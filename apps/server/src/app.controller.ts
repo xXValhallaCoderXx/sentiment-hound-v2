@@ -12,6 +12,7 @@ export class AppController {
     const myLib = new MyLib();
     const prisma = new PrismaClient();
     const users = await prisma.user.findMany();
+
     const result = this.appService.getHello();
     return {
       data: result,
