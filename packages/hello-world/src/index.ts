@@ -1,6 +1,6 @@
 class MyLib {
   public hello() {
-    return "Hello World!";
+    return "Hello Wssssorld!";
   }
 }
 

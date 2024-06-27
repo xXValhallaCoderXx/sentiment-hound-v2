@@ -2,8 +2,11 @@
   "name": "hello-world",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "source": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc",
+    "dev": "tsc -w"
   },
   "devDependencies": {
     "typescript": "^5.1.3"
