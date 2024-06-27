@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run --parallel dev"
+    "dev": "pnpm run --parallel dev",
+    "db:push": "pnpm --filter database run db:push"
   },
   "keywords": [],
   "author": "",
