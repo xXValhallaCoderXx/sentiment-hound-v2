@@ -6,6 +6,8 @@ settings:
 
 importers:
 
+  .: {}
+
   apps/server:
     dependencies:
       '@nestjs/common':
@@ -17,6 +19,9 @@ importers:
       '@nestjs/platform-express':
         specifier: ^10.0.0
         version: 10.0.0(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)
+      hello-world:
+        specifier: workspace:*
+        version: link:../../packages/hello-world
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.0
@@ -84,6 +89,12 @@ importers:
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
+      typescript:
+        specifier: ^5.1.3
+        version: 5.1.3
+
+  packages/hello-world:
+    devDependencies:
       typescript:
         specifier: ^5.1.3
         version: 5.1.3
