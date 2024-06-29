@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import React from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/next-auth.lib";
+import DashboardLayout from "@/components/templates/DashboardLayout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,7 @@ const AuthenticatedLayout = async ({
   if (!session) {
     redirect("/");
   }
-  return <div>{children}</div>;
+  return <DashboardLayout>{children}</DashboardLayout>;
 };
 
 export default AuthenticatedLayout;

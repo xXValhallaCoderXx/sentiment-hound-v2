@@ -4,7 +4,7 @@ import { signOut } from "@/lib/next-auth.lib";
 
 const DashboardPage = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between p-24">
       <form
         action={async () => {
           "use server";

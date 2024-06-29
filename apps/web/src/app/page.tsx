@@ -16,7 +16,6 @@ export default async function Home() {
       <NavigationMenu />
       <div className="mt-20">
         <Hero />
-        sss
       </div>
     </main>
   );
