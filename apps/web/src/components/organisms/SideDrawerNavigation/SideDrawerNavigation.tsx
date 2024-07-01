@@ -1,40 +1,60 @@
-import { FC } from "react";
+import { useState } from "react";
+import { IceCream2Icon } from "lucide-react";
 
-interface ISideDrawerNavigationProps {
-  isOpen?: boolean;
-  togglePanel?: () => void;
-}
+import classes from "./side-drawer.module.css";
 
-const SideDrawerNavigation: FC<ISideDrawerNavigationProps> = ({
-  isOpen,
-  togglePanel,
-}) => {
-  return (
-    <div
-      className={`bg-gray-200 fixed left-0 top-0 bottom-0 transition-width ease-in-out duration-300 ${
-        isOpen ? "w-64" : "w-16"
-      }`}
-      style={{ minWidth: isOpen ? "64px" : "16px" }}
+const data = [
+  { link: "", label: "Notifications", icon: IceCream2Icon },
+  { link: "", label: "Billing", icon: IceCream2Icon },
+  { link: "", label: "Security", icon: IceCream2Icon },
+  { link: "", label: "SSH Keys", icon: IceCream2Icon },
+  { link: "", label: "Databases", icon: IceCream2Icon },
+  { link: "", label: "Authentication", icon: IceCream2Icon },
+  { link: "", label: "Other Settings", icon: IceCream2Icon },
+];
+
+const SideDrawerNavigation = () => {
+  const [active, setActive] = useState("Billing");
+
+  const links = data.map((item) => (
+    <a
+      className={classes.link}
+      data-active={item.label === active || undefined}
+      href={item.link}
+      key={item.label}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(item.label);
+      }}
     >
-      <button
-        className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-        onClick={togglePanel}
-      >
-        {isOpen ? "Close" : "Open"}
-      </button>
-      {/* Your side panel content here */}
-      {isOpen && (
-        <div className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Side Panel</h2>
-          {/* Add your side panel content */}
-          <ul>
-            <li className="mb-2">Link 1</li>
-            <li className="mb-2">Link 2</li>
-            <li className="mb-2">Link 3</li>
-          </ul>
-        </div>
-      )}
-    </div>
+      <item.icon className={classes.linkIcon} />
+      <span>{item.label}</span>
+    </a>
+  ));
+
+  return (
+    <nav className={classes.navbar}>
+      <div className={classes.navbarMain}>{links}</div>
+      <div className={classes.footer}>
+        <a
+          href="#"
+          className={classes.link}
+          onClick={(event) => event.preventDefault()}
+        >
+          <IceCream2Icon className={classes.linkIcon} />
+          <span>Change account</span>
+        </a>
+
+        <a
+          href="#"
+          className={classes.link}
+          onClick={(event) => event.preventDefault()}
+        >
+          <IceCream2Icon className={classes.linkIcon} />
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
   );
 };
 
