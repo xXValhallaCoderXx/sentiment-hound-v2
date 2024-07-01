@@ -1,9 +1,8 @@
-import { Card } from "@/components/atoms/card";
 import { StatsCards } from "./components";
 
 const DashboardPage = () => {
   return (
-    <div className="h-full  ">
+    <div className="h-full px-4 py-4">
       <StatsCards />
     </div>
   );

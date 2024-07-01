@@ -1,8 +1,10 @@
 import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@mantine/core";
 import { House, SearchCode, BarChart4 } from "lucide-react";
 import { IceCream2Icon } from "lucide-react";
-
-import classes from "./side-drawer.module.css";
+import { signOut } from "next-auth/react";
+import classes from "./SideDrawer.module.scss";
 
 const data = [
   { link: "", label: "Dashboard", icon: House },
@@ -11,45 +13,35 @@ const data = [
 ];
 
 const SideDrawerNavigation = () => {
-  const [active, setActive] = useState("Billing");
+  // const [active, setActive] = useState("Billing");
 
+  const handleSignout = async () => {
+    await signOut();
+  };
   const links = data.map((item) => (
-    <a
+    <Link
       className={classes.link}
-      data-active={item.label === active || undefined}
+      // data-active={item.label === active || undefined}
       href={item.link}
       key={item.label}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(item.label);
-      }}
+      // onClick={(event) => {
+      //   event.preventDefault();
+      //   setActive(item.label);
+      // }}
     >
       <item.icon className={classes.linkIcon} />
       <span>{item.label}</span>
-    </a>
+    </Link>
   ));
 
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>{links}</div>
       <div className={classes.footer}>
-        <a
-          href="#"
-          className={classes.link}
-          onClick={(event) => event.preventDefault()}
-        >
-          <IceCream2Icon className={classes.linkIcon} />
-          <span>Change account</span>
-        </a>
-
-        <a
-          href="#"
-          className={classes.link}
-          onClick={(event) => event.preventDefault()}
-        >
+        <Button variant="transparent" color="gray" onClick={handleSignout}>
           <IceCream2Icon className={classes.linkIcon} />
           <span>Logout</span>
-        </a>
+        </Button>
       </div>
     </nav>
   );

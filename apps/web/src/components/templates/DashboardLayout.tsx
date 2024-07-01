@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }: any) => {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
+      navbar={{ width: 245, breakpoint: "sm", collapsed: { mobile: !opened } }}
       padding="md"
     >
       <AppShell.Header>
@@ -34,7 +34,7 @@ const DashboardLayout = ({ children }: any) => {
       <AppShell.Navbar p="md">
         <SideDrawerNavigation />
       </AppShell.Navbar>
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main className="h-[1px]">{children}</AppShell.Main>
     </AppShell>
   );
 };
