@@ -4,7 +4,7 @@ import { Button } from "@mantine/core";
 import { House, SearchCode, BarChart4 } from "lucide-react";
 import { IceCream2Icon } from "lucide-react";
 import { signOut } from "next-auth/react";
-import classes from "./SideDrawer.module.scss";
+import classes from "./SideDrawer.module.css";
 
 const data = [
   { link: "", label: "Dashboard", icon: House },
