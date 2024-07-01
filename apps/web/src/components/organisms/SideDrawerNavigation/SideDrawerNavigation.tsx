@@ -1,16 +1,13 @@
 import { useState } from "react";
+import { House, SearchCode, BarChart4 } from "lucide-react";
 import { IceCream2Icon } from "lucide-react";
 
 import classes from "./side-drawer.module.css";
 
 const data = [
-  { link: "", label: "Notifications", icon: IceCream2Icon },
-  { link: "", label: "Billing", icon: IceCream2Icon },
-  { link: "", label: "Security", icon: IceCream2Icon },
-  { link: "", label: "SSH Keys", icon: IceCream2Icon },
-  { link: "", label: "Databases", icon: IceCream2Icon },
-  { link: "", label: "Authentication", icon: IceCream2Icon },
-  { link: "", label: "Other Settings", icon: IceCream2Icon },
+  { link: "", label: "Dashboard", icon: House },
+  { link: "", label: "Analyse", icon: SearchCode },
+  { link: "", label: "Sentiment", icon: BarChart4 },
 ];
 
 const SideDrawerNavigation = () => {

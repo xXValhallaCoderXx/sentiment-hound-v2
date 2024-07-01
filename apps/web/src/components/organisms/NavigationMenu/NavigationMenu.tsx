@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/molecules/button";
+import { Button } from "@mantine/core";
 import { signIn } from "@/lib/next-auth.lib";
 
 const NavigationMenu = () => {
@@ -25,7 +25,9 @@ const NavigationMenu = () => {
               await signIn("google");
             }}
           >
-            <button type="submit">Sign in</button>
+            <Button variant="primary" type="submit">
+              Sign in
+            </Button>
           </form>
           {/* 
          <Button onClick={() => signIn()}>Sign In</Button> */}
