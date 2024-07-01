@@ -73,6 +73,7 @@ model SocialAccount {
   provider    String
   accountId   String
   accessToken String
+  refreshToken String
   userId      String
   user        User          @relation(fields: [userId], references: [id])
   posts       Post[]

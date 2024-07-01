@@ -8,7 +8,7 @@ import classes from "./SideDrawer.module.css";
 const data = [
   { link: "/app/dashboard", label: "Dashboard", icon: House },
   { link: "/app/analyse", label: "Analyse", icon: SearchCode },
-
+  { link: "/app/integrations", label: "Integrations", icon: SearchCode },
   { link: "/app/settings", label: "Settings", icon: Settings },
   { link: "/app/profile", label: "Profile", icon: Contact },
 ];
