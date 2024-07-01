@@ -1,4 +1,4 @@
-import { Button } from "@/components/molecules/button";
+import { Button } from "@mantine/core";
 
 const ProfilePage = () => (
   <main className="flex min-h-screen flex-col items-center justify-between p-24">
