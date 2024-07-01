@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm run --parallel dev",
-    "db:push": "pnpm --filter database run db:push"
+    "build": "pnpm run --parallel build",
+    "db:push": "pnpm --filter database run db:push",
+    "db:generate": "pnpm --filter database run db:generate"
   },
   "keywords": [],
   "author": "",

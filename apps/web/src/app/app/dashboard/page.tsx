@@ -1,13 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { userService } from "services";
+import { StatsCards } from "./components";
 
-const DashboardPage = async () => {
-  const users = await userService.getUsers();
-  console.log("users", users);
+const DashboardPage = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Button>DASHBOARD</Button>
-    </main>
+    <div className="h-full px-4 py-4">
+      <StatsCards />
+    </div>
   );
 };
 

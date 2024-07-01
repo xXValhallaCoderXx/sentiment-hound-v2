@@ -21,6 +21,9 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  socialAccounts SocialAccount[]
+  posts         Post[]
+  tasks         Task[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -64,3 +67,101 @@ model VerificationToken {
   @@id([identifier, token])
 }
  
+
+model SocialAccount {
+  id          Int           @id @default(autoincrement())
+  provider    String
+  accountId   String
+  accessToken String
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  posts       Post[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Post {
+  id              Int           @id @default(autoincrement())
+  postId          String
+  content         String
+  videoUrl        String?
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  socialAccountId Int
+  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id])
+  comments        Comment[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Comment {
+  id              Int               @id @default(autoincrement())
+  commentId       String
+  content         String
+  sentiment       Float?
+  sentimentStatus SentimentStatus   @default(PENDING)
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id])
+  aspectAnalyses  AspectAnalysis[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model AspectAnalysis {
+  id            Int           @id @default(autoincrement())
+  aspect        String
+  sentiment     Float
+  commentId     Int
+  comment       Comment        @relation(fields: [commentId], references: [id])
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Task {
+  id            Int          @id @default(autoincrement())
+  type          TaskType
+  status        TaskStatus   @default(PENDING)
+  errorMessage  String?
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+  jobs          Job[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Job {
+  id            Int          @id @default(autoincrement())
+  status        JobStatus    @default(PENDING)
+  errorMessage  String?
+  taskId        Int
+  task          Task         @relation(fields: [taskId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+enum SentimentStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum TaskType {
+  FETCH_COMMENTS
+  ANALYZE_COMMENTS
+  OTHER
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum JobStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
