@@ -21,7 +21,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  socialAccounts SocialAccount[]
+  integrations  Integration[]
   posts         Post[]
   tasks         Task[]
   planId        Int?
@@ -70,31 +70,42 @@ model VerificationToken {
 }
  
 
-model SocialAccount {
-  id          Int           @id @default(autoincrement())
-  provider    String
-  accountId   String
-  accessToken String
+model Integration {
+  id           Int      @id @default(autoincrement())
+  accountId    String
+  accessToken  String
   refreshToken String
-  userId      String
-  user        User          @relation(fields: [userId], references: [id])
-  posts       Post[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  providerId   Int
+  provider     Provider @relation(fields: [providerId], references: [id])
+  posts        Post[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
 }
 
+model Provider {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  integrations Integration[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+}
+
+
 model Post {
-  id              Int           @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   postId          String
   content         String
   videoUrl        String?
   userId          String
-  user            User          @relation(fields: [userId], references: [id])
-  socialAccountId Int
-  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
+  integrationId   Int
+  integration     Integration  @relation(fields: [integrationId], references: [id])
   comments        Comment[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @default(now())
 }
 
 model Comment {
