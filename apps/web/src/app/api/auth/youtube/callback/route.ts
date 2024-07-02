@@ -3,11 +3,9 @@ import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import { prisma } from "database";
 
-import { getSession } from "next-auth/react";
-
 export async function GET(req: NextRequest, res: NextResponse) {
   const code = req?.nextUrl.searchParams.get("code");
-  console.log("code", code);
+
   if (!code) {
     return Response.error();
   }
@@ -31,7 +29,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
   console.log("token", token);
   const accessToken = token.access_token;
   const refreshToken = token.refresh_token;
-  const idToken = token.id_token;
 
   const userInfoResponse = await fetch(
     "https://www.googleapis.com/oauth2/v1/userinfo",
@@ -51,19 +48,31 @@ export async function GET(req: NextRequest, res: NextResponse) {
   if (session?.user) {
     const userId = session?.user.id;
 
-    await prisma.socialAccount.create({
-      data: {
-        provider: "YOUTUBE",
-        accountId: youtubeAccountId,
-        accessToken,
-        refreshToken,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
+    const youtubeProvider = await prisma.provider.findFirst({
+      where: {
+        name: "youtube",
       },
     });
+
+    if (youtubeProvider) {
+      await prisma.integration.create({
+        data: {
+          provider: {
+            connect: {
+              id: youtubeProvider.id,
+            },
+          },
+          accountId: youtubeAccountId,
+          accessToken,
+          refreshToken,
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      });
+    }
 
     redirect("/app/integrations?success=true");
   }
