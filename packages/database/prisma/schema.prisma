@@ -24,6 +24,8 @@ model User {
   socialAccounts SocialAccount[]
   posts         Post[]
   tasks         Task[]
+  planId        Int?
+  plan          Plan?           @relation(fields: [planId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -139,6 +141,16 @@ model Job {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
+
+model Plan {
+  id            Int      @id @default(autoincrement())
+  name          String   @unique
+  description   String?
+  users         User[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+}
+
 
 enum SentimentStatus {
   PENDING

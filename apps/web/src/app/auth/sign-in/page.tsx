@@ -1,6 +1,6 @@
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/molecules/button";
+import { Button } from "@mantine/core";
 import { signIn } from "@/lib/next-auth.lib";
 
 export default async function Home() {

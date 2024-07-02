@@ -1,26 +1,52 @@
-import { prisma, TaskStatus, TaskType, JobStatus } from "database";
-// import { UpdateUserDto } from "./user.dto";
+import { prisma, TaskStatus, TaskType, JobStatus, User } from "database";
+import { CreateUserDto } from "./user.dto";
 
 class UserService {
   async getUsers() {
     return await prisma.user.findMany();
   }
 
-  async integrateSocialAccount(
-    userId: string,
-    provider: string,
-    accountId: string,
-    accessToken: string
-  ) {
-    return prisma.socialAccount.create({
-      data: {
-        provider,
-        accountId,
-        accessToken,
-        user: { connect: { id: userId } },
+  async setupNewUserAccount(data: CreateUserDto): Promise<User> {
+    // Find the default trial plan
+    const trialPlan = await prisma.plan.findFirst({
+      where: {
+        name: "trial",
       },
     });
+
+    if (!trialPlan) {
+      throw new Error("Default trial plan not found");
+    }
+
+    // Create a new user and assign the trial plan
+    console.log("Creating new user with trial plan", data.id);
+    const user = await prisma.user.update({
+      where: { id: data.id },
+      data: {
+        plan: {
+          connect: { id: trialPlan.id },
+        },
+      },
+    });
+
+    return user;
   }
+
+  // async integrateSocialAccount(
+  //   userId: string,
+  //   provider: string,
+  //   accountId: string,
+  //   accessToken: string
+  // ) {
+  //   return prisma.socialAccount.create({
+  //     data: {
+  //       provider,
+  //       accountId,
+  //       accessToken,
+  //       user: { connect: { id: userId } },
+  //     },
+  //   });
+  // }
 
   async createFetchCommentsTask(userId: string, videoUrl: string) {
     // const post = await prisma.post.create({

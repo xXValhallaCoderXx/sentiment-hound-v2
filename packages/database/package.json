@@ -7,11 +7,15 @@
   "scripts": {
     "db:push": "npx prisma db push --accept-data-loss",
     "db:generate": "npx prisma generate",
+    "db:wipe": "npx prisma migrate reset --force --skip-seed",
+    "db:seed": "ts-node src/initial-seed.ts",
     "build": "tsc",
     "dev": "tsc -w"
   },
   "devDependencies": {
-    "prisma": "^5.16.1"
+    "@types/node": "^20.14.9",
+    "prisma": "^5.16.1",
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
     "@prisma/client": "5.16.1",
