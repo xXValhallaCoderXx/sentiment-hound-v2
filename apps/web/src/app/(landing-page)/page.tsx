@@ -1,8 +1,5 @@
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
-import { Button } from "@mantine/core";
-// import { Button } from "@/components/molecules/button";
-import { signIn } from "@/lib/next-auth.lib";
 import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 import { Hero } from "@/components/organisms/Hero";
 import { FaqSection } from "./components/FaqSection";
