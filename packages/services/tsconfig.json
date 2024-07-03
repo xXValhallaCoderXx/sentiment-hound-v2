@@ -6,6 +6,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["*.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["*.d.ts", "**/*.ts", "**/*.tsx", "../database/src/initial-seed.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }
