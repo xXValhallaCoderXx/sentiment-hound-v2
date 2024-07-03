@@ -1,9 +1,10 @@
 "use client";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Alert } from "@mantine/core";
 import IntegrationCards from "./components/IntegrationCards";
 import { Integration, Provider } from "database";
+import {} from "react";
 
 interface IIntegrationsViewProps {
   providers: Provider[];
