@@ -3,12 +3,16 @@ import { FC } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Alert } from "@mantine/core";
 import IntegrationCards from "./components/IntegrationCards";
-import { Provider } from "database";
+import { Integration, Provider } from "database";
 
 interface IIntegrationsViewProps {
   providers: Provider[];
+  integrations: Integration[];
 }
-const IntegrationsView: FC<IIntegrationsViewProps> = ({ providers }) => {
+const IntegrationsView: FC<IIntegrationsViewProps> = ({
+  providers,
+  integrations,
+}) => {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -31,7 +35,7 @@ const IntegrationsView: FC<IIntegrationsViewProps> = ({ providers }) => {
           </Alert>
         </Box>
       )}
-      <IntegrationCards providers={providers} />
+      <IntegrationCards providers={providers} integrations={integrations} />
     </div>
   );
 };

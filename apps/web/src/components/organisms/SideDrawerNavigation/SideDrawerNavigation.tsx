@@ -6,11 +6,11 @@ import { signOut } from "next-auth/react";
 import classes from "./SideDrawer.module.css";
 
 const data = [
-  { link: "/app/dashboard", label: "Dashboard", icon: House },
-  { link: "/app/analyse", label: "Analyse", icon: SearchCode },
-  { link: "/app/integrations", label: "Integrations", icon: SearchCode },
-  { link: "/app/settings", label: "Settings", icon: Settings },
-  { link: "/app/profile", label: "Profile", icon: Contact },
+  { link: "/dashboard", label: "Dashboard", icon: House },
+  { link: "/dashboard/analyse", label: "Analyse", icon: SearchCode },
+  { link: "/dashboard/integrations", label: "Integrations", icon: SearchCode },
+  { link: "/dashboard/settings", label: "Settings", icon: Settings },
+  { link: "/dashboard/profile", label: "Profile", icon: Contact },
 ];
 
 const SideDrawerNavigation = () => {

@@ -21,7 +21,7 @@ export default async function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={`${inter.className} h-full `}>
+      <body className={`${inter.className} antialiased h-full `}>
         <MantineProvider
           theme={{
             colors: {

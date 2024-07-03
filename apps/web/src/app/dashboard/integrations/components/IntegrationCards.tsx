@@ -1,10 +1,11 @@
 "use client";
 import { FC } from "react";
 import { Text, Grid, GridCol, Card, Button } from "@mantine/core";
-import { Provider } from "database";
+import { Integration, Provider } from "database";
 
 interface IIntegrationCardsProps {
   providers: Provider[];
+  integrations: Integration[];
 }
 
 const IntegrationCards: FC<IIntegrationCardsProps> = ({ providers }) => {

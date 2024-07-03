@@ -13,7 +13,7 @@ import { Footer } from "./components/Footer";
 export default async function Home() {
   const session = await auth();
   if (session) {
-    return redirect("/app/dashboard");
+    return redirect("/dashboard");
   }
 
   return (
