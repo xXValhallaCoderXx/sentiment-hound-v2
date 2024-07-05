@@ -6,6 +6,15 @@ class UserService {
     return await prisma.user.findMany();
   }
 
+  async getUserById(id: string) {
+    return await prisma.user.findUnique({
+      where: { id },
+      include: {
+        plan: true,
+      },
+    });
+  }
+
   async setupNewUserAccount(data: CreateUserDto): Promise<User> {
     // Find the default trial plan
     const trialPlan = await prisma.plan.findFirst({
@@ -31,22 +40,6 @@ class UserService {
 
     return user;
   }
-
-  // async integrateSocialAccount(
-  //   userId: string,
-  //   provider: string,
-  //   accountId: string,
-  //   accessToken: string
-  // ) {
-  //   return prisma.socialAccount.create({
-  //     data: {
-  //       provider,
-  //       accountId,
-  //       accessToken,
-  //       user: { connect: { id: userId } },
-  //     },
-  //   });
-  // }
 
   async createFetchCommentsTask(userId: string, videoUrl: string) {
     // const post = await prisma.post.create({
