@@ -1,3 +1,6 @@
+import { IsOptional, IsString, IsInt, Min } from "class-validator";
+import { Type } from "class-transformer";
+
 export class CreatePostDto {
   title: string;
   content?: string;
@@ -8,4 +11,11 @@ export class UpdatePostDto {
   id: number;
   title?: string;
   content?: string;
+}
+
+export class GetPostsDto {
+  page?: number;
+  limit?: number;
+  content?: string;
+  videoUrl?: string;
 }
