@@ -24,6 +24,7 @@ export default async function RootLayout({
       <body className={`${inter.className} antialiased h-full `}>
         <MantineProvider
           theme={{
+            fontFamily: "Inter, sans-serif",
             colors: {
               "ocean-blue": [
                 "#7AD1DD",

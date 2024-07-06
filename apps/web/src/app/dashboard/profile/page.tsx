@@ -11,29 +11,41 @@ import {
   Center,
   Stack,
 } from "@mantine/core";
-import { userService } from "services";
+import { userService, planService } from "services";
+import Plans from "./components/Plans";
 
 const ProfilePage = async () => {
   const session = await auth();
   const userId = session?.user?.id;
   const user = await userService.getUserById(userId as string);
+  const plans = await planService.getPlans();
+  console.log(plans);
   return (
     <Box className="px-6 py-4">
-      <Title>Profile</Title>
-      <Stack className="mt-4 mb-8">
-        <TextInput label="Name" readOnly value={user?.name ?? ""} />
-        <TextInput label="Email" readOnly value={user?.email ?? ""} />
-        <Avatar src={user?.image} size="md" radius="md" />
-      </Stack>
-      <Title>Plan</Title>
-      <Stack className="mt-4">
-        <TextInput
-          label="Current Plan"
-          readOnly
-          value={user?.plan?.name ?? ""}
+      <Flex className="gap-3">
+        <Title>Profile</Title>
+        <Avatar
+          src={user?.image}
+          className="rounded-full"
+          size="md"
+          radius="md"
         />
-        <Text size="sm">{user?.plan?.description}</Text>
-      </Stack>
+      </Flex>
+      <Box className="mt-4">
+        <Title order={4}>Basic Information</Title>
+        <Stack className="mt-2 mb-8">
+          <Flex className="items-center gap-2">
+            <Title order={6}>Name</Title>
+            <Text size="sm">{user?.name}</Text>
+          </Flex>
+          <Flex className="items-center gap-2">
+            <Title order={6}>Email</Title>
+            <Text size="sm">{user?.email}</Text>
+          </Flex>
+        </Stack>
+      </Box>
+      <Title>Plan</Title>
+      <Plans plans={plans} />
     </Box>
   );
 };
