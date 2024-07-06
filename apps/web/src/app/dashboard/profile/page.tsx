@@ -19,7 +19,7 @@ const ProfilePage = async () => {
   const userId = session?.user?.id;
   const user = await userService.getUserById(userId as string);
   const plans = await planService.getPlans();
-  console.log(plans);
+
   return (
     <Box className="px-6 py-4">
       <Flex className="gap-3">
@@ -45,7 +45,7 @@ const ProfilePage = async () => {
         </Stack>
       </Box>
       <Title>Plan</Title>
-      <Plans plans={plans} />
+      <Plans plans={plans} userPlan={user?.plan} />
     </Box>
   );
 };
