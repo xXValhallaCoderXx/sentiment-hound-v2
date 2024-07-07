@@ -1,23 +1,23 @@
 import { Title, Box, Text, Alert } from "@mantine/core";
-import IntegrationsView from "./IntegrationsView";
-import { providersService, integrationsService } from "services";
-import { auth } from "@/lib/next-auth.lib";
+import { Suspense } from "react";
+import IntegrationCardsSkeleton from "./components/IntegrationCardsSkeleton";
+import IntegrationAlert from "./components/IntegrationAlert";
+import IntegrationCards from "./components/IntegrationCards";
 
 const IntegrationsPage = async (params: any) => {
-  const session = await auth();
-  const providers = await providersService.getProviders();
-  const integrations = await integrationsService.getUserIntegrations(
-    session?.user?.id as string
-  );
-  console.log("providers", params);
-  console.log("integrations", integrations);
-
+  const isSuccess = params?.searchParams?.success === "true";
+  console.log("IS SUCCESS", isSuccess);
   return (
     <div className="h-full ">
       <Box className="px-4">
         <Title>Integrations</Title>
         <Text>Choose from a range of different ones</Text>
-        <IntegrationsView providers={providers} integrations={integrations} />
+        <IntegrationAlert />
+        <Box mt={32}>
+          <Suspense fallback={<IntegrationCardsSkeleton />}>
+            <IntegrationCards />
+          </Suspense>
+        </Box>
       </Box>
     </div>
   );
