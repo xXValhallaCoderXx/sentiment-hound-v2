@@ -1,9 +1,8 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import {
   House,
-  Icon,
   SearchCode,
   StickyNote,
   Contact,
@@ -57,9 +56,9 @@ const SideDrawerNavigation = () => {
     for (const link of sidebarLinks) {
       if (link.group) {
         links.push(
-          <div key={link.group} className={classes.group}>
-            <span className={classes.groupLabel}>{link.group}</span>
-            <div className={classes.groupLinks}>
+          <div key={link.group}>
+            <Text size="md">{link.group}</Text>
+            <div>
               {link.items.map((item) => (
                 <Link
                   className={classes.link}
