@@ -1,4 +1,4 @@
-import { prisma, TaskStatus, TaskType, JobStatus, User } from "database";
+import { prisma } from "database";
 
 class IntegrationsService {
   async getProviders() {
@@ -6,8 +6,8 @@ class IntegrationsService {
   }
 
   async getUserIntegrations(userId: string) {
-    console.log("Fetching revenue data...");
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // console.log("Fetching revenue data...");
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
     return prisma.integration.findMany({
       where: { userId },
     });
@@ -18,22 +18,6 @@ class IntegrationsService {
       where: { userId, providerId: parseInt(providerId) },
     });
   }
-
-  // async integrateSocialAccount(
-  //   userId: string,
-  //   provider: string,
-  //   accountId: string,
-  //   accessToken: string
-  // ) {
-  //   return prisma.socialAccount.create({
-  //     data: {
-  //       provider,
-  //       accountId,
-  //       accessToken,
-  //       user: { connect: { id: userId } },
-  //     },
-  //   });
-  // }
 }
 
 export const integrationsService = new IntegrationsService();

@@ -1,3 +1,4 @@
+"use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Box, Button, Text } from "@mantine/core";
@@ -61,8 +62,9 @@ const SideDrawerNavigation = () => {
               {link.group.toUpperCase()}
             </Text>
 
-            {link.items.map((item) => (
+            {link.items.map((item, index) => (
               <Link
+                style={{ marginTop: index === 0 ? 4 : 0 }}
                 className={classes.link}
                 data-active={item.href === path || undefined}
                 href={item.href}
