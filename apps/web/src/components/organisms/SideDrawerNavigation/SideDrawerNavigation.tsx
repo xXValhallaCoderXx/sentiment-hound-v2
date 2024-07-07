@@ -1,6 +1,6 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Button, Text } from "@mantine/core";
+import { Box, Button, Text } from "@mantine/core";
 import {
   House,
   SearchCode,
@@ -15,30 +15,30 @@ import { signOut } from "next-auth/react";
 import classes from "./SideDrawer.module.css";
 
 const sidebarLinks = [
-  { link: "/dashboard", label: "Dashboard", icon: House },
+  { href: "/dashboard", label: "Dashboard", icon: House },
   {
     group: "Management",
     items: [
-      { link: "/dashboard/jobs", label: "Jobs", icon: ClipboardCheck },
-      { link: "/dashboard/analyse", label: "Analyse", icon: SearchCode },
+      { href: "/dashboard/jobs", label: "Jobs", icon: ClipboardCheck },
+      { href: "/dashboard/analyse", label: "Analyse", icon: SearchCode },
     ],
   },
   {
     group: "Content",
     items: [
-      { link: "/dashboard/posts", label: "Posts", icon: StickyNote },
-      { link: "/dashboard/comments", label: "Comments", icon: MessagesSquare },
+      { href: "/dashboard/posts", label: "Posts", icon: StickyNote },
+      { href: "/dashboard/comments", label: "Comments", icon: MessagesSquare },
     ],
   },
   {
     group: "Settings",
     items: [
       {
-        link: "/dashboard/integrations",
+        href: "/dashboard/integrations",
         label: "Integrations",
         icon: Cable,
       },
-      { link: "/dashboard/profile", label: "Profile", icon: Contact },
+      { href: "/dashboard/profile", label: "Profile", icon: Contact },
     ],
   },
 ];
@@ -56,33 +56,33 @@ const SideDrawerNavigation = () => {
     for (const link of sidebarLinks) {
       if (link.group) {
         links.push(
-          <div key={link.group}>
-            <Text size="md">{link.group}</Text>
-            <div>
-              {link.items.map((item) => (
-                <Link
-                  className={classes.link}
-                  data-active={item.link === path || undefined}
-                  href={item.link}
-                  key={item.label}
-                >
-                  <item.icon className={classes.linkIcon} />
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
+          <Box mt={8} key={link.group}>
+            <Text size="xs" fw={500}>
+              {link.group.toUpperCase()}
+            </Text>
+
+            {link.items.map((item) => (
+              <Link
+                className={classes.link}
+                data-active={item.href === path || undefined}
+                href={item.href}
+                key={item.label}
+              >
+                <item.icon className={classes.linkIcon} />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </Box>
         );
       } else {
         links.push(
           <Link
             className={classes.link}
-            data-active={link.link === path || undefined}
-            // href={link.link}
-            href="/"
+            data-active={link.href === path || undefined}
+            href={link.href as string}
             key={link.label}
           >
-            {/* <link.icon className={classes.linkIcon} /> */}
+            {link.icon && <link.icon className={classes.linkIcon} />}
 
             <span>{link.label}</span>
           </Link>
