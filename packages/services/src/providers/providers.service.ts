@@ -5,6 +5,10 @@ class ProviderService {
     return await prisma.provider.findMany();
   }
 
+  async getProviderById(id: string) {
+    return await prisma.provider.findUnique({ where: { id: parseInt(id) } });
+  }
+
   // async integrateSocialAccount(
   //   userId: string,
   //   provider: string,

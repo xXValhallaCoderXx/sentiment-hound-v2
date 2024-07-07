@@ -13,6 +13,12 @@ class IntegrationsService {
     });
   }
 
+  async deleteUserIntegration(userId: string, providerId: string) {
+    return prisma.integration.deleteMany({
+      where: { userId, providerId: parseInt(providerId) },
+    });
+  }
+
   // async integrateSocialAccount(
   //   userId: string,
   //   provider: string,

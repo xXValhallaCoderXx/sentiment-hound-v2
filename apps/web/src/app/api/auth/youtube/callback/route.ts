@@ -74,10 +74,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
       });
     }
 
-    redirect("/app/integrations?success=true");
+    redirect("/dashboard/integrations?success=true");
   }
 
   // Get the current session to associate the YouTube account with the logged-in user
 
-  redirect("/app/integrations?success=false");
+  redirect("/dashboard/integrations?success=false");
 }

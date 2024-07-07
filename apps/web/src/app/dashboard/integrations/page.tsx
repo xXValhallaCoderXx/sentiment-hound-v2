@@ -6,7 +6,7 @@ import IntegrationCards from "./components/IntegrationCards";
 
 const IntegrationsPage = async (params: any) => {
   const isSuccess = params?.searchParams?.success === "true";
-  console.log("IS SUCCESS", isSuccess);
+
   return (
     <div className="h-full ">
       <Box className="px-4">

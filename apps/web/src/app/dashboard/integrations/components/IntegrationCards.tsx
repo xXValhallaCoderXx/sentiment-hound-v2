@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { Text, Grid, GridCol, Card, Button } from "@mantine/core";
 import { providersService, integrationsService } from "services";
 import { auth } from "@/lib/next-auth.lib";
+import IntegrationButton from "./IntegrationButton";
+import { integrateOauthAction, revokeOauthAction } from "../actions";
 
 const IntegrationCards = async () => {
   const session = await auth();
@@ -9,7 +10,7 @@ const IntegrationCards = async () => {
   const integrations = await integrationsService.getUserIntegrations(
     session?.user?.id as string
   );
-  console.log("INT", integrations);
+
   const userIntegrations = integrations?.map(
     (integration) => integration.providerId
   );
@@ -18,17 +19,18 @@ const IntegrationCards = async () => {
     <Grid className="mt-4">
       {providers.map((provider, index) => {
         const isConnected = userIntegrations.includes(provider.id);
-        const url = isConnected
-          ? "/dashboard/integrations"
-          : `/api/auth/${provider.name}`;
+
         return (
-          <GridCol key={index} span={3}>
-            <Card shadow="md">
-              <Text>{provider.name}</Text>
-              <Link href={`/api/auth/${provider.name}`}>
-                <Button disabled={isConnected}>Connect</Button>
-              </Link>
-            </Card>
+          <GridCol key={provider.id} span={3}>
+            <form
+              action={isConnected ? revokeOauthAction : integrateOauthAction}
+            >
+              <Card shadow="md">
+                <Text>{provider.name}s</Text>
+                <input type="hidden" name="providerId" value={provider.id} />
+                <IntegrationButton isConnected={isConnected} />
+              </Card>
+            </form>
           </GridCol>
         );
       })}
