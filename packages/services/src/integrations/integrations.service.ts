@@ -10,6 +10,13 @@ class IntegrationsService {
     // await new Promise((resolve) => setTimeout(resolve, 3000));
     return prisma.integration.findMany({
       where: { userId },
+      include: { provider: true },
+    });
+  }
+
+  async getUserIntegration(userId: string, name: string) {
+    return prisma.integration.findFirst({
+      where: { userId, provider: { name } },
     });
   }
 

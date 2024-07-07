@@ -12,7 +12,9 @@
   "dependencies": {
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "database": "workspace:*"
+    "database": "workspace:*",
+    "jose": "^5.6.3",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",

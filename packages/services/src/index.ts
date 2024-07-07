@@ -6,3 +6,4 @@ export { userService } from "./user/user.service";
 export { planService } from "./plans/plans.service";
 export { integrationsService } from "./integrations/integrations.service";
 export { providersService } from "./providers/providers.service";
+export { youtubeService } from "./youtube/youtube.service";
