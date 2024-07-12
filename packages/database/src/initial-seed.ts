@@ -50,6 +50,7 @@ const seed = async () => {
       accountId: "sample-account-id",
       accessToken: "sample-access-token",
       refreshToken: "sample-refresh-token",
+      refreshTokenExpiresAt: new Date(),
       userId: user.id,
       providerId: youtubeProvider.id,
     },

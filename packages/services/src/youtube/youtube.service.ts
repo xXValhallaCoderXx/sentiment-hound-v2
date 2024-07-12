@@ -3,6 +3,7 @@ import { integrationsService } from "../integrations/integrations.service";
 import jwt from "jsonwebtoken";
 
 function isTokenExpired(token: string): boolean {
+  console.log("TOKEN: ", token);
   try {
     const decoded = jwt.decode(token) as { exp: number } | null;
 
@@ -60,23 +61,62 @@ class YoutubeService {
   }
   async fetchYoutubePosts(userId: string) {
     // const { accessToken, refreshToken } =
-    //   await integrationsService.getUserIntegration(userId, "youtube");
-    const accessToken = await this.refreshAccessToken(userId);
-    console.log("Access Token", accessToken);
-    console.log("IS TOKEN EXPIRED", isTokenExpired(accessToken));
     try {
+      const youtubeIntegration = await integrationsService.getUserIntegration(
+        userId,
+        "youtube"
+      );
+
+      const headers = {
+        Authorization: `Bearer ${youtubeIntegration.accessToken}`,
+      };
+
+      // const accessToken = await this.refreshAccessToken(userId);
+      // console.log("Access Token", accessToken);
+
       const channelResponse = await fetch(
         "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true",
         {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers,
         }
       );
       const channelData = await channelResponse.json();
-      console.log("Channel Data", channelData);
+
+      const uploadsPlaylistId =
+        channelData.items[0].contentDetails.relatedPlaylists.uploads;
+
+      // Step 2: Fetch videos from the upload playlist
+      let videos = [];
+      let nextPageToken = "";
+
+      do {
+        const playlistItemsResponse = await fetch(
+          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
+          { headers }
+        );
+
+        const playlistItemsData = await playlistItemsResponse.json();
+
+        if (playlistItemsResponse.status !== 200) {
+          throw new Error("Failed to fetch playlist items");
+        }
+
+        const fetchedVideos = playlistItemsData.items.map((item: any) => ({
+          id: item.snippet.resourceId.videoId,
+          title: item.snippet.title,
+          description: item.snippet.description,
+          publishedAt: item.snippet.publishedAt,
+          thumbnail: item.snippet.thumbnails.default.url,
+        }));
+
+        videos = [...videos, ...fetchedVideos];
+        nextPageToken = playlistItemsData.nextPageToken || "";
+      } while (nextPageToken);
+
+      return videos;
     } catch (error: any) {
       console.log("Error", error.message);
+      return [];
     }
   }
 }

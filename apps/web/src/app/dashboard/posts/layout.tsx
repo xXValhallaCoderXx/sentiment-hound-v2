@@ -14,11 +14,6 @@ const PostsPage = async ({ children, params, ...rest }: any) => {
     (integration) => integration.provider.name
   );
 
-  if (Object.keys(params).length === 0) {
-    console.log("NO PARAMS", rest);
-    // redirect(`/dashboard/posts/${socialIntegrations[0]}`);
-  }
-
   return (
     <PageLayout title="Posts">
       {integrations.length === 0 ? (
@@ -31,8 +26,8 @@ const PostsPage = async ({ children, params, ...rest }: any) => {
           <Tabs defaultValue={socialIntegrations[0]}>
             <TabsList>
               {socialIntegrations.map((integration, index) => (
-                <TabsTab key={index} value={integration}>
-                  Youtube
+                <TabsTab className="capitalize" key={index} value={integration}>
+                  {integration}
                 </TabsTab>
               ))}
             </TabsList>

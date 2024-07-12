@@ -40,9 +40,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
   );
 
   const userInfo = await userInfoResponse.json();
+  console.log("userInfo", userInfo);
 
   const youtubeAccountId = userInfo?.id;
-  const youtubeAccountName = userInfo?.name;
+
+  const expiresIn = token?.expires_in;
+
+  const expiresAt = new Date(Date.now() + expiresIn * 1000);
 
   const session = await auth();
   if (session?.user) {
@@ -65,6 +69,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
           accountId: youtubeAccountId,
           accessToken,
           refreshToken,
+          refreshTokenExpiresAt: expiresAt,
           user: {
             connect: {
               id: userId,

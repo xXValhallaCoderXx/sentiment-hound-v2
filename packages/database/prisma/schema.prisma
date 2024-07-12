@@ -75,6 +75,7 @@ model Integration {
   accountId    String
   accessToken  String
   refreshToken String
+  refreshTokenExpiresAt     DateTime
   userId       String
   user         User     @relation(fields: [userId], references: [id])
   providerId   Int
