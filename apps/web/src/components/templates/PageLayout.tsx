@@ -12,7 +12,9 @@ const PageLayout: FC<IPageLayoutProps> = ({ title, description, children }) => {
     <Box className="px-4 h-full">
       <Title>{title}</Title>
       {description && <Text>{description}</Text>}
-      <Box mt={16}>{children}</Box>
+      <Box className="h-[calc(100vh-165px)]" mt={16}>
+        {children}
+      </Box>
     </Box>
   );
 };

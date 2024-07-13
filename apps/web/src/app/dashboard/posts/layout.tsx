@@ -1,11 +1,10 @@
-import { redirect } from "next/navigation";
 import PageLayout from "@/components/templates/PageLayout";
-import { integrationsService, youtubeService } from "services";
+import { integrationsService } from "services";
 import { auth } from "@/lib/next-auth.lib";
 import NoData from "@/components/molecules/NoData";
-import { Box, Tabs, TabsList, TabsTab, TabsPanel } from "@mantine/core";
+import { Box, Tabs, TabsList, TabsTab, Flex } from "@mantine/core";
 
-const PostsPage = async ({ children, params, ...rest }: any) => {
+const PostsPage = async ({ children }: any) => {
   const session = await auth();
   const userId = session?.user?.id as string;
   const integrations = await integrationsService.getUserIntegrations(userId);
@@ -14,28 +13,38 @@ const PostsPage = async ({ children, params, ...rest }: any) => {
     (integration) => integration.provider.name
   );
 
+  if (integrations.length === 0) {
+    return (
+      <PageLayout title="Posts">
+        <Flex flex={1} justify="center" className="h-full">
+          <NoData
+            title="No Integrations Found"
+            description="Please integrate a social media account"
+            redirectCta={{
+              href: "/dashboard/integrations",
+              label: "Integrate Account",
+            }}
+          />
+        </Flex>
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout title="Posts">
-      {integrations.length === 0 ? (
-        <NoData
-          title="No Integrations Found"
-          description="Please integrate a social media account"
-        />
-      ) : (
-        <Box>
-          <Tabs defaultValue={socialIntegrations[0]}>
-            <TabsList>
-              {socialIntegrations.map((integration, index) => (
-                <TabsTab className="capitalize" key={index} value={integration}>
-                  {integration}
-                </TabsTab>
-              ))}
-            </TabsList>
+      <Box>
+        <Tabs defaultValue={socialIntegrations[0]}>
+          <TabsList>
+            {socialIntegrations.map((integration, index) => (
+              <TabsTab className="capitalize" key={index} value={integration}>
+                {integration}
+              </TabsTab>
+            ))}
+          </TabsList>
 
-            {children}
-          </Tabs>
-        </Box>
-      )}
+          {children}
+        </Tabs>
+      </Box>
     </PageLayout>
   );
 };

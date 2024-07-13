@@ -13,21 +13,21 @@ import classes from "./MainFeatures.module.css";
 
 const mockdata = [
   {
-    title: "Extreme performance",
+    title: "Disocver what your users are saying",
     description:
-      "This dust is actually a powerful poison that will even make a pro wrestler sick, Regice cloaks itself with frigid air of -328 degrees Fahrenheit",
+      "Empower your business strategy with real-time insights and data-driven decisions",
     icon: PackageOpenIcon,
   },
   {
-    title: "Privacy focused",
+    title: "Analyze Historical Data",
     description:
-      "People say it can run at the same speed as lightning striking, Its icy body is so cold, it will not melt even if it is immersed in magma",
+      "Harness the power of historical data to predict future trends and make informed decisions",
     icon: PackageOpenIcon,
   },
   {
-    title: "No third parties",
+    title: "More than just, sentiment analysis",
     description:
-      "They’re popular, but they’re rare. Trainers who show them off recklessly may be targeted by thieves",
+      "With aspect based analysis, you can dive deeper into the data and understand the nuances of your users' feedback",
     icon: PackageOpenIcon,
   },
 ];
@@ -56,19 +56,14 @@ const MainFeaturesSection = () => {
 
   return (
     <Container size="lg" py="xl">
-      <Group justify="center">
-        <Badge variant="filled" size="lg">
-          Best company ever
-        </Badge>
-      </Group>
-
       <Title order={2} className={classes.title} ta="center" mt="sm">
-        Integrate effortlessly with any technology stack
+        Integrate effortlessly with most social platforms
       </Title>
 
       <Text c="dimmed" className={classes.description} ta="center" mt="md">
-        Every once in a while, you’ll see a Golbat that’s missing some fangs.
-        This happens when hunger drives it to try biting a Steel-type Pokémon.
+        Make data-driven choices with confidence and stay ahead of the curve.
+        Experience the power of our sentiment analysis product today and
+        revolutionize your decision-making process.
       </Text>
 
       <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={50}>
