@@ -98,9 +98,14 @@ model Provider {
 
 model Post {
   id              Int          @id @default(autoincrement())
-  postId          String
-  content         String
-  videoUrl        String?
+  remoteId        String
+  title           String
+  description     String?
+  postUrl         String
+  imageUrl        String?
+  publishedAt     DateTime
+  isBlacklisted   Boolean @default(false)
+  commentCount    Int
   userId          String
   user            User         @relation(fields: [userId], references: [id])
   integrationId   Int

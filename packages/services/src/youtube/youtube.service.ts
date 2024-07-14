@@ -113,6 +113,30 @@ class YoutubeService {
         nextPageToken = playlistItemsData.nextPageToken || "";
       } while (nextPageToken);
 
+      // Fetch video details including comment count
+      const videoIds = videos.map((video) => video.id).join(",");
+      const videoDetailsResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
+        { headers }
+      );
+
+      const videoDetailsData = await videoDetailsResponse.json();
+
+      // Map the comment count to the videos
+      videos = videos.map((video) => {
+        const videoDetail = videoDetailsData.items.find(
+          (detail: any) => detail.id === video.id
+        );
+        return {
+          ...video,
+          commentCount: videoDetail.statistics.commentCount,
+        };
+      });
+
+      if (videoDetailsResponse.status !== 200) {
+        throw new Error("Failed to fetch video details");
+      }
+
       return videos;
     } catch (error: any) {
       console.log("Error", error.message);

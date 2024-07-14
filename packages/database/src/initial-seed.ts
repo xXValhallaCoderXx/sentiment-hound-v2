@@ -73,9 +73,12 @@ const seed = async () => {
 
   const post = await prisma.post.create({
     data: {
-      postId: "sample-post-id",
-      content: "This is a sample post.",
-      videoUrl: "https://www.youtube.com/watch?v=sample",
+      remoteId: "sample-post-id",
+      title: "Sample Post",
+      description: "This is a sample post.",
+      postUrl: "https://www.youtube.com/watch?v=sample",
+      commentCount: 10,
+      publishedAt: new Date(),
       userId: user.id,
       integrationId: integration.id,
     },
