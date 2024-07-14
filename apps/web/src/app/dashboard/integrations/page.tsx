@@ -11,7 +11,12 @@ const IntegrationsPage = async (params: any) => {
     <div className="h-full ">
       <Box className="px-4">
         <Title>Integrations</Title>
-        <Text>Choose from a range of different ones</Text>
+        <Text>
+          Connect your social accounts to seamlessly integrate and manage your
+          content within our application.
+          <br />
+          Select an integration below to get started.
+        </Text>
         <IntegrationAlert />
         <Box mt={32}>
           <Suspense fallback={<IntegrationCardsSkeleton />}>

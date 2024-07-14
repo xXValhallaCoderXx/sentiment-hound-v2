@@ -16,9 +16,10 @@ const IntegrationAlert = (params: any) => {
         color="green"
         title="Integration Success"
         withCloseButton
+        className="mt-4"
         onClose={handleOnCloseAlert}
       >
-        You have integrateed a new service!
+        You have integrated a new service!
       </Alert>
     )
   );

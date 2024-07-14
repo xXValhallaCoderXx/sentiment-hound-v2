@@ -1,4 +1,5 @@
-import { Text, Grid, GridCol, Card, Button } from "@mantine/core";
+import Image from "next/image";
+import { Text, Grid, GridCol, Card, Divider, Flex } from "@mantine/core";
 import { providersService, integrationsService } from "services";
 import { auth } from "@/lib/next-auth.lib";
 import IntegrationButton from "./IntegrationButton";
@@ -21,14 +22,29 @@ const IntegrationCards = async () => {
         const isConnected = userIntegrations.includes(provider.id);
 
         return (
-          <GridCol key={provider.id} span={3}>
+          <GridCol key={provider.id} span={4}>
             <form
               action={isConnected ? revokeOauthAction : integrateOauthAction}
             >
               <Card shadow="md">
-                <Text>{provider.name}s</Text>
+                <Flex align="center" gap={2}>
+                  <Image
+                    alt="provider-image"
+                    height={50}
+                    width={50}
+                    src={`/images/logos/${provider?.image}`}
+                  />
+                  <Text size="lg" fw={500} className="capitalize">
+                    {provider.name}
+                  </Text>
+                </Flex>
+                <Text size="xs">{provider.description}</Text>
+                <Divider className="mt-4" />
                 <input type="hidden" name="providerId" value={provider.id} />
-                <IntegrationButton isConnected={isConnected} />
+                <IntegrationButton
+                  isDisabled={provider.name !== "youtube"}
+                  isConnected={isConnected}
+                />
               </Card>
             </form>
           </GridCol>

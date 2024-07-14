@@ -4,14 +4,18 @@ import { Button } from "@mantine/core";
 import { useFormStatus } from "react-dom";
 interface IIntegrationButtonProps {
   isConnected: boolean;
+  isDisabled?: boolean;
 }
 
-const IntegrationButton: FC<IIntegrationButtonProps> = ({ isConnected }) => {
+const IntegrationButton: FC<IIntegrationButtonProps> = ({
+  isConnected,
+  isDisabled,
+}) => {
   const { pending } = useFormStatus();
 
   return (
     <Button
-      disabled={pending}
+      disabled={isDisabled || pending}
       loading={pending}
       type="submit"
       color={isConnected ? "red" : "blue"}
