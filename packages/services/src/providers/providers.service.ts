@@ -1,4 +1,4 @@
-import { prisma, TaskStatus, TaskType, JobStatus, User } from "database";
+import { prisma } from "database";
 
 class ProviderService {
   async getProviders() {

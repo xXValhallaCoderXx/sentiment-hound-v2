@@ -1,38 +1,21 @@
 import { prisma } from "database";
 import { integrationsService } from "../integrations/integrations.service";
-import jwt from "jsonwebtoken";
-
-function isTokenExpired(token: string): boolean {
-  console.log("TOKEN: ", token);
-  try {
-    const decoded = jwt.decode(token) as { exp: number } | null;
-
-    if (!decoded || !decoded.exp) {
-      throw new Error("Invalid token");
-    }
-
-    const expirationDate = new Date(decoded.exp * 1000);
-    const currentDate = new Date();
-
-    return expirationDate <= currentDate;
-  } catch (error) {
-    console.error("Failed to decode token", error);
-    return true; // If there's an error decoding the token, assume it's expired
-  }
-}
 
 class YoutubeService {
   async refreshAccessToken(userId: string) {
-    const { accessToken, refreshToken, id } =
-      await integrationsService.getUserIntegration(userId, "youtube");
+    const youtubeIntegration = await integrationsService.getUserIntegration(
+      userId,
+      "youtube"
+    );
 
-    if (!accessToken) {
+    if (!youtubeIntegration || !youtubeIntegration.accessToken) {
       throw new Error("YouTube integration not found for user");
     }
 
+    const { id, refreshToken } = youtubeIntegration;
     const params = new URLSearchParams();
-    params.append("client_id", process.env.AUTH_GOOGLE_ID);
-    params.append("client_secret", process.env.AUTH_GOOGLE_SECRET);
+    params.append("client_id", process.env.AUTH_GOOGLE_ID as string);
+    params.append("client_secret", process.env.AUTH_GOOGLE_SECRET as string);
     params.append("refresh_token", refreshToken);
     params.append("grant_type", "refresh_token");
 
@@ -49,7 +32,7 @@ class YoutubeService {
     if (!response.ok) {
       throw new Error("Failed to refresh access token");
     }
-    console.log("DATAAAA: ", data);
+
     const { access_token } = data;
 
     await prisma.integration.update({
@@ -66,6 +49,9 @@ class YoutubeService {
         userId,
         "youtube"
       );
+      if (!youtubeIntegration) {
+        throw new Error("YouTube integration not found for user");
+      }
 
       const headers = {
         Authorization: `Bearer ${youtubeIntegration.accessToken}`,
@@ -86,7 +72,7 @@ class YoutubeService {
         channelData.items[0].contentDetails.relatedPlaylists.uploads;
 
       // Step 2: Fetch videos from the upload playlist
-      let videos = [];
+      let videos: any = [];
       let nextPageToken = "";
 
       do {
@@ -114,7 +100,7 @@ class YoutubeService {
       } while (nextPageToken);
 
       // Fetch video details including comment count
-      const videoIds = videos.map((video) => video.id).join(",");
+      const videoIds = videos.map((video: any) => video.id).join(",");
       const videoDetailsResponse = await fetch(
         `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
         { headers }
@@ -123,7 +109,7 @@ class YoutubeService {
       const videoDetailsData = await videoDetailsResponse.json();
 
       // Map the comment count to the videos
-      videos = videos.map((video) => {
+      videos = videos.map((video: any) => {
         const videoDetail = videoDetailsData.items.find(
           (detail: any) => detail.id === video.id
         );

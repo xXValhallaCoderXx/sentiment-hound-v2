@@ -20,7 +20,7 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
   );
   console.log("POST LIST PAGE", youtubePosts);
 
-  const rows = youtubePosts.map((element) => (
+  const rows = youtubePosts.map((element: any) => (
     <TableTr key={element.id}>
       <TableTd>{element.title}</TableTd>
       <TableTd>{element.publishedAt}</TableTd>
