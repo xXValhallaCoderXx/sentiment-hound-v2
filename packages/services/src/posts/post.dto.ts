@@ -16,6 +16,6 @@ export class UpdatePostDto {
 export class GetPostsDto {
   page?: number;
   limit?: number;
-  content?: string;
-  videoUrl?: string;
+  search?: string;
+  provider?: string;
 }
