@@ -4,6 +4,7 @@ import { integrationsService, youtubeService } from "services";
 import { auth } from "@/lib/next-auth.lib";
 import NoData from "@/components/molecules/NoData";
 import {
+  Box,
   Table,
   TableTd,
   TableThead,
@@ -28,8 +29,7 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
   ));
 
   return (
-    <div>
-      My Post: {params.slug}
+    <Box>
       <Table>
         <TableThead>
           <TableTr>
@@ -39,7 +39,7 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
         </TableThead>
         <TableTbody>{rows}</TableTbody>
       </Table>
-    </div>
+    </Box>
   );
 };
 

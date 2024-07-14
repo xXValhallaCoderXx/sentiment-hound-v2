@@ -66,7 +66,7 @@ const SideDrawerNavigation = () => {
               <Link
                 style={{ marginTop: index === 0 ? 4 : 0 }}
                 className={classes.link}
-                data-active={item.href === path || undefined}
+                data-active={path.includes(item.href) || undefined}
                 href={item.href}
                 key={item.label}
               >

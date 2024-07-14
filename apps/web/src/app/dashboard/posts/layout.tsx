@@ -2,7 +2,9 @@ import PageLayout from "@/components/templates/PageLayout";
 import { integrationsService } from "services";
 import { auth } from "@/lib/next-auth.lib";
 import NoData from "@/components/molecules/NoData";
-import { Box, Tabs, TabsList, TabsTab, Flex } from "@mantine/core";
+import { Suspense } from "react";
+import LoadingList from "./components/LoadingList";
+import { Box, Tabs, TabsList, TabsTab, Flex, Text } from "@mantine/core";
 
 const PostsPage = async ({ children }: any) => {
   const session = await auth();
@@ -33,7 +35,11 @@ const PostsPage = async ({ children }: any) => {
   return (
     <PageLayout title="Posts">
       <Box>
-        <Tabs defaultValue={socialIntegrations[0]}>
+        <Text size="sm">
+          Select from the list below of your content posts, you can choose which
+          posts to anayse or even blacklist.
+        </Text>
+        <Tabs className="mt-4" defaultValue={socialIntegrations[0]}>
           <TabsList>
             {socialIntegrations.map((integration, index) => (
               <TabsTab className="capitalize" key={index} value={integration}>
@@ -42,7 +48,7 @@ const PostsPage = async ({ children }: any) => {
             ))}
           </TabsList>
 
-          {children}
+          <Suspense fallback={<LoadingList />}>{children}</Suspense>
         </Tabs>
       </Box>
     </PageLayout>
