@@ -22,6 +22,7 @@ const IntegrationsPage = async (params: any) => {
           <Suspense fallback={<IntegrationCardsSkeleton />}>
             <IntegrationCards />
           </Suspense>
+
         </Box>
       </Box>
     </div>
