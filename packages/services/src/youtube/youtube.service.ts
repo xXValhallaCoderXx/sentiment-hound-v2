@@ -2,6 +2,44 @@ import { prisma } from "database";
 import { integrationsService } from "../integrations/integrations.service";
 
 class YoutubeService {
+  async generateAuthFromCode(code: string) {
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+
+    const redirectUri = `${baseUrl}/api/auth/youtube/callback`;
+
+    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      body: JSON.stringify({
+        code,
+        client_id: process.env.AUTH_GOOGLE_ID,
+        client_secret: process.env.AUTH_GOOGLE_SECRET,
+        redirect_uri: redirectUri,
+        grant_type: "authorization_code",
+      }),
+    });
+
+    const token = await tokenResponse.json();
+
+    const accessToken = token.access_token;
+    const refreshToken = token.refresh_token;
+
+    return { accessToken, refreshToken, expiresIn: token.expires_in };
+  }
+
+  async getUserProfile(accessToken: string) {
+    const userInfoResponse = await fetch(
+      "https://www.googleapis.com/oauth2/v1/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const userInfo = await userInfoResponse.json();
+    return userInfo;
+  }
+
   async refreshAccessToken(userId: string) {
     const youtubeIntegration = await integrationsService.getUserIntegration(
       userId,

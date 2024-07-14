@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import { prisma } from "database";
+import { youtubeService, providersService } from "services";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const code = req?.nextUrl.searchParams.get("code");
@@ -10,53 +11,18 @@ export async function GET(req: NextRequest, res: NextResponse) {
     return Response.error();
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-
-  const redirectUri = `${baseUrl}/api/auth/youtube/callback`;
-
-  const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    body: JSON.stringify({
-      code,
-      client_id: process.env.AUTH_GOOGLE_ID,
-      client_secret: process.env.AUTH_GOOGLE_SECRET,
-      redirect_uri: redirectUri,
-      grant_type: "authorization_code",
-    }),
-  });
-
-  const token = await tokenResponse.json();
-  console.log("token", token);
-  const accessToken = token.access_token;
-  const refreshToken = token.refresh_token;
-
-  const userInfoResponse = await fetch(
-    "https://www.googleapis.com/oauth2/v1/userinfo",
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-
-  const userInfo = await userInfoResponse.json();
-  console.log("userInfo", userInfo);
-
-  const youtubeAccountId = userInfo?.id;
-
-  const expiresIn = token?.expires_in;
+  const { accessToken, refreshToken, expiresIn } =
+    await youtubeService.generateAuthFromCode(code);
 
   const expiresAt = new Date(Date.now() + expiresIn * 1000);
+  const userInfo = await youtubeService.getUserProfile(accessToken);
+  const youtubeAccountId = userInfo?.id;
 
   const session = await auth();
   if (session?.user) {
     const userId = session?.user.id;
 
-    const youtubeProvider = await prisma.provider.findFirst({
-      where: {
-        name: "youtube",
-      },
-    });
+    const youtubeProvider = await providersService.getProviderByName("youtube");
 
     if (youtubeProvider) {
       await prisma.integration.create({
