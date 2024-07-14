@@ -88,6 +88,7 @@ model Integration {
 model Provider {
   id          Int      @id @default(autoincrement())
   name        String   @unique
+  image       String
   description String?
   integrations Integration[]
   createdAt   DateTime @default(now())

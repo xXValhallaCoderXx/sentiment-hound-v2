@@ -10,9 +10,24 @@ const seed = async () => {
   ];
 
   const providers = [
-    { name: "youtube", description: "Youtube integration" },
-    { name: "instagram", description: "Instagram integration" },
-    { name: "facebook", description: "Facebook integration" },
+    {
+      name: "youtube",
+      description:
+        "Fetch all the comments from your youtube vidoes and analyze their sentiment.",
+      image: "youtube-logo.png",
+    },
+    {
+      name: "instagram",
+      description:
+        "Fetch all the comments from your instagram posts and analyze their sentiment.",
+      image: "instagram-logo.png",
+    },
+    {
+      name: "facebook",
+      description:
+        "Fetch all the comments from your facebook posts and analyze their sentiment.",
+      image: "facebook-logo.png",
+    },
   ];
 
   for (const plan of plans) {
