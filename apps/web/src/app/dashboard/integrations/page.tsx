@@ -1,4 +1,4 @@
-import { Title, Box, Text, Alert } from "@mantine/core";
+import { Title, Box, Text, Container } from "@mantine/core";
 import { Suspense } from "react";
 import IntegrationCardsSkeleton from "./components/IntegrationCardsSkeleton";
 import IntegrationAlert from "./components/IntegrationAlert";
@@ -18,11 +18,10 @@ const IntegrationsPage = async (params: any) => {
           Select an integration below to get started.
         </Text>
         <IntegrationAlert />
-        <Box mt={32}>
+        <Box mt={32} className="w-full 2xl:w-3/4">
           <Suspense fallback={<IntegrationCardsSkeleton />}>
             <IntegrationCards />
           </Suspense>
-
         </Box>
       </Box>
     </div>

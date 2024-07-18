@@ -67,6 +67,8 @@ class YoutubeService {
 
     const data = await response.json();
 
+    console.log("Refresh Token Response", data);
+
     if (!response.ok) {
       throw new Error("Failed to refresh access token");
     }
@@ -91,6 +93,8 @@ class YoutubeService {
         throw new Error("YouTube integration not found for user");
       }
 
+      console.log("Youtube Integration", youtubeIntegration);
+
       const headers = {
         Authorization: `Bearer ${youtubeIntegration.accessToken}`,
       };
@@ -104,7 +108,14 @@ class YoutubeService {
           headers,
         }
       );
-      const channelData = await channelResponse.json();
+      let channelData = await channelResponse.json();
+      console.log("Channel Data", channelData);
+
+      if (channelData.error?.code === 401) {
+        const newAccessToken = await this.refreshAccessToken(userId);
+        console.log("New Access Token", newAccessToken);
+        headers.Authorization = `Bearer ${newAccessToken}`;
+      }
 
       const uploadsPlaylistId =
         channelData.items[0].contentDetails.relatedPlaylists.uploads;
@@ -163,7 +174,7 @@ class YoutubeService {
 
       return videos;
     } catch (error: any) {
-      console.log("Error", error.message);
+      console.log("Error", error);
       return [];
     }
   }
