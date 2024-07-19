@@ -6,3 +6,13 @@ export interface ICreateIntegrationDTO {
   refreshTokenExpiry: Date;
   userId: string;
 }
+
+
+export interface IUpdateCredentialsDTO {
+  providerId: number;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiry: Date;
+  userId: string;
+}
+  

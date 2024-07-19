@@ -1,4 +1,3 @@
-import { prisma } from "database";
 import { integrationsService } from "../integrations/integrations.service";
 import { providersService } from "../providers/providers.service";
 class YoutubeService {
@@ -91,117 +90,113 @@ class YoutubeService {
       body: params.toString(),
     });
 
-    const data = await response.json();
-
-    console.log("Refresh Token Response", data);
-
     if (!response.ok) {
       throw new Error("Failed to refresh access token");
     }
 
-    const { access_token } = data;
+    const data = await response.json();
 
-    await prisma.integration.update({
-      where: { id, userId },
-      data: { accessToken: access_token },
+    const { expires_in, access_token } = data;
+
+    const expiresAt = new Date(Date.now() + expires_in * 1000);
+
+    await integrationsService.updateIntegrationAuthCredentials({
+      providerId: id,
+      userId,
+      accessToken: access_token,
+      refreshToken,
+      accessTokenExpiry: expiresAt,
     });
 
     return access_token;
   }
-  async fetchYoutubePosts(userId: string) {
-    try {
-      const youtubeIntegration = await integrationsService.getUserIntegration(
-        userId,
-        "youtube"
-      );
-      if (!youtubeIntegration) {
-        throw new Error("YouTube integration not found for user");
+
+  async fetchYoutubePosts(userId: string, retry = true) {
+    const youtubeIntegration = await integrationsService.getUserIntegration(
+      userId,
+      "youtube"
+    );
+    if (!youtubeIntegration) {
+      throw new Error("YouTube integration not found for user");
+    }
+
+    const accessTokenExpiryDate = new Date(
+      youtubeIntegration.refreshTokenExpiresAt
+    );
+    const currentTime = new Date();
+
+    if (accessTokenExpiryDate < currentTime) {
+      console.log("The specified time has passed.");
+      await this.refreshAccessToken(userId);
+      await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
+    }
+
+    const headers = {
+      Authorization: `Bearer ${youtubeIntegration.accessToken}`,
+    };
+
+    const channelResponse = await fetch(
+      "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true",
+      {
+        headers,
       }
+    );
+    let channelData = await channelResponse.json();
 
-      console.log("Youtube Integration", youtubeIntegration);
+    if (channelData.error?.code === 401 && retry) {
+      await this.refreshAccessToken(userId);
+      await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
+    }
 
-      const headers = {
-        Authorization: `Bearer ${youtubeIntegration.accessToken}`,
-      };
+    let videos: any = [];
+    let nextPageToken = "";
+    const uploadsPlaylistId =
+      channelData.items[0].contentDetails.relatedPlaylists.uploads;
 
-      // const accessToken = await this.refreshAccessToken(userId);
-      // console.log("Access Token", accessToken);
-
-      const channelResponse = await fetch(
-        "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true",
-        {
-          headers,
-        }
-      );
-      let channelData = await channelResponse.json();
-      console.log("Channel Data", channelData);
-
-      if (channelData.error?.code === 401) {
-        const newAccessToken = await this.refreshAccessToken(userId);
-        console.log("New Access Token", newAccessToken);
-        headers.Authorization = `Bearer ${newAccessToken}`;
-      }
-
-      const uploadsPlaylistId =
-        channelData.items[0].contentDetails.relatedPlaylists.uploads;
-
-      // Step 2: Fetch videos from the upload playlist
-      let videos: any = [];
-      let nextPageToken = "";
-
-      do {
-        const playlistItemsResponse = await fetch(
-          `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
-          { headers }
-        );
-
-        const playlistItemsData = await playlistItemsResponse.json();
-
-        if (playlistItemsResponse.status !== 200) {
-          throw new Error("Failed to fetch playlist items");
-        }
-
-        const fetchedVideos = playlistItemsData.items.map((item: any) => ({
-          id: item.snippet.resourceId.videoId,
-          title: item.snippet.title,
-          description: item.snippet.description,
-          publishedAt: item.snippet.publishedAt,
-          thumbnail: item.snippet.thumbnails.default.url,
-        }));
-
-        videos = [...videos, ...fetchedVideos];
-        nextPageToken = playlistItemsData.nextPageToken || "";
-      } while (nextPageToken);
-
-      // Fetch video details including comment count
-      const videoIds = videos.map((video: any) => video.id).join(",");
-      const videoDetailsResponse = await fetch(
-        `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
+    do {
+      const playlistItemsResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
         { headers }
       );
 
-      const videoDetailsData = await videoDetailsResponse.json();
+      const playlistItemsData = await playlistItemsResponse.json();
 
-      // Map the comment count to the videos
-      videos = videos.map((video: any) => {
-        const videoDetail = videoDetailsData.items.find(
-          (detail: any) => detail.id === video.id
-        );
-        return {
-          ...video,
-          commentCount: videoDetail.statistics.commentCount,
-        };
-      });
-
-      if (videoDetailsResponse.status !== 200) {
-        throw new Error("Failed to fetch video details");
+      if (playlistItemsResponse.status !== 200) {
+        throw new Error("Failed to fetch playlist items");
       }
 
-      return videos;
-    } catch (error: any) {
-      console.log("Error", error);
-      return [];
-    }
+      const fetchedVideos = playlistItemsData.items.map((item: any) => ({
+        id: item.snippet.resourceId.videoId,
+        title: item.snippet.title,
+        description: item.snippet.description,
+        publishedAt: item.snippet.publishedAt,
+        thumbnail: item.snippet.thumbnails.default.url,
+      }));
+
+      videos = [...videos, ...fetchedVideos];
+      nextPageToken = playlistItemsData.nextPageToken || "";
+    } while (nextPageToken);
+
+    // Fetch video details including comment count
+    const videoIds = videos.map((video: any) => video.id).join(",");
+    const videoDetailsResponse = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
+      { headers }
+    );
+
+    const videoDetailsData = await videoDetailsResponse.json();
+
+    videos = videos.map((video: any) => {
+      const videoDetail = videoDetailsData.items.find(
+        (detail: any) => detail.id === video.id
+      );
+      return {
+        ...video,
+        commentCount: videoDetail.statistics.commentCount,
+      };
+    });
+
+    return videos;
   }
 }
 

@@ -18,7 +18,7 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
   const youtubePosts = await youtubeService.fetchYoutubePosts(
     session?.user?.id as string
   );
-  console.log("POST LIST PAGE", youtubePosts);
+
 
   const rows = youtubePosts.map((element: any) => (
     <TableTr key={element.id}>

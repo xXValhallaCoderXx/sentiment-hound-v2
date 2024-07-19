@@ -1,5 +1,8 @@
 import { prisma } from "database";
-import { ICreateIntegrationDTO } from "./intefrations.dto";
+import {
+  ICreateIntegrationDTO,
+  IUpdateCredentialsDTO,
+} from "./intefrations.dto";
 
 export class IntegrationsRepository {
   async getProviders() {
@@ -43,6 +46,21 @@ export class IntegrationsRepository {
             id: data.userId,
           },
         },
+      },
+    });
+  }
+
+  async updateIntegrationAuthCredentials(data: IUpdateCredentialsDTO) {
+    // Update the integration credentials
+    await prisma.integration.update({
+      where: {
+        id: data?.providerId,
+        userId: data?.userId,
+      },
+      data: {
+        accessToken: data?.accessToken,
+        refreshToken: data?.refreshToken,
+        refreshTokenExpiresAt: data?.accessTokenExpiry,
       },
     });
   }

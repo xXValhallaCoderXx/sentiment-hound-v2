@@ -2,7 +2,10 @@ import {
   integrationsRepository,
   IntegrationsRepository,
 } from "./integrations.repository";
-import { ICreateIntegrationDTO } from "./intefrations.dto";
+import {
+  ICreateIntegrationDTO,
+  IUpdateCredentialsDTO,
+} from "./intefrations.dto";
 class IntegrationsService {
   private integrationsRepository: IntegrationsRepository;
 
@@ -27,6 +30,10 @@ class IntegrationsService {
 
   async createIntegration(data: ICreateIntegrationDTO) {
     return this.integrationsRepository.createIntegration(data);
+  }
+
+  async updateIntegrationAuthCredentials(data: IUpdateCredentialsDTO) {
+    return this.integrationsRepository.updateIntegrationAuthCredentials(data);
   }
 }
 
