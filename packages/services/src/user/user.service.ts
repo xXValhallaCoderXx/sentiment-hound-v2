@@ -1,30 +1,17 @@
-import { prisma, TaskStatus, TaskType, JobStatus, User } from "database";
+import { User } from "database";
 import { CreateUserDto } from "./user.dto";
 import { planService } from "../plans/plans.service";
+import { userRepository, UserRepository } from "./user.repository";
 
 class UserService {
-  async getUsers() {
-    return await prisma.user.findMany();
+  private userRepository: UserRepository;
+
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
   }
 
   async getUserById(id: string) {
-    return await prisma.user.findUnique({
-      where: { id },
-      include: {
-        plan: true,
-      },
-    });
-  }
-
-  async updateUserPlan(userId: string, planId: number) {
-    return await prisma.user.update({
-      where: { id: userId },
-      data: {
-        plan: {
-          connect: { id: planId },
-        },
-      },
-    });
+    return await userRepository.getUserById(id);
   }
 
   async setupNewUserAccount(data: CreateUserDto): Promise<User> {
@@ -37,10 +24,13 @@ class UserService {
 
     // Create a new user and assign the trial plan
     console.log("Creating new user with trial plan", data.id);
-    const user = await this.updateUserPlan(data.id, trialPlan.id);
+    const user = await this.userRepository.updateUserPlan(
+      data.id,
+      trialPlan.id
+    );
 
     return user;
   }
 }
 
-export const userService = new UserService();
+export const userService = new UserService(userRepository);

@@ -1,30 +1,30 @@
-import { prisma } from "database";
-
+import {
+  integrationsRepository,
+  IntegrationsRepository,
+} from "./integrations.repository";
 class IntegrationsService {
-  async getProviders() {
-    return await prisma.user.findMany();
+  private integrationsRepository: IntegrationsRepository;
+
+  constructor(integrationsRepository: IntegrationsRepository) {
+    this.integrationsRepository = integrationsRepository;
   }
 
   async getUserIntegrations(userId: string) {
-    // console.log("Fetching revenue data...");
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-    return prisma.integration.findMany({
-      where: { userId },
-      include: { provider: true },
-    });
+    return this.integrationsRepository.getUserIntegrations(userId);
   }
 
   async getUserIntegration(userId: string, name: string) {
-    return prisma.integration.findFirst({
-      where: { userId, provider: { name } },
-    });
+    return this.integrationsRepository.getUserIntegration(userId, name);
   }
 
   async deleteUserIntegration(userId: string, providerId: string) {
-    return prisma.integration.deleteMany({
-      where: { userId, providerId: parseInt(providerId) },
-    });
+    return this.integrationsRepository.deleteUserIntegration(
+      userId,
+      providerId
+    );
   }
 }
 
-export const integrationsService = new IntegrationsService();
+export const integrationsService = new IntegrationsService(
+  integrationsRepository
+);
