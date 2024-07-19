@@ -1,7 +1,33 @@
 import { prisma } from "database";
 import { integrationsService } from "../integrations/integrations.service";
-
+import { providersService } from "../providers/providers.service";
 class YoutubeService {
+  async connectYoutubeIntegration(code: string, userId: string) {
+    const { accessToken, refreshToken, expiresIn } =
+      await this.generateAuthFromCode(code);
+
+    const userInfo = await this.getUserProfile(accessToken);
+
+    const youtubeAccountId = userInfo?.id;
+    const expiresAt = new Date(Date.now() + expiresIn * 1000);
+    const youtubeProvider = await providersService.getProviderByName("youtube");
+
+    if (!youtubeProvider) {
+      throw new Error("YouTube provider not found");
+    }
+
+    await integrationsService.createIntegration({
+      providerId: youtubeProvider.id,
+      remoteId: youtubeAccountId,
+      accessToken,
+      refreshToken,
+      refreshTokenExpiry: expiresAt,
+      userId,
+    });
+
+    return true;
+  }
+
   async generateAuthFromCode(code: string) {
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
@@ -83,7 +109,6 @@ class YoutubeService {
     return access_token;
   }
   async fetchYoutubePosts(userId: string) {
-    // const { accessToken, refreshToken } =
     try {
       const youtubeIntegration = await integrationsService.getUserIntegration(
         userId,

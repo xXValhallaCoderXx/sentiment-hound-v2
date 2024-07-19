@@ -1,33 +1,25 @@
-import { prisma } from "database";
-
+import {
+  ProvidersRepository,
+  providersRepository,
+} from "./providers.repository";
 class ProviderService {
+  private providersRepository: ProvidersRepository;
+
+  constructor(providersRepository: ProvidersRepository) {
+    this.providersRepository = providersRepository;
+  }
+
   async getProviders() {
-    return await prisma.provider.findMany();
+    return await this.providersRepository.getProviders();
   }
 
   async getProviderById(id: string) {
-    return await prisma.provider.findUnique({ where: { id: parseInt(id) } });
+    return await this.providersRepository.getProviderById(id);
   }
 
   async getProviderByName(name: string) {
-    return await prisma.provider.findFirst({ where: { name } });
+    return await this.providersRepository.getProviderByName(name);
   }
-
-  // async integrateSocialAccount(
-  //   userId: string,
-  //   provider: string,
-  //   accountId: string,
-  //   accessToken: string
-  // ) {
-  //   return prisma.socialAccount.create({
-  //     data: {
-  //       provider,
-  //       accountId,
-  //       accessToken,
-  //       user: { connect: { id: userId } },
-  //     },
-  //   });
-  // }
 }
 
-export const providersService = new ProviderService();
+export const providersService = new ProviderService(providersRepository);

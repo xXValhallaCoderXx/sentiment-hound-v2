@@ -1,4 +1,5 @@
 import { prisma } from "database";
+import { ICreateIntegrationDTO } from "./intefrations.dto";
 
 export class IntegrationsRepository {
   async getProviders() {
@@ -21,6 +22,28 @@ export class IntegrationsRepository {
   async deleteUserIntegration(userId: string, providerId: string) {
     return prisma.integration.deleteMany({
       where: { userId, providerId: parseInt(providerId) },
+    });
+  }
+
+  async createIntegration(data: ICreateIntegrationDTO) {
+    const { providerId, remoteId, accessToken, refreshToken } = data;
+    await prisma.integration.create({
+      data: {
+        provider: {
+          connect: {
+            id: providerId,
+          },
+        },
+        accountId: remoteId,
+        accessToken,
+        refreshToken,
+        refreshTokenExpiresAt: data.refreshTokenExpiry,
+        user: {
+          connect: {
+            id: data.userId,
+          },
+        },
+      },
     });
   }
 }
