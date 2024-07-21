@@ -1,44 +1,31 @@
-import { redirect } from "next/navigation";
-import PageLayout from "@/components/templates/PageLayout";
-import { integrationsService, youtubeService } from "services";
+import { integrationsService, postService } from "services";
 import { auth } from "@/lib/next-auth.lib";
-import NoData from "@/components/molecules/NoData";
-import {
-  Box,
-  Table,
-  TableTd,
-  TableThead,
-  TableTr,
-  TableTh,
-  TableTbody,
-} from "@mantine/core";
 
-const PostListPage = async ({ params }: { params: { slug: string } }) => {
+import { Box } from "@mantine/core";
+import PostListView from "./PostListView";
+import PostListTable from "./components/PostListTable";
+import PostDetailDrawer from "./components/PostDetailDrawer";
+
+const PostListPage = async ({
+  params,
+  searchParams,
+}: {
+  searchParams: any;
+  params: { slug: string };
+}) => {
   const session = await auth();
-  const youtubePosts = await youtubeService.fetchYoutubePosts(
-    session?.user?.id as string
+  const youtubeIntegration = await integrationsService.getUserIntegration(
+    session?.user?.id as string,
+    "youtube"
   );
-
-
-  const rows = youtubePosts.map((element: any) => (
-    <TableTr key={element.id}>
-      <TableTd>{element.title}</TableTd>
-      <TableTd>{element.publishedAt}</TableTd>
-      {/* <Table.Td>{element.thumbnail}</Table.Td> */}
-    </TableTr>
-  ));
+  const integrationPosts = await postService.getUserIntegrationPosts({
+    userId: session?.user?.id as string,
+    integrationId: String(youtubeIntegration?.id),
+  });
 
   return (
     <Box>
-      <Table>
-        <TableThead>
-          <TableTr>
-            <TableTh>Title</TableTh>
-            <TableTh>Published At</TableTh>
-          </TableTr>
-        </TableThead>
-        <TableTbody>{rows}</TableTbody>
-      </Table>
+      <PostListTable data={integrationPosts} />
     </Box>
   );
 };

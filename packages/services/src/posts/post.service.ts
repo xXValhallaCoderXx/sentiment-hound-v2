@@ -1,7 +1,19 @@
 import { prisma } from "database";
 import { GetPostsDto } from "./post.dto";
+import { PostsRepository, postsRepository } from "./post.repository";
+import { GetUserIntegrationPostsDTO } from "./post.dto";
 
 class PostService {
+  private postsRepository: PostsRepository;
+
+  constructor(postsRepository: PostsRepository) {
+    this.postsRepository = postsRepository;
+  }
+
+  async getUserIntegrationPosts(data: GetUserIntegrationPostsDTO) {
+    return this.postsRepository.getUserIntegrationPosts(data);
+  }
+
   async getPosts(dto: GetPostsDto) {
     const { page = 1, limit = 10, search } = dto;
     const offset = (page - 1) * limit;
@@ -33,4 +45,4 @@ class PostService {
   }
 }
 
-export const postService = new PostService();
+export const postService = new PostService(postsRepository);

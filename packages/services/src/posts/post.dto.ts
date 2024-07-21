@@ -19,3 +19,9 @@ export class GetPostsDto {
   search?: string;
   provider?: string;
 }
+
+
+export class GetUserIntegrationPostsDTO {
+  userId: string;
+  integrationId: string;
+}
