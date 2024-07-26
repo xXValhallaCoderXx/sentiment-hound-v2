@@ -81,11 +81,25 @@ model Integration {
   providerId   Int
   provider     Provider @relation(fields: [providerId], references: [id])
   posts        Post[]
-  lastPartialSyncTime      DateTime?
-  lastFullSyncTime         DateTime?
+  syncs                    Sync[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 }
+
+model Sync {
+  id                       Int         @id @default(autoincrement())
+  integrationId            Int
+  integration              Integration @relation(fields: [integrationId], references: [id])
+  type                     SyncType
+  status                   SyncStatus  @default(IDLE)
+  startedAt                DateTime
+  completedAt              DateTime?
+  errorMessage             String?
+  taskId                   Int
+  task                     Task        @relation(fields: [taskId], references: [id])
+  lastSyncTime             DateTime?
+}
+
 
 model Provider {
   id          Int      @id @default(autoincrement())
@@ -148,6 +162,7 @@ model Task {
   userId        String
   user          User         @relation(fields: [userId], references: [id])
   jobs          Job[]
+  syncs         Sync[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -171,6 +186,19 @@ model Plan {
   updatedAt     DateTime @default(now())
 }
 
+
+enum SyncStatus {
+  IDLE
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum SyncType {
+  PARTIAL
+  FULL
+  CONTENT
+}
 
 enum SentimentStatus {
   PENDING

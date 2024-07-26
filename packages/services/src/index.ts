@@ -7,3 +7,5 @@ export { planService } from "./plans/plans.service";
 export { integrationsService } from "./integrations/integrations.service";
 export { providersService } from "./providers/providers.service";
 export { youtubeService } from "./youtube/youtube.service";
+export { jobService } from "./job/job.service";
+export { syncService } from "./sync/sync.service";
