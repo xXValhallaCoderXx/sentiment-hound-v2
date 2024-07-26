@@ -39,7 +39,7 @@ const PostsPage = async ({ children }: any) => {
           Select from the list below of your content posts, you can choose which
           posts to anayse or even blacklist.
         </Text>
-        <Tabs className="mt-4" defaultValue={socialIntegrations[0]}>
+        <Tabs className="mt-4 h-full" defaultValue={socialIntegrations[0]}>
           <TabsList>
             {socialIntegrations.map((integration, index) => (
               <TabsTab className="capitalize" key={index} value={integration}>

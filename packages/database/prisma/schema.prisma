@@ -81,6 +81,8 @@ model Integration {
   providerId   Int
   provider     Provider @relation(fields: [providerId], references: [id])
   posts        Post[]
+  lastPartialSyncTime      DateTime?
+  lastFullSyncTime         DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 }

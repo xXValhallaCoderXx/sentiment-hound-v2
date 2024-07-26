@@ -19,6 +19,7 @@ export class IntegrationsRepository {
   async getUserIntegration(userId: string, name: string) {
     return prisma.integration.findFirst({
       where: { userId, provider: { name } },
+      include: { provider: true },
     });
   }
 
