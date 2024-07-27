@@ -36,6 +36,10 @@ class SyncService {
 
     return "";
   }
+
+  async createSync(data: ICreateSyncDTO) {
+    return this.syncRepository.createSync(data);
+  }
 }
 
 export const syncService = new SyncService(

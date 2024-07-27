@@ -1,7 +1,11 @@
+import { IsNotEmpty } from "class-validator";
 import { SyncType } from "database";
 
-export interface ICreateSyncDTO {
+export class ICreateSyncDTO {
+  @IsNotEmpty()
   integrationId: number;
+
+  @IsNotEmpty()
   type: SyncType;
 }
 

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { integrationsService } from 'services';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { integrationsService, syncService } from 'services';
 
 @Injectable()
 export class SyncService {
@@ -7,9 +7,26 @@ export class SyncService {
 
   async helloWorld() {
     const result = await integrationsService.getUserIntegration('3331', 'dd');
-    console.log(result);
-    return {
-      hello: result,
-    };
+    try {
+      await syncService.fullSyncUserIntegration({
+        userId: '3331',
+        name: 'dd',
+      });
+
+      return {
+        hello: result,
+      };
+    } catch (e) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_ACCEPTABLE,
+          error: 'This is a custom message',
+        },
+        HttpStatus.NOT_ACCEPTABLE,
+        {
+          cause: e,
+        },
+      );
+    }
   }
 }
