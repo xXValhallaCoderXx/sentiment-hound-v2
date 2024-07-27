@@ -1,4 +1,5 @@
 "use server";
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/next-auth.lib";
 import { planService } from "services";
@@ -22,6 +23,7 @@ export const upgradePlanAction = async (formData: FormData) => {
     rawFormData.planId as string
   );
 
-  console.log(result);
+  console.log("PLAN UPDATED", result);
   revalidatePath("/dashboard/profile");
+  redirect("/dashboard/profile?planUpdated=true");
 };

@@ -18,14 +18,8 @@ export class SyncService {
       };
     } catch (e) {
       throw new HttpException(
-        {
-          status: HttpStatus.NOT_ACCEPTABLE,
-          error: 'This is a custom message',
-        },
+        'This is a custom message',
         HttpStatus.NOT_ACCEPTABLE,
-        {
-          cause: e,
-        },
       );
     }
   }

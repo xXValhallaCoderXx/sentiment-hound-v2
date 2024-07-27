@@ -1,20 +1,19 @@
 import { auth } from "@/lib/next-auth.lib";
+import { CheckCircle } from "lucide-react";
+import Link from "next/link";
 import {
   Avatar,
-  Card,
   Flex,
   Box,
   Text,
   Title,
-  Container,
-  TextInput,
-  Center,
   Stack,
+  Notification,
 } from "@mantine/core";
 import { userService, planService } from "services";
 import Plans from "./components/Plans";
 
-const ProfilePage = async () => {
+const ProfilePage = async (props: any) => {
   const session = await auth();
   const userId = session?.user?.id;
   const user = await userService.getUserById(userId as string);
@@ -22,6 +21,20 @@ const ProfilePage = async () => {
 
   return (
     <Box className="px-6 py-4">
+      {props?.searchParams?.planUpdated === "true" && (
+        <Box pos="absolute" right={60} top={60}>
+          <Link href="/dashboard/profile">
+            <Notification
+              icon={<CheckCircle />}
+              color="teal"
+              title="Plan updated!"
+              mt="md"
+            >
+              You have successfully updated your plan
+            </Notification>
+          </Link>
+        </Box>
+      )}
       <Flex className="gap-3">
         <Title>Profile</Title>
         <Avatar
