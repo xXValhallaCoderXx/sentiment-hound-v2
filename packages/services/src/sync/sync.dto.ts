@@ -7,6 +7,14 @@ export class ICreateSyncDTO {
 
   @IsNotEmpty()
   type: SyncType;
+
+  @IsNotEmpty()
+  taskId: number;
+}
+
+export class ICheckExistingIntegrationSyncDTO {
+  @IsNotEmpty()
+  integrationId: number;
 }
 
 

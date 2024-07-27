@@ -2,42 +2,93 @@ import {
   IntegrationsRepository,
   integrationsRepository,
 } from "../integrations/integrations.repository";
-import { SyncType } from "database";
+import { SyncType, TaskType } from "database";
+import { taskService, TaskService } from "../task/task.service";
 import { SyncRepository, syncRepository } from "./sync.repository";
-import { ICreateSyncDTO, IFullSyncUserIntegrationDTO } from "./sync.dto";
-import { NotFoundError } from "../errors";
+import { IFullSyncUserIntegrationDTO } from "./sync.dto";
+import { NotFoundError, BadRequestError } from "../errors";
 
+class SyncService {
+  constructor(
+    private integrationsRepository: IntegrationsRepository,
+    private syncRepository: SyncRepository,
+    private taskService: TaskService
+  ) {
+    this.integrationsRepository = integrationsRepository;
+    this.syncRepository = syncRepository;
+    this.taskService = taskService;
+  }
+  async fullSyncUserIntegration(data: IFullSyncUserIntegrationDTO) {
+    const integration = await this.integrationsRepository.getUserIntegration(
+      data.userId,
+      data.name
+    );
 
+    if (!integration) {
+      throw new NotFoundError(`${data.name} integration not found`);
+    }
 
- class SyncService {
-   constructor(
-     private integrationsRepository: IntegrationsRepository,
-     private syncRepository: SyncRepository
-   ) {
-     this.integrationsRepository = integrationsRepository;
-     this.syncRepository = syncRepository;
-   }
-   async fullSyncUserIntegration(data: IFullSyncUserIntegrationDTO) {
-     // return await this.integrationsRepository.getPlans();
+    const existingSync = await this.syncRepository.getUserSyncForIntegration({
+      integrationId: integration.id,
+    });
 
-     const getUserIntegration =
-       await this.integrationsRepository.getUserIntegration(
-         data.userId,
-         data.name
-       );
+    if (existingSync) {
+      throw new BadRequestError("Sync already in progress");
+    }
 
-     const heh = await this.syncRepository.createSync({
-       integrationId: getUserIntegration.id,
-       type: SyncType.FULL,
-     });
-     console.log("HEH", heh);
-     return {
-       hello: "world",
-     };
-   }
- }
+    const newTask = await this.taskService.createUserTask({
+      userId: data.userId,
+      type: TaskType.OTHER,
+    });
 
-export const syncService = new SyncService(integrationsRepository, syncRepository);
+    if (!newTask) {
+      throw new BadRequestError("Task not able to be created");
+    }
+
+    const newSync = await this.syncRepository.createSync({
+      integrationId: integration.id,
+      type: SyncType.FULL,
+      taskId: newTask.id,
+    });
+    console.log("SYNC TASK", newSync);
+    return {
+      hello: "world",
+    };
+  }
+
+  async checkIfSyncExistsForUserIntegration({
+    integrationId,
+    userId,
+  }: {
+    integrationId: number;
+    userId: number;
+  }) {
+    // Check if sync exists for user integration
+    const integration = await this.integrationsRepository.findFirst({
+      where: {
+        id: integrationId,
+        userId: userId,
+      },
+    });
+
+    if (!integration) {
+      throw new NotFoundError("Integration not found for this user");
+    }
+
+    // const idleSync = await prisma.sync.findFirst({
+    //   where: {
+    //     integrationId: integrationId,
+    //     status: 'IDLE',
+    //   },
+    // });
+  }
+}
+
+export const syncService = new SyncService(
+  integrationsRepository,
+  syncRepository,
+  taskService
+);
 
 // class SyncService {
 

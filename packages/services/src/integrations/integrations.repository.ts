@@ -9,6 +9,10 @@ export class IntegrationsRepository {
     return await prisma.user.findMany();
   }
 
+  async findFirst(where: any) {
+    return await prisma.integration.findFirst({ where });
+  }
+
   async getUserIntegrations(userId: string) {
     return prisma.integration.findMany({
       where: { userId },
