@@ -1,5 +1,6 @@
 export * from "./user/user.dto";
 export * from "./posts/post.dto";
+export * from "./sync/sync.dto";
 
 export { postService } from "./posts/post.service";
 export { userService } from "./user/user.service";
