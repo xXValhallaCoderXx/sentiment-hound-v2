@@ -5,17 +5,13 @@ import {
 import { SyncType } from "database";
 import { SyncRepository, syncRepository } from "./sync.repository";
 import { ICreateSyncDTO, IFullSyncUserIntegrationDTO } from "./sync.dto";
+import { NotFoundError } from "../errors";
 
 class SyncService {
   private integrationsRepository: IntegrationsRepository;
-  private syncRepository: SyncRepository;
 
-  constructor(
-    integrationsRepository: IntegrationsRepository,
-    syncRepository: SyncRepository
-  ) {
+  constructor(integrationsRepository: IntegrationsRepository) {
     this.integrationsRepository = integrationsRepository;
-    this.syncRepository = syncRepository;
   }
 
   async fullSyncUserIntegration(data: IFullSyncUserIntegrationDTO) {
@@ -26,24 +22,23 @@ class SyncService {
         data.name
       );
 
+    console.log("USER INTEGRATION", getUserIntegration);
+
     if (!getUserIntegration) {
-      throw new Error("Integration not found");
+      throw new NotFoundError("Integration not found");
     }
 
-    const sync = await this.syncRepository.createSync({
-      integrationId: getUserIntegration.id,
-      type: SyncType.FULL,
-    });
+    const heh = syncRepository.helloWorld();
 
-    return "";
-  }
+    // const sync = this.syncRepository.createSync({
+    //   integrationId: getUserIntegration.id,
+    //   type: SyncType.FULL,
+    // });
 
-  async createSync(data: ICreateSyncDTO) {
-    return this.syncRepository.createSync(data);
+    return {
+      blah: "laa",
+    };
   }
 }
 
-export const syncService = new SyncService(
-  integrationsRepository,
-  syncRepository
-);
+export const syncService = new SyncService(integrationsRepository);

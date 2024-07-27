@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { integrationsService, syncService } from 'services';
+import { integrationsService } from 'services';
 
 @Injectable()
 export class SyncService {
@@ -8,10 +8,10 @@ export class SyncService {
   async helloWorld() {
     const result = await integrationsService.getUserIntegration('3331', 'dd');
     try {
-      await syncService.fullSyncUserIntegration({
-        userId: '3331',
-        name: 'dd',
-      });
+      //   await syncService.fullSyncUserIntegration({
+      //     userId: '3331',
+      //     name: 'dd',
+      //   });
 
       return {
         hello: result,

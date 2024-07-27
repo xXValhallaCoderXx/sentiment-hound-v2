@@ -2,7 +2,12 @@
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import { SyncType } from "database";
-import { integrationsService, youtubeService, syncService } from "services";
+import {
+  integrationsService,
+  youtubeService,
+  syncService,
+  NotFoundError,
+} from "services";
 
 export const integrationMenuAction = async (formData: FormData) => {
   const session = await auth();
@@ -20,8 +25,11 @@ export const integrationMenuAction = async (formData: FormData) => {
       type: syncType as SyncType,
       name: integration as string,
     });
+    console.log("RESPONSE", response);
   } catch (error) {
-    console.log("ERROR", error);
+    if (error instanceof NotFoundError) {
+      redirect(`/dashboard/posts/youtube?isSyncStarted=false`);
+    }
   }
 
   redirect(`/dashboard/posts/youtube?isSyncStarted=true`);
