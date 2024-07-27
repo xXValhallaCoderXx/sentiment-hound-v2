@@ -9,7 +9,14 @@ export class ICreateSyncDTO {
   type: SyncType;
 }
 
-export interface IFullSyncUserIntegrationDTO {
+
+export class IFullSyncUserIntegrationDTO {
+  @IsNotEmpty()
   userId: string;
+
+  @IsNotEmpty()
   name: string;
+
+  @IsNotEmpty()
+  type: SyncType;
 }

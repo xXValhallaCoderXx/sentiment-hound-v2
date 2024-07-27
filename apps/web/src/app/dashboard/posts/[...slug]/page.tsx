@@ -2,9 +2,7 @@ import { integrationsService, postService } from "services";
 import { auth } from "@/lib/next-auth.lib";
 
 import { Box } from "@mantine/core";
-import PostListView from "./PostListView";
 import PostListTable from "./components/PostListTable";
-import PostDetailDrawer from "./components/PostDetailDrawer";
 import ActionPanel from "./components/ActionPanel";
 
 const PostListPage = async ({

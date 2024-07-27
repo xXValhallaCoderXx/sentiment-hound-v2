@@ -1,20 +1,7 @@
 import { FC } from "react";
-import {
-  Box,
-  Title,
-  Stack,
-  Button,
-  Flex,
-  MenuDivider,
-  Text,
-  Menu,
-  rem,
-  MenuTarget,
-  MenuDropdown,
-  MenuLabel,
-  MenuItem,
-} from "@mantine/core";
-import { MessageCircle, Trash } from "lucide-react";
+import { Box, Title, Button, Flex } from "@mantine/core";
+import { integrationMenuAction } from "../actions";
+import SyncSubmitButton from "./SyncSubmitButton";
 
 interface IActionPanelProps {
   name: string;
@@ -28,31 +15,11 @@ const ActionPanel: FC<IActionPanelProps> = ({ name }) => {
           {name}
         </Title>
         <Box p={10}>
-          <Menu shadow="md" width={200}>
-            <MenuTarget>
-              <Button>Action</Button>
-            </MenuTarget>
-
-            <MenuDropdown>
-              <MenuLabel>Integrations</MenuLabel>
-              <MenuItem>Partial Integration</MenuItem>
-              <MenuItem>Full Integration</MenuItem>
-              <MenuItem>Content Integration</MenuItem>
-
-              <MenuDivider />
-
-              <MenuLabel>Danger zone</MenuLabel>
-
-              <MenuItem
-                color="red"
-                leftSection={
-                  <Trash style={{ width: rem(14), height: rem(14) }} />
-                }
-              >
-                Delete Integration
-              </MenuItem>
-            </MenuDropdown>
-          </Menu>
+          <form action={integrationMenuAction}>
+            <SyncSubmitButton />
+            <input type="hidden" name="integrationName" value={name} />
+            <input type="hidden" name="syncType" value="full" />
+          </form>
         </Box>
       </Flex>
     </Box>

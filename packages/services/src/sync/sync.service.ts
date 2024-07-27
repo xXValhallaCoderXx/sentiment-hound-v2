@@ -19,6 +19,7 @@ class SyncService {
   }
 
   async fullSyncUserIntegration(data: IFullSyncUserIntegrationDTO) {
+    console.log("FULL SYNC USER INTEGRATION", data);
     const getUserIntegration =
       await this.integrationsRepository.getUserIntegration(
         data.userId,
