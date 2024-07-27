@@ -1,28 +1,22 @@
-import { prisma, SyncStatus } from "database";
+import { prisma } from "database";
 import { ICreateSyncDTO } from "./sync.dto";
 
 export class SyncRepository {
-  createSync(data: ICreateSyncDTO) {
-    console.log("PRISMASYNC", prisma);
-    // try {
-    //   await prisma.sync.create({
-    //     data: {
-    //       integrationId,
-    //       type: type,
-    //       status: SyncStatus.IDLE,
-    //       startedAt: new Date(),
-    //       taskId: 1,
-    //     },
-    //   });
-    // } catch (error) {
-    //   throw new Error(error);
-    // }
-    return "hello";
+  async getAllSyncs() {
+    return await prisma.sync.findMany();
   }
 
-  helloWorld() {
-    console.log("PRISMASYNC", prisma);
-    return "hello";
+  async createSync(data: ICreateSyncDTO) {
+    const { integrationId, type } = data;
+    return await prisma.sync.create({
+      data: {
+        integrationId,
+        type: type,
+        status: "IDLE",
+        startedAt: new Date(),
+        taskId: 1,
+      },
+    });
   }
 }
 

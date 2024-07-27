@@ -27,8 +27,11 @@ export const integrationMenuAction = async (formData: FormData) => {
     });
     console.log("RESPONSE", response);
   } catch (error) {
+    console.log("ERRORO ", error);
     if (error instanceof NotFoundError) {
       redirect(`/dashboard/posts/youtube?isSyncStarted=false`);
+    } else {
+      redirect(`/dashboard/posts/youtube?isSyncError=true`);
     }
   }
 
