@@ -9,7 +9,10 @@ import {
   NotFoundError,
 } from "services";
 
-export const integrationMenuAction = async (formData: FormData) => {
+export const integrationMenuAction = async (
+  prevState: any,
+  formData: FormData
+) => {
   const session = await auth();
   const userId = session?.user?.id as string;
 
@@ -29,9 +32,11 @@ export const integrationMenuAction = async (formData: FormData) => {
   } catch (error) {
     console.log("ERRORO ", error);
     if (error instanceof NotFoundError) {
-      redirect(`/dashboard/posts/youtube?isSyncStarted=false`);
+      // redirect(`/dashboard/posts/youtube?isSyncStarted=false`);
+      return { message: "what" };
     } else {
-      redirect(`/dashboard/posts/youtube?isSyncError=true`);
+      // redirect(`/dashboard/posts/youtube?isSyncError=true`);
+      return { message: "what" };
     }
   }
 

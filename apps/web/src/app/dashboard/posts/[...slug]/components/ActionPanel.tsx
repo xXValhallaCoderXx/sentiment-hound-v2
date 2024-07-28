@@ -15,11 +15,12 @@ const ActionPanel: FC<IActionPanelProps> = ({ name }) => {
           {name}
         </Title>
         <Box p={10}>
-          <form action={integrationMenuAction}>
+          <SyncSubmitButton name={name} />
+          {/* <form action={integrationMenuAction}>
             <SyncSubmitButton />
             <input type="hidden" name="integrationName" value={name} />
             <input type="hidden" name="syncType" value="full" />
-          </form>
+          </form> */}
         </Box>
       </Flex>
     </Box>
