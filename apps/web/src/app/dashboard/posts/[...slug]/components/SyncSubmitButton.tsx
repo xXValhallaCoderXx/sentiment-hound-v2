@@ -1,20 +1,32 @@
 "use client";
 
-import { FC, useActionState } from "react";
+import { FC, useEffect, useRef } from "react";
 import { Button } from "@mantine/core";
 import { useFormStatus, useFormState } from "react-dom";
 import { integrationMenuAction } from "../actions";
+import { notifications } from "@mantine/notifications";
 interface ISyncSubmitButtonProps {
   name: string;
 }
 
 const initialState = {
   message: "",
+  error: false,
 };
 
 const SyncSubmitButton: FC<ISyncSubmitButtonProps> = ({ name }) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(integrationMenuAction, initialState);
-  console.log("STATE", state);
+
+  useEffect(() => {
+    if (state.error) {
+      notifications.show({
+        color: "red",
+        title: "Error initializng sync",
+        message: state?.message,
+      });
+    }
+  }, [state]);
   return (
     <form action={formAction}>
       <SubmitButton />

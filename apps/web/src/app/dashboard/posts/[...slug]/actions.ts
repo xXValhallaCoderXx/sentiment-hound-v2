@@ -29,16 +29,21 @@ export const integrationMenuAction = async (
       name: integration as string,
     });
     console.log("RESPONSE", response);
-  } catch (error) {
+  } catch (error: any) {
     console.log("ERRORO ", error);
     if (error instanceof NotFoundError) {
-      // redirect(`/dashboard/posts/youtube?isSyncStarted=false`);
-      return { message: "what" };
+      return {
+        message: error?.message,
+        error: true,
+      };
     } else {
-      // redirect(`/dashboard/posts/youtube?isSyncError=true`);
-      return { message: "what" };
+      return {
+        message: error?.message,
+        error: true,
+      };
     }
   }
 
-  redirect(`/dashboard/posts/youtube?isSyncStarted=true`);
+  // redirect(`/dashboard/posts/youtube?isSyncStarted=true`);
+  return { message: "what", error: false };
 };
