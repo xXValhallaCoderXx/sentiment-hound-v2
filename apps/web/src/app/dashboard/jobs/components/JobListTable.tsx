@@ -10,6 +10,8 @@ import {
 } from "@mantine/core";
 import NoData from "@/components/molecules/NoData";
 import { taskRepository } from "services/src/task/task.repository";
+import RestartSyncButton from "./RestartSyncButton";
+import DeleteJobButton from "./DeleteJobSyncButton";
 
 const JobListTable = async () => {
   const session = await auth();
@@ -31,15 +33,23 @@ const JobListTable = async () => {
     );
   }
 
-  const rows = jobs?.map((element) => (
-    <TableTr key={element.id}>
-      <TableTd>{element.type}</TableTd>
-      <TableTd>{element.status}</TableTd>
-      <TableTd>{new Date(element.createdAt).toDateString()}</TableTd>
-      <TableTd>{new Date(element.updatedAt).toDateString()}</TableTd>
-      <TableTd>Hello</TableTd>
-    </TableTr>
-  ));
+  const rows = jobs?.map((element) => {
+    console.log("ELEMENT", element);
+    return (
+      <TableTr key={element.id}>
+        <TableTd>{element.type}</TableTd>
+        <TableTd>{element.status}</TableTd>
+        <TableTd>{new Date(element.createdAt).toDateString()}</TableTd>
+        <TableTd>{new Date(element.updatedAt).toDateString()}</TableTd>
+        <TableTd>
+          <Flex gap={2}>
+            <RestartSyncButton jobId={element.id} />
+            <DeleteJobButton jobId={element.id} />
+          </Flex>
+        </TableTd>
+      </TableTr>
+    );
+  });
 
   return (
     <Table>
