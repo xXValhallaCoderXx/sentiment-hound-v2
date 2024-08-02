@@ -1,5 +1,5 @@
 import { prisma, TaskStatus } from "database";
-import { ICreateTaskDTO } from "./task.dto";
+import { ICreateTaskDTO, IGetUserTasksDTO } from "./task.dto";
 
 export class TaskRepository {
   async createTask(data: ICreateTaskDTO) {
@@ -14,6 +14,24 @@ export class TaskRepository {
       });
     } catch (error) {
       console.log("Error creating task", error);
+      return null;
+    }
+  }
+
+  async getUserTasks(data: IGetUserTasksDTO) {
+    const { userId } = data;
+    try {
+      return await prisma.task.findMany({
+        where: {
+          userId,
+        },
+        include: {
+          jobs: true,
+          syncs: true,
+        },
+      });
+    } catch (error) {
+      console.log("Error getting user tasks", error);
       return null;
     }
   }

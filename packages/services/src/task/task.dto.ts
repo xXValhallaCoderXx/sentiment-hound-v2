@@ -8,3 +8,8 @@ export class ICreateTaskDTO {
   @IsNotEmpty()
   type: TaskType;
 }
+
+export class IGetUserTasksDTO {
+  @IsNotEmpty()
+  userId: string;
+}

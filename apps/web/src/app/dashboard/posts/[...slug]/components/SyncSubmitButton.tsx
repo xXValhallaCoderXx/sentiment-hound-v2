@@ -15,7 +15,6 @@ const initialState = {
 };
 
 const SyncSubmitButton: FC<ISyncSubmitButtonProps> = ({ name }) => {
-  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useFormState(integrationMenuAction, initialState);
 
   useEffect(() => {
@@ -24,6 +23,7 @@ const SyncSubmitButton: FC<ISyncSubmitButtonProps> = ({ name }) => {
         color: "red",
         title: "Error initializng sync",
         message: state?.message,
+        position: "top",
       });
     }
   }, [state]);

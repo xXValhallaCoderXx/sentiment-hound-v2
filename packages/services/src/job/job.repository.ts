@@ -1,5 +1,5 @@
 import { prisma } from "database";
-import { ICreateJobDTO } from "./job.dto";
+import { ICreateJobDTO, IGetUserJobsDTO } from "./job.dto";
 
 export class JobRepository {
   async createJob(data: ICreateJobDTO) {
@@ -9,6 +9,11 @@ export class JobRepository {
         taskId: 1,
       },
     });
+  }
+
+  async getUserJobs(data: IGetUserJobsDTO) {
+    const { userId } = data;
+    return "";
   }
 }
 

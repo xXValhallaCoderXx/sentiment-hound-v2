@@ -33,7 +33,9 @@ class SyncService {
     });
 
     if (existingSync) {
-      throw new BadRequestError("Sync already in progress");
+      throw new BadRequestError(
+        "You have an exisiting sync, please check your jobs"
+      );
     }
 
     const newTask = await this.taskService.createUserTask({

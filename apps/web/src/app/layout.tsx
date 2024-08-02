@@ -55,7 +55,7 @@ export default async function RootLayout({
             },
           }}
         >
-          <Notifications />
+          <Notifications position="top-right" />
           {children}
         </MantineProvider>
       </body>
