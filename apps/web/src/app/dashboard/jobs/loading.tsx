@@ -1,13 +1,14 @@
-import { Loader } from "@mantine/core";
+import PageLayout from "@/components/templates/PageLayout";
+import { Loader, Flex, Title } from "@mantine/core";
 
 const JobsLoadingPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <Loader />
-      <div className="mt-4 text-lg font-semibold text-gray-800">
-        Loading jobs...
-      </div>
-    </div>
+    <PageLayout title="Jobs">
+      <Flex flex={1} justify="center" className="h-full">
+        <Loader />
+        <Title>Loading jobs...</Title>
+      </Flex>
+    </PageLayout>
   );
 };
 

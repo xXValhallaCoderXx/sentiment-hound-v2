@@ -1,47 +1,40 @@
 import { auth } from "@/lib/next-auth.lib";
+import { Suspense } from "react";
+import JobListTable from "./components/JobListTable";
+import JobListTableLoading from "./components/JobListTableLoading";
 import PageLayout from "@/components/templates/PageLayout";
-import {
-  Table,
-  TableTr,
-  TableThead,
-  TableTh,
-  TableTbody,
-  TableTd,
-} from "@mantine/core";
-
-import { taskRepository } from "services/src/task/task.repository";
+import { Flex } from "@mantine/core";
+import NoData from "@/components/molecules/NoData";
+import { integrationsService } from "services";
 
 const JobsPage = async () => {
   const session = await auth();
   const userId = session?.user?.id as string;
-  const jobs = await taskRepository.getUserTasks({ userId });
-  console.log("JOBS", jobs);
+  const integrations = await integrationsService.getUserIntegrations(userId);
 
-  const rows = jobs?.map((element) => (
-    <TableTr key={element.id}>
-      <TableTd>{element.type}</TableTd>
-      <TableTd>{element.status}</TableTd>
-      <TableTd>{new Date(element.createdAt).toDateString()}</TableTd>
-      <TableTd>{new Date(element.updatedAt).toDateString()}</TableTd>
-      <TableTd>Hello</TableTd>
-    </TableTr>
-  ));
+  if (integrations.length === 0) {
+    return (
+      <PageLayout title="Jobs">
+        <Flex flex={1} justify="center" className="h-full">
+          <NoData
+            title="No Integrations Found"
+            description="Integrate a social media account to get started"
+            redirectCta={{
+              href: "/dashboard/integrations",
+              label: "Integrate Account",
+            }}
+          />
+        </Flex>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout title="Jobs" description="Check you latests jobs">
       Jobs Page
-      <Table>
-        <TableThead>
-          <TableTr>
-            <TableTh>Type</TableTh>
-            <TableTh>Status</TableTh>
-            <TableTh>Created At</TableTh>
-            <TableTh>Updated At</TableTh>
-            <TableTh>Actions</TableTh>
-          </TableTr>
-        </TableThead>
-        <TableTbody>{rows}</TableTbody>
-      </Table>
+      <Suspense fallback={<JobListTableLoading />}>
+        <JobListTable />
+      </Suspense>
     </PageLayout>
   );
 };

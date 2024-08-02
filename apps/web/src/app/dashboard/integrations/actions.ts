@@ -73,7 +73,7 @@ export const revokeOauthAction = async (formData: FormData) => {
     rawFormData.providerId as string
   );
 
-  revalidatePath("/dashboard/integrations");
+  revalidatePath("/dashboard/jobs");
   redirect("/dashboard/integrations");
 };
 

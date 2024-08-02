@@ -27,7 +27,11 @@ export class TaskRepository {
         },
         include: {
           jobs: true,
-          syncs: true,
+          syncs: {
+            include: {
+              provider: true,
+            },
+          },
         },
       });
     } catch (error) {

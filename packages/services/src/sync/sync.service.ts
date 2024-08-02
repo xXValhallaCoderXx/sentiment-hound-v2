@@ -37,6 +37,7 @@ class SyncService {
         "You have an exisiting sync, please check your jobs"
       );
     }
+    // TODO - USE TRANSACTION FOR DB
 
     const newTask = await this.taskService.createUserTask({
       userId: data.userId,
@@ -51,11 +52,9 @@ class SyncService {
       integrationId: integration.id,
       type: SyncType.FULL,
       taskId: newTask.id,
+      providerId: integration.providerId,
     });
-    console.log("SYNC TASK", newSync);
-    return {
-      hello: "world",
-    };
+    return newSync;
   }
 
   async checkIfSyncExistsForUserIntegration({

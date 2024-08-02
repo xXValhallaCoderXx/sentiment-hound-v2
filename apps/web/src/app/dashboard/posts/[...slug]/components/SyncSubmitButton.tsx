@@ -23,7 +23,12 @@ const SyncSubmitButton: FC<ISyncSubmitButtonProps> = ({ name }) => {
         color: "red",
         title: "Error initializng sync",
         message: state?.message,
-        position: "top",
+      });
+    } else if (state.success){
+      notifications.show({
+        color: "green",
+        title: "Sync created",
+        message: state?.message,
       });
     }
   }, [state]);

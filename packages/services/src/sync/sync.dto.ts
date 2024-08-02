@@ -6,6 +6,9 @@ export class ICreateSyncDTO {
   integrationId: number;
 
   @IsNotEmpty()
+  providerId: number;
+
+  @IsNotEmpty()
   type: SyncType;
 
   @IsNotEmpty()

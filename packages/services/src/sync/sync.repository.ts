@@ -17,7 +17,7 @@ export class SyncRepository {
   }
 
   async createSync(data: ICreateSyncDTO) {
-    const { integrationId, type } = data;
+    const { integrationId, type, providerId } = data;
     try {
       return await prisma.sync.create({
         data: {
@@ -26,6 +26,7 @@ export class SyncRepository {
           status: "IDLE",
           startedAt: new Date(),
           taskId: 1,
+          providerId,
         },
       });
     } catch (error) {

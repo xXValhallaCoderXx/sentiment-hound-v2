@@ -1,6 +1,7 @@
 "use server";
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { SyncType } from "database";
 import {
   integrationsService,
@@ -28,10 +29,11 @@ export const integrationMenuAction = async (
       type: syncType as SyncType,
       name: integration as string,
     });
-    console.log("RESPONSE", response);
-    return { message: "what", error: false };
+    console.log("ACTION RESPONSE", response);
+    revalidatePath(`/dashboard/posts/${integration}`);
+    return { message: "New Sync Created", success: true };
   } catch (error: any) {
-    console.log("ERROR ", error);
+    console.log("ACTION ERROR ", error);
     return {
       message: error?.message,
       error: true,
