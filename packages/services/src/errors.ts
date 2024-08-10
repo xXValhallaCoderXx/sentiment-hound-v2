@@ -12,6 +12,14 @@ export class BadRequestError extends CustomError {
   }
 }
 
+
+export class DatabaseError extends CustomError {
+  constructor(message: string) {
+    super(message);
+    this.name = "DatabaseError";
+  }
+}
+
 export class UnauthorizedError extends CustomError {
   constructor(message: string) {
     super(message);

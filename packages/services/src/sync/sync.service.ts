@@ -54,6 +54,7 @@ class SyncService {
       taskId: newTask.id,
       providerId: integration.providerId,
     });
+    console.log("NEW SYNC", newSync); 
     return newSync;
   }
 

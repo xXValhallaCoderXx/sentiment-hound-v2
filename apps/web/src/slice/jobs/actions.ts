@@ -38,6 +38,7 @@ export const deleteJobAction = async (prevState: any, formData: FormData) => {
     const jobId = Number(jobIdEntry);
     const response = await taskService.deleteUserTask(jobId);
 
+    revalidatePath("/dashboard/jobs");
     return { message: response.message, success: true };
   } catch (error: any) {
     console.log("ACTION ERROR ", error);

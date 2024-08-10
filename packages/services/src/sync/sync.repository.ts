@@ -1,4 +1,5 @@
 import { prisma } from "database";
+import { DatabaseError } from "../errors";
 import { ICreateSyncDTO, ICheckExistingIntegrationSyncDTO } from "./sync.dto";
 
 export class SyncRepository {
@@ -17,7 +18,7 @@ export class SyncRepository {
   }
 
   async createSync(data: ICreateSyncDTO) {
-    const { integrationId, type, providerId } = data;
+    const { integrationId, type, providerId, taskId } = data;
     try {
       return await prisma.sync.create({
         data: {
@@ -25,13 +26,13 @@ export class SyncRepository {
           type: type,
           status: "IDLE",
           startedAt: new Date(),
-          taskId: 1,
+          taskId,
           providerId,
         },
       });
     } catch (error) {
-      console.log("Error creating sync", error);
-      return null;
+      console.log("Error creating sync entry", error);
+      throw new DatabaseError("Error creating sync");
     }
   }
 
