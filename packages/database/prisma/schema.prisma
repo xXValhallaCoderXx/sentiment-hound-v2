@@ -26,8 +26,8 @@ model User {
   tasks         Task[]
   planId        Int?
   plan          Plan?           @relation(fields: [planId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
  
 model Account {
@@ -42,12 +42,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
   @@id([provider, providerAccountId])
 }
  
@@ -56,7 +53,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -65,7 +61,6 @@ model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
   @@id([identifier, token])
 }
  
@@ -81,25 +76,9 @@ model Integration {
   providerId   Int
   provider     Provider @relation(fields: [providerId], references: [id])
   posts        Post[]
-  syncs                    Sync[]
+  tasks        Task[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
-}
-
-model Sync {
-  id                       Int         @id @default(autoincrement())
-  integrationId            Int
-  integration              Integration @relation(fields: [integrationId], references: [id])
-  type                     SyncType
-  status                   SyncStatus  @default(IDLE)
-  startedAt                DateTime
-  completedAt              DateTime?
-  errorMessage             String?
-  taskId                   Int
-  task                     Task        @relation(fields: [taskId], references: [id])
-  lastSyncTime             DateTime?
-  providerId               Int
-  provider                 Provider    @relation(fields: [providerId], references: [id])
 }
 
 
@@ -108,7 +87,6 @@ model Provider {
   name        String   @unique
   image       String
   description String?
-  syncs       Sync[]
   integrations Integration[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
@@ -165,7 +143,8 @@ model Task {
   userId        String
   user          User         @relation(fields: [userId], references: [id])
   jobs          Job[]
-  syncs         Sync[]
+  integrationId Int
+  integration   Integration  @relation(fields: [integrationId], references: [id])
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -175,7 +154,8 @@ model Job {
   status        JobStatus    @default(PENDING)
   errorMessage  String?
   taskId        Int
-  task          Task         @relation(fields: [taskId], references: [id])
+  task          Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  data          Json         // Data needed for the job, e.g., post IDs or integration details
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -190,19 +170,6 @@ model Plan {
 }
 
 
-enum SyncStatus {
-  IDLE
-  IN_PROGRESS
-  COMPLETED
-  FAILED
-}
-
-enum SyncType {
-  PARTIAL
-  FULL
-  CONTENT
-}
-
 enum SentimentStatus {
   PENDING
   IN_PROGRESS
@@ -211,9 +178,9 @@ enum SentimentStatus {
 }
 
 enum TaskType {
-  FETCH_COMMENTS
+  FULL_SYNC
+  PARTIAL_SYNC
   ANALYZE_COMMENTS
-  OTHER
 }
 
 enum TaskStatus {
@@ -229,4 +196,3 @@ enum JobStatus {
   COMPLETED
   FAILED
 }
-
