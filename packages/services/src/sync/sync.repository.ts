@@ -34,6 +34,19 @@ export class SyncRepository {
       return null;
     }
   }
+
+  async deleteSyncByTaskId(taskId: number) {
+    try {
+      return await prisma.sync.deleteMany({
+        where: {
+          taskId,
+        },
+      });
+    } catch (error) {
+      console.log("Error deleting sync", error);
+      return null;
+    }
+  }
 }
 
 export const syncRepository = new SyncRepository();

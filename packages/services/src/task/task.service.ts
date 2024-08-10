@@ -1,3 +1,4 @@
+import { syncRepository } from "../sync/sync.repository";
 import { TaskRepository, taskRepository } from "./task.repository";
 import { ICreateTaskDTO, IGetUserTasksDTO } from "./task.dto";
 
@@ -34,6 +35,13 @@ export class TaskService {
     // });
 
     return { message: "Cancel all tasks" };
+  }
+
+  async deleteUserTask(taskId: number) {
+    await syncRepository.deleteSyncByTaskId(taskId);
+    await this.taskRepository.deleteUserTask(taskId);
+
+    return { message: `#${taskId} - Cancelled` };
   }
 }
 

@@ -39,6 +39,19 @@ export class TaskRepository {
       return null;
     }
   }
+
+  async deleteUserTask(taskId: number) {
+    try {
+      return await prisma.task.delete({
+        where: {
+          id: taskId,
+        },
+      });
+    } catch (error) {
+      console.log("Error deleting task", error);
+      return null;
+    }
+  }
 }
 
 export const taskRepository = new TaskRepository();

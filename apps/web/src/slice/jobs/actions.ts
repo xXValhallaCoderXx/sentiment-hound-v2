@@ -1,5 +1,6 @@
 "use server";
 import { auth } from "@/lib/next-auth.lib";
+import { taskService } from "services/src/task/task.service";
 
 export const restartJobAction = async (prevState: any, formData: FormData) => {
   const session = await auth();
@@ -24,8 +25,17 @@ export const deleteJobAction = async (prevState: any, formData: FormData) => {
   const userId = session?.user?.id as string;
 
   try {
-    const jobId = formData.get("jobId");
-    console.log("JOB ID", jobId);
+    const jobIdEntry = formData.get("jobId");
+
+    // Ensure jobIdEntry is a string before converting to number
+    if (!jobIdEntry || typeof jobIdEntry !== "string") {
+      return {
+        message: "Job ID is required and must be a string",
+        error: true,
+      };
+    }
+    const jobId = Number(jobIdEntry);
+    await taskService.deleteUserTask(jobId);
 
     return { message: "Job Deleted", success: true };
   } catch (error: any) {
