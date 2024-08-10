@@ -1,5 +1,6 @@
 "use server";
 import { auth } from "@/lib/next-auth.lib";
+import { revalidatePath } from "next/cache";
 import { taskService } from "services/src/task/task.service";
 
 export const restartJobAction = async (prevState: any, formData: FormData) => {
@@ -35,9 +36,9 @@ export const deleteJobAction = async (prevState: any, formData: FormData) => {
       };
     }
     const jobId = Number(jobIdEntry);
-    await taskService.deleteUserTask(jobId);
+    const response = await taskService.deleteUserTask(jobId);
 
-    return { message: "Job Deleted", success: true };
+    return { message: response.message, success: true };
   } catch (error: any) {
     console.log("ACTION ERROR ", error);
     return {
