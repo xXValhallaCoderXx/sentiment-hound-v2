@@ -1,4 +1,3 @@
-import { SyncType } from "database";
 import { IsNotEmpty } from "class-validator";
 
 export class IGetUserJobsDTO {
@@ -6,9 +5,6 @@ export class IGetUserJobsDTO {
   userId: string;
 }
 
-
-
 export interface ICreateJobDTO {
   integrationId: number;
-  type: SyncType;
 }

@@ -42,9 +42,12 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
+ 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+ 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
   @@id([provider, providerAccountId])
 }
  
@@ -53,6 +56,7 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -61,16 +65,16 @@ model VerificationToken {
   identifier String
   token      String
   expires    DateTime
+ 
   @@id([identifier, token])
 }
- 
 
 model Integration {
   id           Int      @id @default(autoincrement())
   accountId    String
   accessToken  String
   refreshToken String
-  refreshTokenExpiresAt     DateTime
+  refreshTokenExpiresAt DateTime
   userId       String
   user         User     @relation(fields: [userId], references: [id])
   providerId   Int
@@ -81,17 +85,15 @@ model Integration {
   updatedAt    DateTime @default(now())
 }
 
-
 model Provider {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  image       String
-  description String?
-  integrations Integration[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
+  image         String
+  description   String?
+  integrations  Integration[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
 }
-
 
 model Post {
   id              Int          @id @default(autoincrement())
@@ -109,7 +111,7 @@ model Post {
   integration     Integration  @relation(fields: [integrationId], references: [id])
   comments        Comment[]
   createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
 
 model Comment {
@@ -130,7 +132,7 @@ model AspectAnalysis {
   aspect        String
   sentiment     Float
   commentId     Int
-  comment       Comment        @relation(fields: [commentId], references: [id])
+  comment       Comment        @relation(fields: [commentId], references: [id], onDelete: Cascade)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -169,7 +171,6 @@ model Plan {
   updatedAt     DateTime @default(now())
 }
 
-
 enum SentimentStatus {
   PENDING
   IN_PROGRESS
@@ -181,6 +182,7 @@ enum TaskType {
   FULL_SYNC
   PARTIAL_SYNC
   ANALYZE_COMMENTS
+  OTHER
 }
 
 enum TaskStatus {

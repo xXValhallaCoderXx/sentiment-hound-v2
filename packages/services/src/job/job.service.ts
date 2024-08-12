@@ -2,7 +2,6 @@ import {
   IntegrationsRepository,
   integrationsRepository,
 } from "../integrations/integrations.repository";
-import { SyncType } from "database";
 import { jobRepository, JobRepository } from "./job.repository";
 
 class JobService {
