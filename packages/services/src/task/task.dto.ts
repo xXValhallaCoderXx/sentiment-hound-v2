@@ -28,3 +28,15 @@ export class IStartUserTaskDTO {
   @IsNotEmpty()
   userId: string;
 }
+
+export interface IStartUserTaskDTO2 {
+  taskId: number;
+
+  userId: string;
+}
+
+export class HelloWorld {
+  getHelloWorld() {
+    return "Hello World";
+  }
+}
