@@ -5,7 +5,7 @@ import {
   IStartUserTaskDTO,
 } from "./task.dto";
 import { jobRepository, JobRepository } from "../job/job.repository";
-import { TaskStatus, TaskType } from "database";
+import { TaskStatus, TaskType, JobType } from "database";
 
 export class TaskService {
   constructor(
@@ -23,6 +23,13 @@ export class TaskService {
     await this.jobRepository.createJob({
       integrationId: data.integrationId,
       taskId: newTask.id,
+      type: JobType.FETCH_CONTENT,
+    });
+
+    await this.jobRepository.createJob({
+      integrationId: data.integrationId,
+      taskId: newTask.id,
+      type: JobType.ANALYZE_CONTENT_SENTIMENT,
     });
 
     return newTask;
@@ -49,9 +56,15 @@ export class TaskService {
     if (userTask.type === TaskType.FULL_SYNC) {
       // TODO: Add logic to start full sync
       console.log("Starting full sync");
-      console.log("FULL SYNC", userTask);
+
       if (userTask.integration.provider.name === "youtube") {
         // TODO: Add logic to start youtube sync
+        console.log("YOUTUBE SYNC");
+        const jobs = userTask.jobs;
+
+        for (const job of jobs) {
+          console.log("JOB", job);
+        }
       } else {
         throw new Error("Provider not supported");
       }

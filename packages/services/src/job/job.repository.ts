@@ -1,5 +1,5 @@
 import { prisma } from "database";
-import { TaskStatus } from "database";
+import { TaskStatus, JobType } from "database";
 import { ICreateJobDTO, IGetUserJobsDTO } from "./job.dto";
 
 export class JobRepository {
@@ -7,6 +7,7 @@ export class JobRepository {
     const newJob = await prisma.job.create({
       data: {
         status: TaskStatus.PENDING,
+        type: data.type,
         data: {
           integrationId: data.integrationId,
         },

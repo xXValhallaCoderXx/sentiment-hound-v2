@@ -154,6 +154,7 @@ model Task {
 model Job {
   id            Int          @id @default(autoincrement())
   status        JobStatus    @default(PENDING)
+  type          JobType
   errorMessage  String?
   taskId        Int
   task          Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
@@ -197,4 +198,9 @@ enum JobStatus {
   IN_PROGRESS
   COMPLETED
   FAILED
+}
+
+enum JobType {
+  FETCH_CONTENT
+  ANALYZE_CONTENT_SENTIMENT
 }
