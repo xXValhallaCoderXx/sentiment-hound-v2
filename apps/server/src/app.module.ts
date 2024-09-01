@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { SyncModule } from './modules/sync/sync.module';
+import { JobModule } from './modules/job/job.module';
 
 @Module({
-  imports: [SyncModule],
+  imports: [JobModule],
   controllers: [],
   providers: [],
 })
