@@ -6,6 +6,11 @@ import {
   ICreateIntegrationDTO,
   IUpdateCredentialsDTO,
 } from "./intefrations.dto";
+
+interface IGetUserIntegration {
+  userId: string;
+  name: string;
+}
 class IntegrationsService {
   private integrationsRepository: IntegrationsRepository;
 
@@ -17,7 +22,7 @@ class IntegrationsService {
     return this.integrationsRepository.getUserIntegrations(userId);
   }
 
-  async getUserIntegration(userId: string, name: string) {
+  async getUserIntegration({ userId, name }: IGetUserIntegration) {
     return this.integrationsRepository.getUserIntegration(userId, name);
   }
 

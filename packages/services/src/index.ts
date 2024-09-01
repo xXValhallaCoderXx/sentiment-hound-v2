@@ -9,3 +9,4 @@ export { integrationsService } from "./integrations/integrations.service";
 export { providersService } from "./providers/providers.service";
 export { youtubeService } from "./youtube/youtube.service";
 export { jobService } from "./job/job.service";
+export { taskService } from "./task/task.service";

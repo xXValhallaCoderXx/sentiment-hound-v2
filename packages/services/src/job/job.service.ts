@@ -11,6 +11,8 @@ class JobService {
   async fullSyncUserIntegration(data: any) {
     return "";
   }
+
+  async createUserJob(data: any) {}
 }
 
 export const jobService = new JobService(jobRepository);

@@ -6,7 +6,10 @@ export class SyncService {
   constructor() {}
 
   async helloWorld() {
-    const result = await integrationsService.getUserIntegration('3331', 'dd');
+    const result = await integrationsService.getUserIntegration({
+      userId: '3331',
+      name: 'dd',
+    });
     try {
       //   await syncService.fullSyncUserIntegration({
       //     userId: '3331',

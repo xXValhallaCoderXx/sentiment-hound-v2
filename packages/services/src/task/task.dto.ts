@@ -6,6 +6,9 @@ export class ICreateTaskDTO {
   userId: string;
 
   @IsNotEmpty()
+  integrationId: number;
+
+  @IsNotEmpty()
   type: TaskType;
 }
 

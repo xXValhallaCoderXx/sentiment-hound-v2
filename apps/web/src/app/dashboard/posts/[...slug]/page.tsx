@@ -13,10 +13,12 @@ const PostListPage = async ({
 }) => {
   const slug = params.slug;
   const session = await auth();
-  const currentIntegration = await integrationsService.getUserIntegration(
-    session?.user?.id as string,
-    slug[0]
-  );
+
+
+  const currentIntegration = await integrationsService.getUserIntegration({
+    userId: session?.user?.id as string,
+    name: slug[0],
+  });
   const integrationPosts = await postService.getUserIntegrationPosts({
     userId: session?.user?.id as string,
     integrationId: String(currentIntegration?.id),

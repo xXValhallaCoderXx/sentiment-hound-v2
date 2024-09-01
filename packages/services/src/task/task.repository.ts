@@ -3,13 +3,22 @@ import { ICreateTaskDTO, IGetUserTasksDTO } from "./task.dto";
 
 export class TaskRepository {
   async createTask(data: ICreateTaskDTO) {
-    const { userId, type } = data;
+    const { userId, type, integrationId } = data;
     try {
       return await prisma.task.create({
         data: {
           type: type,
-          userId,
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
           status: TaskStatus.PENDING,
+          integration: {
+            connect: {
+              id: integrationId,
+            },
+          },
         },
       });
     } catch (error) {
@@ -27,11 +36,6 @@ export class TaskRepository {
         },
         include: {
           jobs: true,
-          syncs: {
-            include: {
-              provider: true,
-            },
-          },
         },
       });
     } catch (error) {

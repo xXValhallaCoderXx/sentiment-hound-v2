@@ -1,4 +1,5 @@
 import { IsNotEmpty } from "class-validator";
+import { TaskStatus } from "database";
 
 export class IGetUserJobsDTO {
   @IsNotEmpty()
@@ -7,4 +8,5 @@ export class IGetUserJobsDTO {
 
 export interface ICreateJobDTO {
   integrationId: number;
+  taskId: number;
 }

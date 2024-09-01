@@ -66,10 +66,10 @@ class YoutubeService {
   }
 
   async refreshAccessToken(userId: string) {
-    const youtubeIntegration = await integrationsService.getUserIntegration(
+    const youtubeIntegration = await integrationsService.getUserIntegration({
       userId,
-      "youtube"
-    );
+      name: "youtube",
+    });
 
     if (!youtubeIntegration || !youtubeIntegration.accessToken) {
       throw new Error("YouTube integration not found for user");
@@ -112,10 +112,10 @@ class YoutubeService {
   }
 
   async fetchYoutubePosts(userId: string, retry = true) {
-    const youtubeIntegration = await integrationsService.getUserIntegration(
+    const youtubeIntegration = await integrationsService.getUserIntegration({
       userId,
-      "youtube"
-    );
+      name: "youtube",
+    });
     if (!youtubeIntegration) {
       throw new Error("YouTube integration not found for user");
     }

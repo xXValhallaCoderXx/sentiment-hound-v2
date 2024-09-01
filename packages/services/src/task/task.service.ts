@@ -1,13 +1,25 @@
 import { TaskRepository, taskRepository } from "./task.repository";
 import { ICreateTaskDTO, IGetUserTasksDTO } from "./task.dto";
+import { jobRepository, JobRepository } from "../job/job.repository";
 
 export class TaskService {
-  constructor(private taskRepository: TaskRepository) {
+  constructor(
+    private taskRepository: TaskRepository,
+    private jobRepository: JobRepository
+  ) {
     this.taskRepository = taskRepository;
+    this.jobRepository = jobRepository;
   }
   async createUserTask(data: ICreateTaskDTO) {
     const newTask = await this.taskRepository.createTask(data);
-
+    if (!newTask) {
+      throw new Error("Error creating task");
+    }
+    const job = await this.jobRepository.createJob({
+      integrationId: data.integrationId,
+      taskId: newTask.id,
+    });
+    console.log("JOB", job);
     return newTask;
   }
 
@@ -43,4 +55,4 @@ export class TaskService {
   }
 }
 
-export const taskService = new TaskService(taskRepository);
+export const taskService = new TaskService(taskRepository, jobRepository);
