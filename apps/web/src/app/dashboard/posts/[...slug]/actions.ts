@@ -34,27 +34,21 @@ export const integrationMenuAction = async (
     type: TaskType.FULL_SYNC,
     integrationId: integration.id,
   });
-  console.log("ACTION  RESPONSE", response);
+
+  console.log("Task Created", response);
+
+  const x = await taskService.startUserTask({
+    taskId: response.id,
+    userId,
+  });
+
+  console.log("XXX", x);
+
+
 
   return {
     message: "New Sync Created",
     error: false,
   };
 
-  // try {
-  //   const response = await syncService.fullSyncUserIntegration({
-  //     userId,
-  //     type: syncType as SyncType,
-  //     name: integration as string,
-  //   });
-  //   console.log("ACTION RESPONSE", response);
-  //   revalidatePath(`/dashboard/posts/${integration}`);
-  //   return { message: "New Sync Created", success: true };
-  // } catch (error: any) {
-  //   console.log("ACTION ERROR ", error);
-  //   return {
-  //     message: error?.message,
-  //     error: true,
-  //   };
-  // }
 };

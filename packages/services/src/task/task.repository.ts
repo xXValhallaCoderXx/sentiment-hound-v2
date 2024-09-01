@@ -28,18 +28,45 @@ export class TaskRepository {
   }
 
   async getUserTasks(data: IGetUserTasksDTO) {
-    const { userId } = data;
+    const { userId, status } = data;
     try {
       return await prisma.task.findMany({
         where: {
           userId,
+          ...(status && { status }),
         },
         include: {
           jobs: true,
+          integration: {
+            include: {
+              provider: true,
+            },
+          },
         },
       });
     } catch (error) {
       console.log("Error getting user tasks", error);
+      return null;
+    }
+  }
+
+  async getUserTask({ taskId }: { taskId: number }) {
+    try {
+      return await prisma.task.findUnique({
+        where: {
+          id: taskId,
+        },
+        include: {
+          jobs: true,
+          integration: {
+            include: {
+              provider: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.log("Error getting user task", error);
       return null;
     }
   }

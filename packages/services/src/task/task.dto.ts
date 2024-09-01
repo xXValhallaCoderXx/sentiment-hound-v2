@@ -1,5 +1,5 @@
-import { IsNotEmpty } from "class-validator";
-import { TaskType } from "database";
+import { IsNotEmpty, IsOptional, IsEnum } from "class-validator";
+import { TaskType, TaskStatus } from "database";
 
 export class ICreateTaskDTO {
   @IsNotEmpty()
@@ -13,6 +13,18 @@ export class ICreateTaskDTO {
 }
 
 export class IGetUserTasksDTO {
+  @IsNotEmpty()
+  userId: string;
+
+  @IsOptional()
+  @IsEnum(TaskStatus)
+  status?: TaskStatus;
+}
+
+export class IStartUserTaskDTO {
+  @IsNotEmpty()
+  taskId: number;
+
   @IsNotEmpty()
   userId: string;
 }

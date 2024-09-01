@@ -34,9 +34,10 @@ const JobListTable = async () => {
   }
 
   const rows = jobs?.map((element) => {
+
     return (
       <TableTr key={element.id}>
-        <TableTd>{element.syncs[0]?.provider?.name}</TableTd>
+        <TableTd>{element?.integration?.provider?.name}</TableTd>
         <TableTd>{element.status}</TableTd>
         <TableTd>{new Date(element.createdAt).toDateString()}</TableTd>
         <TableTd>{new Date(element.updatedAt).toDateString()}</TableTd>
