@@ -61,7 +61,7 @@ export class TaskService {
         // TODO: Add logic to start youtube sync
         console.log("YOUTUBE SYNC");
         const jobs = userTask.jobs;
-
+        
         for (const job of jobs) {
           console.log("JOB", job);
         }
