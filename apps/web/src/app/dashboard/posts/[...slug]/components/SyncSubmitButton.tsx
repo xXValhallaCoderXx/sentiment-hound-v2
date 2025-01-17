@@ -17,20 +17,21 @@ const initialState = {
 const SyncSubmitButton: FC<ISyncSubmitButtonProps> = ({ name }) => {
   const [state, formAction] = useFormState(integrationMenuAction, initialState);
 
+  console.log("STATE: ", state);
   useEffect(() => {
-    // if (state.error) {
-    //   notifications.show({
-    //     color: "red",
-    //     title: "Error initializng sync",
-    //     message: state?.message,
-    //   });
-    // } else if (state.success){
-    //   notifications.show({
-    //     color: "green",
-    //     title: "Sync created",
-    //     message: state?.message,
-    //   });
-    // }
+    if (state.error) {
+      notifications.show({
+        color: "red",
+        title: "Error initializng sync",
+        message: state?.message,
+      });
+    } else {
+      notifications.show({
+        color: "green",
+        title: "Sync created",
+        message: state?.message,
+      });
+    }
   }, [state]);
   return (
     <form action={formAction}>

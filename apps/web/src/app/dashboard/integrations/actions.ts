@@ -67,7 +67,7 @@ export const revokeOauthAction = async (formData: FormData) => {
   if (integration?.refreshToken) {
     await revokeToken(integration.refreshToken);
   }
-
+  console.log("REMOVING USER INTEGRATION");
   await integrationsService.deleteUserIntegration(
     userId as string,
     rawFormData.providerId as string

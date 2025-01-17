@@ -28,8 +28,29 @@ export class IntegrationsRepository {
   }
 
   async deleteUserIntegration(userId: string, providerId: string) {
-    return prisma.integration.deleteMany({
-      where: { userId, providerId: parseInt(providerId) },
+    // return prisma.integration.deleteMany({
+    //   where: { userId, providerId: parseInt(providerId) },
+    // });
+
+    return prisma.$transaction(async (tx) => {
+      // First delete all related tasks
+      await tx.task.deleteMany({
+        where: {
+          integration: {
+            userId,
+
+            providerId: parseInt(providerId),
+          },
+        },
+      });
+
+      // Then delete the integration
+      return tx.integration.deleteMany({
+        where: {
+          userId,
+          providerId: parseInt(providerId),
+        },
+      });
     });
   }
 

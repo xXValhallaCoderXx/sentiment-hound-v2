@@ -10,7 +10,7 @@ const PostsPage = async () => {
   const socialIntegrations = integrations.map(
     (integration) => integration.provider.name
   );
-  console.log("MISSING INTEGRATION PAGE");
+
   redirect(`/dashboard/posts/${socialIntegrations[0]}`);
 };
 
