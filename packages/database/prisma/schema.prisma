@@ -21,11 +21,13 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  socialAccounts SocialAccount[]
+  integrations  Integration[]
   posts         Post[]
   tasks         Task[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  planId        Int?
+  plan          Plan?           @relation(fields: [planId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
  
 model Account {
@@ -66,32 +68,50 @@ model VerificationToken {
  
   @@id([identifier, token])
 }
- 
 
-model SocialAccount {
-  id          Int           @id @default(autoincrement())
-  provider    String
-  accountId   String
-  accessToken String
-  userId      String
-  user        User          @relation(fields: [userId], references: [id])
-  posts       Post[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+model Integration {
+  id           Int      @id @default(autoincrement())
+  accountId    String
+  accessToken  String
+  refreshToken String
+  refreshTokenExpiresAt DateTime
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  providerId   Int
+  provider     Provider @relation(fields: [providerId], references: [id])
+  posts        Post[]
+  tasks        Task[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+model Provider {
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
+  image         String
+  description   String?
+  integrations  Integration[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
 }
 
 model Post {
-  id              Int           @id @default(autoincrement())
-  postId          String
-  content         String
-  videoUrl        String?
+  id              Int          @id @default(autoincrement())
+  remoteId        String
+  title           String
+  description     String?
+  postUrl         String
+  imageUrl        String?
+  publishedAt     DateTime
+  isBlacklisted   Boolean @default(false)
+  commentCount    Int
   userId          String
-  user            User          @relation(fields: [userId], references: [id])
-  socialAccountId Int
-  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
+  integrationId   Int
+  integration     Integration  @relation(fields: [integrationId], references: [id])
   comments        Comment[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
 
 model Comment {
@@ -112,7 +132,7 @@ model AspectAnalysis {
   aspect        String
   sentiment     Float
   commentId     Int
-  comment       Comment        @relation(fields: [commentId], references: [id])
+  comment       Comment        @relation(fields: [commentId], references: [id], onDelete: Cascade)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -125,6 +145,8 @@ model Task {
   userId        String
   user          User         @relation(fields: [userId], references: [id])
   jobs          Job[]
+  integrationId Int
+  integration   Integration  @relation(fields: [integrationId], references: [id])
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -132,11 +154,22 @@ model Task {
 model Job {
   id            Int          @id @default(autoincrement())
   status        JobStatus    @default(PENDING)
+  type          JobType
   errorMessage  String?
   taskId        Int
-  task          Task         @relation(fields: [taskId], references: [id])
+  task          Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  data          Json         // Data needed for the job, e.g., post IDs or integration details
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
+}
+
+model Plan {
+  id            Int      @id @default(autoincrement())
+  name          String   @unique
+  description   String?
+  users         User[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
 }
 
 enum SentimentStatus {
@@ -147,7 +180,8 @@ enum SentimentStatus {
 }
 
 enum TaskType {
-  FETCH_COMMENTS
+  FULL_SYNC
+  PARTIAL_SYNC
   ANALYZE_COMMENTS
   OTHER
 }
@@ -164,4 +198,9 @@ enum JobStatus {
   IN_PROGRESS
   COMPLETED
   FAILED
+}
+
+enum JobType {
+  FETCH_CONTENT
+  ANALYZE_CONTENT_SENTIMENT
 }

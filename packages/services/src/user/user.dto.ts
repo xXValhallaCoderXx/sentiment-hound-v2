@@ -3,3 +3,8 @@ export class UpdateUserDto {
   title?: string;
   content?: string;
 }
+
+
+export class CreateUserDto {
+  id: string;
+}

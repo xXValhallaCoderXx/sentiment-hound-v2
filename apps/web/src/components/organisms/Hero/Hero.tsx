@@ -6,21 +6,21 @@ const Hero = () => {
     <div className={classes.wrapper}>
       <Container size={1020} className={classes.inner}>
         <h1 className={classes.title}>
-          A{" "}
           <Text
             component="span"
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
             inherit
           >
-            fully featured
-          </Text>{" "}
-          React components and hooks library
+            Sentiment Analysis
+          </Text>
+          <br />
+          Made Easy
         </h1>
         <Text className={classes.description} color="dimmed">
-          Build fully functional accessible web applications with ease – Mantine
-          includes more than 100 customizable components and hooks to cover you
-          in any situation
+          <span>Sentiment</span> Hound delivers cost-effective sentiment
+          analysis at your fingertips, ensuring that no one is left behind in
+          the quest for data-driven success
         </Text>
 
         <Group className={classes.controls}>
@@ -30,18 +30,7 @@ const Hero = () => {
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
           >
-            Get started
-          </Button>
-
-          <Button
-            component="a"
-            href="https://github.com/mantinedev/mantine"
-            size="xl"
-            variant="default"
-            className={classes.control}
-            // leftSection={<GithubIcon size={20} />}
-          >
-            GitHub
+            Get early access
           </Button>
         </Group>
       </Container>

@@ -1,41 +1,26 @@
 import { FC } from "react";
+import { Burger, Group, Title } from "@mantine/core";
 import Image from "next/image";
-import Link from "next/link";
-import { ProfileDropdown } from "@/components/molecules/ProfileDropdown";
-
 interface IAuthenticatedNavigationMenuProps {
   isOpen?: boolean;
+  onToggle?: () => void;
 }
 
 const AuthenticatedNavigationMenu: FC<IAuthenticatedNavigationMenuProps> = ({
   isOpen,
+  onToggle,
 }) => {
   return (
-    <header className="bg-white shadow-md fixed w-full  top-0 z-50 ">
-      <div className=" px-6 py-3 flex justify-between items-center  ">
-        <Link href="/app/dashboard" passHref>
-          <div
-            id="logo"
-            className="shrink-0 mr-4 flex flex-row items-center gap-2"
-          >
-            <Image
-              src="/images/logos/main-logo.png"
-              alt=""
-              height={50}
-              width={50}
-              className="mx-auto"
-            />
-            <h5>
-              <span className="font-bold text-lg text-primary">Sentiment</span>{" "}
-              Hound
-            </h5>
-          </div>
-        </Link>
-        <nav className={`space-x-4 ${isOpen ? " mr-64" : " mr-16"}`}>
-          <ProfileDropdown />
-        </nav>
+    <Group h="100%" px="md">
+      <Burger opened={isOpen} onClick={onToggle} hiddenFrom="sm" size="sm" />
+      <Image src="/images/logos/main-logo.png" alt="" height={45} width={45} />
+      <div className="flex gap-3 items-center -ml-2">
+        <Title order={3}>
+          <span className="font-extrabold">Sentiment</span>{" "}
+          <span className="font-normal">Hound</span>
+        </Title>
       </div>
-    </header>
+    </Group>
   );
 };
 

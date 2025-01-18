@@ -1,7 +1,9 @@
 import "./globals.css";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Notifications } from "@mantine/notifications";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,9 +23,10 @@ export default async function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={`${inter.className} h-full `}>
+      <body className={`${inter.className} antialiased h-full `}>
         <MantineProvider
           theme={{
+            fontFamily: "Inter, sans-serif",
             colors: {
               "ocean-blue": [
                 "#7AD1DD",
@@ -52,6 +55,7 @@ export default async function RootLayout({
             },
           }}
         >
+          <Notifications position="top-right" />
           {children}
         </MantineProvider>
       </body>

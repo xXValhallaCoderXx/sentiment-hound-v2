@@ -1,5 +1,24 @@
-import { PrismaClient } from "@prisma/client";
+import {
+  PrismaClient,
+  User,
+  Plan,
+  TaskType,
+  TaskStatus,
+  JobType,
+} from "@prisma/client";
 
-export const prisma = new PrismaClient();
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
 
-export * from "@prisma/client";
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
+
+export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+
+if (process.env.NODE_ENV !== "production") {
+  globalThis.prismaGlobal = prisma;
+}
+
+export { User, Plan, TaskType, TaskStatus, JobType };
