@@ -16,6 +16,7 @@ const DashboardPage = async ({
   return (
     <div className="h-full px-4 py-4">
       <StatsCards />
+      ssssss
       <div className="mt-4">
         <ListSearch placeholder="Search me" />
       </div>
