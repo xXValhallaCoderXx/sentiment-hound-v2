@@ -10,7 +10,11 @@
     "db:generate": "pnpm --filter database run db:generate",
     "db:wipe": "pnpm --filter database run db:wipe",
     "db:seed": "pnpm --filter database run db:seed",
-    "db:reset": "pnpm run db:wipe && pnpm run db:push && pnpm run db:generate && pnpm run db:seed"
+    "db:reset": "pnpm run db:wipe && pnpm run db:push && pnpm run db:generate && pnpm run db:seed",
+    "build:server": "pnpm --filter server build",
+    "build:web": "pnpm --filter web build",
+    "start:server": "pnpm --filter server start:prod",
+    "start:web": "pnpm --filter web start"
   },
   "keywords": [],
   "author": "",
