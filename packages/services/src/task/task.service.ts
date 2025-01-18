@@ -1,9 +1,5 @@
 import { TaskRepository, taskRepository } from "./task.repository";
-import {
-  ICreateTaskDTO,
-  IGetUserTasksDTO,
-  IStartUserTaskDTO,
-} from "./task.dto";
+import { ICreateTask, IGetUserTasks, IStartUserTask } from "./task.interface";
 import { jobRepository, JobRepository } from "../job/job.repository";
 import { TaskStatus, TaskType, JobType } from "database";
 
@@ -15,7 +11,7 @@ export class TaskService {
     this.taskRepository = taskRepository;
     this.jobRepository = jobRepository;
   }
-  async createUserTask(data: ICreateTaskDTO) {
+  async createUserTask(data: ICreateTask) {
     const newTask = await this.taskRepository.createTask(data);
     if (!newTask) {
       throw new Error("Error creating task");
@@ -35,7 +31,7 @@ export class TaskService {
     return newTask;
   }
 
-  async startUserTask(data: IStartUserTaskDTO) {
+  async startUserTask(data: IStartUserTask) {
     const getRunningTasks = await this.taskRepository.getUserTasks({
       userId: data.userId,
       status: TaskStatus.IN_PROGRESS,
@@ -54,8 +50,6 @@ export class TaskService {
     }
 
     if (userTask.type === TaskType.FULL_SYNC) {
-
-
       if (userTask.integration.provider.name === "youtube") {
         const jobs = userTask.jobs;
 
@@ -115,7 +109,7 @@ export class TaskService {
     }
   }
 
-  async getUserTasks(data: IGetUserTasksDTO) {
+  async getUserTasks(data: IGetUserTasks) {
     const tasks = await this.taskRepository.getUserTasks(data);
 
     return tasks;

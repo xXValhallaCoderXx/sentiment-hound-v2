@@ -1,42 +1,31 @@
-import { IsNotEmpty, IsOptional, IsEnum } from "class-validator";
-import { TaskType, TaskStatus } from "database";
+// import { IsNotEmpty, IsOptional, IsEnum } from "class-validator";
+// import { TaskType, TaskStatus } from "database";
+// import { IGetUserTasks, ICreateTask, IStartUserTask } from "./task.interface";
 
-export class ICreateTaskDTO {
-  @IsNotEmpty()
-  userId: string;
+// export class ICreateTaskDTO implements ICreateTask {
+//   @IsNotEmpty()
+//   userId: string;
 
-  @IsNotEmpty()
-  integrationId: number;
+//   @IsNotEmpty()
+//   integrationId: number;
 
-  @IsNotEmpty()
-  type: TaskType;
-}
+//   @IsNotEmpty()
+//   type: TaskType;
+// }
 
-export class IGetUserTasksDTO {
-  @IsNotEmpty()
-  userId: string;
+// export class IGetUserTasksDTO implements IGetUserTasks {
+//   @IsNotEmpty()
+//   userId: string;
 
-  @IsOptional()
-  @IsEnum(TaskStatus)
-  status?: TaskStatus;
-}
+//   @IsOptional()
+//   @IsEnum(TaskStatus)
+//   status?: TaskStatus;
+// }
 
-export class IStartUserTaskDTO {
-  @IsNotEmpty()
-  taskId: number;
+// export class IStartUserTaskDTO implements IStartUserTask {
+//   @IsNotEmpty()
+//   taskId: number;
 
-  @IsNotEmpty()
-  userId: string;
-}
-
-export interface IStartUserTaskDTO2 {
-  taskId: number;
-
-  userId: string;
-}
-
-export class HelloWorld {
-  getHelloWorld() {
-    return "Hello World";
-  }
-}
+//   @IsNotEmpty()
+//   userId: string;
+// }

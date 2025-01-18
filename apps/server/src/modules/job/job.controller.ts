@@ -1,17 +1,14 @@
 import { Controller, Post, Body, Param } from '@nestjs/common';
 import { JobService } from './job.service';
 // import { HelloWorld } from 'services/src/task/task.dto';
-import { IStartUserTaskDTO2 } from 'services/src/task/task.dto';
+import { IStartUserTaskDTO } from '../task/task.dto';
 
 @Controller('jobs')
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
   @Post(':id/start')
-  create(
-    @Param('id') jobId: string,
-    @Body() createUserDto: IStartUserTaskDTO2,
-  ) {
+  create(@Param('id') jobId: string, @Body() createUserDto: IStartUserTaskDTO) {
     console.log(createUserDto);
     // const x = new HelloWorld();
     // console.log(x);

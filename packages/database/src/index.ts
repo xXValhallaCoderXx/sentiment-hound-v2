@@ -2,9 +2,9 @@ import {
   PrismaClient,
   User,
   Plan,
-  TaskType,
-  TaskStatus,
-  JobType,
+  TaskType as PrismaTaskType,
+  TaskStatus as PrismaTaskStatus,
+  JobType as PrismaJobType,
 } from "@prisma/client";
 
 const prismaClientSingleton = () => {
@@ -21,4 +21,15 @@ if (process.env.NODE_ENV !== "production") {
   globalThis.prismaGlobal = prisma;
 }
 
-export { User, Plan, TaskType, TaskStatus, JobType };
+// Export types
+export type TaskType = PrismaTaskType;
+export type TaskStatus = PrismaTaskStatus;
+export type JobType = PrismaJobType;
+
+// Export enum values
+export const TaskType = PrismaTaskType;
+export const TaskStatus = PrismaTaskStatus;
+export const JobType = PrismaJobType;
+
+// Export Prisma models as types
+export type { User, Plan };
