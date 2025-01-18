@@ -1,8 +1,8 @@
 import { prisma, TaskStatus } from "database";
-import { ICreateTaskDTO, IGetUserTasksDTO } from "./task.dto";
+import { ICreateTask, IGetUserTasks } from "./task.interface";
 
 export class TaskRepository {
-  async createTask(data: ICreateTaskDTO) {
+  async createTask(data: ICreateTask) {
     const { userId, type, integrationId } = data;
     try {
       return await prisma.task.create({
@@ -27,7 +27,7 @@ export class TaskRepository {
     }
   }
 
-  async getUserTasks(data: IGetUserTasksDTO) {
+  async getUserTasks(data: IGetUserTasks) {
     const { userId, status } = data;
     try {
       return await prisma.task.findMany({
