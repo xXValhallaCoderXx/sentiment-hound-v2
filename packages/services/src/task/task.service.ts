@@ -54,16 +54,58 @@ export class TaskService {
     }
 
     if (userTask.type === TaskType.FULL_SYNC) {
-      // TODO: Add logic to start full sync
-      console.log("Starting full sync");
+
 
       if (userTask.integration.provider.name === "youtube") {
-        // TODO: Add logic to start youtube sync
-        console.log("YOUTUBE SYNC");
         const jobs = userTask.jobs;
-        
-        for (const job of jobs) {
-          console.log("JOB", job);
+
+        // Find the first pending job
+        const pendingJob = jobs.find(
+          (job) => job.status === "PENDING" || job.status === "IN_PROGRESS"
+        );
+
+        if (pendingJob) {
+          console.log(
+            "TASK SERVICE - START USER TASK: Pending Job: ",
+            pendingJob
+          );
+
+          // Update the job status to IN_PROGRESS
+          await this.jobRepository.updateJob(pendingJob.id, {
+            status: "IN_PROGRESS",
+          });
+
+          // Update the task status to IN_PROGRESS
+          //  await this.taskRepository.updateTask({
+          //   taskId: data.taskId,
+          //   status: TaskStatus.IN_PROGRESS
+          // });
+
+          // Here you would trigger your job processing
+          // This could be sending to a queue, calling a worker, etc.
+          // switch (pendingJob.type) {
+          //   case JobType.FETCH_CONTENT:
+          //     // Trigger content fetching
+          //     await this.processContentFetch(pendingJob);
+          //     break;
+          //   case JobType.ANALYZE_CONTENT_SENTIMENT:
+          //     // Trigger sentiment analysis
+          //     await this.processSentimentAnalysis(pendingJob);
+          //     break;
+          //   default:
+          //     throw new Error(`Unsupported job type: ${pendingJob.type}`);
+          // }
+
+          return {
+            message: `Started job ${pendingJob.id} for task ${data.taskId}`,
+            job: pendingJob,
+          };
+        } else {
+          // No pending jobs found
+          return {
+            message: "No pending jobs found for this task",
+            job: null,
+          };
         }
       } else {
         throw new Error("Provider not supported");
