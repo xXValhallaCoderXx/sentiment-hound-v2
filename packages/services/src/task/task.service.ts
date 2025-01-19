@@ -2,6 +2,7 @@ import { TaskRepository, taskRepository } from "./task.repository";
 import { ICreateTask, IGetUserTasks, IStartUserTask } from "./task.interface";
 import { jobRepository, JobRepository } from "../job/job.repository";
 import { TaskStatus, TaskType, JobType } from "database";
+import { ResourceCreateError } from "../errors";
 
 export class TaskService {
   constructor(
@@ -13,21 +14,27 @@ export class TaskService {
   }
   async createUserTask(data: ICreateTask) {
     const newTask = await this.taskRepository.createTask(data);
-    if (!newTask) {
-      throw new Error("Error creating task");
+
+    if (newTask.type === TaskType.FULL_SYNC) {
+      await this.jobRepository.createJob({
+        integrationId: data.integrationId,
+        taskId: newTask.id,
+        type: JobType.FETCH_CONTENT,
+      });
+
+      await this.jobRepository.createJob({
+        integrationId: data.integrationId,
+        taskId: newTask.id,
+        type: JobType.ANALYZE_CONTENT_SENTIMENT,
+      });
+    } else if (newTask.type === TaskType.FETCH_CONTENT) {
+      console.log("NEW USER TASK - FETCH CONTENT: ", newTask);
+      await this.jobRepository.createJob({
+        integrationId: data.integrationId,
+        taskId: newTask.id,
+        type: JobType.FETCH_CONTENT,
+      });
     }
-    await this.jobRepository.createJob({
-      integrationId: data.integrationId,
-      taskId: newTask.id,
-      type: JobType.FETCH_CONTENT,
-    });
-
-    await this.jobRepository.createJob({
-      integrationId: data.integrationId,
-      taskId: newTask.id,
-      type: JobType.ANALYZE_CONTENT_SENTIMENT,
-    });
-
     return newTask;
   }
 
@@ -65,7 +72,7 @@ export class TaskService {
           );
 
           // Update the job status to IN_PROGRESS
-          await this.jobRepository.updateJob(pendingJob.id, {
+          const updatedJob = await this.jobRepository.updateJob(pendingJob.id, {
             status: "IN_PROGRESS",
           });
 
@@ -91,8 +98,8 @@ export class TaskService {
           // }
 
           return {
-            message: `Started job ${pendingJob.id} for task ${data.taskId}`,
-            job: pendingJob,
+            message: `Started job ${updatedJob.id} for task ${data.taskId}`,
+            job: updatedJob,
           };
         } else {
           // No pending jobs found

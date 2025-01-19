@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Box, Title, Button, Flex } from "@mantine/core";
-import { integrationMenuAction } from "../actions";
+import FetchContentButton from "./FetchContentButton";
 import SyncSubmitButton from "./SyncSubmitButton";
 
 interface IActionPanelProps {
@@ -14,10 +14,10 @@ const ActionPanel: FC<IActionPanelProps> = ({ name }) => {
         <Title className="capitalize" order={2}>
           {name}
         </Title>
-        <Box p={10}>
+        <Flex gap={8} p={10}>
+          <FetchContentButton name={name} />
           <SyncSubmitButton name={name} />
-
-        </Box>
+        </Flex>
       </Flex>
     </Box>
   );

@@ -1,9 +1,11 @@
 import { prisma, TaskStatus } from "database";
 import { ICreateTask, IGetUserTasks } from "./task.interface";
+import { ResourceCreateError, ResourceCreateErrorCodes } from "../errors";
 
 export class TaskRepository {
   async createTask(data: ICreateTask) {
     const { userId, type, integrationId } = data;
+
     try {
       return await prisma.task.create({
         data: {
@@ -22,8 +24,12 @@ export class TaskRepository {
         },
       });
     } catch (error) {
-      console.log("Error creating task", error);
-      return null;
+      console.log("TTTYPPPE: ", error);
+      throw new ResourceCreateError(
+        ResourceCreateErrorCodes.TASK_CREATE,
+        "We couldn't create your task, Please try again later",
+        error
+      );
     }
   }
 

@@ -49,7 +49,7 @@ export const revokeOauthAction = async (formData: FormData) => {
     rawFormData.providerId as string
   );
 
-  console.log("REMOVING: ", provider);
+
   const userIntegrations = await integrationsService.getUserIntegrations(
     userId as string
   );
@@ -59,7 +59,6 @@ export const revokeOauthAction = async (formData: FormData) => {
       String(integration.providerId) === String(rawFormData.providerId)
   );
 
-  console.log("INTEGRATION: ", integration);
   if (integration?.accessToken) {
     await revokeToken(integration.accessToken);
   }
@@ -67,7 +66,7 @@ export const revokeOauthAction = async (formData: FormData) => {
   if (integration?.refreshToken) {
     await revokeToken(integration.refreshToken);
   }
-  console.log("REMOVING USER INTEGRATION");
+
   await integrationsService.deleteUserIntegration(
     userId as string,
     rawFormData.providerId as string
