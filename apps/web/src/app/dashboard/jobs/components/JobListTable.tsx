@@ -17,7 +17,7 @@ const JobListTable = async () => {
   const session = await auth();
   const userId = session?.user?.id as string;
   const jobs = await taskRepository.getUserTasks({ userId });
-
+  console.log("JOBS: ", jobs);
   if (jobs?.length === 0) {
     return (
       <Flex flex={1} justify="center" className="h-full">
@@ -34,10 +34,10 @@ const JobListTable = async () => {
   }
 
   const rows = jobs?.map((element) => {
-
     return (
       <TableTr key={element.id}>
         <TableTd>{element?.integration?.provider?.name}</TableTd>
+        <TableTd>{element.type}</TableTd>
         <TableTd>{element.status}</TableTd>
         <TableTd>{new Date(element.createdAt).toDateString()}</TableTd>
         <TableTd>{new Date(element.updatedAt).toDateString()}</TableTd>
@@ -55,7 +55,8 @@ const JobListTable = async () => {
     <Table>
       <TableThead>
         <TableTr>
-          <TableTh>Type</TableTh>
+          <TableTh>Integration</TableTh>
+          <TableTh>Job Type</TableTh>
           <TableTh>Status</TableTh>
           <TableTh>Created At</TableTh>
           <TableTh>Updated At</TableTh>

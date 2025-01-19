@@ -111,6 +111,13 @@ export class TaskService {
       } else {
         throw new Error("Provider not supported");
       }
+    } else if(userTask.type === TaskType.FETCH_CONTENT) {
+
+      const integrationType = userTask.integration.provider.name
+
+      console.log("USER TASK: ", userTask)
+      console.log("INTEGRATION TYPE: ", integrationType)
+
     } else {
       throw new Error("Task type not supported");
     }

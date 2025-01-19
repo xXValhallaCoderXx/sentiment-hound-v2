@@ -15,7 +15,7 @@ export const restartJobAction = async (prevState: any, formData: FormData) => {
       taskId: Number(jobId),
       userId,
     });
-    console.log("RESPONSE", response);
+
 
     return { message: "Job Has Entered Queue", success: true };
   } catch (error: any) {
