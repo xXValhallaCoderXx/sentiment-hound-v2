@@ -159,6 +159,7 @@ model Job {
   taskId        Int
   task          Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
   data          Json         // Data needed for the job, e.g., post IDs or integration details
+  queue         Queue?       // New relationship (one-to-one)
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -170,6 +171,27 @@ model Plan {
   users         User[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
+}
+
+model Queue {
+  id            Int         @id @default(autoincrement())
+  status        QueueStatus @default(NEW)
+  jobId         Int        @unique  // Added @unique here
+  job           Job        @relation(fields: [jobId], references: [id])
+  payload       Json
+  processingAt  DateTime?
+  isDead        Boolean    @default(false)
+  attempts      Int        @default(0)
+  maxAttempts   Int        @default(3)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+enum QueueStatus {
+  NEW
+  PROCESSING
+  DONE
+  FAILED
 }
 
 enum SentimentStatus {
