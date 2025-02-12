@@ -1,6 +1,9 @@
-import { prisma } from "database";
-import { ICreateQueue, IUpdateQueue } from "./queue.interface";
-import { ResourceCreateError, ResourceCreateErrorCodes } from "../errors";
+import { prisma } from 'database';
+import { ICreateQueue, IUpdateQueue } from 'services/src/queue/queue.interface';
+import {
+  ResourceCreateError,
+  ResourceCreateErrorCodes,
+} from 'services/src/errors';
 
 export class QueueRepository {
   async createQueue(data: ICreateQueue) {
@@ -9,14 +12,14 @@ export class QueueRepository {
         data: {
           jobId: data.jobId,
           payload: data.payload,
-          status: "NEW",
+          status: 'NEW',
         },
       });
     } catch (error) {
       throw new ResourceCreateError(
         ResourceCreateErrorCodes.TASK_CREATE,
         "We couldn't create your task, Please try again later",
-        error
+        error,
       );
     }
   }
@@ -36,7 +39,7 @@ export class QueueRepository {
       throw new ResourceCreateError(
         ResourceCreateErrorCodes.TASK_CREATE,
         "We couldn't create your task, Please try again later",
-        error
+        error,
       );
     }
   }
@@ -44,7 +47,7 @@ export class QueueRepository {
     try {
       return await prisma.queue.findFirst({
         where: {
-          status: "NEW",
+          status: 'NEW',
           isDead: false,
           attempts: {
             lt: 3, // Max attempts
@@ -58,7 +61,7 @@ export class QueueRepository {
       throw new ResourceCreateError(
         ResourceCreateErrorCodes.TASK_CREATE,
         "We couldn't create your task, Please try again later",
-        error
+        error,
       );
     }
   }
