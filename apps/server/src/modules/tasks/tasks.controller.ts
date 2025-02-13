@@ -1,35 +1,26 @@
-import { Controller, Post, Body } from '@nestjs/common';
-// import { TaskService } from './task.service';
-import { CreateTaskDto } from './tasks.dto';
+import {
+  Controller,
+  Get,
+  Param,
+  NotFoundException,
+  Inject,
+} from '@nestjs/common';
+import { ConcreteTaskService } from './tasks.service.concrete';
 
 @Controller('tasks')
 export class TaskController {
-  //   constructor(private readonly taskService: TaskService) {}
+  constructor(
+    @Inject('TaskService')
+    private readonly taskService: ConcreteTaskService,
+  ) {}
 
-  @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    console.log('CREATE TAKS: ', createTaskDto);
-    // return this.taskService.create(createTaskDto);
-    return '';
+  @Get(':id')
+  async getTask(@Param('id') id: string) {
+    try {
+      const task = await this.taskService.getTask(id);
+      return task;
+    } catch (error) {
+      throw new NotFoundException('Task not found');
+    }
   }
-
-  //   @Get()
-  //   findAll(@Query('status') status: string) {
-  //     return this.taskService.findAll(status);
-  //   }
-
-  //   @Get(':id')
-  //   findOne(@Param('id') id: string) {
-  //     return this.taskService.findOne(id);
-  //   }
-
-  //   @Put(':id')
-  //   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-  //     return this.taskService.update(id, updateTaskDto);
-  //   }
-
-  //   @Delete(':id')
-  //   remove(@Param('id') id: string) {
-  //     return this.taskService.remove(id);
-  //   }
 }

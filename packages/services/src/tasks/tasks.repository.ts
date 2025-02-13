@@ -1,7 +1,7 @@
 import { ITaskRepository, ITask } from "./tasks.interface";
 
 export class TaskRepository implements ITaskRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: any) {}
 
   async create(task: Partial<ITask>): Promise<ITask> {
     return this.prisma.task.create({ data: task });

@@ -14,7 +14,7 @@
       "dependsOn": ["^check-types"]
     },
     "dev": {
-      "dependsOn": ["db:build", "db:generate", "^dev"],
+      "dependsOn": ["services:build", "db:build", "db:generate", "^dev"],
       "cache": false,
       "persistent": true
     },
@@ -32,6 +32,9 @@
       "cache": false
     },
     "db:build": {
+      "cache": false
+    },
+    "services:build": {
       "cache": false
     }
   }

@@ -1,11 +1,16 @@
-// apps/server/src/modules/queue/queue.module.ts
 import { Module } from '@nestjs/common';
-import { BaseTaskService } from './tasks.service';
 import { TaskController } from './tasks.controller';
+import { ConcreteTaskService } from './tasks.service.concrete';
+import { TaskRepository } from './tasks.repository';
 
 @Module({
-  providers: [BaseTaskService],
   controllers: [TaskController],
-  exports: [BaseTaskService],
+  providers: [
+    TaskRepository,
+    {
+      provide: 'TaskService',
+      useClass: ConcreteTaskService,
+    },
+  ],
 })
 export class TasksModule {}
