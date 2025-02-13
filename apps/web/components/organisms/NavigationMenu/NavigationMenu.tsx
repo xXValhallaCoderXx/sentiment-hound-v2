@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Group, Anchor, Text, Button } from "@mantine/core";
-import { signIn } from "@/lib/next-auth.lib";
+import { Group, Anchor, Text } from "@mantine/core";
+import { SignInButton } from "@/components/molecules/SignInButton";
 
 const NavigationMenu = () => {
   return (
@@ -22,17 +22,7 @@ const NavigationMenu = () => {
       </Group>
 
       <Group gap="lg">
-        <form
-        // action={async () => {
-        //   "use server";
-        //   // await signIn("google");
-        // }}
-        >
-          <Button variant="filled" type="submit">
-            Sign in
-          </Button>
-        </form>
-
+        <SignInButton />
         <Anchor href="#" c="gray.8" fw={500}>
           Home
         </Anchor>
