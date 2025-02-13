@@ -119,21 +119,152 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  createdAt: 'createdAt',
+  name: 'name',
   email: 'email',
-  name: 'name'
+  emailVerified: 'emailVerified',
+  image: 'image',
+  planId: 'planId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
-exports.Prisma.LoserScalarFieldEnum = {
-  id: 'id',
+exports.Prisma.AccountScalarFieldEnum = {
+  userId: 'userId',
+  type: 'type',
+  provider: 'provider',
+  providerAccountId: 'providerAccountId',
+  refresh_token: 'refresh_token',
+  access_token: 'access_token',
+  expires_at: 'expires_at',
+  token_type: 'token_type',
+  scope: 'scope',
+  id_token: 'id_token',
+  session_state: 'session_state',
   createdAt: 'createdAt',
-  email: 'email',
-  name: 'name'
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SessionScalarFieldEnum = {
+  sessionToken: 'sessionToken',
+  userId: 'userId',
+  expires: 'expires',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VerificationTokenScalarFieldEnum = {
+  identifier: 'identifier',
+  token: 'token',
+  expires: 'expires'
+};
+
+exports.Prisma.IntegrationScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
+  userId: 'userId',
+  providerId: 'providerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProviderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  image: 'image',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PostScalarFieldEnum = {
+  id: 'id',
+  remoteId: 'remoteId',
+  title: 'title',
+  description: 'description',
+  postUrl: 'postUrl',
+  imageUrl: 'imageUrl',
+  publishedAt: 'publishedAt',
+  isBlacklisted: 'isBlacklisted',
+  commentCount: 'commentCount',
+  userId: 'userId',
+  integrationId: 'integrationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  content: 'content',
+  sentiment: 'sentiment',
+  sentimentStatus: 'sentimentStatus',
+  postId: 'postId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AspectAnalysisScalarFieldEnum = {
+  id: 'id',
+  aspect: 'aspect',
+  sentiment: 'sentiment',
+  commentId: 'commentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  userId: 'userId',
+  integrationId: 'integrationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.JobScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  type: 'type',
+  errorMessage: 'errorMessage',
+  taskId: 'taskId',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QueueScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  jobId: 'jobId',
+  payload: 'payload',
+  processingAt: 'processingAt',
+  isDead: 'isDead',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -146,10 +277,66 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.SentimentStatus = exports.$Enums.SentimentStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+exports.TaskType = exports.$Enums.TaskType = {
+  FULL_SYNC: 'FULL_SYNC',
+  PARTIAL_SYNC: 'PARTIAL_SYNC',
+  ANALYZE_COMMENTS: 'ANALYZE_COMMENTS',
+  FETCH_CONTENT: 'FETCH_CONTENT',
+  OTHER: 'OTHER'
+};
+
+exports.TaskStatus = exports.$Enums.TaskStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+exports.JobStatus = exports.$Enums.JobStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+exports.JobType = exports.$Enums.JobType = {
+  FETCH_CONTENT: 'FETCH_CONTENT',
+  ANALYZE_CONTENT_SENTIMENT: 'ANALYZE_CONTENT_SENTIMENT'
+};
+
+exports.QueueStatus = exports.$Enums.QueueStatus = {
+  NEW: 'NEW',
+  PROCESSING: 'PROCESSING',
+  DONE: 'DONE',
+  FAILED: 'FAILED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Loser: 'Loser'
+  Account: 'Account',
+  Session: 'Session',
+  VerificationToken: 'VerificationToken',
+  Integration: 'Integration',
+  Provider: 'Provider',
+  Post: 'Post',
+  Comment: 'Comment',
+  AspectAnalysis: 'AspectAnalysis',
+  Task: 'Task',
+  Job: 'Job',
+  Plan: 'Plan',
+  Queue: 'Queue'
 };
 
 /**

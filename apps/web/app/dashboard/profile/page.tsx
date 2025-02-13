@@ -1,4 +1,4 @@
-// import { auth } from "@/lib/next-auth.lib";
+import { auth } from "@/lib/next-auth.lib";
 
 import Link from "next/link";
 import {
@@ -14,8 +14,8 @@ import {
 import Plans from "./components/Plans";
 
 const ProfilePage = async (props: any) => {
-  // const session = await auth();
-  // const userId = session?.user?.id;
+  const session = await auth();
+  const userId = session?.user?.id;
   // const user = await userService.getUserById(userId as string);
   // const plans = await planService.getPlans();
   const user = {};

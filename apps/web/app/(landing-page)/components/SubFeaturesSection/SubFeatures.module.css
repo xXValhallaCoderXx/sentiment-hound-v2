@@ -11,7 +11,7 @@
     margin-bottom: var(--mantine-spacing-md);
     text-align: center;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         font-size: rem(28px);
         text-align: left;
     }
@@ -20,7 +20,7 @@
 .description {
     text-align: center;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         text-align: left;
     }
 }

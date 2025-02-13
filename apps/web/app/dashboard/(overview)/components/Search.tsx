@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@mantine/core";
-import { SearchIcon } from "lucide-react";
-import { useDebouncedCallback } from "use-debounce";
+import { IconSearch } from "@tabler/icons-react";
+import { useDebouncedCallback } from "@mantine/hooks";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 const ListSearch = ({ placeholder }: { placeholder: string }) => {
@@ -28,7 +28,7 @@ const ListSearch = ({ placeholder }: { placeholder: string }) => {
       </label>
       <Input
         placeholder={placeholder}
-        leftSection={<SearchIcon size={18} />}
+        leftSection={<IconSearch size={18} />}
         onChange={(e) => handleSearch(e.target.value)}
         defaultValue={searchParams.get("query")?.toString()}
       />

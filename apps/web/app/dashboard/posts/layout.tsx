@@ -1,14 +1,14 @@
-// import PageLayout from "@/components/templates/PageLayout";
+import PageLayout from "@/components/templates/PageLayout";
 // import { integrationsService } from "services";
-// import { auth } from "@/lib/next-auth.lib";
-// import NoData from "@/components/molecules/NoData";
+import { auth } from "@/lib/next-auth.lib";
+import NoData from "@/components/molecules/NoData";
 import { Suspense } from "react";
 import LoadingList from "./components/LoadingList";
 import { Box, Tabs, TabsList, TabsTab, Flex, Text } from "@mantine/core";
 
 const PostsPage = async ({ children }: any) => {
-  // const session = await auth();
-  // const userId = session?.user?.id as string;
+  const session = await auth();
+  const userId = session?.user?.id as string;
   // const integrations = await integrationsService.getUserIntegrations(userId);
 
   // const socialIntegrations = integrations.map(
