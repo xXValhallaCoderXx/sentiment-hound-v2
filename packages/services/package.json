@@ -1,0 +1,14 @@
+{
+  "name": "@repo/services",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@repo/database": "workspace:*"
+  }
+}
