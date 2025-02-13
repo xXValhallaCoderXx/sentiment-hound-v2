@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { ITask } from '@repo/services';
-import { TaskRepository } from './tasks.repository';
+import { CoreTaskService, TaskRepository } from '@repo/services';
 
 @Injectable()
 export class TaskService {
-  constructor(private readonly repository: TaskRepository) {}
+  private coreService: CoreTaskService;
 
-  async getTask(id: string): Promise<ITask> {
-    const task = await this.repository.findById(id);
-    if (!task) throw new Error('Task not found');
+  constructor(private readonly repository: TaskRepository) {
+    this.coreService = new CoreTaskService(repository);
+  }
+
+  async getTask(id: string) {
+    // Add NestJS-specific logic here (e.g., logging, events)
+    const task = await this.coreService.getTask(id);
     return task;
   }
 
