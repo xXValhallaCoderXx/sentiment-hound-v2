@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { BaseTaskService as BaseService, ITask } from '@repo/services';
+import { ITask } from '@repo/services';
+import { TaskRepository } from './tasks.repository';
 
 @Injectable()
-export class BaseTaskService {
-  constructor(private readonly taskService: BaseService) {}
+export class TaskService {
+  constructor(private readonly repository: TaskRepository) {}
 
   async getTask(id: string): Promise<ITask> {
-    return this.taskService.getTask(id);
+    const task = await this.repository.findById(id);
+    if (!task) throw new Error('Task not found');
+    return task;
   }
+
+  // Add other methods as needed
 }

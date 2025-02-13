@@ -1,16 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TaskController } from './tasks.controller';
-import { ConcreteTaskService } from './tasks.service.concrete';
+import { TaskService } from './tasks.service';
 import { TaskRepository } from './tasks.repository';
 
 @Module({
   controllers: [TaskController],
-  providers: [
-    TaskRepository,
-    {
-      provide: 'TaskService',
-      useClass: ConcreteTaskService,
-    },
-  ],
+  providers: [TaskService, TaskRepository],
 })
 export class TasksModule {}

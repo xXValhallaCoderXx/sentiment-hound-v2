@@ -1,24 +1,14 @@
-import {
-  Controller,
-  Get,
-  Param,
-  NotFoundException,
-  Inject,
-} from '@nestjs/common';
-import { ConcreteTaskService } from './tasks.service.concrete';
+import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
+import { TaskService } from './tasks.service';
 
 @Controller('tasks')
 export class TaskController {
-  constructor(
-    @Inject('TaskService')
-    private readonly taskService: ConcreteTaskService,
-  ) {}
+  constructor(private readonly taskService: TaskService) {}
 
   @Get(':id')
   async getTask(@Param('id') id: string) {
     try {
-      const task = await this.taskService.getTask(id);
-      return task;
+      return await this.taskService.getTask(id);
     } catch (error) {
       throw new NotFoundException('Task not found');
     }
