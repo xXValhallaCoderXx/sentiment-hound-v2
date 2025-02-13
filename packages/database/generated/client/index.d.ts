@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model Loser
+ * 
+ */
+export type Loser = $Result.DefaultSelection<Prisma.$LoserPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -153,6 +158,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loser`: Exposes CRUD operations for the **Loser** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Losers
+    * const losers = await prisma.loser.findMany()
+    * ```
+    */
+  get loser(): Prisma.LoserDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -593,7 +608,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    Loser: 'Loser'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -609,7 +625,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "loser"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -684,6 +700,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Loser: {
+        payload: Prisma.$LoserPayload<ExtArgs>
+        fields: Prisma.LoserFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>
+          }
+          findFirst: {
+            args: Prisma.LoserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>
+          }
+          findMany: {
+            args: Prisma.LoserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>[]
+          }
+          create: {
+            args: Prisma.LoserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>
+          }
+          createMany: {
+            args: Prisma.LoserCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LoserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>[]
+          }
+          delete: {
+            args: Prisma.LoserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>
+          }
+          update: {
+            args: Prisma.LoserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoserDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoserUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LoserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>[]
+          }
+          upsert: {
+            args: Prisma.LoserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoserPayload>
+          }
+          aggregate: {
+            args: Prisma.LoserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoser>
+          }
+          groupBy: {
+            args: Prisma.LoserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoserGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LoserCountArgs<ExtArgs>
+            result: $Utils.Optional<LoserCountAggregateOutputType> | number
           }
         }
       }
@@ -772,6 +862,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    loser?: LoserOmit
   }
 
   /* Types for Logging */
@@ -1883,6 +1974,1022 @@ export namespace Prisma {
 
 
   /**
+   * Model Loser
+   */
+
+  export type AggregateLoser = {
+    _count: LoserCountAggregateOutputType | null
+    _avg: LoserAvgAggregateOutputType | null
+    _sum: LoserSumAggregateOutputType | null
+    _min: LoserMinAggregateOutputType | null
+    _max: LoserMaxAggregateOutputType | null
+  }
+
+  export type LoserAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type LoserSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type LoserMinAggregateOutputType = {
+    id: number | null
+    createdAt: Date | null
+    email: string | null
+    name: string | null
+  }
+
+  export type LoserMaxAggregateOutputType = {
+    id: number | null
+    createdAt: Date | null
+    email: string | null
+    name: string | null
+  }
+
+  export type LoserCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    email: number
+    name: number
+    _all: number
+  }
+
+
+  export type LoserAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type LoserSumAggregateInputType = {
+    id?: true
+  }
+
+  export type LoserMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    email?: true
+    name?: true
+  }
+
+  export type LoserMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    email?: true
+    name?: true
+  }
+
+  export type LoserCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    email?: true
+    name?: true
+    _all?: true
+  }
+
+  export type LoserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Loser to aggregate.
+     */
+    where?: LoserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Losers to fetch.
+     */
+    orderBy?: LoserOrderByWithRelationInput | LoserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Losers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Losers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Losers
+    **/
+    _count?: true | LoserCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoserMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoserMaxAggregateInputType
+  }
+
+  export type GetLoserAggregateType<T extends LoserAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoser]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoser[P]>
+      : GetScalarType<T[P], AggregateLoser[P]>
+  }
+
+
+
+
+  export type LoserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoserWhereInput
+    orderBy?: LoserOrderByWithAggregationInput | LoserOrderByWithAggregationInput[]
+    by: LoserScalarFieldEnum[] | LoserScalarFieldEnum
+    having?: LoserScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoserCountAggregateInputType | true
+    _avg?: LoserAvgAggregateInputType
+    _sum?: LoserSumAggregateInputType
+    _min?: LoserMinAggregateInputType
+    _max?: LoserMaxAggregateInputType
+  }
+
+  export type LoserGroupByOutputType = {
+    id: number
+    createdAt: Date
+    email: string
+    name: string | null
+    _count: LoserCountAggregateOutputType | null
+    _avg: LoserAvgAggregateOutputType | null
+    _sum: LoserSumAggregateOutputType | null
+    _min: LoserMinAggregateOutputType | null
+    _max: LoserMaxAggregateOutputType | null
+  }
+
+  type GetLoserGroupByPayload<T extends LoserGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoserGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoserGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoserGroupByOutputType[P]>
+            : GetScalarType<T[P], LoserGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    email?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["loser"]>
+
+  export type LoserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    email?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["loser"]>
+
+  export type LoserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    email?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["loser"]>
+
+  export type LoserSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    email?: boolean
+    name?: boolean
+  }
+
+  export type LoserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "email" | "name", ExtArgs["result"]["loser"]>
+
+  export type $LoserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Loser"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      createdAt: Date
+      email: string
+      name: string | null
+    }, ExtArgs["result"]["loser"]>
+    composites: {}
+  }
+
+  type LoserGetPayload<S extends boolean | null | undefined | LoserDefaultArgs> = $Result.GetResult<Prisma.$LoserPayload, S>
+
+  type LoserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoserCountAggregateInputType | true
+    }
+
+  export interface LoserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Loser'], meta: { name: 'Loser' } }
+    /**
+     * Find zero or one Loser that matches the filter.
+     * @param {LoserFindUniqueArgs} args - Arguments to find a Loser
+     * @example
+     * // Get one Loser
+     * const loser = await prisma.loser.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoserFindUniqueArgs>(args: SelectSubset<T, LoserFindUniqueArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "findUnique", ClientOptions> | null, null, ExtArgs, ClientOptions>
+
+    /**
+     * Find one Loser that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoserFindUniqueOrThrowArgs} args - Arguments to find a Loser
+     * @example
+     * // Get one Loser
+     * const loser = await prisma.loser.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoserFindUniqueOrThrowArgs>(args: SelectSubset<T, LoserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Find the first Loser that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoserFindFirstArgs} args - Arguments to find a Loser
+     * @example
+     * // Get one Loser
+     * const loser = await prisma.loser.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoserFindFirstArgs>(args?: SelectSubset<T, LoserFindFirstArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "findFirst", ClientOptions> | null, null, ExtArgs, ClientOptions>
+
+    /**
+     * Find the first Loser that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoserFindFirstOrThrowArgs} args - Arguments to find a Loser
+     * @example
+     * // Get one Loser
+     * const loser = await prisma.loser.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoserFindFirstOrThrowArgs>(args?: SelectSubset<T, LoserFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "findFirstOrThrow", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Find zero or more Losers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoserFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Losers
+     * const losers = await prisma.loser.findMany()
+     * 
+     * // Get first 10 Losers
+     * const losers = await prisma.loser.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loserWithIdOnly = await prisma.loser.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoserFindManyArgs>(args?: SelectSubset<T, LoserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "findMany", ClientOptions>>
+
+    /**
+     * Create a Loser.
+     * @param {LoserCreateArgs} args - Arguments to create a Loser.
+     * @example
+     * // Create one Loser
+     * const Loser = await prisma.loser.create({
+     *   data: {
+     *     // ... data to create a Loser
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoserCreateArgs>(args: SelectSubset<T, LoserCreateArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "create", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Create many Losers.
+     * @param {LoserCreateManyArgs} args - Arguments to create many Losers.
+     * @example
+     * // Create many Losers
+     * const loser = await prisma.loser.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoserCreateManyArgs>(args?: SelectSubset<T, LoserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Losers and returns the data saved in the database.
+     * @param {LoserCreateManyAndReturnArgs} args - Arguments to create many Losers.
+     * @example
+     * // Create many Losers
+     * const loser = await prisma.loser.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Losers and only return the `id`
+     * const loserWithIdOnly = await prisma.loser.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LoserCreateManyAndReturnArgs>(args?: SelectSubset<T, LoserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "createManyAndReturn", ClientOptions>>
+
+    /**
+     * Delete a Loser.
+     * @param {LoserDeleteArgs} args - Arguments to delete one Loser.
+     * @example
+     * // Delete one Loser
+     * const Loser = await prisma.loser.delete({
+     *   where: {
+     *     // ... filter to delete one Loser
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoserDeleteArgs>(args: SelectSubset<T, LoserDeleteArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "delete", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Update one Loser.
+     * @param {LoserUpdateArgs} args - Arguments to update one Loser.
+     * @example
+     * // Update one Loser
+     * const loser = await prisma.loser.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoserUpdateArgs>(args: SelectSubset<T, LoserUpdateArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "update", ClientOptions>, never, ExtArgs, ClientOptions>
+
+    /**
+     * Delete zero or more Losers.
+     * @param {LoserDeleteManyArgs} args - Arguments to filter Losers to delete.
+     * @example
+     * // Delete a few Losers
+     * const { count } = await prisma.loser.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoserDeleteManyArgs>(args?: SelectSubset<T, LoserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Losers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoserUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Losers
+     * const loser = await prisma.loser.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoserUpdateManyArgs>(args: SelectSubset<T, LoserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Losers and returns the data updated in the database.
+     * @param {LoserUpdateManyAndReturnArgs} args - Arguments to update many Losers.
+     * @example
+     * // Update many Losers
+     * const loser = await prisma.loser.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Losers and only return the `id`
+     * const loserWithIdOnly = await prisma.loser.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LoserUpdateManyAndReturnArgs>(args: SelectSubset<T, LoserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "updateManyAndReturn", ClientOptions>>
+
+    /**
+     * Create or update one Loser.
+     * @param {LoserUpsertArgs} args - Arguments to update or create a Loser.
+     * @example
+     * // Update or create a Loser
+     * const loser = await prisma.loser.upsert({
+     *   create: {
+     *     // ... data to create a Loser
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Loser we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoserUpsertArgs>(args: SelectSubset<T, LoserUpsertArgs<ExtArgs>>): Prisma__LoserClient<$Result.GetResult<Prisma.$LoserPayload<ExtArgs>, T, "upsert", ClientOptions>, never, ExtArgs, ClientOptions>
+
+
+    /**
+     * Count the number of Losers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoserCountArgs} args - Arguments to filter Losers to count.
+     * @example
+     * // Count the number of Losers
+     * const count = await prisma.loser.count({
+     *   where: {
+     *     // ... the filter for the Losers we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoserCountArgs>(
+      args?: Subset<T, LoserCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoserCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Loser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoserAggregateArgs>(args: Subset<T, LoserAggregateArgs>): Prisma.PrismaPromise<GetLoserAggregateType<T>>
+
+    /**
+     * Group by Loser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoserGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoserGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoserGroupByArgs['orderBy'] }
+        : { orderBy?: LoserGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Loser model
+   */
+  readonly fields: LoserFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Loser.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Loser model
+   */ 
+  interface LoserFieldRefs {
+    readonly id: FieldRef<"Loser", 'Int'>
+    readonly createdAt: FieldRef<"Loser", 'DateTime'>
+    readonly email: FieldRef<"Loser", 'String'>
+    readonly name: FieldRef<"Loser", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Loser findUnique
+   */
+  export type LoserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * Filter, which Loser to fetch.
+     */
+    where: LoserWhereUniqueInput
+  }
+
+  /**
+   * Loser findUniqueOrThrow
+   */
+  export type LoserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * Filter, which Loser to fetch.
+     */
+    where: LoserWhereUniqueInput
+  }
+
+  /**
+   * Loser findFirst
+   */
+  export type LoserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * Filter, which Loser to fetch.
+     */
+    where?: LoserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Losers to fetch.
+     */
+    orderBy?: LoserOrderByWithRelationInput | LoserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Losers.
+     */
+    cursor?: LoserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Losers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Losers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Losers.
+     */
+    distinct?: LoserScalarFieldEnum | LoserScalarFieldEnum[]
+  }
+
+  /**
+   * Loser findFirstOrThrow
+   */
+  export type LoserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * Filter, which Loser to fetch.
+     */
+    where?: LoserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Losers to fetch.
+     */
+    orderBy?: LoserOrderByWithRelationInput | LoserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Losers.
+     */
+    cursor?: LoserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Losers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Losers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Losers.
+     */
+    distinct?: LoserScalarFieldEnum | LoserScalarFieldEnum[]
+  }
+
+  /**
+   * Loser findMany
+   */
+  export type LoserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * Filter, which Losers to fetch.
+     */
+    where?: LoserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Losers to fetch.
+     */
+    orderBy?: LoserOrderByWithRelationInput | LoserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Losers.
+     */
+    cursor?: LoserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Losers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Losers.
+     */
+    skip?: number
+    distinct?: LoserScalarFieldEnum | LoserScalarFieldEnum[]
+  }
+
+  /**
+   * Loser create
+   */
+  export type LoserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Loser.
+     */
+    data: XOR<LoserCreateInput, LoserUncheckedCreateInput>
+  }
+
+  /**
+   * Loser createMany
+   */
+  export type LoserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Losers.
+     */
+    data: LoserCreateManyInput | LoserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Loser createManyAndReturn
+   */
+  export type LoserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * The data used to create many Losers.
+     */
+    data: LoserCreateManyInput | LoserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Loser update
+   */
+  export type LoserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Loser.
+     */
+    data: XOR<LoserUpdateInput, LoserUncheckedUpdateInput>
+    /**
+     * Choose, which Loser to update.
+     */
+    where: LoserWhereUniqueInput
+  }
+
+  /**
+   * Loser updateMany
+   */
+  export type LoserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Losers.
+     */
+    data: XOR<LoserUpdateManyMutationInput, LoserUncheckedUpdateManyInput>
+    /**
+     * Filter which Losers to update
+     */
+    where?: LoserWhereInput
+    /**
+     * Limit how many Losers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Loser updateManyAndReturn
+   */
+  export type LoserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * The data used to update Losers.
+     */
+    data: XOR<LoserUpdateManyMutationInput, LoserUncheckedUpdateManyInput>
+    /**
+     * Filter which Losers to update
+     */
+    where?: LoserWhereInput
+    /**
+     * Limit how many Losers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Loser upsert
+   */
+  export type LoserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Loser to update in case it exists.
+     */
+    where: LoserWhereUniqueInput
+    /**
+     * In case the Loser found by the `where` argument doesn't exist, create a new Loser with this data.
+     */
+    create: XOR<LoserCreateInput, LoserUncheckedCreateInput>
+    /**
+     * In case the Loser was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoserUpdateInput, LoserUncheckedUpdateInput>
+  }
+
+  /**
+   * Loser delete
+   */
+  export type LoserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+    /**
+     * Filter which Loser to delete.
+     */
+    where: LoserWhereUniqueInput
+  }
+
+  /**
+   * Loser deleteMany
+   */
+  export type LoserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Losers to delete
+     */
+    where?: LoserWhereInput
+    /**
+     * Limit how many Losers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Loser without action
+   */
+  export type LoserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loser
+     */
+    select?: LoserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loser
+     */
+    omit?: LoserOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -1904,6 +3011,16 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const LoserScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    email: 'email',
+    name: 'name'
+  };
+
+  export type LoserScalarFieldEnum = (typeof LoserScalarFieldEnum)[keyof typeof LoserScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -2043,6 +3160,55 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
+  export type LoserWhereInput = {
+    AND?: LoserWhereInput | LoserWhereInput[]
+    OR?: LoserWhereInput[]
+    NOT?: LoserWhereInput | LoserWhereInput[]
+    id?: IntFilter<"Loser"> | number
+    createdAt?: DateTimeFilter<"Loser"> | Date | string
+    email?: StringFilter<"Loser"> | string
+    name?: StringNullableFilter<"Loser"> | string | null
+  }
+
+  export type LoserOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    email?: SortOrder
+    name?: SortOrderInput | SortOrder
+  }
+
+  export type LoserWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    email?: string
+    AND?: LoserWhereInput | LoserWhereInput[]
+    OR?: LoserWhereInput[]
+    NOT?: LoserWhereInput | LoserWhereInput[]
+    createdAt?: DateTimeFilter<"Loser"> | Date | string
+    name?: StringNullableFilter<"Loser"> | string | null
+  }, "id" | "email">
+
+  export type LoserOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    email?: SortOrder
+    name?: SortOrderInput | SortOrder
+    _count?: LoserCountOrderByAggregateInput
+    _avg?: LoserAvgOrderByAggregateInput
+    _max?: LoserMaxOrderByAggregateInput
+    _min?: LoserMinOrderByAggregateInput
+    _sum?: LoserSumOrderByAggregateInput
+  }
+
+  export type LoserScalarWhereWithAggregatesInput = {
+    AND?: LoserScalarWhereWithAggregatesInput | LoserScalarWhereWithAggregatesInput[]
+    OR?: LoserScalarWhereWithAggregatesInput[]
+    NOT?: LoserScalarWhereWithAggregatesInput | LoserScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Loser"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Loser"> | Date | string
+    email?: StringWithAggregatesFilter<"Loser"> | string
+    name?: StringNullableWithAggregatesFilter<"Loser"> | string | null
+  }
+
   export type UserCreateInput = {
     createdAt?: Date | string
     email: string
@@ -2083,6 +3249,52 @@ export namespace Prisma {
   }
 
   export type UserUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoserCreateInput = {
+    createdAt?: Date | string
+    email: string
+    name?: string | null
+  }
+
+  export type LoserUncheckedCreateInput = {
+    id?: number
+    createdAt?: Date | string
+    email: string
+    name?: string | null
+  }
+
+  export type LoserUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoserUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoserCreateManyInput = {
+    id?: number
+    createdAt?: Date | string
+    email: string
+    name?: string | null
+  }
+
+  export type LoserUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     email?: StringFieldUpdateOperationsInput | string
@@ -2239,6 +3451,35 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type LoserCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    email?: SortOrder
+    name?: SortOrder
+  }
+
+  export type LoserAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type LoserMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    email?: SortOrder
+    name?: SortOrder
+  }
+
+  export type LoserMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    email?: SortOrder
+    name?: SortOrder
+  }
+
+  export type LoserSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type DateTimeFieldUpdateOperationsInput = {

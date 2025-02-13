@@ -124,6 +124,13 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.LoserScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  email: 'email',
+  name: 'name'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -141,7 +148,8 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Loser: 'Loser'
 };
 
 /**
