@@ -1,7 +1,7 @@
 // import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
-// import { NavigationMenu } from "@/components/organisms/NavigationMenu";
-// import { Hero } from "@/components/organisms/Hero";
+import { NavigationMenu } from "@/components/organisms/NavigationMenu";
+import { Hero } from "@/components/organisms/Hero";
 import { FaqSection } from "./components/FaqSection";
 import { MainFeaturesSection } from "./components/MainFeaturesSection";
 import { SubFeaturesSection } from "./components/SubFeaturesSection";
@@ -15,9 +15,9 @@ export default async function Home() {
 
   return (
     <main>
-      {/* <NavigationMenu /> */}
+      <NavigationMenu />
       <div>
-        {/* <Hero /> */}
+        <Hero />
 
         <MainFeaturesSection />
         <SubFeaturesSection />
