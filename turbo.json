@@ -29,6 +29,9 @@
     },
     "db:push": {
       "cache": false
+    },
+    "db:build": {
+      "cache": false
     }
   }
 }
