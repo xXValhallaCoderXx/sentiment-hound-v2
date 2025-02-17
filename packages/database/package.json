@@ -13,7 +13,8 @@
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
-    "db:deploy": "prisma migrate deploy"
+    "db:deploy": "prisma migrate deploy",
+    "seed": "ts-node seed.ts"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

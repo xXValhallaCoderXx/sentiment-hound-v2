@@ -7,6 +7,7 @@ import {
   AppShellMain,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { Notifications } from "@mantine/notifications";
 import { SideDrawerNavigation } from "../organisms/SideDrawerNavigation";
 import { AuthenticatedNavigationMenu } from "../organisms/AuthenticatedNavigationMenu";
 
@@ -16,7 +17,11 @@ const DashboardLayout = ({ children }: any) => {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 245, breakpoint: "sm", collapsed: { mobile: !opened } }}
+      navbar={{
+        width: 245,
+        breakpoint: "sm",
+        collapsed: { mobile: !opened },
+      }}
       padding="md"
     >
       <AppShellHeader>
@@ -25,9 +30,13 @@ const DashboardLayout = ({ children }: any) => {
       <AppShellNavbar p="md">
         <SideDrawerNavigation />
       </AppShellNavbar>
-      <AppShellMain className="h-[1px]">{children}</AppShellMain>
+      <AppShellMain className="h-[1px]">
+        <Notifications />
+        {children}
+      </AppShellMain>
     </AppShell>
   );
 };
 
 export default DashboardLayout;
+
