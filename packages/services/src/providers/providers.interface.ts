@@ -1,12 +1,4 @@
-export interface IProvider {
-  id: string;
-  name: string;
-  type: string;
-  endpoint: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
+import { Provider } from "@repo/db";
 export interface CreateProviderDto {
   name: string;
   type: string;
@@ -20,10 +12,10 @@ export interface UpdateProviderDto {
 }
 
 export interface IProviderRepository {
-  findAll(): Promise<IProvider[]>;
-  findById(id: string): Promise<IProvider | null>;
-  create(data: CreateProviderDto): Promise<IProvider>;
-  update(id: string, data: UpdateProviderDto): Promise<IProvider>;
+  findAll(): Promise<Provider[]>;
+  findById(id: string): Promise<Provider | null>;
+  create(data: CreateProviderDto): Promise<Provider>;
+  update(id: string, data: UpdateProviderDto): Promise<Provider>;
   delete(id: string): Promise<void>;
 }
 
@@ -33,9 +25,9 @@ export interface IProviderService {
     name: string,
     type: string,
     credentials: any
-  ): Promise<IProvider>;
-  getProvider(id: string): Promise<IProvider>;
-  getUserProviders(userId: string): Promise<IProvider[]>;
-  updateProvider(id: string, data: Partial<IProvider>): Promise<IProvider>;
+  ): Promise<Provider>;
+  getProvider(id: string): Promise<Provider>;
+  getUserProviders(userId: string): Promise<Provider[]>;
+  updateProvider(id: string, data: Partial<Provider>): Promise<Provider>;
   deleteProvider(id: string): Promise<void>;
 }

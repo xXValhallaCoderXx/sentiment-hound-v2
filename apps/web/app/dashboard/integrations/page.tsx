@@ -1,16 +1,13 @@
-import { Title, Box, Text, Container } from "@mantine/core";
+import { Title, Box, Text } from "@mantine/core";
 import { Suspense } from "react";
 import IntegrationCardsSkeleton from "./components/IntegrationCardsSkeleton";
 import IntegrationAlert from "./components/IntegrationAlert";
 import IntegrationCards from "./components/IntegrationCards";
-import { getIntegration } from "@/actions/integrations.actions";
 import { ErrorNotification } from "@/components/atoms/ErrorNotification";
 
-const IntegrationsPage = async (params: any) => {
-  const response = await getIntegration(1);
-
+const IntegrationsPage = async () => {
   return (
-    <div className="h-full ">
+    <Box p={16}>
       <Box className="px-4">
         <Title>Integrations</Title>
         <Text>
@@ -34,7 +31,7 @@ const IntegrationsPage = async (params: any) => {
           </Suspense>
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 };
 

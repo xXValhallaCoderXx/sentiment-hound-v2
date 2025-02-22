@@ -16,6 +16,7 @@ export interface IIntegrationRepository {
   findByUserId(userId: string): Promise<IIntegration[]>;
   update(id: number, data: Partial<IIntegration>): Promise<IIntegration>;
   delete(id: number): Promise<void>;
+  findAll(): Promise<IIntegration[]>;
 }
 
 export interface IIntegrationService {

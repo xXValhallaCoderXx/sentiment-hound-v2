@@ -17,6 +17,14 @@ export class CoreIntegrationService {
     return integration;
   }
 
+  async getAllIntegrations(): Promise<IIntegration[]> {
+    const integration = await this.repository.findAll();
+    if (!integration) {
+      throw new IntegrationNotFoundError("No integrations found");
+    }
+    return integration;
+  }
+
   async getUserIntegrations(userId: string): Promise<IIntegration[]> {
     if (!userId) {
       throw new IntegrationValidationError("User ID is required");

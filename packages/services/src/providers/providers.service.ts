@@ -1,5 +1,5 @@
+import { Provider } from "@repo/db";
 import {
-  IProvider,
   IProviderRepository,
   CreateProviderDto,
   UpdateProviderDto,
@@ -8,11 +8,11 @@ import {
 export class CoreProviderService {
   constructor(private repository: IProviderRepository) {}
 
-  async getAllProviders(): Promise<IProvider[]> {
+  async getAllProviders(): Promise<Provider[]> {
     return await this.repository.findAll();
   }
 
-  async getProvider(id: string): Promise<IProvider> {
+  async getProvider(id: string): Promise<Provider> {
     const provider = await this.repository.findById(id);
     if (!provider) {
       throw new Error("Provider not found");
@@ -20,15 +20,12 @@ export class CoreProviderService {
     return provider;
   }
 
-  async createProvider(data: CreateProviderDto): Promise<IProvider> {
+  async createProvider(data: CreateProviderDto): Promise<Provider> {
     // Add validation if needed
     return await this.repository.create(data);
   }
 
-  async updateProvider(
-    id: string,
-    data: UpdateProviderDto
-  ): Promise<IProvider> {
+  async updateProvider(id: string, data: UpdateProviderDto): Promise<Provider> {
     const provider = await this.repository.findById(id);
     if (!provider) {
       throw new Error("Provider not found");

@@ -1,32 +1,27 @@
 import Image from "next/image";
 import { Text, Grid, GridCol, Card, Divider, Flex } from "@mantine/core";
-// import { providersService, integrationsService } from "services";
-// import { auth } from "@/lib/next-auth.lib";
+import { getAllProviders } from "@/actions/providers.actions";
 import IntegrationButton from "./IntegrationButton";
-import { integrateOauthAction, revokeOauthAction } from "../actions";
+import { revokeOauthAction } from "../actions";
+import {
+  getUserIntegrations,
+  integrateProvider,
+} from "@/actions/integrations.actions";
 
 const IntegrationCards = async () => {
-  // const session = await auth();
-  // const providers = await providersService.getProviders();
-  // const integrations = await integrationsService.getUserIntegrations(
-  //   session?.user?.id as string
-  // );
+  const providers = await getAllProviders();
+  const userIntegrations = await getUserIntegrations("id");
 
-  // const userIntegrations = integrations?.map(
-  //   (integration) => integration.providerId
-  // );
+  console.log("user integrarions?: ", userIntegrations);
 
   return (
     <Grid className="mt-4">
-      sss
-      {/* {providers.map((provider, index) => {
-        const isConnected = userIntegrations.includes(provider.id);
-
+      {providers?.data?.map((provider) => {
+        // const isConnected = userIntegrations.includes(provider.id);
+        const isConnected = false;
         return (
           <GridCol key={provider.id} span={4}>
-            <form
-              action={isConnected ? revokeOauthAction : integrateOauthAction}
-            >
+            <form action={isConnected ? revokeOauthAction : integrateProvider}>
               <Card shadow="md">
                 <Flex align="center" gap={2}>
                   <Image
@@ -50,7 +45,7 @@ const IntegrationCards = async () => {
             </form>
           </GridCol>
         );
-      })} */}
+      })}
     </Grid>
   );
 };

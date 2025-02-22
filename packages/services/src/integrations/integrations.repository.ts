@@ -7,6 +7,10 @@ export class IntegrationRepository implements IIntegrationRepository {
     return this.prisma.integration.create({ data: integration });
   }
 
+  async findAll(): Promise<IIntegration[]> {
+    return this.prisma.integration.findMany();
+  }
+
   async findById(id: number): Promise<IIntegration | null> {
     return this.prisma.integration.findUnique({ where: { id } });
   }

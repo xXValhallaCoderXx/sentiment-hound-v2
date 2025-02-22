@@ -4,28 +4,7 @@ import { redirect } from "next/navigation";
 // import { auth } from "@/lib/next-auth.lib";
 // import { providersService, integrationsService } from "services";
 
-export const integrateOauthAction = async (formData: FormData) => {
-  // const session = await auth();
-  // const userId = session?.user?.id;
-  // if (!userId) {
-  //   throw new Error("User not found");
-  // }
-  // if (!formData.get("providerId")) {
-  //   throw new Error("Provider not found");
-  // }
-  // const rawFormData = {
-  //   providerId: formData.get("providerId"),
-  // };
-  // const provider = await providersService.getProviderById(
-  //   rawFormData.providerId as string
-  // );
-  // if (provider && provider.name === "youtube") {
-  //   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  //   const redirectUri = `${baseUrl}/api/auth/youtube/callback`;
-  //   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.AUTH_GOOGLE_ID}&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&access_type=offline&prompt=consent`;
-  //   redirect(authUrl);
-  // }
-};
+
 
 export const revokeOauthAction = async (formData: FormData) => {
   // const session = await auth();
