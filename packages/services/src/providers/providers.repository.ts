@@ -9,7 +9,15 @@ export class ProviderRepository implements IProviderRepository {
   }
 
   async findById(id: string): Promise<Provider | null> {
-    return this.prisma.provider.findUnique({ where: { id } });
+    try {
+      return await this.prisma.provider.findUnique({
+        where: { id: parseInt(id) },
+      });
+    } catch (error) {
+      console.log("ERROR: ", error);
+      return null;
+    }
+   
   }
 
   async findByUserId(userId: string): Promise<Provider[]> {
