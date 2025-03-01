@@ -1,5 +1,5 @@
-import { integrationsService } from "../integrations/integrations.service";
-import { providersService } from "../providers/providers.service";
+// import { integrationsService } from "../integrations/integrations.service";
+// import { providersService } from "../providers/providers.service";
 
 class YoutubeService {
   async connectYoutubeIntegration(code: string, userId: string) {
@@ -10,20 +10,20 @@ class YoutubeService {
 
     const youtubeAccountId = userInfo?.id;
     const expiresAt = new Date(Date.now() + expiresIn * 1000);
-    const youtubeProvider = await providersService.getProviderByName("youtube");
+    // const youtubeProvider = await providersService.getProviderByName("youtube");
 
-    if (!youtubeProvider) {
-      throw new Error("YouTube provider not found");
-    }
+    // if (!youtubeProvider) {
+    //   throw new Error("YouTube provider not found");
+    // }
 
-    await integrationsService.createIntegration({
-      providerId: youtubeProvider.id,
-      remoteId: youtubeAccountId,
-      accessToken,
-      refreshToken,
-      refreshTokenExpiry: expiresAt,
-      userId,
-    });
+    // await integrationsService.createIntegration({
+    //   providerId: youtubeProvider.id,
+    //   remoteId: youtubeAccountId,
+    //   accessToken,
+    //   refreshToken,
+    //   refreshTokenExpiry: expiresAt,
+    //   userId,
+    // });
 
     return true;
   }
@@ -67,20 +67,20 @@ class YoutubeService {
   }
 
   async refreshAccessToken(userId: string) {
-    const youtubeIntegration = await integrationsService.getUserIntegration({
-      userId,
-      name: "youtube",
-    });
+    // const youtubeIntegration = await integrationsService.getUserIntegration({
+    //   userId,
+    //   name: "youtube",
+    // });
 
-    if (!youtubeIntegration || !youtubeIntegration.accessToken) {
-      throw new Error("YouTube integration not found for user");
-    }
+    // if (!youtubeIntegration || !youtubeIntegration.accessToken) {
+    //   throw new Error("YouTube integration not found for user");
+    // }
 
-    const { id, refreshToken } = youtubeIntegration;
+    // const { id, refreshToken } = youtubeIntegration;
     const params = new URLSearchParams();
     params.append("client_id", process.env.AUTH_GOOGLE_ID as string);
     params.append("client_secret", process.env.AUTH_GOOGLE_SECRET as string);
-    params.append("refresh_token", refreshToken);
+    // params.append("refresh_token", refreshToken);
     params.append("grant_type", "refresh_token");
 
     const response = await fetch("https://oauth2.googleapis.com/token", {
@@ -101,13 +101,13 @@ class YoutubeService {
 
     const expiresAt = new Date(Date.now() + expires_in * 1000);
 
-    await integrationsService.updateIntegrationAuthCredentials({
-      providerId: id,
-      userId,
-      accessToken: access_token,
-      refreshToken,
-      accessTokenExpiry: expiresAt,
-    });
+    // await integrationsService.updateIntegrationAuthCredentials({
+    //   providerId: id,
+    //   userId,
+    //   accessToken: access_token,
+    //   refreshToken,
+    //   accessTokenExpiry: expiresAt,
+    // });
 
     return access_token;
   }

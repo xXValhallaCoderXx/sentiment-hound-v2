@@ -26,11 +26,11 @@ type ActionResponse<T> =
   | { data: T; error: null }
   | { data: null; error: ErrorResponse };
 
-export async function getUserIntegrations(
-  id: string
-): Promise<ActionResponse<IIntegration[]>> {
+export async function getUserIntegrations(): Promise<
+  ActionResponse<IIntegration[]>
+> {
   try {
-    const data = await integrationService.getUserIntegrations(id);
+    const data = await integrationService.getAllIntegrations();
     return { data, error: null };
   } catch (error: any) {
     return {
@@ -109,7 +109,6 @@ export async function createIntegration(
 }
 
 export const integrateProvider = async (formData: FormData) => {
-  console.log("LETS GO");
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
@@ -122,9 +121,7 @@ export const integrateProvider = async (formData: FormData) => {
   }
 
   const provider = await providerService.getProvider(providerId as string);
-  console.log("PROVIDER", provider);
 
-  // console.log("PROVIDER", provider);
   if (provider && provider.name === "youtube") {
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
     const redirectUri = `${baseUrl}/api/auth/youtube/callback`;
@@ -132,3 +129,4 @@ export const integrateProvider = async (formData: FormData) => {
     redirect(authUrl);
   }
 };
+

@@ -10,15 +10,22 @@ import {
 
 const IntegrationCards = async () => {
   const providers = await getAllProviders();
-  const userIntegrations = await getUserIntegrations("id");
+  console.log("PROVIDERS: ", providers);
+  const youtubeIntegration = providers?.data?.find(
+    (provider) => provider.name === "youtube"
+  );
+  const userIntegrations = await getUserIntegrations();
+  console.log("GET ", youtubeIntegration);
 
   console.log("user integrarions?: ", userIntegrations);
 
   return (
     <Grid className="mt-4">
       {providers?.data?.map((provider) => {
-        // const isConnected = userIntegrations.includes(provider.id);
-        const isConnected = false;
+        const isConnected = userIntegrations?.data?.find(
+          (integration) => integration.providerId === provider.id
+        );
+
         return (
           <GridCol key={provider.id} span={4}>
             <form action={isConnected ? revokeOauthAction : integrateProvider}>
@@ -39,7 +46,7 @@ const IntegrationCards = async () => {
                 <input type="hidden" name="providerId" value={provider.id} />
                 <IntegrationButton
                   isDisabled={provider.name !== "youtube"}
-                  isConnected={isConnected}
+                  isConnected={Boolean(isConnected?.id)}
                 />
               </Card>
             </form>

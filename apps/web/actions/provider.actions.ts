@@ -3,17 +3,17 @@
 import { prisma } from "@repo/db";
 import {
   CoreProviderService,
-  IProvider,
   ProviderRepository,
   CreateProviderDto,
   UpdateProviderDto,
 } from "@repo/services";
+import { Provider } from "@repo/db";
 
 // Create a repository implementation
 const providerRepository = new ProviderRepository(prisma);
 const providerService = new CoreProviderService(providerRepository);
 
-export async function getProviders(): Promise<IProvider[]> {
+export async function getProviders(): Promise<Provider[]> {
   try {
     return await providerService.getAllProviders();
   } catch (error) {
@@ -21,7 +21,7 @@ export async function getProviders(): Promise<IProvider[]> {
   }
 }
 
-export async function getProvider(id: string): Promise<IProvider> {
+export async function getProvider(id: string): Promise<Provider> {
   try {
     return await providerService.getProvider(id);
   } catch (error) {
@@ -31,7 +31,7 @@ export async function getProvider(id: string): Promise<IProvider> {
 
 export async function createProvider(
   data: CreateProviderDto
-): Promise<IProvider> {
+): Promise<Provider> {
   try {
     return await providerService.createProvider(data);
   } catch (error) {
@@ -42,7 +42,7 @@ export async function createProvider(
 export async function updateProvider(
   id: string,
   data: UpdateProviderDto
-): Promise<IProvider> {
+): Promise<Provider> {
   try {
     return await providerService.updateProvider(id, data);
   } catch (error) {
