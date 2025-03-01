@@ -108,6 +108,45 @@ export async function createIntegration(
   }
 }
 
+export async function revokeIntegration(formData: FormData) {
+  console.log("LETS GO: ", formData);
+  const providerId = formData.get("providerId");
+  if (!providerId) {
+    throw new Error("Provider not found");
+  }
+
+  const integration = await integrationService.getIntegration(
+    Number(providerId)
+  );
+  if (!integration) {
+    throw new Error("Integration not found");
+  }
+
+  const provider = await providerService.getProvider(
+    integration.providerId.toString()
+  );
+
+  // Handle YouTube token revocation
+  if (provider && provider.name === "youtube") {
+    const response = await fetch(
+      `https://oauth2.googleapis.com/revoke?token=${integration.accessToken}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    console.log("REVOKE TOKEN: ", response);
+    if (!response.ok) {
+      console.error("Failed to revoke Google token");
+    }
+  }
+
+  // Delete the integration from our database
+  await integrationService.deleteIntegration(integration.id);
+}
+
 export const integrateProvider = async (formData: FormData) => {
   const session = await auth();
   const userId = session?.user?.id;

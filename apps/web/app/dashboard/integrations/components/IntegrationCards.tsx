@@ -2,10 +2,10 @@ import Image from "next/image";
 import { Text, Grid, GridCol, Card, Divider, Flex } from "@mantine/core";
 import { getAllProviders } from "@/actions/providers.actions";
 import IntegrationButton from "./IntegrationButton";
-import { revokeOauthAction } from "../actions";
 import {
   getUserIntegrations,
   integrateProvider,
+  revokeIntegration,
 } from "@/actions/integrations.actions";
 
 const IntegrationCards = async () => {
@@ -28,7 +28,7 @@ const IntegrationCards = async () => {
 
         return (
           <GridCol key={provider.id} span={4}>
-            <form action={isConnected ? revokeOauthAction : integrateProvider}>
+            <form action={isConnected ? revokeIntegration : integrateProvider}>
               <Card shadow="md">
                 <Flex align="center" gap={2}>
                   <Image

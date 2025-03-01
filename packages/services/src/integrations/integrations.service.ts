@@ -67,4 +67,21 @@ export class CoreIntegrationService {
       );
     }
   }
+
+  async deleteIntegration(id: number): Promise<void> {
+    // Verify the integration exists before attempting to delete
+    const integration = await this.repository.findById(id);
+    if (!integration) {
+      throw new IntegrationNotFoundError(id);
+    }
+
+    try {
+      await this.repository.delete(id);
+    } catch (error) {
+      throw new IntegrationError(
+        "Failed to delete integration",
+        "INTEGRATION_DELETE_ERROR"
+      );
+    }
+  }
 }
