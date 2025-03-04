@@ -6,10 +6,19 @@ import {
   IntegrationAuthenticationError,
 } from "./integrations.errors";
 
+
+interface ICreateIntegration {
+  userId: string;
+  accountId: string;
+  providerId: number;
+  accessToken: string;
+  refreshToken: string;
+}
 export class CoreIntegrationService {
   constructor(private repository: IIntegrationRepository) {}
 
   async getIntegration(id: number): Promise<IIntegration> {
+    console.log("GET INTEGRATION: ", id);
     const integration = await this.repository.findById(id);
     if (!integration) {
       throw new IntegrationNotFoundError(id);
@@ -32,13 +41,13 @@ export class CoreIntegrationService {
     return this.repository.findByUserId(userId);
   }
 
-  async createIntegration(
-    userId: string,
-    accountId: string,
-    providerId: number,
-    accessToken: string,
-    refreshToken: string
-  ): Promise<IIntegration> {
+  async createIntegration({
+    userId,
+    accessToken,
+    accountId,
+    providerId,
+    refreshToken,
+  }: ICreateIntegration): Promise<IIntegration> {
     // Validation
     if (!userId || !accountId || !providerId) {
       throw new IntegrationValidationError("Missing required fields");

@@ -17,6 +17,7 @@ export interface IProviderRepository {
   create(data: CreateProviderDto): Promise<Provider>;
   update(id: string, data: UpdateProviderDto): Promise<Provider>;
   delete(id: string): Promise<void>;
+  findByName(name: string): Promise<Provider | null>;
 }
 
 export interface IProviderService {

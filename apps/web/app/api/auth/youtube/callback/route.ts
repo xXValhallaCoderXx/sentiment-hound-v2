@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
+
 import { prisma } from "@repo/db";
 import {
   CoreIntegrationService,
@@ -8,6 +9,7 @@ import {
   ProviderRepository,
   CoreProviderService,
   IIntegration,
+  youtubeService,
 } from "@repo/services";
 
 const integrationRepository = new IntegrationRepository(prisma);
@@ -26,9 +28,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   if (session?.user) {
     const userId = session?.user?.id;
-    // await youtubeService.connectYoutubeIntegration(code, userId as string);
-    // redirect("/dashboard/integrations?success=true");
+    await youtubeService.connectYoutubeIntegration(code, userId as string);
+   redirect("/dashboard/integrations?success=true");
   } else {
-    // redirect("/dashboard/integrations?success=false");
+    redirect("/dashboard/integrations?success=false");
   }
 }

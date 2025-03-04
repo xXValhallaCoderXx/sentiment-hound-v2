@@ -80,33 +80,7 @@ export async function getAllIntegrations(): Promise<
   }
 }
 
-export async function createIntegration(
-  userId: string,
-  accountId: string,
-  providerId: number,
-  accessToken: string,
-  refreshToken: string
-): Promise<ActionResponse<IIntegration>> {
-  try {
-    const data = await integrationService.createIntegration(
-      userId,
-      accountId,
-      providerId,
-      accessToken,
-      refreshToken
-    );
-    return { data, error: null };
-  } catch (error: any) {
-    return {
-      data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
-    };
-  }
-}
+
 
 export async function revokeIntegration(formData: FormData) {
   console.log("LETS GO: ", formData);
@@ -145,6 +119,7 @@ export async function revokeIntegration(formData: FormData) {
 
   // Delete the integration from our database
   await integrationService.deleteIntegration(integration.id);
+  redirect("/dashboard/integrations");
 }
 
 export const integrateProvider = async (formData: FormData) => {

@@ -7,3 +7,4 @@ export * from "./providers/providers.repository";
 export * from "./integrations/integrations.interface";
 export * from "./integrations/integrations.service";
 export * from "./integrations/integrations.repository";
+export * from "./youtube/youtube.services";

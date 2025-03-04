@@ -17,7 +17,6 @@ export class ProviderRepository implements IProviderRepository {
       console.log("ERROR: ", error);
       return null;
     }
-   
   }
 
   async findByUserId(userId: string): Promise<Provider[]> {
@@ -34,5 +33,9 @@ export class ProviderRepository implements IProviderRepository {
 
   async findAll(): Promise<Provider[]> {
     return this.prisma.provider.findMany();
+  }
+
+  async findByName(name: string): Promise<Provider | null> {
+    return this.prisma.provider.findUnique({ where: { name } });
   }
 }

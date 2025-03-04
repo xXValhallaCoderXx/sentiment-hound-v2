@@ -20,6 +20,14 @@ export class CoreProviderService {
     return provider;
   }
 
+  async getProviderByName(name: string): Promise<Provider> {
+    const provider = await this.repository.findByName(name);
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+    return provider;
+  }
+
   async createProvider(data: CreateProviderDto): Promise<Provider> {
     // Add validation if needed
     return await this.repository.create(data);

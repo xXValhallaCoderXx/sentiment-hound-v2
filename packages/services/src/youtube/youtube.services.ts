@@ -1,5 +1,15 @@
 // import { integrationsService } from "../integrations/integrations.service";
-// import { providersService } from "../providers/providers.service";
+import { prisma } from "@repo/db";
+import { ProviderRepository } from "../providers/providers.repository";
+import { CoreProviderService } from "../providers/providers.service";
+import { IntegrationRepository } from "../integrations/integrations.repository";
+import { CoreIntegrationService } from "../integrations/integrations.service";
+
+const providerRepository = new ProviderRepository(prisma);
+const providerService = new CoreProviderService(providerRepository);
+
+const integrationRepository = new IntegrationRepository(prisma);
+const integrationsService = new CoreIntegrationService(integrationRepository);
 
 class YoutubeService {
   async connectYoutubeIntegration(code: string, userId: string) {
@@ -10,20 +20,21 @@ class YoutubeService {
 
     const youtubeAccountId = userInfo?.id;
     const expiresAt = new Date(Date.now() + expiresIn * 1000);
-    // const youtubeProvider = await providersService.getProviderByName("youtube");
+    const youtubeProvider = await providerService.getProviderByName("youtube");
 
-    // if (!youtubeProvider) {
-    //   throw new Error("YouTube provider not found");
-    // }
+    if (!youtubeProvider) {
+      throw new Error("YouTube provider not found");
+    }
 
-    // await integrationsService.createIntegration({
-    //   providerId: youtubeProvider.id,
-    //   remoteId: youtubeAccountId,
-    //   accessToken,
-    //   refreshToken,
-    //   refreshTokenExpiry: expiresAt,
-    //   userId,
-    // });
+    await integrationsService.createIntegration({
+      providerId: youtubeProvider.id,
+      // remoteId: youtubeAccountId,
+      accessToken,
+      refreshToken,
+      accountId: youtubeAccountId,
+      // refreshTokenExpiry: expiresAt,
+      userId,
+    });
 
     return true;
   }
