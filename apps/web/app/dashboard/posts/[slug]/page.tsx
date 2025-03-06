@@ -5,13 +5,9 @@ import { Box } from "@mantine/core";
 import PostListTable from "./components/PostListTable";
 import ActionPanel from "./components/ActionPanel";
 
-const PostListPage = async ({
-  params,
-}: {
-  searchParams: any;
-  params: { slug: string };
-}) => {
-  const slug = params.slug;
+const PostListPage = async ({ params }: { params: { slug: string } }) => {
+  const { slug } = await params;
+  console.log("NESTED ", slug);
   // const session = await auth();
 
   // const currentIntegration = await integrationsService.getUserIntegration({
@@ -26,6 +22,7 @@ const PostListPage = async ({
   return (
     <Box>
       <Box className="mt-4">
+        SOme slug
         {/* <ActionPanel name={currentIntegration?.provider.name ?? ""} /> */}
       </Box>
       {/* <PostListTable data={integrationPosts} /> */}
