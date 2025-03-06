@@ -22,6 +22,15 @@ export class IntegrationRepository implements IIntegrationRepository {
     });
   }
 
+  async findByUserIdAndProviderName(
+    userId: string,
+    providerName: string
+  ): Promise<IIntegration> {
+    return this.prisma.integration.findFirst({
+      where: { userId, provider: { name: providerName } },
+    });
+  }
+
   async update(id: number, data: Partial<IIntegration>): Promise<IIntegration> {
     return this.prisma.integration.update({ where: { id }, data });
   }

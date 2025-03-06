@@ -123,94 +123,93 @@ class YoutubeService {
     return access_token;
   }
 
-  //   async fetchYoutubePosts(userId: string, retry = true) {
-  //     const youtubeIntegration = await integrationsService.getUserIntegration({
-  //       userId,
-  //       name: "youtube",
-  //     });
-  //     if (!youtubeIntegration) {
-  //       throw new Error("YouTube integration not found for user");
-  //     }
+  async fetchYoutubePosts(userId: string, retry = true) {
+    const youtubeIntegration =
+      await integrationsService.getUserIntegrationByName(userId, "youtube");
 
-  //     const accessTokenExpiryDate = new Date(
-  //       youtubeIntegration.refreshTokenExpiresAt
-  //     );
-  //     const currentTime = new Date();
+    if (!youtubeIntegration) {
+      throw new Error("YouTube integration not found for user");
+    }
 
-  //     if (accessTokenExpiryDate < currentTime) {
-  //       console.log("The specified time has passed.");
-  //       await this.refreshAccessToken(userId);
-  //       await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
-  //     }
+    const accessTokenExpiryDate = new Date(
+      youtubeIntegration.refreshTokenExpiresAt
+    );
+    const currentTime = new Date();
 
-  //     const headers = {
-  //       Authorization: `Bearer ${youtubeIntegration.accessToken}`,
-  //     };
+    if (accessTokenExpiryDate < currentTime) {
+      console.log("The specified time has passed.");
+      await this.refreshAccessToken(userId);
+      await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
+    }
 
-  //     const channelResponse = await fetch(
-  //       "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true",
-  //       {
-  //         headers,
-  //       }
-  //     );
-  //     let channelData = await channelResponse.json();
+    const headers = {
+      Authorization: `Bearer ${youtubeIntegration.accessToken}`,
+    };
 
-  //     if (channelData.error?.code === 401 && retry) {
-  //       await this.refreshAccessToken(userId);
-  //       await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
-  //     }
+    const channelResponse = await fetch(
+      "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true",
+      {
+        headers,
+      }
+    );
+    let channelData = await channelResponse.json();
 
-  //     let videos: any = [];
-  //     let nextPageToken = "";
+    if (channelData.error?.code === 401 && retry) {
+      await this.refreshAccessToken(userId);
+      await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
+    }
 
-  //     const uploadsPlaylistId =
-  //       channelData.items[0].contentDetails.relatedPlaylists.uploads;
+    let videos: any = [];
+    let nextPageToken = "";
 
-  //     do {
-  //       const playlistItemsResponse = await fetch(
-  //         `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
-  //         { headers }
-  //       );
+    const uploadsPlaylistId =
+      channelData.items[0].contentDetails.relatedPlaylists.uploads;
 
-  //       const playlistItemsData = await playlistItemsResponse.json();
+    do {
+      const playlistItemsResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
+        { headers }
+      );
 
-  //       if (playlistItemsResponse.status !== 200) {
-  //         throw new Error("Failed to fetch playlist items");
-  //       }
+      const playlistItemsData = await playlistItemsResponse.json();
 
-  //       const fetchedVideos = playlistItemsData.items.map((item: any) => ({
-  //         id: item.snippet.resourceId.videoId,
-  //         title: item.snippet.title,
-  //         description: item.snippet.description,
-  //         publishedAt: item.snippet.publishedAt,
-  //         thumbnail: item.snippet.thumbnails.default.url,
-  //       }));
+      if (playlistItemsResponse.status !== 200) {
+        throw new Error("Failed to fetch playlist items");
+      }
 
-  //       videos = [...videos, ...fetchedVideos];
-  //       nextPageToken = playlistItemsData.nextPageToken || "";
-  //     } while (nextPageToken);
+      const fetchedVideos = playlistItemsData.items.map((item: any) => ({
+        id: item.snippet.resourceId.videoId,
+        title: item.snippet.title,
+        description: item.snippet.description,
+        publishedAt: item.snippet.publishedAt,
+        thumbnail: item.snippet.thumbnails.default.url,
+      }));
 
-  //     // Fetch video details including comment count
-  //     const videoIds = videos.map((video: any) => video.id).join(",");
-  //     const videoDetailsResponse = await fetch(
-  //       `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
-  //       { headers }
-  //     );
+      videos = [...videos, ...fetchedVideos];
+      nextPageToken = playlistItemsData.nextPageToken || "";
+    } while (nextPageToken);
 
-  //     const videoDetailsData = await videoDetailsResponse.json();
+    // Fetch video details including comment count
+    const videoIds = videos.map((video: any) => video.id).join(",");
+    const videoDetailsResponse = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
+      { headers }
+    );
 
-  //     videos = videos.map((video: any) => {
-  //       const videoDetail = videoDetailsData.items.find(
-  //         (detail: any) => detail.id === video.id
-  //       );
-  //       return {
-  //         ...video,
-  //         commentCount: videoDetail.statistics.commentCount,
-  //       };
-  //     });
+    const videoDetailsData = await videoDetailsResponse.json();
 
-  //     return videos;
-  //   }
+    videos = videos.map((video: any) => {
+      const videoDetail = videoDetailsData.items.find(
+        (detail: any) => detail.id === video.id
+      );
+      return {
+        ...video,
+        commentCount: videoDetail.statistics.commentCount,
+      };
+    });
+
+    return videos;
+  }
 }
 
 export const youtubeService = new YoutubeService();

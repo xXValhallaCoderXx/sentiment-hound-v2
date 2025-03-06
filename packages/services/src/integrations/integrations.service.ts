@@ -41,6 +41,18 @@ export class CoreIntegrationService {
     return this.repository.findByUserId(userId);
   }
 
+  async getUserIntegrationByName(
+    userId: string,
+    providerName: string
+  ): Promise<IIntegration> {
+    if (!userId || !providerName) {
+      throw new IntegrationValidationError(
+        "User ID and provider name are required"
+      );
+    }
+    return this.repository.findByUserIdAndProviderName(userId, providerName);
+  }
+
   async createIntegration({
     userId,
     accessToken,
