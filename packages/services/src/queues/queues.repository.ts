@@ -1,17 +1,12 @@
-import { IQueueRepository, IQueue, QueueStatus } from "./queues.interface";
+import { BaseRepository } from "../common/base.repository";
+import { Queue, QueueStatus } from "@repo/db";
 
-export class QueueRepository implements IQueueRepository {
-  constructor(private prisma: any) {}
-
-  async create(queue: Partial<IQueue>): Promise<IQueue> {
-    return this.prisma.queue.create({ data: queue });
+export class QueueRepository extends BaseRepository<Queue, number> {
+  constructor(prisma: any) {
+    super(prisma, "queue");
   }
 
-  async findById(id: number): Promise<IQueue | null> {
-    return this.prisma.queue.findUnique({ where: { id } });
-  }
-
-  async findByStatus(status: QueueStatus): Promise<IQueue[]> {
+  async findByStatus(status: QueueStatus): Promise<Queue[]> {
     return this.prisma.queue.findMany({
       where: {
         status,
@@ -21,15 +16,7 @@ export class QueueRepository implements IQueueRepository {
     });
   }
 
-  async update(id: number, data: Partial<IQueue>): Promise<IQueue> {
-    return this.prisma.queue.update({ where: { id }, data });
-  }
-
-  async delete(id: number): Promise<void> {
-    await this.prisma.queue.delete({ where: { id } });
-  }
-
-  async incrementAttempts(id: number): Promise<IQueue> {
+  async incrementAttempts(id: number): Promise<Queue> {
     return this.prisma.queue.update({
       where: { id },
       data: {

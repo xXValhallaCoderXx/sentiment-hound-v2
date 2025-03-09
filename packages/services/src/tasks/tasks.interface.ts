@@ -1,20 +1,12 @@
-export interface ITask {
-  id: string;
-  title: string;
-  description?: string;
-  completed: boolean;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Task } from "@repo/db";
 
 export interface ITaskRepository {
-  create(task: Partial<ITask>): Promise<ITask>;
-  findById(id: string): Promise<ITask | null>;
-  findByUserId(userId: string): Promise<ITask[]>;
-  update(id: string, data: Partial<ITask>): Promise<ITask>;
+  create(task: Partial<Task>): Promise<Task>;
+  findById(id: string): Promise<Task | null>;
+  findByUserId(userId: string): Promise<Task[]>;
+  update(id: string, data: Partial<Task>): Promise<Task>;
   delete(id: string): Promise<void>;
-  toggleComplete(id: string): Promise<ITask>;
+  toggleComplete(id: string): Promise<Task>;
 }
 
 export interface ITaskService {
@@ -22,10 +14,10 @@ export interface ITaskService {
     userId: string,
     title: string,
     description?: string
-  ): Promise<ITask>;
-  getTask(id: string): Promise<ITask>;
-  getUserTasks(userId: string): Promise<ITask[]>;
-  updateTask(id: string, data: Partial<ITask>): Promise<ITask>;
+  ): Promise<Task>;
+  getTask(id: string): Promise<Task>;
+  getUserTasks(userId: string): Promise<Task[]>;
+  updateTask(id: string, data: Partial<Task>): Promise<Task>;
   deleteTask(id: string): Promise<void>;
-  toggleTaskComplete(id: string): Promise<ITask>;
+  toggleTaskComplete(id: string): Promise<Task>;
 }

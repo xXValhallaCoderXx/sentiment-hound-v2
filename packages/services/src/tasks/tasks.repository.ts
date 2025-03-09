@@ -1,33 +1,17 @@
-import { ITaskRepository, ITask } from "./tasks.interface";
+import { BaseRepository } from "../common/base.repository";
+import { Task } from "@repo/db";
 
-export class TaskRepository implements ITaskRepository {
-  constructor(private prisma: any) {}
-
-  async create(task: Partial<ITask>): Promise<ITask> {
-    return this.prisma.task.create({ data: task });
+export class TaskRepository extends BaseRepository<Task, string> {
+  constructor(prisma: any) {
+    super(prisma, "task");
   }
 
-  async findById(id: string): Promise<ITask | null> {
-    return this.prisma.task.findUnique({ where: { id } });
-  }
-
-  async findByUserId(userId: string): Promise<ITask[]> {
+  async findByUserId(userId: string): Promise<Task[]> {
     return this.prisma.task.findMany({ where: { userId } });
   }
 
-  async update(id: string, data: Partial<ITask>): Promise<ITask> {
-    return this.prisma.task.update({ where: { id }, data });
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.prisma.task.delete({ where: { id } });
-  }
-
-  async toggleComplete(id: string): Promise<ITask> {
+  async toggleComplete(id: string): Promise<Task> {
     const task = await this.findById(id);
-    return this.prisma.task.update({
-      where: { id },
-      data: { completed: !task?.completed },
-    });
+    return this.update(id, { completed: !task?.completed });
   }
 }

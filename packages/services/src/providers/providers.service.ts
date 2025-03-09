@@ -1,12 +1,9 @@
 import { Provider } from "@repo/db";
-import {
-  IProviderRepository,
-  CreateProviderDto,
-  UpdateProviderDto,
-} from "./providers.interface";
+import { CreateProviderDto, UpdateProviderDto } from "./providers.interface";
+import { ProviderRepository } from "./providers.repository";
 
 export class CoreProviderService {
-  constructor(private repository: IProviderRepository) {}
+  constructor(private repository: ProviderRepository) {}
 
   async getAllProviders(): Promise<Provider[]> {
     return await this.repository.findAll();

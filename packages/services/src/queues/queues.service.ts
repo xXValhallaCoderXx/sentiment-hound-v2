@@ -1,9 +1,9 @@
-import { IQueue, IQueueRepository, QueueStatus } from "./queues.interface";
-
+import { Queue, QueueStatus } from "@repo/db";
+import { QueueRepository } from "./queues.repository";
 export class CoreQueueService {
-  constructor(private repository: IQueueRepository) {}
+  constructor(private repository: QueueRepository) {}
 
-  async getQueue(id: number): Promise<IQueue> {
+  async getQueue(id: number): Promise<Queue> {
     const queue = await this.repository.findById(id);
     if (!queue) {
       throw new Error("Queue not found");
@@ -11,7 +11,7 @@ export class CoreQueueService {
     return queue;
   }
 
-  async processNext(): Promise<IQueue | null> {
+  async processNext(): Promise<Queue | null> {
     const [nextQueue] = await this.repository.findByStatus(QueueStatus.NEW);
     if (!nextQueue) return null;
 
@@ -23,7 +23,7 @@ export class CoreQueueService {
     return queue;
   }
 
-  async markAsFailed(id: number, error: string): Promise<IQueue> {
+  async markAsFailed(id: number, error: string): Promise<Queue> {
     const queue = await this.getQueue(id);
     const attempts = await this.repository.incrementAttempts(id);
 

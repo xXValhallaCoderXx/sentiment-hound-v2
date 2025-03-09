@@ -6,7 +6,16 @@ import Link from "next/link";
 import NoData from "@/components/molecules/NoData";
 import { Suspense } from "react";
 import LoadingList from "./components/LoadingList";
-import { Box, Tabs, TabsList, TabsTab, TabsPanel, Text } from "@mantine/core";
+import {
+  Box,
+  Tabs,
+  TabsList,
+  TabsTab,
+  TabsPanel,
+  Text,
+  Flex,
+  Button,
+} from "@mantine/core";
 
 import { CoreProviderService } from "@repo/services";
 import { IntegrationRepository, ProviderRepository } from "@repo/services";
@@ -24,10 +33,15 @@ const PostsPage = async ({ children }: any) => {
   return (
     <PageLayout title="Posts">
       <Box>
-        <Text size="sm">
-          Select from the list below of your content posts, you can choose which
-          posts to anayse or even blacklist.
-        </Text>
+        <Flex justify="space-between" align="center">
+          <Text size="sm">
+            Select from the list below of your content posts, you can choose
+            which posts to anayse or even blacklist.
+          </Text>
+          <Flex>
+            <Button>Fetch Posts</Button>
+          </Flex>
+        </Flex>
 
         <Suspense fallback={<LoadingList />}>
           <Tabs className="mt-4 h-full" defaultValue={providers[0]?.name}>
