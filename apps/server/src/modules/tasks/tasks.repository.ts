@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ITaskRepository, ITask } from '@repo/services';
+type ITask = any;
+// import { ITaskRepository, ITask } from '@repo/services';
 
 @Injectable()
-export class TaskRepository implements ITaskRepository {
+export class TaskRepository {
   private tasks: ITask[] = [];
 
   async findById(id: string): Promise<ITask | null> {

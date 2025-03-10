@@ -1,41 +1,18 @@
-import { IIntegrationRepository, IIntegration } from "./integrations.interface";
-
-export class IntegrationRepository implements IIntegrationRepository {
-  constructor(private prisma: any) {}
-
-  async create(integration: Partial<IIntegration>): Promise<IIntegration> {
-    return this.prisma.integration.create({ data: integration });
+import { BaseRepository } from "../common/base.repository";
+import { Integration } from "@repo/db";
+export class IntegrationRepository extends BaseRepository<Integration, number> {
+  constructor(prisma: any) {
+    super(prisma, "integration");
   }
 
-  async findAll(): Promise<IIntegration[]> {
-    return this.prisma.integration.findMany();
-  }
-
-  async findById(id: number): Promise<IIntegration | null> {
-    return this.prisma.integration.findUnique({ where: { id } });
-  }
-
-  async findByUserId(userId: string): Promise<IIntegration[]> {
-    return this.prisma.integration.findMany({
-      where: { userId },
-      include: { provider: true },
-    });
+  async findByUserId(userId: string): Promise<Integration[]> {
+    return this.findMany({ userId }, { provider: true });
   }
 
   async findByUserIdAndProviderName(
     userId: string,
     providerName: string
-  ): Promise<IIntegration> {
-    return this.prisma.integration.findFirst({
-      where: { userId, provider: { name: providerName } },
-    });
-  }
-
-  async update(id: number, data: Partial<IIntegration>): Promise<IIntegration> {
-    return this.prisma.integration.update({ where: { id }, data });
-  }
-
-  async delete(id: number): Promise<void> {
-    await this.prisma.integration.delete({ where: { id } });
+  ): Promise<Integration | null> {
+    return this.findFirst({ userId, provider: { name: providerName } });
   }
 }

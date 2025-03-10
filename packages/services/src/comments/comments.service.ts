@@ -1,13 +1,9 @@
-import {
-  IComment,
-  ICommentRepository,
-  SentimentStatus,
-} from "./comments.interface";
-
+import { Comment, SentimentStatus } from "@repo/db";
+import { CommentRepository } from "./comments.repository";
 export class CoreCommentService {
-  constructor(private repository: ICommentRepository) {}
+  constructor(private repository: CommentRepository) {}
 
-  async getComment(id: number): Promise<IComment> {
+  async getComment(id: number): Promise<Comment> {
     const comment = await this.repository.findById(id);
     if (!comment) {
       throw new Error("Comment not found");
@@ -15,23 +11,23 @@ export class CoreCommentService {
     return comment;
   }
 
-  async analyzeSentiment(id: number): Promise<IComment> {
+  async analyzeSentiment(id: number) {
     const comment = await this.getComment(id);
 
     // Update status to in progress
-    await this.repository.update(id, {
-      sentimentStatus: SentimentStatus.IN_PROGRESS,
-    });
+    // await this.repository.update(id, {
+    //   sentimentStatus: SentimentStatus.IN_PROGRESS,
+    // });
 
-    try {
-      // TODO: Implement actual sentiment analysis
-      const sentiment = Math.random(); // Placeholder
-      return await this.repository.updateSentiment(id, sentiment);
-    } catch (error) {
-      await this.repository.update(id, {
-        sentimentStatus: SentimentStatus.FAILED,
-      });
-      throw error;
-    }
+    // try {
+    //   // TODO: Implement actual sentiment analysis
+    //   const sentiment = Math.random(); // Placeholder
+    //   return await this.repository.updateSentiment(id, sentiment);
+    // } catch (error) {
+    //   await this.repository.update(id, {
+    //     sentimentStatus: SentimentStatus.FAILED,
+    //   });
+    //   throw error;
+    // }
   }
 }

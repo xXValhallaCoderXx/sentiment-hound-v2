@@ -1,11 +1,11 @@
-import { IIntegration, IIntegrationRepository } from "./integrations.interface";
+import { Integration } from "@repo/db";
+import { IntegrationRepository } from "./integrations.repository";
 import {
   IntegrationError,
   IntegrationNotFoundError,
   IntegrationValidationError,
   IntegrationAuthenticationError,
 } from "./integrations.errors";
-
 
 interface ICreateIntegration {
   userId: string;
@@ -15,10 +15,9 @@ interface ICreateIntegration {
   refreshToken: string;
 }
 export class CoreIntegrationService {
-  constructor(private repository: IIntegrationRepository) {}
+  constructor(private repository: IntegrationRepository) {}
 
-  async getIntegration(id: number): Promise<IIntegration> {
-    console.log("GET INTEGRATION: ", id);
+  async getIntegration(id: number): Promise<Integration> {
     const integration = await this.repository.findById(id);
     if (!integration) {
       throw new IntegrationNotFoundError(id);
@@ -26,7 +25,7 @@ export class CoreIntegrationService {
     return integration;
   }
 
-  async getAllIntegrations(): Promise<IIntegration[]> {
+  async getAllIntegrations(): Promise<Integration[]> {
     const integration = await this.repository.findAll();
     if (!integration) {
       throw new IntegrationNotFoundError("No integrations found");
@@ -34,7 +33,7 @@ export class CoreIntegrationService {
     return integration;
   }
 
-  async getUserIntegrations(userId: string): Promise<IIntegration[]> {
+  async getUserIntegrations(userId: string): Promise<Integration[]> {
     if (!userId) {
       throw new IntegrationValidationError("User ID is required");
     }
@@ -44,7 +43,7 @@ export class CoreIntegrationService {
   async getUserIntegrationByName(
     userId: string,
     providerName: string
-  ): Promise<IIntegration> {
+  ): Promise<Integration | null> {
     if (!userId || !providerName) {
       throw new IntegrationValidationError(
         "User ID and provider name are required"
@@ -59,7 +58,7 @@ export class CoreIntegrationService {
     accountId,
     providerId,
     refreshToken,
-  }: ICreateIntegration): Promise<IIntegration> {
+  }: ICreateIntegration): Promise<Integration> {
     // Validation
     if (!userId || !accountId || !providerId) {
       throw new IntegrationValidationError("Missing required fields");

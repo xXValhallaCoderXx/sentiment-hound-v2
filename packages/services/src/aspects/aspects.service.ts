@@ -1,12 +1,9 @@
-import {
-  IAspectAnalysis,
-  IAspectAnalysisRepository,
-} from "./aspects.interface";
-
+import { AspectAnalysis } from "@repo/db";
+import { AspectAnalysisRepository } from "./aspects.repository";
 export class CoreAspectAnalysisService {
-  constructor(private repository: IAspectAnalysisRepository) {}
+  constructor(private repository: AspectAnalysisRepository) {}
 
-  async getAspectAnalysis(id: number): Promise<IAspectAnalysis> {
+  async getAspectAnalysis(id: number): Promise<AspectAnalysis> {
     const analysis = await this.repository.findById(id);
     if (!analysis) {
       throw new Error("Aspect analysis not found");
@@ -14,7 +11,7 @@ export class CoreAspectAnalysisService {
     return analysis;
   }
 
-  async getCommentAspects(commentId: number): Promise<IAspectAnalysis[]> {
+  async getCommentAspects(commentId: number): Promise<AspectAnalysis[]> {
     return this.repository.findByCommentId(commentId);
   }
 
@@ -22,7 +19,7 @@ export class CoreAspectAnalysisService {
     commentId: number,
     aspect: string,
     sentiment: number
-  ): Promise<IAspectAnalysis> {
+  ): Promise<AspectAnalysis> {
     return this.repository.create({
       commentId,
       aspect,

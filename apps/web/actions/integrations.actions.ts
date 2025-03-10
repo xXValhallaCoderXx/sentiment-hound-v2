@@ -1,20 +1,9 @@
 "use server";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/next-auth.lib";
-import { prisma } from "@repo/db";
-import {
-  CoreIntegrationService,
-  IntegrationRepository,
-  ProviderRepository,
-  CoreProviderService,
-  IIntegration,
-} from "@repo/services";
 
-const integrationRepository = new IntegrationRepository(prisma);
-const integrationService = new CoreIntegrationService(integrationRepository);
-
-const providerRepository = new ProviderRepository(prisma);
-const providerService = new CoreProviderService(providerRepository);
+import { Integration } from "@repo/db";
+import { integrationsService, providerService } from "@repo/services";
 
 interface ErrorResponse {
   error: string;
@@ -26,11 +15,9 @@ type ActionResponse<T> =
   | { data: T; error: null }
   | { data: null; error: ErrorResponse };
 
-export async function getUserIntegrations(): Promise<
-  ActionResponse<IIntegration[]>
-> {
+export async function getUserIntegrations(): Promise<ActionResponse<Integration[]>> {
   try {
-    const data = await integrationService.getAllIntegrations();
+    const data = await integrationsService.getAllIntegrations();
     return { data, error: null };
   } catch (error: any) {
     return {
@@ -46,9 +33,9 @@ export async function getUserIntegrations(): Promise<
 
 export async function getIntegration(
   id: number
-): Promise<ActionResponse<IIntegration>> {
+): Promise<ActionResponse<Integration>> {
   try {
-    const data = await integrationService.getIntegration(id);
+    const data = await integrationsService.getIntegration(id);
     return { data, error: null };
   } catch (error: any) {
     return {
@@ -62,11 +49,9 @@ export async function getIntegration(
   }
 }
 
-export async function getAllIntegrations(): Promise<
-  ActionResponse<IIntegration[]>
-> {
+export async function getAllIntegrations(): Promise<ActionResponse<Integration[]>> {
   try {
-    const data = await integrationService.getAllIntegrations();
+    const data = await integrationsService.getAllIntegrations();
     return { data, error: null };
   } catch (error: any) {
     return {
@@ -79,8 +64,6 @@ export async function getAllIntegrations(): Promise<
     };
   }
 }
-
-
 
 export async function revokeIntegration(formData: FormData) {
   console.log("LETS GO: ", formData);
@@ -89,7 +72,7 @@ export async function revokeIntegration(formData: FormData) {
     throw new Error("Provider not found");
   }
 
-  const integration = await integrationService.getIntegration(
+  const integration = await integrationsService.getIntegration(
     Number(providerId)
   );
   if (!integration) {
@@ -118,7 +101,7 @@ export async function revokeIntegration(formData: FormData) {
   }
 
   // Delete the integration from our database
-  await integrationService.deleteIntegration(integration.id);
+  await integrationsService.deleteIntegration(integration.id);
   redirect("/dashboard/integrations");
 }
 

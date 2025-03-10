@@ -35,7 +35,7 @@ const IntegrationCards = async () => {
                     alt="provider-image"
                     height={50}
                     width={50}
-                    src={`/images/logos/${provider?.image}`}
+                    src={`/images/logos/youtube-logo.png`}
                   />
                   <Text size="lg" fw={500} className="capitalize">
                     {provider.name}

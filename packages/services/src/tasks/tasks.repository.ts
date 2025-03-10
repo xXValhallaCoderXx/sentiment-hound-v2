@@ -10,8 +10,8 @@ export class TaskRepository extends BaseRepository<Task, string> {
     return this.prisma.task.findMany({ where: { userId } });
   }
 
-  async toggleComplete(id: string): Promise<Task> {
-    const task = await this.findById(id);
-    return this.update(id, { completed: !task?.completed });
-  }
+  // async toggleComplete(id: string): Promise<Task> {
+  //   const task = await this.findById(id);
+  //   return this.update(id, { completed: !task?.completed });
+  // }
 }

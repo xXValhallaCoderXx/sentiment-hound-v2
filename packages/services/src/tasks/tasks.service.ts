@@ -1,10 +1,10 @@
-import { ITask } from "./tasks.interface";
+import { Task } from "@repo/db";
 import { TaskRepository } from "./tasks.repository";
 
 export class CoreTaskService {
   constructor(private repository: TaskRepository) {}
 
-  async getTask(id: string): Promise<ITask> {
+  async getTask(id: string): Promise<Task> {
     const task = await this.repository.findById(id);
     if (!task) {
       throw new Error("Task not found");
@@ -15,13 +15,14 @@ export class CoreTaskService {
     return task;
   }
 
-  async getTasksByUserId(userId: string): Promise<ITask[]> {
+  async getTasksByUserId(userId: string): Promise<Task[]> {
     return this.repository.findByUserId(userId);
   }
 
-  async toggleTaskCompletion(id: string): Promise<ITask> {
+  async toggleTaskCompletion(id: string): Promise<Task> {
     // Validate task exists before toggling
-    await this.getTask(id);
-    return this.repository.toggleComplete(id);
+    return await this.getTask(id);
+
+    // return this.repository.toggleComplete(id);
   }
 }

@@ -1,17 +1,7 @@
-// import { integrationsService } from "../integrations/integrations.service";
-import { prisma } from "@repo/db";
-import { ProviderRepository } from "../providers/providers.repository";
-import { CoreProviderService } from "../providers/providers.service";
-import { IntegrationRepository } from "../integrations/integrations.repository";
-import { CoreIntegrationService } from "../integrations/integrations.service";
+// Import services from centralized location (uncomment when index.ts is created)
+import { providerService, integrationsService } from "../index";
 
-const providerRepository = new ProviderRepository(prisma);
-const providerService = new CoreProviderService(providerRepository);
-
-const integrationRepository = new IntegrationRepository(prisma);
-const integrationsService = new CoreIntegrationService(integrationRepository);
-
-class YoutubeService {
+export class YoutubeService {
   async connectYoutubeIntegration(code: string, userId: string) {
     const { accessToken, refreshToken, expiresIn } =
       await this.generateAuthFromCode(code);

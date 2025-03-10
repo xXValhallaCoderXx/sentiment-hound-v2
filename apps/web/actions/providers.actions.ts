@@ -1,10 +1,7 @@
 "use server";
 
-import { prisma, Provider } from "@repo/db";
-import { CoreProviderService, ProviderRepository } from "@repo/services";
-
-const providerRepository = new ProviderRepository(prisma);
-const providerService = new CoreProviderService(providerRepository);
+import { Provider } from "@repo/db";
+import { providerService } from "@repo/services";
 
 interface ErrorResponse {
   error: string;

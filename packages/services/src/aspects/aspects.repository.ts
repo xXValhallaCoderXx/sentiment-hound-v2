@@ -1,31 +1,15 @@
-import {
-  IAspectAnalysisRepository,
-  IAspectAnalysis,
-} from "./aspects.interface";
+import { BaseRepository } from "../common/base.repository";
+import { AspectAnalysis } from "@repo/db";
 
-export class AspectAnalysisRepository implements IAspectAnalysisRepository {
-  constructor(private prisma: any) {}
-
-  async create(analysis: Partial<IAspectAnalysis>): Promise<IAspectAnalysis> {
-    return this.prisma.aspectAnalysis.create({ data: analysis });
+export class AspectAnalysisRepository extends BaseRepository<
+  AspectAnalysis,
+  number
+> {
+  constructor(prisma: any) {
+    super(prisma, "aspectAnalysis");
   }
 
-  async findById(id: number): Promise<IAspectAnalysis | null> {
-    return this.prisma.aspectAnalysis.findUnique({ where: { id } });
-  }
-
-  async findByCommentId(commentId: number): Promise<IAspectAnalysis[]> {
+  async findByCommentId(commentId: number): Promise<AspectAnalysis[]> {
     return this.prisma.aspectAnalysis.findMany({ where: { commentId } });
-  }
-
-  async update(
-    id: number,
-    data: Partial<IAspectAnalysis>
-  ): Promise<IAspectAnalysis> {
-    return this.prisma.aspectAnalysis.update({ where: { id }, data });
-  }
-
-  async delete(id: number): Promise<void> {
-    await this.prisma.aspectAnalysis.delete({ where: { id } });
   }
 }

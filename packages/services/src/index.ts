@@ -1,10 +1,17 @@
-export * from "./tasks/tasks.interface";
-export * from "./tasks/tasks.service";
-export * from "./tasks/tasks.repository";
-export * from "./providers/providers.interface";
-export * from "./providers/providers.service";
-export * from "./providers/providers.repository";
-export * from "./integrations/integrations.interface";
-export * from "./integrations/integrations.service";
-export * from "./integrations/integrations.repository";
-export * from "./youtube/youtube.services";
+import { prisma } from "@repo/db";
+import { ProviderRepository } from "./providers/providers.repository";
+import { CoreProviderService } from "./providers/providers.service";
+import { IntegrationRepository } from "./integrations/integrations.repository";
+import { CoreIntegrationService } from "./integrations/integrations.service";
+import { YoutubeService } from "./youtube/youtube.services";
+
+// Create singleton instances of repositories
+const providerRepository = new ProviderRepository(prisma);
+const integrationRepository = new IntegrationRepository(prisma);
+
+// Create singleton instances of services
+export const providerService = new CoreProviderService(providerRepository);
+export const integrationsService = new CoreIntegrationService(
+  integrationRepository
+);
+export const youtubeService = new YoutubeService();
