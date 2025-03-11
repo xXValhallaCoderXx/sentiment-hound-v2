@@ -15,9 +15,7 @@ const IntegrationCards = async () => {
     (provider) => provider.name === "youtube"
   );
   const userIntegrations = await getUserIntegrations();
-  console.log("GET ", youtubeIntegration);
 
-  console.log("user integrarions?: ", userIntegrations);
 
   return (
     <Grid className="mt-4">
