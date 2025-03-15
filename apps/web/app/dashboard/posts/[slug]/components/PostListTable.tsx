@@ -1,66 +1,119 @@
 "use client";
+import React from "react";
 import {
+  Box,
   Table,
-  TableTd,
-  TableThead,
-  TableTr,
-  TableTh,
-  TableTbody,
-  Flex,
   Text,
-  Title,
+  Checkbox,
+  Group,
+  Avatar,
+  Badge,
 } from "@mantine/core";
-import { FC } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 
-interface IPostListTableProps {
-  data: any[];
+interface Post {
+  id: string;
+  title: string;
+  content?: string;
+  thumbnailUrl?: string;
+  publishDate?: Date;
+  likes?: number;
+  comments?: number;
+  views?: number;
+  status?: string;
 }
 
-const PostListTable: FC<IPostListTableProps> = ({ data }) => {
-  const router = useRouter();
-  const onClickRow = (_id: any) => () => {
-    router.push(`/dashboard/posts/youtube?id=${_id}`);
-  };
+interface PostListTableProps {
+  data: Post[];
+}
 
-  const rows = data.map((element: any) => (
-    <TableTr onClick={onClickRow(element?.id)} key={element.id}>
-      <TableTd>{element.title}</TableTd>
-      <TableTd>{element.publishedAt}</TableTd>
-    </TableTr>
-  ));
-
-  if (data.length === 0) {
+const PostListTable = ({ data }: PostListTableProps) => {
+  if (!data || data.length === 0) {
     return (
-      <Flex
-        className="mt-14"
-        direction="column"
-        justify="center"
-        align="center"
-      >
-        <Image
-          src="/images/page-content/no-data.png"
-          width={650}
-          height={650}
-          alt="no-data"
-        />
-        <Title order={4}>You have no post data</Title>
-        <Text size="sm">Please sync your account to view your posts</Text>
-      </Flex>
+      <Box p="md">
+        <Text>No posts available. Try fetching new posts.</Text>
+      </Box>
     );
   }
 
   return (
-    <Table>
-      <TableThead>
-        <TableTr>
-          <TableTh>Title</TableTh>
-          <TableTh>Published At</TableTh>
-        </TableTr>
-      </TableThead>
-      <TableTbody>{rows}</TableTbody>
-    </Table>
+    <Box className="mt-4">
+      <Table striped highlightOnHover>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th style={{ width: 40 }}>
+              <Checkbox />
+            </Table.Th>
+            <Table.Th>Post</Table.Th>
+            <Table.Th>Published</Table.Th>
+            <Table.Th>Engagement</Table.Th>
+            <Table.Th>Status</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {data.map((post) => (
+            <Table.Tr key={post.id}>
+              <Table.Td>
+                <Checkbox />
+              </Table.Td>
+              <Table.Td>
+                <Group>
+                  {post.thumbnailUrl && (
+                    <Avatar src={post.thumbnailUrl} size="md" radius="sm" />
+                  )}
+                  <div>
+                    <Text size="sm" fw={500}>
+                      {post.title}
+                    </Text>
+                    {post.content && (
+                      <Text size="xs" color="dimmed" lineClamp={1}>
+                        {post.content}
+                      </Text>
+                    )}
+                  </div>
+                </Group>
+              </Table.Td>
+              <Table.Td>
+                {post.publishDate ? (
+                  <Text size="sm">
+                    {new Date(post.publishDate).toLocaleDateString()}
+                  </Text>
+                ) : (
+                  <Text size="sm" color="dimmed">
+                    -
+                  </Text>
+                )}
+              </Table.Td>
+              <Table.Td>
+                <Group gap="xs">
+                  {post.likes !== undefined && (
+                    <Text size="xs">👍 {post.likes}</Text>
+                  )}
+                  {post.comments !== undefined && (
+                    <Text size="xs">💬 {post.comments}</Text>
+                  )}
+                  {post.views !== undefined && (
+                    <Text size="xs">👁️ {post.views}</Text>
+                  )}
+                </Group>
+              </Table.Td>
+              <Table.Td>
+                <Badge
+                  color={
+                    post.status === "analysed"
+                      ? "green"
+                      : post.status === "pending"
+                        ? "yellow"
+                        : "gray"
+                  }
+                >
+                  {post.status || "Not analysed"}
+                </Badge>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+    </Box>
   );
 };
 

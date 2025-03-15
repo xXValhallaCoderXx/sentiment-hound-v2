@@ -1,25 +1,60 @@
-import { FC } from "react";
-import { Box, Title, Button, Flex } from "@mantine/core";
-import FetchContentButton from "./FetchContentButton";
-import SyncSubmitButton from "./SyncSubmitButton";
+"use client";
+import React from "react";
+import { Group, Button, Badge, Text, Flex } from "@mantine/core";
+import { IconRefresh, IconAnalyze, IconFilter } from "@tabler/icons-react";
 
-interface IActionPanelProps {
+interface ActionPanelProps {
   name: string;
 }
 
-const ActionPanel: FC<IActionPanelProps> = ({ name }) => {
+const ActionPanel = ({ name }: ActionPanelProps) => {
+  const handleRefresh = () => {
+    // Implement the refresh functionality
+    console.log(`Refreshing ${name} posts`);
+  };
+
+  const handleAnalyze = () => {
+    // Implement the analyze functionality
+    console.log(`Analyzing ${name} posts`);
+  };
+
   return (
-    <Box>
-      <Flex justify="space-between">
-        <Title className="capitalize" order={2}>
-          {name}
-        </Title>
-        <Flex gap={8} p={10}>
-          <FetchContentButton name={name} />
-          <SyncSubmitButton name={name} />
-        </Flex>
-      </Flex>
-    </Box>
+    <Flex justify="space-between" align="center" mb={4}>
+      <Group>
+        <Text fw={500} className="capitalize">
+          {name} Posts
+        </Text>
+        <Badge color="blue" variant="light">
+          Connected
+        </Badge>
+      </Group>
+
+      <Group>
+        <Button
+          variant="light"
+          leftSection={<IconFilter size={16} />}
+          size="xs"
+        >
+          Filter
+        </Button>
+        <Button
+          variant="light"
+          leftSection={<IconAnalyze size={16} />}
+          size="xs"
+          onClick={handleAnalyze}
+        >
+          Analyze Posts
+        </Button>
+        <Button
+          variant="filled"
+          leftSection={<IconRefresh size={16} />}
+          size="xs"
+          onClick={handleRefresh}
+        >
+          Refresh Posts
+        </Button>
+      </Group>
+    </Flex>
   );
 };
 
