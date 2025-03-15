@@ -15,4 +15,11 @@ export class IntegrationRepository extends BaseRepository<Integration, number> {
   ): Promise<Integration | null> {
     return this.findFirst({ userId, provider: { name: providerName } });
   }
+
+  async findByProviderIdAndUserId(
+    providerId: number,
+    userId: string
+  ): Promise<Integration | null> {
+    return this.findFirst({ providerId, userId });
+  }
 }

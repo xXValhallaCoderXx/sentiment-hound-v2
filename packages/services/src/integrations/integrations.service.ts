@@ -88,6 +88,42 @@ export class CoreIntegrationService {
     }
   }
 
+  async updateIntegrationAuthCredentials({
+    providerId,
+    userId,
+    accessToken,
+    refreshToken,
+    accessTokenExpiry,
+  }: {
+    providerId: number;
+    userId: string;
+    accessToken: string;
+    refreshToken: string;
+    accessTokenExpiry: Date;
+  }): Promise<Integration> {
+    // Verify the integration exists before attempting to update
+    const integration = await this.repository.findByProviderIdAndUserId(
+      providerId,
+      userId
+    );
+    if (!integration) {
+      throw new IntegrationNotFoundError(providerId);
+    }
+
+    try {
+      return await this.repository.update(providerId, {
+        accessToken,
+        refreshToken,
+        refreshTokenExpiresAt: accessTokenExpiry,
+      });
+    } catch (error) {
+      throw new IntegrationError(
+        "Failed to update integration",
+        "INTEGRATION_UPDATE_ERROR"
+      );
+    }
+  }
+
   async deleteIntegration(id: number): Promise<void> {
     // Verify the integration exists before attempting to delete
     const integration = await this.repository.findById(id);

@@ -68,20 +68,18 @@ export class YoutubeService {
   }
 
   async refreshAccessToken(userId: string) {
-    // const youtubeIntegration = await integrationsService.getUserIntegration({
-    //   userId,
-    //   name: "youtube",
-    // });
+    const youtubeIntegration =
+      await integrationsService.getUserIntegrationByName(userId, "youtube");
 
-    // if (!youtubeIntegration || !youtubeIntegration.accessToken) {
-    //   throw new Error("YouTube integration not found for user");
-    // }
+    if (!youtubeIntegration || !youtubeIntegration.accessToken) {
+      throw new Error("YouTube integration not found for user");
+    }
 
-    // const { id, refreshToken } = youtubeIntegration;
+    const { id, refreshToken } = youtubeIntegration;
     const params = new URLSearchParams();
     params.append("client_id", process.env.AUTH_GOOGLE_ID as string);
     params.append("client_secret", process.env.AUTH_GOOGLE_SECRET as string);
-    // params.append("refresh_token", refreshToken);
+    params.append("refresh_token", refreshToken);
     params.append("grant_type", "refresh_token");
 
     const response = await fetch("https://oauth2.googleapis.com/token", {
@@ -91,6 +89,8 @@ export class YoutubeService {
       },
       body: params.toString(),
     });
+
+    console.log("RESPONSE WHAT : ", response);
 
     if (!response.ok) {
       throw new Error("Failed to refresh access token");
@@ -102,13 +102,13 @@ export class YoutubeService {
 
     const expiresAt = new Date(Date.now() + expires_in * 1000);
 
-    // await integrationsService.updateIntegrationAuthCredentials({
-    //   providerId: id,
-    //   userId,
-    //   accessToken: access_token,
-    //   refreshToken,
-    //   accessTokenExpiry: expiresAt,
-    // });
+    await integrationsService.updateIntegrationAuthCredentials({
+      providerId: id,
+      userId,
+      accessToken: access_token,
+      refreshToken,
+      accessTokenExpiry: expiresAt,
+    });
 
     return access_token;
   }
@@ -120,7 +120,7 @@ export class YoutubeService {
     if (!youtubeIntegration) {
       throw new Error("YouTube integration not found for user");
     }
-
+    console.log("YOUTUBE INTEGRATION: ", youtubeIntegration);
     const accessTokenExpiryDate = new Date(
       youtubeIntegration.refreshTokenExpiresAt
     );
@@ -144,61 +144,66 @@ export class YoutubeService {
     );
     let channelData = await channelResponse.json();
 
-    if (channelData.error?.code === 401 && retry) {
-      await this.refreshAccessToken(userId);
-      await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
-    }
+    console.log("CHANNEL DATA: ", channelData);
+
+    // if (channelData.error?.code === 401 && retry) {
+    //   await this.refreshAccessToken(userId);
+    //   await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
+    // }
+
+    // console.log("channelResponse", channelData);
 
     let videos: any = [];
     let nextPageToken = "";
 
-    const uploadsPlaylistId =
-      channelData.items[0].contentDetails.relatedPlaylists.uploads;
+    // const uploadsPlaylistId =
+    //   channelData.items[0].contentDetails.relatedPlaylists.uploads;
 
-    do {
-      const playlistItemsResponse = await fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
-        { headers }
-      );
+    // do {
+    //   const playlistItemsResponse = await fetch(
+    //     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
+    //     { headers }
+    //   );
 
-      const playlistItemsData = await playlistItemsResponse.json();
+    //   const playlistItemsData = await playlistItemsResponse.json();
 
-      if (playlistItemsResponse.status !== 200) {
-        throw new Error("Failed to fetch playlist items");
-      }
+    //   if (playlistItemsResponse.status !== 200) {
+    //     throw new Error("Failed to fetch playlist items");
+    //   }
 
-      const fetchedVideos = playlistItemsData.items.map((item: any) => ({
-        id: item.snippet.resourceId.videoId,
-        title: item.snippet.title,
-        description: item.snippet.description,
-        publishedAt: item.snippet.publishedAt,
-        thumbnail: item.snippet.thumbnails.default.url,
-      }));
+    //   const fetchedVideos = playlistItemsData.items.map((item: any) => ({
+    //     id: item.snippet.resourceId.videoId,
+    //     title: item.snippet.title,
+    //     description: item.snippet.description,
+    //     publishedAt: item.snippet.publishedAt,
+    //     thumbnail: item.snippet.thumbnails.default.url,
+    //   }));
 
-      videos = [...videos, ...fetchedVideos];
-      nextPageToken = playlistItemsData.nextPageToken || "";
-    } while (nextPageToken);
+    //   videos = [...videos, ...fetchedVideos];
+    //   nextPageToken = playlistItemsData.nextPageToken || "";
+    // } while (nextPageToken);
 
     // Fetch video details including comment count
-    const videoIds = videos.map((video: any) => video.id).join(",");
-    const videoDetailsResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
-      { headers }
-    );
+    // const videoIds = videos.map((video: any) => video.id).join(",");
+    // const videoDetailsResponse = await fetch(
+    //   `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
+    //   { headers }
+    // );
 
-    const videoDetailsData = await videoDetailsResponse.json();
+    // const videoDetailsData = await videoDetailsResponse.json();
 
-    videos = videos.map((video: any) => {
-      const videoDetail = videoDetailsData.items.find(
-        (detail: any) => detail.id === video.id
-      );
-      return {
-        ...video,
-        commentCount: videoDetail.statistics.commentCount,
-      };
-    });
+    // videos = videos.map((video: any) => {
+    //   const videoDetail = videoDetailsData.items.find(
+    //     (detail: any) => detail.id === video.id
+    //   );
+    //   return {
+    //     ...video,
+    //     commentCount: videoDetail.statistics.commentCount,
+    //   };
+    // });
 
-    return videos;
+    // return videos;
+    return [];
   }
 }
 
