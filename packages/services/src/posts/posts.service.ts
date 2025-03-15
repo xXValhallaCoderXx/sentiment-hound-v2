@@ -11,6 +11,19 @@ export class CorePostService {
     return post;
   }
 
+  async getUserIntegrationPosts({
+    userId,
+    integrationId,
+  }: {
+    userId: string;
+    integrationId: string;
+  }): Promise<Post[]> {
+    return this.repository.findUserIntegrationPosts(
+      userId,
+      parseInt(integrationId)
+    );
+  }
+
   async getUserPosts(userId: string): Promise<Post[]> {
     return this.repository.findByUserId(userId);
   }

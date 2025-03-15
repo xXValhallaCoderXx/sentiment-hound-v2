@@ -1,4 +1,4 @@
-import { integrationsService } from "@repo/services";
+import { integrationsService, postService } from "@repo/services";
 import { auth } from "@/lib/next-auth.lib";
 import { Box } from "@mantine/core";
 import PostListTable from "./components/PostListTable";
@@ -30,17 +30,18 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
     }
 
     // Get posts for this integration
-    // const integrationPosts = await postService.getUserIntegrationPosts({
-    //   userId: session.user.id,
-    //   integrationId: String(currentIntegration.id),
-    // });
+    const integrationPosts = await postService.getUserIntegrationPosts({
+      userId: session.user.id,
+      integrationId: String(currentIntegration.id),
+    });
 
+    console.log("integrationPosts", integrationPosts);
     return (
-      <Box>
+      <Box p={16}>
         <Box className="mt-4">
-          <ActionPanel name="hehe" />
+          <ActionPanel name={slug} />
         </Box>
-        <PostListTable data={[]} />
+        <PostListTable data={integrationPosts} />
       </Box>
     );
   } catch (error) {

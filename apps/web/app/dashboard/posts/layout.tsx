@@ -25,9 +25,9 @@ const PostsPage = async ({ children }: any) => {
             Select from the list below of your content posts, you can choose
             which posts to anayse or even blacklist.
           </Text>
-          <Flex>
+          {/* <Flex>
             <Button>Fetch Posts</Button>
-          </Flex>
+          </Flex> */}
         </Flex>
 
         <Suspense fallback={<LoadingList />}>

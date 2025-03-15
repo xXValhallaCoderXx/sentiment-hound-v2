@@ -13,4 +13,11 @@ export class PostRepository extends BaseRepository<Post, number> {
   async findByIntegrationId(integrationId: number): Promise<Post[]> {
     return this.prisma.post.findMany({ where: { integrationId } });
   }
+
+  async findUserIntegrationPosts(
+    userId: string,
+    integrationId: number
+  ): Promise<Post[]> {
+    return this.prisma.post.findMany({ where: { userId, integrationId } });
+  }
 }

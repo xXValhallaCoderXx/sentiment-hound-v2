@@ -1,4 +1,5 @@
 "use client";
+import { Post } from "@repo/db";
 import React from "react";
 import {
   Box,
@@ -9,18 +10,6 @@ import {
   Avatar,
   Badge,
 } from "@mantine/core";
-
-interface Post {
-  id: string;
-  title: string;
-  content?: string;
-  thumbnailUrl?: string;
-  publishDate?: Date;
-  likes?: number;
-  comments?: number;
-  views?: number;
-  status?: string;
-}
 
 interface PostListTableProps {
   data: Post[];
@@ -57,23 +46,23 @@ const PostListTable = ({ data }: PostListTableProps) => {
               </Table.Td>
               <Table.Td>
                 <Group>
-                  {post.thumbnailUrl && (
+                  {/* {post.thumbnailUrl && (
                     <Avatar src={post.thumbnailUrl} size="md" radius="sm" />
-                  )}
+                  )} */}
                   <div>
                     <Text size="sm" fw={500}>
                       {post.title}
                     </Text>
-                    {post.content && (
+                    {/* {post.content && (
                       <Text size="xs" color="dimmed" lineClamp={1}>
                         {post.content}
                       </Text>
-                    )}
+                    )} */}
                   </div>
                 </Group>
               </Table.Td>
               <Table.Td>
-                {post.publishDate ? (
+                {/* {post.publishDate ? (
                   <Text size="sm">
                     {new Date(post.publishDate).toLocaleDateString()}
                   </Text>
@@ -81,11 +70,11 @@ const PostListTable = ({ data }: PostListTableProps) => {
                   <Text size="sm" color="dimmed">
                     -
                   </Text>
-                )}
+                )} */}
               </Table.Td>
               <Table.Td>
                 <Group gap="xs">
-                  {post.likes !== undefined && (
+                  {/* {post.likes !== undefined && (
                     <Text size="xs">👍 {post.likes}</Text>
                   )}
                   {post.comments !== undefined && (
@@ -93,11 +82,11 @@ const PostListTable = ({ data }: PostListTableProps) => {
                   )}
                   {post.views !== undefined && (
                     <Text size="xs">👁️ {post.views}</Text>
-                  )}
+                  )} */}
                 </Group>
               </Table.Td>
               <Table.Td>
-                <Badge
+                {/* <Badge
                   color={
                     post.status === "analysed"
                       ? "green"
@@ -107,7 +96,7 @@ const PostListTable = ({ data }: PostListTableProps) => {
                   }
                 >
                   {post.status || "Not analysed"}
-                </Badge>
+                </Badge> */}
               </Table.Td>
             </Table.Tr>
           ))}

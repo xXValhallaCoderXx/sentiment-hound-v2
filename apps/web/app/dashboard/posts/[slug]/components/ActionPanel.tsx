@@ -21,9 +21,9 @@ const ActionPanel = ({ name }: ActionPanelProps) => {
   return (
     <Flex justify="space-between" align="center" mb={4}>
       <Group>
-        <Text fw={500} className="capitalize">
+        {/* <Text fw={500} className="capitalize">
           {name} Posts
-        </Text>
+        </Text> */}
         <Badge color="blue" variant="light">
           Connected
         </Badge>

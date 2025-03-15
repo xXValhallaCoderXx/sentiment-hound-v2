@@ -48,3 +48,8 @@ a {
     display: unset;
   }
 }
+
+
+.capitalize {
+  text-transform: capitalize;
+}
