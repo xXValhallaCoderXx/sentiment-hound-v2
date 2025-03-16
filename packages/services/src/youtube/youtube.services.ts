@@ -1,4 +1,5 @@
 // Import services from centralized location (uncomment when index.ts is created)
+import { IYouTubePost } from "./youtube.interface";
 import { providerService, integrationsService } from "../index";
 
 export class YoutubeService {
@@ -113,7 +114,10 @@ export class YoutubeService {
     return access_token;
   }
 
-  async fetchYoutubePosts(userId: string, retry = true) {
+  async fetchYoutubePosts(
+    userId: string,
+    retry = true
+  ): Promise<IYouTubePost[]> {
     const youtubeIntegration =
       await integrationsService.getUserIntegrationByName(userId, "youtube");
 
@@ -144,66 +148,61 @@ export class YoutubeService {
     );
     let channelData = await channelResponse.json();
 
-    console.log("CHANNEL DATA: ", channelData);
-
-    // if (channelData.error?.code === 401 && retry) {
-    //   await this.refreshAccessToken(userId);
-    //   await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
-    // }
-
-    // console.log("channelResponse", channelData);
+    if (channelData.error?.code === 401 && retry) {
+      await this.refreshAccessToken(userId);
+      await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
+    }
 
     let videos: any = [];
     let nextPageToken = "";
 
-    // const uploadsPlaylistId =
-    //   channelData.items[0].contentDetails.relatedPlaylists.uploads;
+    const uploadsPlaylistId =
+      channelData.items[0].contentDetails.relatedPlaylists.uploads;
 
-    // do {
-    //   const playlistItemsResponse = await fetch(
-    //     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
-    //     { headers }
-    //   );
+    do {
+      const playlistItemsResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}`,
+        { headers }
+      );
 
-    //   const playlistItemsData = await playlistItemsResponse.json();
+      const playlistItemsData = await playlistItemsResponse.json();
 
-    //   if (playlistItemsResponse.status !== 200) {
-    //     throw new Error("Failed to fetch playlist items");
-    //   }
+      if (playlistItemsResponse.status !== 200) {
+        throw new Error("Failed to fetch playlist items");
+      }
 
-    //   const fetchedVideos = playlistItemsData.items.map((item: any) => ({
-    //     id: item.snippet.resourceId.videoId,
-    //     title: item.snippet.title,
-    //     description: item.snippet.description,
-    //     publishedAt: item.snippet.publishedAt,
-    //     thumbnail: item.snippet.thumbnails.default.url,
-    //   }));
+      const fetchedVideos = playlistItemsData.items.map((item: any) => ({
+        id: item.snippet.resourceId.videoId,
+        title: item.snippet.title,
+        description: item.snippet.description,
+        publishedAt: item.snippet.publishedAt,
+        thumbnail: item.snippet.thumbnails.default.url,
+      }));
 
-    //   videos = [...videos, ...fetchedVideos];
-    //   nextPageToken = playlistItemsData.nextPageToken || "";
-    // } while (nextPageToken);
+      videos = [...videos, ...fetchedVideos];
+      nextPageToken = playlistItemsData.nextPageToken || "";
+    } while (nextPageToken);
 
     // Fetch video details including comment count
-    // const videoIds = videos.map((video: any) => video.id).join(",");
-    // const videoDetailsResponse = await fetch(
-    //   `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
-    //   { headers }
-    // );
+    const videoIds = videos.map((video: any) => video.id).join(",");
+    const videoDetailsResponse = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}`,
+      { headers }
+    );
 
-    // const videoDetailsData = await videoDetailsResponse.json();
+    const videoDetailsData = await videoDetailsResponse.json();
 
-    // videos = videos.map((video: any) => {
-    //   const videoDetail = videoDetailsData.items.find(
-    //     (detail: any) => detail.id === video.id
-    //   );
-    //   return {
-    //     ...video,
-    //     commentCount: videoDetail.statistics.commentCount,
-    //   };
-    // });
+    videos = videos.map((video: any) => {
+      const videoDetail = videoDetailsData.items.find(
+        (detail: any) => detail.id === video.id
+      );
+      return {
+        ...video,
+        commentCount: videoDetail.statistics.commentCount,
+      };
+    });
 
-    // return videos;
-    return [];
+    return videos;
   }
 }
 

@@ -10,12 +10,8 @@ import {
 
 const IntegrationCards = async () => {
   const providers = await getAllProviders();
-  console.log("PROVIDERS: ", providers);
-  const youtubeIntegration = providers?.data?.find(
-    (provider) => provider.name === "youtube"
-  );
-  const userIntegrations = await getUserIntegrations();
 
+  const userIntegrations = await getUserIntegrations();
 
   return (
     <Grid className="mt-4">

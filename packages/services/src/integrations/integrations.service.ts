@@ -18,11 +18,19 @@ export class CoreIntegrationService {
   constructor(private repository: IntegrationRepository) {}
 
   async getIntegration(id: number): Promise<Integration> {
+    console.log("Getting integration with ID:", id);
     const integration = await this.repository.findById(id);
     if (!integration) {
       throw new IntegrationNotFoundError(id);
     }
     return integration;
+  }
+
+  getIntegrationUserIntegrationByProviderId(
+    providerId: number,
+    userId: string
+  ): Promise<Integration | null> {
+    return this.repository.findByProviderIdAndUserId(providerId, userId);
   }
 
   async getAllIntegrations(): Promise<Integration[]> {

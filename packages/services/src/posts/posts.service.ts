@@ -1,5 +1,6 @@
 import { Post } from "@repo/db";
 import { PostRepository } from "./posts.repository";
+import { ICreatePost } from "./post.interface";
 export class CorePostService {
   constructor(private repository: PostRepository) {}
 
@@ -26,5 +27,24 @@ export class CorePostService {
 
   async getUserPosts(userId: string): Promise<Post[]> {
     return this.repository.findByUserId(userId);
+  }
+
+  async createUserPost(data: ICreatePost): Promise<Post> {
+    const { userId, title } = data;
+    return this.repository.create({
+      userId,
+      title,
+      commentCount: data?.commentCount || 0,
+      description: data?.description || "",
+      publishedAt: data?.publishedAt || null,
+      imageUrl: data?.imageUrl || "",
+      postUrl: data?.postUrl || "",
+      remoteId: data?.remoteId || "",
+      integrationId: data?.integrationId || 0,
+    });
+  }
+
+  async createUserPosts(data: ICreatePost[]): Promise<Post[]> {
+    return this.repository.batchCreate(data);
   }
 }

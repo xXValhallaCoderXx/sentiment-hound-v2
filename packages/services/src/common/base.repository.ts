@@ -5,18 +5,15 @@ export interface IBaseRepository<
   UpdateDTO = Partial<T>,
 > {
   create(data: CreateDTO): Promise<T>;
+  batchCreate(data: CreateDTO[]): Promise<T[]>;
   findAll(options?: any): Promise<T[]>;
   findById(id: ID): Promise<T | null>;
   update(id: ID, data: UpdateDTO): Promise<T>;
   delete(id: ID): Promise<void>;
 }
 
-export class BaseRepository<
-  T,
-  ID,
-  CreateDTO = Partial<T>,
-  UpdateDTO = Partial<T>,
-> implements IBaseRepository<T, ID, CreateDTO, UpdateDTO>
+export class BaseRepository<T, ID, CreateDTO = Partial<T>, UpdateDTO = Partial<T>>
+  implements IBaseRepository<T, ID, CreateDTO, UpdateDTO>
 {
   constructor(
     protected prisma: any,
@@ -25,6 +22,10 @@ export class BaseRepository<
 
   async create(data: CreateDTO): Promise<T> {
     return this.prisma[this.model].create({ data });
+  }
+
+  async batchCreate(data: CreateDTO[]): Promise<T[]> {
+    return this.prisma[this.model].createMany({ data });
   }
 
   async findAll(options?: any): Promise<T[]> {

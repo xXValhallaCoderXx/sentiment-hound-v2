@@ -9,7 +9,8 @@
     }
   },
   "scripts": {
-    "services:build": "tsc --project tsconfig.build.json"
+    "services:build": "tsc --project tsconfig.build.json",
+    "services:watch": "tsc --project tsconfig.build.json --watch"
   },
   "dependencies": {
     "@repo/db": "workspace:*"

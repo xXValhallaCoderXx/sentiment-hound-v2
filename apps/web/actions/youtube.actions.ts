@@ -1,4 +1,5 @@
 "use server";
+import { postService, ICreatePost } from "@repo/services";
 
 import { auth } from "@/lib/next-auth.lib";
 import { youtubeService } from "@repo/services";
@@ -32,6 +33,23 @@ export async function fetchAllUserPosts(): Promise<ActionResponse<boolean>> {
 
     // Fetch the YouTube posts using the service
     const userPosts = await youtubeService.fetchYoutubePosts(userId);
+
+    const postData: ICreatePost[] = userPosts?.map((post) => ({
+      userId: userId,
+      title: post.title,
+      commentCount: parseInt(post.commentCount),
+      description: post.description,
+      publishedAt: post.publishedAt,
+      imageUrl: post.thumbnail,
+      postUrl: post.thumbnail,
+      remoteId: post.id,
+      integrationId: 0,
+      content: "",
+      id: parseInt(post.id),
+    }));
+
+    postService.createUserPosts(postData);
+
     // Revalidate the page to show the new data
     revalidatePath("/dashboard/posts/youtube");
 
