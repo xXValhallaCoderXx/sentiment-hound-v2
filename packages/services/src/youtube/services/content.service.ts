@@ -1,0 +1,9 @@
+import { YoutubeAuthService } from "./auth.service";
+// ...existing code...
+export class YoutubeContentService {
+  constructor(private authService: YoutubeAuthService) {}
+  async fetchYoutubePosts(userId: string, retry = true) {
+    // ...fetch channel, playlist items, and comment counts...
+    // ...handle token refresh via this.authService if needed...
+  }
+}

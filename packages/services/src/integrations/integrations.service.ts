@@ -13,6 +13,7 @@ interface ICreateIntegration {
   providerId: number;
   accessToken: string;
   refreshToken: string;
+  refreshTokenExpiresAt: Date;
 }
 export class CoreIntegrationService {
   constructor(private repository: IntegrationRepository) {}
@@ -66,6 +67,7 @@ export class CoreIntegrationService {
     accountId,
     providerId,
     refreshToken,
+    refreshTokenExpiresAt,
   }: ICreateIntegration): Promise<Integration> {
     // Validation
     if (!userId || !accountId || !providerId) {
@@ -75,9 +77,6 @@ export class CoreIntegrationService {
     if (!accessToken) {
       throw new IntegrationAuthenticationError("Access token is required");
     }
-
-    const refreshTokenExpiresAt = new Date();
-    refreshTokenExpiresAt.setDate(refreshTokenExpiresAt.getDate() + 30);
 
     try {
       return await this.repository.create({

@@ -32,23 +32,23 @@ export async function fetchAllUserPosts(): Promise<ActionResponse<boolean>> {
     }
 
     // Fetch the YouTube posts using the service
-    const userPosts = await youtubeService.fetchYoutubePosts(userId);
+    // const userPosts = await youtubeService.fetchYoutubePosts(userId);
 
-    const postData: ICreatePost[] = userPosts?.map((post) => ({
-      userId: userId,
-      title: post.title,
-      commentCount: parseInt(post.commentCount),
-      description: post.description,
-      publishedAt: post.publishedAt,
-      imageUrl: post.thumbnail,
-      postUrl: post.thumbnail,
-      remoteId: post.id,
-      integrationId: 0,
-      content: "",
-      id: parseInt(post.id),
-    }));
+    // const postData: ICreatePost[] = userPosts?.map((post) => ({
+    //   userId: userId,
+    //   title: post.title,
+    //   commentCount: parseInt(post.commentCount),
+    //   description: post.description,
+    //   publishedAt: post.publishedAt,
+    //   imageUrl: post.thumbnail,
+    //   postUrl: post.thumbnail,
+    //   remoteId: post.id,
+    //   integrationId: 0,
+    //   content: "",
+    //   id: parseInt(post.id),
+    // }));
 
-    console.log("POST DATA: ", postData);
+    // console.log("POST DATA: ", postData);
 
     // postService.createUserPosts(postData);
 
