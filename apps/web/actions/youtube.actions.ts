@@ -48,7 +48,9 @@ export async function fetchAllUserPosts(): Promise<ActionResponse<boolean>> {
       id: parseInt(post.id),
     }));
 
-    postService.createUserPosts(postData);
+    console.log("POST DATA: ", postData);
+
+    // postService.createUserPosts(postData);
 
     // Revalidate the page to show the new data
     revalidatePath("/dashboard/posts/youtube");

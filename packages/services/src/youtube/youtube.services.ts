@@ -124,7 +124,7 @@ export class YoutubeService {
     if (!youtubeIntegration) {
       throw new Error("YouTube integration not found for user");
     }
-    console.log("YOUTUBE INTEGRATION: ", youtubeIntegration);
+
     const accessTokenExpiryDate = new Date(
       youtubeIntegration.refreshTokenExpiresAt
     );
@@ -183,6 +183,8 @@ export class YoutubeService {
       nextPageToken = playlistItemsData.nextPageToken || "";
     } while (nextPageToken);
 
+    console.log("VIDEOS: ", videos);
+
     // Fetch video details including comment count
     const videoIds = videos.map((video: any) => video.id).join(",");
     const videoDetailsResponse = await fetch(
@@ -196,6 +198,7 @@ export class YoutubeService {
       const videoDetail = videoDetailsData.items.find(
         (detail: any) => detail.id === video.id
       );
+
       return {
         ...video,
         commentCount: videoDetail.statistics.commentCount,
