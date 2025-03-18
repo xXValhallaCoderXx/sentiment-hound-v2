@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
-import { fetchAllUserPosts } from "@/actions/youtube.actions";
+import { refreshAccessToken } from "@/actions/youtube.actions";
 import { notifications } from "@mantine/notifications";
 
 interface RefreshButtonProps {
@@ -18,21 +18,21 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({ name }) => {
 
     setIsLoading(true);
     try {
-      const response = await fetchAllUserPosts();
+      const response = await refreshAccessToken();
 
-      if (response.error) {
-        notifications.show({
-          title: "Error",
-          message: response.error.error,
-          color: "red",
-        });
-      } else {
-        notifications.show({
-          title: "Success",
-          message: "YouTube posts refreshed successfully",
-          color: "green",
-        });
-      }
+      // if (response.error) {
+      //   notifications.show({
+      //     title: "Error",
+      //     message: response.error.error,
+      //     color: "red",
+      //   });
+      // } else {
+      //   notifications.show({
+      //     title: "Success",
+      //     message: "YouTube posts refreshed successfully",
+      //     color: "green",
+      //   });
+      // }
     } catch (error: any) {
       notifications.show({
         title: "Error",

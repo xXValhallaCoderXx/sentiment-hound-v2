@@ -1,5 +1,5 @@
 "use server";
-import { postService, ICreatePost } from "@repo/services";
+import { postService, ICreatePost, integrationsService } from "@repo/services";
 
 import { auth } from "@/lib/next-auth.lib";
 import { youtubeService } from "@repo/services";
@@ -73,6 +73,39 @@ export async function analyzeYoutubePosts(): Promise<ActionResponse<boolean>> {
   try {
     // Implement post analysis functionality here
     // For now, we'll just return success
+    return { data: true, error: null };
+  } catch (error: any) {
+    return {
+      data: null,
+      error: {
+        error: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+        status: error.statusCode || 500,
+      },
+    };
+  }
+}
+
+export async function refreshAccessToken(): Promise<ActionResponse<boolean>> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      throw new Error("User not authenticated");
+    }
+    const userId = session.user.id;
+
+    const x = await integrationsService.getUserIntegrationByName(
+      userId,
+      "youtube"
+    );
+
+    if (!x?.refreshToken) {
+      throw new Error("No refresh token found for user");
+    }
+
+    const result = await youtubeService.refreshAccessToken(x?.refreshToken);
+
+    console.log("RESSSULT: ", result);
     return { data: true, error: null };
   } catch (error: any) {
     return {

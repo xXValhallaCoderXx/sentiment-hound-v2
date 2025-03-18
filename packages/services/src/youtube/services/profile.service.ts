@@ -1,12 +1,4 @@
-interface IGetUserProfileResponse {
-  id: string;
-  email: string;
-  verified_email: boolean;
-  name: string;
-  given_name: string;
-  picture: string;
-}
-
+import { IGetUserProfileResponse } from "../youtube.interface";
 export class YoutubeProfileService {
   async getUserProfile(accessToken: string): Promise<IGetUserProfileResponse> {
     const userInfoResponse = await fetch(

@@ -1,10 +1,8 @@
-interface IYoutubeRefreshToken {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
-  expiresAt: Date;
-}
-
+import {
+  IGenerateAuthFromCodeResponse,
+  IYoutubeRefeshTokenResponse,
+  IYoutubeRefreshToken,
+} from "../youtube.interface";
 export class YoutubeAuthService {
   async generateAuthFromCode(code: string) {
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
@@ -22,7 +20,7 @@ export class YoutubeAuthService {
       }),
     });
 
-    const token = await tokenResponse.json();
+    const token: IGenerateAuthFromCodeResponse = await tokenResponse.json();
 
     const accessToken = token.access_token;
     const refreshToken = token.refresh_token;
@@ -51,7 +49,7 @@ export class YoutubeAuthService {
       throw new Error("Failed to refresh access token");
     }
 
-    const responseResult = await response.json();
+    const responseResult: IYoutubeRefeshTokenResponse = await response.json();
 
     const { expires_in, access_token } = responseResult;
 
