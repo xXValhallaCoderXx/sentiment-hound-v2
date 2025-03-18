@@ -17,7 +17,7 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
     // Get the integration for this specific provider
     const currentIntegration =
       await integrationsService.getUserIntegrationByName(session.user.id, slug);
-
+    console.log("CURRENT INTEGRATION: ", currentIntegration);
 
     if (!currentIntegration) {
       // If the provider exists but user doesn't have this integration
@@ -38,7 +38,7 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
     return (
       <Box p={16}>
         <Box className="mt-4">
-          <ActionPanel name={slug} />
+          <ActionPanel providerId={currentIntegration.providerId} name={slug} />
         </Box>
         <PostListTable data={integrationPosts} />
       </Box>

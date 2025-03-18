@@ -1,4 +1,4 @@
-import { Title, Box, Text, Container, Flex } from "@mantine/core";
+import { Title, Box, Text } from "@mantine/core";
 import { Suspense } from "react";
 import IntegrationCardsSkeleton from "./components/IntegrationCardsSkeleton";
 import IntegrationAlert from "./components/IntegrationAlert";
