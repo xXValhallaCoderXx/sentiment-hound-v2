@@ -4,10 +4,10 @@ import { SignInButton } from "@/components/molecules/SignInButton";
 
 const NavigationMenu = () => {
   return (
-    <Group justify="space-between" h="100%">
+    <Group justify="space-between" px={24} h="100%">
       <Group gap="sm">
         <Image
-          src="/globe.svg"
+          src="/images/logos/main-logo.png"
           alt=""
           height={50}
           width={50}

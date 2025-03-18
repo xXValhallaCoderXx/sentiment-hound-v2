@@ -1,9 +1,8 @@
-import { Title, Box, Text } from "@mantine/core";
+import { Title, Box, Text, Container, Flex } from "@mantine/core";
 import { Suspense } from "react";
 import IntegrationCardsSkeleton from "./components/IntegrationCardsSkeleton";
 import IntegrationAlert from "./components/IntegrationAlert";
 import IntegrationCards from "./components/IntegrationCards";
-import { ErrorNotification } from "@/components/atoms/ErrorNotification";
 
 const IntegrationsPage = async () => {
   return (
@@ -17,15 +16,8 @@ const IntegrationsPage = async () => {
           Select an integration below to get started.
         </Text>
 
-        <ErrorNotification
-          error={{
-            code: "ISS",
-            error: "adasd",
-            status: 500,
-          }}
-        />
         <IntegrationAlert />
-        <Box mt={32} className="w-full 2xl:w-3/4">
+        <Box mt={32} maw={1420}>
           <Suspense fallback={<IntegrationCardsSkeleton />}>
             <IntegrationCards />
           </Suspense>

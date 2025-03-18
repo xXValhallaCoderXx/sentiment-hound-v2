@@ -24,19 +24,19 @@ const IntegrationCards = async () => {
           <GridCol key={provider.id} span={4}>
             <form action={isConnected ? revokeIntegration : integrateProvider}>
               <Card shadow="md">
-                <Flex align="center" gap={2}>
+                <Flex mb={12} align="center" gap={8}>
                   <Image
                     alt="provider-image"
-                    height={50}
-                    width={50}
-                    src={`/images/logos/youtube-logo.png`}
+                    height={35}
+                    width={35}
+                    src={`/images/logos/${provider?.image}`}
                   />
                   <Text size="lg" fw={500} className="capitalize">
                     {provider.name}
                   </Text>
                 </Flex>
                 <Text size="xs">{provider.description}</Text>
-                <Divider className="mt-4" />
+                <Divider mt={16} />
                 <input type="hidden" name="providerId" value={provider.id} />
                 <IntegrationButton
                   isDisabled={provider.name !== "youtube"}
