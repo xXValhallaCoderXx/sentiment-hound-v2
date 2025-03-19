@@ -1,4 +1,4 @@
-import { Task, TaskType, JobType } from "@repo/db";
+import { Task, TaskType, TaskStatus, Job, JobStatus } from "@repo/db";
 import { TaskRepository } from "./tasks.repository";
 
 export class CoreTaskService {
@@ -13,6 +13,11 @@ export class CoreTaskService {
     // Shared business logic goes here
     // For example: task validation, transformation, etc.
     return task;
+  }
+
+  async getAllTasks(): Promise<Task[]> {
+    // Include jobs relation for each task
+    return this.repository.findAll({ include: { jobs: true } });
   }
 
   async getTasksByUserId(userId: string): Promise<Task[]> {
@@ -40,6 +45,18 @@ export class CoreTaskService {
       type: taskType,
       integrationId,
       userId,
+    });
+  }
+
+  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+    // Update task with new status using repository update method
+    return this.repository.update(id, { status });
+  }
+
+  async markJobAsFailed(jobId: string, error: string): Promise<Job> {
+    return this.repository.updateJob(Number(jobId), {
+      status: JobStatus.FAILED,
+      errorMessage: error,
     });
   }
 }
