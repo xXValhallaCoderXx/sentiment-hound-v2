@@ -20,7 +20,19 @@ export class CoreQueueService {
       processingAt: new Date(),
     });
 
+    console.log("QUEUE: ", queue);
+
     return queue;
+  }
+
+  public async enqueueTask(taskId: number) {
+    const jobId = await this.repository.createQueueItem(taskId);
+    const hasActive = await this.repository.hasActiveQueue();
+    console.log("HAS ACTIVE ", hasActive);
+    if (!hasActive) {
+      console.log("PROCESSING NEXT");
+      await this.processNext();
+    }
   }
 
   async markAsFailed(id: number, error: string): Promise<Queue> {

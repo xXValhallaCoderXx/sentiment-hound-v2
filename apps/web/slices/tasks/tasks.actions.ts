@@ -1,8 +1,9 @@
 "use server";
 import { IAddTaskDto } from "./task.dto";
+import { auth } from "@/lib/next-auth.lib";
 
-import { taskService } from "./task.service";
-import { Task } from "@repo/db";
+import { Task, TaskType } from "@repo/db";
+import { queueService, taskService } from "@repo/services";
 
 export async function getTask(id: string): Promise<string> {
   try {
@@ -17,10 +18,21 @@ export async function getTask(id: string): Promise<string> {
 
 export async function addNewTask(data: FormData): Promise<void> {
   try {
-    const providerId = data.get("providerId");
-    const taskType = data.get("taskType");
+    const session = await auth();
+    const userId = session?.user?.id as string;
+    const providerId = data.get("providerId") ?? "";
+    const taskType = data.get("taskType") as TaskType;
 
     console.log("PROVIDER ID ", providerId);
+    console.log("TASK TYPE ", taskType);
+    console.log("USER ID ", userId);
+
+    const newTask = await taskService.createTask({
+      providerId,
+      taskType,
+      userId,
+    });
+    await queueService.enqueueTask(newTask.id);
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to add task"

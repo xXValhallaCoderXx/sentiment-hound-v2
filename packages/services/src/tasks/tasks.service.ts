@@ -1,4 +1,4 @@
-import { Task } from "@repo/db";
+import { Task, TaskType, JobType } from "@repo/db";
 import { TaskRepository } from "./tasks.repository";
 
 export class CoreTaskService {
@@ -24,5 +24,22 @@ export class CoreTaskService {
     return await this.getTask(id);
 
     // return this.repository.toggleComplete(id);
+  }
+
+  async createTask({
+    providerId,
+    taskType,
+    userId,
+  }: {
+    userId: string;
+    providerId?: string | FormDataEntryValue;
+    taskType?: TaskType;
+  }): Promise<Task> {
+    const integrationId = Number(providerId) || 0;
+    return this.repository.create({
+      type: taskType,
+      integrationId,
+      userId,
+    });
   }
 }

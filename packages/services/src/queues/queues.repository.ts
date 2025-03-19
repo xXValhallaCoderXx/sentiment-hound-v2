@@ -24,4 +24,28 @@ export class QueueRepository extends BaseRepository<Queue, number> {
       },
     });
   }
+
+  public async createQueueItem(taskId: number): Promise<number> {
+    const job = await this.prisma.job.create({
+      data: {
+        taskId,
+      },
+    });
+    const queue = await this.prisma.queue.create({
+      data: {
+        jobId: job.id,
+      },
+    });
+    return queue.id;
+  }
+
+  public async hasActiveQueue(): Promise<boolean> {
+    const count = await this.prisma.queue.count({
+      where: {
+        status: { in: ["NEW", "PROCESSING"] },
+        isDead: false,
+      },
+    });
+    return count > 0;
+  }
 }
