@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { JobsService } from '../jobs/jobs.service';
-import { taskService } from '@repo/services';
+import { taskService, jobService } from '@repo/services';
 
 @Injectable()
 export class QueueService {
@@ -15,6 +15,7 @@ export class QueueService {
     this.logger.log('Polling queue for new tasks...');
     // Get all tasks from DB; assume tasks include a "status" field and a list of jobs.
     const tasks = await taskService.getAllTasks();
+
     // Pick one pending task (status: 'PENDING')
     const pendingTask = tasks.find((task) => task.status === 'PENDING');
     if (!pendingTask) {
@@ -24,10 +25,10 @@ export class QueueService {
 
     this.logger.log(`Processing task id=${pendingTask.id}`);
     // Mark the task as IN_PROGRESS
-    await taskService.updateTaskStatus(String(pendingTask.id), 'IN_PROGRESS');
+    await taskService.updateTaskStatus(pendingTask.id, 'IN_PROGRESS');
 
     // Process each job sequentially for this task
-    console.log('PENDING TASK: ', pendingTask);
+
     // @ts-ignore
     for (const job of pendingTask.jobs) {
       try {
@@ -35,14 +36,14 @@ export class QueueService {
       } catch (error) {
         this.logger.error(`Job processing failed for job id ${job.id}`, error);
         // Optionally, mark the job as FAILED
-        await taskService.markJobAsFailed(job.id, error);
+        await jobService.markJobAsFailed(job.id, error);
         // Optionally, break out if a job fails
         break;
       }
     }
 
     // Mark the task as COMPLETED after all jobs have been processed
-    await taskService.updateTaskStatus(String(pendingTask.id), 'COMPLETED');
+    await taskService.updateTaskStatus(pendingTask.id, 'COMPLETED');
     this.logger.log(`Task id ${pendingTask.id} processed.`);
   }
 }

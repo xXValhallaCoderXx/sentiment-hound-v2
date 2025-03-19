@@ -1,10 +1,11 @@
-import { Task, TaskType, TaskStatus, Job, JobStatus } from "@repo/db";
+import { Task, TaskType, TaskStatus, JobType } from "@repo/db";
 import { TaskRepository } from "./tasks.repository";
+import { jobService } from "..";
 
 export class CoreTaskService {
   constructor(private repository: TaskRepository) {}
 
-  async getTask(id: string): Promise<Task> {
+  async getTask(id: number): Promise<Task> {
     const task = await this.repository.findById(id);
     if (!task) {
       throw new Error("Task not found");
@@ -24,7 +25,7 @@ export class CoreTaskService {
     return this.repository.findByUserId(userId);
   }
 
-  async toggleTaskCompletion(id: string): Promise<Task> {
+  async toggleTaskCompletion(id: number): Promise<Task> {
     // Validate task exists before toggling
     return await this.getTask(id);
 
@@ -41,22 +42,68 @@ export class CoreTaskService {
     taskType?: TaskType;
   }): Promise<Task> {
     const integrationId = Number(providerId) || 0;
-    return this.repository.create({
+
+    // Create the task first
+    const task = await this.repository.create({
       type: taskType,
       integrationId,
       userId,
     });
+
+    // Create appropriate jobs based on task type
+    if (task.id) {
+      switch (taskType) {
+        case TaskType.FULL_SYNC:
+          // Full sync needs both fetching and analyzing
+          await jobService.createJob({
+            taskId: task.id,
+            type: JobType.FETCH_CONTENT,
+            data: { integrationId },
+          });
+          await jobService.createJob({
+            taskId: task.id,
+            type: JobType.ANALYZE_CONTENT_SENTIMENT,
+            data: { integrationId },
+          });
+
+          break;
+
+        case TaskType.PARTIAL_SYNC:
+          // Partial sync just needs to fetch new content
+          await jobService.createJob({
+            taskId: task.id,
+            type: JobType.FETCH_CONTENT,
+
+            data: { integrationId },
+          });
+
+          break;
+
+        case TaskType.ANALYZE_COMMENTS:
+          // Just need sentiment analysis
+          await jobService.createJob({
+            taskId: task.id,
+            type: JobType.FETCH_CONTENT,
+            data: { integrationId },
+          });
+          await jobService.createJob({
+            taskId: task.id,
+            type: JobType.ANALYZE_CONTENT_SENTIMENT,
+            data: { integrationId },
+          });
+          break;
+
+        default:
+          // For OTHER or unspecified types, no jobs are created
+          break;
+      }
+    }
+
+    return task;
   }
 
-  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+  async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
     // Update task with new status using repository update method
     return this.repository.update(id, { status });
-  }
-
-  async markJobAsFailed(jobId: string, error: string): Promise<Job> {
-    return this.repository.updateJob(Number(jobId), {
-      status: JobStatus.FAILED,
-      errorMessage: error,
-    });
   }
 }

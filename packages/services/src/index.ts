@@ -10,6 +10,8 @@ import { QueueRepository } from "./queues/queues.repository";
 import { CoreQueueService } from "./queues/queues.service";
 import { TaskRepository } from "./tasks/tasks.repository";
 import { CoreTaskService } from "./tasks/tasks.service";
+import { JobRepository } from "./jobs/jobs.repository";
+import { CoreJobService } from "./jobs/jobs.service";
 
 export * from "./posts/post.interface";
 
@@ -19,6 +21,7 @@ const providerRepository = new ProviderRepository(prisma);
 const integrationRepository = new IntegrationRepository(prisma);
 const postRepository = new PostRepository(prisma);
 const taskRepository = new TaskRepository(prisma);
+const jobRepository = new JobRepository(prisma);
 
 // Create singleton instances of services
 export const providerService = new CoreProviderService(providerRepository);
@@ -30,4 +33,4 @@ export const youtubeService = new YoutubeService();
 
 export const queueService = new CoreQueueService(queueRepository);
 export const taskService = new CoreTaskService(taskRepository);
-
+export const jobService = new CoreJobService(jobRepository);

@@ -321,7 +321,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/nate/Dungeon/Github/sentiment-hound-v2/packages/database/generated/client",
+      "value": "/home/odin/Dungeon/Github/sentiment-hound-v2/packages/database/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -330,12 +330,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/nate/Dungeon/Github/sentiment-hound-v2/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/home/odin/Dungeon/Github/sentiment-hound-v2/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
