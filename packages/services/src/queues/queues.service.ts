@@ -25,8 +25,12 @@ export class CoreQueueService {
     return queue;
   }
 
-  public async enqueueTask(taskId: number, taskType: TaskType) {
-    const jobId = await this.repository.createQueueItem(taskId, taskType);
+  public async enqueueTask(
+    taskId: number,
+    taskType: TaskType,
+    data?: Record<string, any>
+  ) {
+    const jobId = await this.repository.createQueueItem(taskId, taskType, data);
     const hasActive = await this.repository.hasActiveQueue();
     console.log("HAS ACTIVE ", hasActive);
     if (!hasActive) {

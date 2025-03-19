@@ -23,6 +23,14 @@ export async function addNewTask(data: FormData): Promise<void> {
     const providerId = data.get("providerId") ?? "";
     const taskType = data.get("taskType") as TaskType;
 
+    // For FULL_SYNC tasks on YouTube, extract additional data (e.g., youtubeChannelId)
+    let extraData = {};
+    if (taskType === TaskType.FULL_SYNC) {
+      extraData = {
+        youtubeChannelId: data.get("youtubeChannelId") as string,
+      };
+    }
+
     console.log("PROVIDER ID ", providerId);
     console.log("TASK TYPE ", taskType);
     console.log("USER ID ", userId);
@@ -32,7 +40,7 @@ export async function addNewTask(data: FormData): Promise<void> {
       taskType,
       userId,
     });
-    await queueService.enqueueTask(newTask.id, taskType);
+    await queueService.enqueueTask(newTask.id, taskType, extraData);
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to add task"
