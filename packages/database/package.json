@@ -10,7 +10,7 @@
   },
   "scripts": {
     "db:build": "tsc -p tsconfig.build.json",
-    "db:push": "prisma db push",
+    "db:push": "prisma db push --accept-data-loss",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
     "db:deploy": "prisma migrate deploy",

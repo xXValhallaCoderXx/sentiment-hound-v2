@@ -1,4 +1,4 @@
-import { Queue, QueueStatus } from "@repo/db";
+import { Queue, QueueStatus, TaskType } from "@repo/db";
 import { QueueRepository } from "./queues.repository";
 export class CoreQueueService {
   constructor(private repository: QueueRepository) {}
@@ -25,8 +25,8 @@ export class CoreQueueService {
     return queue;
   }
 
-  public async enqueueTask(taskId: number) {
-    const jobId = await this.repository.createQueueItem(taskId);
+  public async enqueueTask(taskId: number, taskType: TaskType) {
+    const jobId = await this.repository.createQueueItem(taskId, taskType);
     const hasActive = await this.repository.hasActiveQueue();
     console.log("HAS ACTIVE ", hasActive);
     if (!hasActive) {

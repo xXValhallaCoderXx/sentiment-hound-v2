@@ -32,7 +32,7 @@ export async function addNewTask(data: FormData): Promise<void> {
       taskType,
       userId,
     });
-    await queueService.enqueueTask(newTask.id);
+    await queueService.enqueueTask(newTask.id, taskType);
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to add task"

@@ -1,5 +1,5 @@
 import { BaseRepository } from "../common/base.repository";
-import { Queue, QueueStatus } from "@repo/db";
+import { JobType, Queue, QueueStatus, TaskType } from "@repo/db";
 
 export class QueueRepository extends BaseRepository<Queue, number> {
   constructor(prisma: any) {
@@ -25,15 +25,22 @@ export class QueueRepository extends BaseRepository<Queue, number> {
     });
   }
 
-  public async createQueueItem(taskId: number): Promise<number> {
+  public async createQueueItem(
+    taskId: number,
+    taskType: TaskType,
+    data?: Record<string, any>
+  ): Promise<number> {
     const job = await this.prisma.job.create({
       data: {
         taskId,
+        type: JobType.ANALYZE_CONTENT_SENTIMENT, // added job type
+        data: {}, // added default empty JSON object for job data
       },
     });
     const queue = await this.prisma.queue.create({
       data: {
         jobId: job.id,
+        payload: { taskId, taskType, data },
       },
     });
     return queue.id;
