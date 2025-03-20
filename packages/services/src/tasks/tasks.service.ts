@@ -45,10 +45,14 @@ export class CoreTaskService {
 
     // Create the task first
     const task = await this.repository.create({
-      type: taskType,
-      integrationId,
-      userId,
+      data: {
+        type: taskType || TaskType.OTHER,
+        integrationId,
+        userId,
+        status: TaskStatus.PENDING,
+      },
     });
+
 
     // Create appropriate jobs based on task type
     if (task.id) {

@@ -1,4 +1,4 @@
-import { Job, JobStatus, JobType } from "@repo/db";
+import { Job, JobStatus, JobType, Task, User } from "@repo/db";
 import { JobRepository } from "./jobs.repository";
 
 export class CoreJobService {
@@ -30,10 +30,37 @@ export class CoreJobService {
     data?: Record<string, any>;
   }): Promise<Job> {
     return this.repository.create({
-      taskId,
-      type,
-      data,
+      data: {
+        task: { connect: { id: taskId } },
+        data: data || {},
+        type: type || JobType.ANALYZE_CONTENT_SENTIMENT,
+      },
     });
+  }
+
+  async getJobWithUser(
+    id: number
+  ): Promise<Job & { task: Task & { user: User } }> {
+    const job = await this.repository.findById(id, {
+      include: {
+        task: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    return job;
+  }
+
+  async getUserForJob(id: number): Promise<User> {
+    const job = await this.getJobWithUser(id);
+    return job.task.user;
   }
 
   async markJobAsFailed(jobId: string, error: string): Promise<Job> {

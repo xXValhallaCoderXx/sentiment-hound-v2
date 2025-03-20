@@ -80,13 +80,16 @@ export class CoreIntegrationService {
 
     try {
       return await this.repository.create({
-        userId,
-        accountId,
-        providerId,
-        accessToken,
-        refreshToken,
-        refreshTokenExpiresAt,
+        data: {
+          userId,
+          accountId,
+          providerId,
+          accessToken,
+          refreshToken,
+          refreshTokenExpiresAt,
+        },
       });
+
     } catch (error) {
       throw new IntegrationError(
         "Failed to create integration",

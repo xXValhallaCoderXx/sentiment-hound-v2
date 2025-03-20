@@ -1,13 +1,13 @@
 import { BaseRepository } from "../common/base.repository";
-import { JobType, Queue, QueueStatus, TaskType } from "@repo/db";
+import { Queue, QueueStatus } from "@repo/db";
 
-export class QueueRepository extends BaseRepository<Queue, number> {
+export class QueueRepository extends BaseRepository<"queue"> {
   constructor(prisma: any) {
     super(prisma, "queue");
   }
 
   async findByStatus(status: QueueStatus): Promise<Queue[]> {
-    return this.prisma.queue.findMany({
+    return super.findMany({
       where: {
         status,
         isDead: false,
@@ -25,29 +25,8 @@ export class QueueRepository extends BaseRepository<Queue, number> {
     });
   }
 
-  public async createQueueItem(
-    taskId: number,
-    taskType: TaskType,
-    data?: Record<string, any>
-  ): Promise<number> {
-    const job = await this.prisma.job.create({
-      data: {
-        taskId,
-        type: JobType.ANALYZE_CONTENT_SENTIMENT, // added job type
-        data: {}, // added default empty JSON object for job data
-      },
-    });
-    const queue = await this.prisma.queue.create({
-      data: {
-        jobId: job.id,
-        payload: { taskId, taskType, data },
-      },
-    });
-    return queue.id;
-  }
-
   public async hasActiveQueue(): Promise<boolean> {
-    const count = await this.prisma.queue.count({
+    const count = await super.count({
       where: {
         status: { in: ["NEW", "PROCESSING"] },
         isDead: false,

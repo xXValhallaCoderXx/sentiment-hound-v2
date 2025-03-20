@@ -7,7 +7,6 @@ import {
   youtubeService,
 } from '@repo/services';
 
-
 @Injectable()
 export class ContentFetchProcessor {
   private readonly logger = new Logger(ContentFetchProcessor.name);
@@ -25,6 +24,8 @@ export class ContentFetchProcessor {
     // TODO - Make this constant
     if (provider.name === 'youtube') {
       console.log('Fetching content from Youtube');
+      const user = await jobService.getUserForJob(job.id);
+      await youtubeService.fetchAllYoutubePosts(user?.id);
     } else {
       console.log('Provider not supported');
     }

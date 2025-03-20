@@ -1,65 +1,123 @@
-export interface IBaseRepository<
-  T,
-  ID,
-  CreateDTO = Partial<T>,
-  UpdateDTO = Partial<T>,
-> {
-  create(data: CreateDTO): Promise<T>;
-  batchCreate(data: CreateDTO[]): Promise<T[]>;
-  findAll(options?: any): Promise<T[]>;
-  findById(id: ID): Promise<T | null>;
-  update(id: ID, data: UpdateDTO): Promise<T>;
-  delete(id: ID): Promise<void>;
-}
+import { PrismaClient, Prisma } from "@repo/db";
 
-export class BaseRepository<T, ID, CreateDTO = Partial<T>, UpdateDTO = Partial<T>>
-  implements IBaseRepository<T, ID, CreateDTO, UpdateDTO>
-{
+export type PrismaModels = keyof Omit<
+  PrismaClient,
+  | "$connect"
+  | "$disconnect"
+  | "$on"
+  | "$transaction"
+  | "$use"
+  | "$extends"
+  | "$queryRaw"
+  | "$executeRaw"
+>;
+
+/**
+ * Base repository class that provides common CRUD operations for Prisma models
+ */
+export class BaseRepository<ModelName extends PrismaModels> {
+  protected readonly prismaModel: any;
+
   constructor(
-    protected prisma: any,
-    protected model: string
-  ) {}
-
-  async create(data: CreateDTO): Promise<T> {
-    return this.prisma[this.model].create({ data });
+    protected readonly prisma: PrismaClient,
+    protected readonly modelName: ModelName
+  ) {
+    this.prismaModel = this.prisma[this.modelName];
   }
 
-  async batchCreate(data: CreateDTO[]): Promise<T[]> {
-    return this.prisma[this.model].createMany({ data });
+  /**
+   * Create a new record
+   */
+  create(args: { data: any; [key: string]: any }) {
+    return this.prismaModel.create(args);
   }
 
-  async findAll(options?: any): Promise<T[]> {
-    return this.prisma[this.model].findMany(options);
+  /**
+   * Create multiple records at once
+   */
+  batchCreate(data: any[]) {
+    return this.prismaModel.createMany({ data });
   }
 
-  async findById(id: ID): Promise<T | null> {
-    return this.prisma[this.model].findUnique({ where: { id } });
+  /**
+   * Find all records matching options
+   */
+  findAll(args?: any) {
+    return this.prismaModel.findMany(args || {});
   }
 
-  async update(id: ID, data: UpdateDTO): Promise<T> {
-    return this.prisma[this.model].update({ where: { id }, data });
+  /**
+   * Find a record by its ID
+   */
+  findById(id: number | string, args?: Omit<any, "where">) {
+    const findOptions = {
+      where: { id },
+      ...args,
+    };
+    return this.prismaModel.findUnique(findOptions);
   }
 
-  async delete(id: ID): Promise<void> {
-    await this.prisma[this.model].delete({ where: { id } });
+  /**
+   * Update a record by its ID
+   */
+  update(id: number | string, data: any, args?: Omit<any, "where" | "data">) {
+    const updateOptions = {
+      where: { id },
+      data,
+      ...args,
+    };
+    return this.prismaModel.update(updateOptions);
   }
 
-  // Common helper methods
-  protected findMany(where: any, include?: any): Promise<T[]> {
-    const options: any = { where };
-    if (include) options.include = include;
-    return this.prisma[this.model].findMany(options);
+  /**
+   * Delete a record by its ID
+   */
+  delete(id: number | string, args?: Omit<any, "where">) {
+    const deleteOptions = {
+      where: { id },
+      ...args,
+    };
+    return this.prismaModel.delete(deleteOptions);
   }
 
-  protected findUnique(where: any, include?: any): Promise<T | null> {
-    const options: any = { where };
-    if (include) options.include = include;
-    return this.prisma[this.model].findUnique(options);
+  /**
+   * Find many records with a where condition
+   */
+  findMany(where: any, args?: Omit<any, "where">) {
+    const options = {
+      where,
+      ...args,
+    };
+    return this.prismaModel.findMany(options);
   }
 
-  protected findFirst(where: any, include?: any): Promise<T | null> {
-    const options: any = { where };
-    if (include) options.include = include;
-    return this.prisma[this.model].findFirst(options);
+  /**
+   * Find the first record matching the where condition
+   */
+  findFirst(where: any, args?: Omit<any, "where">) {
+    const options = {
+      where,
+      ...args,
+    };
+    return this.prismaModel.findFirst(options);
+  }
+
+  /**
+   * Count records matching the where condition
+   */
+  count(where: any, args?: Omit<any, "where">) {
+    const options = {
+      where,
+      ...args,
+    };
+    return this.prismaModel.count(options);
+  }
+
+  findUnique(where: any, args?: Omit<any, "where">) {
+    const options = {
+      where,
+      ...args,
+    };
+    return this.prismaModel.findUnique(options);
   }
 }

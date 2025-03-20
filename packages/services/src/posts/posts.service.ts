@@ -19,10 +19,9 @@ export class CorePostService {
     userId: string;
     integrationId: string;
   }): Promise<Post[]> {
-    return this.repository.findUserIntegrationPosts(
-      userId,
-      parseInt(integrationId)
-    );
+
+    return this.repository.findMany({ id: parseInt(userId), integrationId });
+  
   }
 
   async getUserPosts(userId: string): Promise<Post[]> {
@@ -32,15 +31,17 @@ export class CorePostService {
   async createUserPost(data: ICreatePost): Promise<Post> {
     const { userId, title } = data;
     return this.repository.create({
-      userId,
-      title,
-      commentCount: data?.commentCount || 0,
-      description: data?.description || "",
-      publishedAt: data?.publishedAt || null,
-      imageUrl: data?.imageUrl || "",
-      postUrl: data?.postUrl || "",
-      remoteId: data?.remoteId || "",
-      integrationId: data?.integrationId || 0,
+      data: {
+        userId,
+        title,
+        commentCount: data?.commentCount || 0,
+        description: data?.description || "",
+        publishedAt: data?.publishedAt || new Date(),
+        imageUrl: data?.imageUrl || "",
+        postUrl: data?.postUrl || "",
+        remoteId: data?.remoteId || "",
+        integrationId: data?.integrationId || 0,
+      },
     });
   }
 

@@ -1,10 +1,32 @@
 import { YoutubeAuthService } from "./auth.service";
-// ...existing code...
+import { integrationsService } from "../..";
+
 export class YoutubeContentService {
   constructor(private authService: YoutubeAuthService) {}
   async fetchYoutubePosts(userId: string, retry = true) {
     // ...fetch channel, playlist items, and comment counts...
     // ...handle token refresh via this.authService if needed...
+  }
+  async fetchAllYoutubePosts(userId: string, retry = true) {
+    // ...fetch channel, playlist items, and comment counts...
+    // ...handle token refresh via this.authService if needed...
+    const youtubeIntegration =
+      await integrationsService.getUserIntegrationByName(userId, "youtube");
+
+    if (!youtubeIntegration) {
+      throw new Error("YouTube integration not found for user");
+    }
+
+    const accessTokenExpiryDate = new Date(
+      youtubeIntegration.refreshTokenExpiresAt
+    );
+    const currentTime = new Date();
+
+    if (accessTokenExpiryDate < currentTime) {
+      console.log("The specified time has passed.");
+    }
+
+    console.log("CARRY ON");
   }
 }
 
@@ -13,23 +35,23 @@ export class YoutubeContentService {
 //     userId: string,
 //     retry = true
 //   ): Promise<IYouTubePost[]> {
-//     const youtubeIntegration =
-//       await integrationsService.getUserIntegrationByName(userId, "youtube");
+    // const youtubeIntegration =
+    //   await integrationsService.getUserIntegrationByName(userId, "youtube");
 
-//     if (!youtubeIntegration) {
-//       throw new Error("YouTube integration not found for user");
-//     }
+    // if (!youtubeIntegration) {
+    //   throw new Error("YouTube integration not found for user");
+    // }
 
-//     const accessTokenExpiryDate = new Date(
-//       youtubeIntegration.refreshTokenExpiresAt
-//     );
-//     const currentTime = new Date();
+    // const accessTokenExpiryDate = new Date(
+    //   youtubeIntegration.refreshTokenExpiresAt
+    // );
+    // const currentTime = new Date();
 
-//     if (accessTokenExpiryDate < currentTime) {
-//       console.log("The specified time has passed.");
-//       await this.refreshAccessToken(userId);
-//       await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
-//     }
+    // if (accessTokenExpiryDate < currentTime) {
+    //   console.log("The specified time has passed.");
+    //   await this.refreshAccessToken(userId);
+    //   await this.fetchYoutubePosts(userId, false); // Prevent infinite Recursion
+    // }
 
 //     const headers = {
 //       Authorization: `Bearer ${youtubeIntegration.accessToken}`,

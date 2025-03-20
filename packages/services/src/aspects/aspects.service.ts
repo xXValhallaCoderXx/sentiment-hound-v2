@@ -21,9 +21,12 @@ export class CoreAspectAnalysisService {
     sentiment: number
   ): Promise<AspectAnalysis> {
     return this.repository.create({
-      commentId,
-      aspect,
-      sentiment,
+      data: {
+        comment: { connect: { id: commentId } },
+        aspect,
+        sentiment,
+      },
     });
+
   }
 }
