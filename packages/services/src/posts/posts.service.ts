@@ -19,9 +19,10 @@ export class CorePostService {
     userId: string;
     integrationId: string;
   }): Promise<Post[]> {
-
-    return this.repository.findMany({ id: parseInt(userId), integrationId });
-  
+    return this.repository.findUserIntegrationPosts({
+      userId,
+      integrationId: parseInt(integrationId),
+    });
   }
 
   async getUserPosts(userId: string): Promise<Post[]> {

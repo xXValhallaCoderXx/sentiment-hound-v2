@@ -17,9 +17,13 @@ export class ContentFetchProcessor {
       job.data.integrationId,
     );
 
+    console.log('Integration: ', integration);
+
     const provider = await providerService.getProvider(
       String(integration.providerId),
     );
+
+    console.log('Provider: ', provider);
 
     // TODO - Make this constant
     if (provider.name === 'youtube') {

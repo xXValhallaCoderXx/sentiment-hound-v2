@@ -1,4 +1,4 @@
-import { Provider } from "@repo/db";
+import { Provider, Prisma } from "@repo/db";
 import { CreateProviderDto, UpdateProviderDto } from "./providers.interface";
 import { ProviderRepository } from "./providers.repository";
 
@@ -11,7 +11,7 @@ export class CoreProviderService {
 
   async getProvider(id: string): Promise<Provider> {
     console.log("GET PROVIDER: ", id);
-    const provider = await this.repository.findById(id);
+    const provider = await this.repository.findUnique({ id: parseInt(id) });
     if (!provider) {
       throw new Error("Provider not found");
     }
@@ -26,9 +26,9 @@ export class CoreProviderService {
     return provider;
   }
 
-  async createProvider(data: CreateProviderDto): Promise<Provider> {
+  async createProvider(data: Prisma.ProviderCreateInput): Promise<Provider> {
     // Add validation if needed
-    return await this.repository.create(data);
+    return await this.repository.create({ data });
   }
 
   async updateProvider(id: string, data: UpdateProviderDto): Promise<Provider> {
@@ -36,7 +36,7 @@ export class CoreProviderService {
     if (!provider) {
       throw new Error("Provider not found");
     }
-    return await this.repository.update(id, data);
+    return await this.repository.update(parseInt(id), data);
   }
 
   async deleteProvider(id: string): Promise<void> {
@@ -44,6 +44,6 @@ export class CoreProviderService {
     if (!provider) {
       throw new Error("Provider not found");
     }
-    await this.repository.delete(id);
+    await this.repository.delete(parseInt(id));
   }
 }

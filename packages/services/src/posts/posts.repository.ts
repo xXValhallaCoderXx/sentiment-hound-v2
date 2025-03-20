@@ -1,23 +1,34 @@
 import { BaseRepository } from "../common/base.repository";
-import { Post } from "@repo/db";
+import { PrismaClient, Post, Prisma } from "@repo/db";
 
 export class PostRepository extends BaseRepository<"post"> {
-  constructor(prisma: any) {
+  constructor(prisma: PrismaClient) {
     super(prisma, "post");
   }
 
-  async findByUserId(userId: string): Promise<Post[]> {
-    return super.findMany({ where: { userId } });
-  }
-
-  async findByIntegrationId(integrationId: number): Promise<Post[]> {
-    return super.findMany({ where: { integrationId } });
-  }
-
-  async findUserIntegrationPosts(
+  async findByUserId(
     userId: string,
-    integrationId: number
+    args?: Omit<Prisma.PostFindManyArgs, "where">
   ): Promise<Post[]> {
-    return super.findMany({ where: { userId, integrationId } });
+    return this.findMany({ userId }, args);
+  }
+
+  async findByIntegrationId(
+    integrationId: number,
+    args?: Omit<Prisma.PostFindManyArgs, "where">
+  ): Promise<Post[]> {
+    return this.findMany({ integrationId }, args);
+  }
+
+  async findUserIntegrationPosts({
+    userId,
+    integrationId,
+    args,
+  }: {
+    userId: string;
+    integrationId: number;
+    args?: Omit<Prisma.PostFindManyArgs, "where">;
+  }): Promise<Post[]> {
+    return this.findMany({ userId, integrationId }, args);
   }
 }
