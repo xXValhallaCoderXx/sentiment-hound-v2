@@ -39,3 +39,5 @@ yarn-error.log*
 
 
 postgres-data
+
+packages/database/generated/client
