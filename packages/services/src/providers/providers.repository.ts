@@ -7,6 +7,7 @@ export class ProviderRepository extends BaseRepository<Provider, string> {
   }
 
   async findById(id: string): Promise<Provider | null> {
+    console.log("FINDING PROVIDER BY ID: ", id);
     try {
       return await this.prisma.provider.findUnique({
         where: { id: parseInt(id) },

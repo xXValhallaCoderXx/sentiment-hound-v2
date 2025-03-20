@@ -54,6 +54,7 @@ export class CoreTaskService {
     if (task.id) {
       switch (taskType) {
         case TaskType.FULL_SYNC:
+          console.log("Task Type: FULL_SYNC");
           // Full sync needs both fetching and analyzing
           await jobService.createJob({
             taskId: task.id,
@@ -69,6 +70,7 @@ export class CoreTaskService {
           break;
 
         case TaskType.PARTIAL_SYNC:
+          console.log("Task Type: PARTIAL_SYNC");
           // Partial sync just needs to fetch new content
           await jobService.createJob({
             taskId: task.id,
@@ -80,6 +82,7 @@ export class CoreTaskService {
           break;
 
         case TaskType.ANALYZE_COMMENTS:
+          console.log("Task Type: ANALYZE_COMMENTS");
           // Just need sentiment analysis
           await jobService.createJob({
             taskId: task.id,
@@ -95,6 +98,7 @@ export class CoreTaskService {
 
         default:
           // For OTHER or unspecified types, no jobs are created
+          console.log("Task Type: OTHER");
           break;
       }
     }

@@ -10,6 +10,7 @@ export class CoreProviderService {
   }
 
   async getProvider(id: string): Promise<Provider> {
+    console.log("GET PROVIDER: ", id);
     const provider = await this.repository.findById(id);
     if (!provider) {
       throw new Error("Provider not found");
