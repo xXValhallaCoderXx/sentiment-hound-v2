@@ -29,7 +29,8 @@ export class ContentFetchProcessor {
     if (provider.name === 'youtube') {
       console.log('Fetching content from Youtube');
       const user = await jobService.getUserForJob(job.id);
-      await youtubeService.fetchAllYoutubePosts(user?.id);
+     const results = await youtubeService.fetchAllYoutubePosts(user?.id);
+     console.log('Results: ', results);
     } else {
       console.log('Provider not supported');
     }

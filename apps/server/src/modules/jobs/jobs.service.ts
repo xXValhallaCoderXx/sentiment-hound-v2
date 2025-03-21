@@ -33,7 +33,7 @@ export class JobsService {
   async processJob(job: Job) {
     const processor = this.processors[job.type];
     if (!processor) {
-      throw new Error(`No processor for job type ${job.type}`);
+      throw new Error(`No processorsss for job type ${job.type}`);
     }
     await processor.process(job);
   }

@@ -7,7 +7,6 @@ export interface IYouTubePost {
   commentCount: string;
 }
 
-
 export interface IYoutubeRefreshToken {
   accessToken: string;
   refreshToken: string;
@@ -49,4 +48,12 @@ export interface IConnectYoutubeIntegration {
   expiresIn: number;
   youtubeAccountId: string;
   refreshTokenExpiresAt: Date;
+}
+
+export interface IGetYoutubePlaylistItemsResponse {
+  id: string;
+  title: string;
+  description: string;
+  publishedAt: string;
+  thumbnail: string;
 }
