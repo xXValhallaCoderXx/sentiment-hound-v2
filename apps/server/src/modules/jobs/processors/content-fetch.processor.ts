@@ -16,21 +16,16 @@ export class ContentFetchProcessor {
     const integration = await integrationsService.getIntegration(
       job.data.integrationId,
     );
-
-    console.log('Integration: ', integration);
-
     const provider = await providerService.getProvider(
       String(integration.providerId),
     );
-
-    console.log('Provider: ', provider);
 
     // TODO - Make this constant
     if (provider.name === 'youtube') {
       console.log('Fetching content from Youtube');
       const user = await jobService.getUserForJob(job.id);
-     const results = await youtubeService.fetchAllYoutubePosts(user?.id);
-     console.log('Results: ', results);
+      const results = await youtubeService.fetchAllYoutubePosts(user?.id);
+      console.log('Results: ', results);
     } else {
       console.log('Provider not supported');
     }

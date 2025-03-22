@@ -48,7 +48,7 @@ export class YoutubeService {
   //   return this.contentService.fetchYoutubePosts(userId, retry);
   // }
 
-  async fetchAllYoutubePosts(userId: string): Promise<any> {
+  async fetchAllYoutubePosts(userId: string) {
     return this.contentService.fetchAllYoutubePosts(userId);
   }
 }

@@ -44,7 +44,7 @@ export class YoutubeAuthService {
       },
       body: params.toString(),
     });
-
+    console.log("REFRESH RESPONSE: ", response);
     if (!response.ok) {
       throw new Error("Failed to refresh access token");
     }
