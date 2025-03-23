@@ -1,7 +1,15 @@
-import { Comment, SentimentStatus } from "@repo/db";
+import { Comment, SentimentStatus, Prisma } from "@repo/db";
 import { CommentRepository } from "./comments.repository";
 export class CoreCommentService {
   constructor(private repository: CommentRepository) {}
+
+  async createComment(comment: Prisma.CommentCreateArgs) {
+    return this.repository.create(comment);
+  }
+
+  async createManyComments(comments: Prisma.CommentCreateManyArgs) {
+    return this.repository.createMany(comments);
+  }
 
   async getComment(id: number): Promise<Comment> {
     const comment = await this.repository.findById(id);

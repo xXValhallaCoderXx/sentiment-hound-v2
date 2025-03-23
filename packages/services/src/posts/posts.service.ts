@@ -1,4 +1,4 @@
-import { Post } from "@repo/db";
+import { Post, Prisma, prisma } from "@repo/db";
 import { PostRepository } from "./posts.repository";
 import { ICreatePost } from "./post.interface";
 export class CorePostService {
@@ -12,6 +12,10 @@ export class CorePostService {
     return post;
   }
 
+  async findPostsBasedOnRemoteIds(videoIds: string[]): Promise<Post[]> {
+    return this.repository.findMany({ remoteId: { in: videoIds } });
+  }
+
   async getUserIntegrationPosts({
     userId,
     integrationId,
@@ -19,14 +23,33 @@ export class CorePostService {
     userId: string;
     integrationId: string;
   }): Promise<Post[]> {
-    return this.repository.findUserIntegrationPosts({
+    return this.findUserIntegrationPosts({
       userId,
       integrationId: parseInt(integrationId),
     });
   }
 
+  async findUserIntegrationPosts({
+    userId,
+    integrationId,
+    args,
+  }: {
+    userId: string;
+    integrationId: number;
+    args?: Omit<Prisma.PostFindManyArgs, "where">;
+  }): Promise<Post[]> {
+    return this.repository.findMany({ userId, integrationId }, args);
+  }
+
+  async findByUserId(
+    userId: string,
+    args?: Omit<Prisma.PostFindManyArgs, "where">
+  ): Promise<Post[]> {
+    return this.repository.findMany({ userId }, args);
+  }
+
   async getUserPosts(userId: string): Promise<Post[]> {
-    return this.repository.findByUserId(userId);
+    return this.findByUserId(userId);
   }
 
   async createUserPost(data: ICreatePost): Promise<Post> {
@@ -46,7 +69,11 @@ export class CorePostService {
     });
   }
 
-  async createUserPosts(data: ICreatePost[]): Promise<Post[]> {
-    return this.repository.batchCreate(data);
+  async createUserPosts(data: Prisma.PostCreateManyInput[]) {
+    return this.repository.createMany({ data });
+  }
+
+  async batchCreateComments(data: Prisma.CommentCreateManyInput[]) {
+    return prisma.comment.createMany({ data });
   }
 }
