@@ -43,3 +43,7 @@ postgres-data
 packages/database/generated/client
 
 __pycache__
+env310
+checkpoints
+checkpoints.json
+Aspect Term Extraction and Polarity Classification.FAST_LCF_ATEPC.result.json
