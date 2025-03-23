@@ -41,3 +41,5 @@ yarn-error.log*
 postgres-data
 
 packages/database/generated/client
+
+__pycache__
