@@ -104,7 +104,7 @@ export async function revokeIntegration(formData: FormData) {
     }
   }
 
-  // Delete the integration from our database
+  // // Delete the integration from our database
   await integrationsService.deleteIntegration(integration.id);
   redirect("/dashboard/integrations");
 }

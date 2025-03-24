@@ -47,14 +47,22 @@ export class IntegrationRepository extends BaseRepository<"integration"> {
   }
 
   async deleteRelatedRecords(integrationId: number): Promise<void> {
-    // Example implementation using Prisma (adjust based on your actual repository implementation)
-    // First, delete tasks (and their related jobs)
-    await this.prisma.task.deleteMany({
-      where: { integrationId },
+    // First, delete comments related to posts
+    await this.prisma.comment.deleteMany({
+      where: {
+        post: {
+          integrationId,
+        },
+      },
     });
 
     // Then delete posts (and their related comments)
     await this.prisma.post.deleteMany({
+      where: { integrationId },
+    });
+
+    // Finally, delete tasks (and their related jobs)
+    await this.prisma.task.deleteMany({
       where: { integrationId },
     });
   }

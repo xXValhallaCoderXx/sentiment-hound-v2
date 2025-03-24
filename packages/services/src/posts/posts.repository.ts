@@ -46,14 +46,8 @@ export class PostRepository {
     });
   }
 
-  async findMany(
-    where: Prisma.PostWhereInput,
-    args?: Omit<Prisma.PostFindManyArgs, "where">
-  ) {
-    return this.prisma.post.findMany({
-      where,
-      ...args,
-    });
+  async findMany(args: Prisma.PostFindManyArgs) {
+    return this.prisma.post.findMany(args);
   }
 
   async update(

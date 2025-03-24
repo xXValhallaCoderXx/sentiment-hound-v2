@@ -3,5 +3,6 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "terminal.integrated.fontFamily": "Mononoki Nerd Font Mono"
 }
