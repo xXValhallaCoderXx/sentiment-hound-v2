@@ -13,10 +13,13 @@ export class CorePostService {
   }
 
   async findPostsBasedOnRemoteIds(videoIds: string[]): Promise<Post[]> {
-    return this.repository.findMany({where: { remoteId: { in: videoIds } }});
+    return this.repository.findMany({ where: { remoteId: { in: videoIds } } });
   }
 
-  async getUserPostsByProvider(userId: string, providerId: number): Promise<Post[]> {
+  async getUserPostsByProvider(
+    userId: string,
+    providerId: number
+  ): Promise<Post[]> {
     return this.repository.findMany({
       where: {
         userId,
@@ -36,7 +39,7 @@ export class CorePostService {
   }: {
     userId: string;
     integrationId: string;
-  }): Promise<Post[]> {
+  }) {
     return this.findUserIntegrationPosts({
       userId,
       integrationId: parseInt(integrationId),
@@ -51,11 +54,14 @@ export class CorePostService {
     userId: string;
     integrationId: number;
     args?: Omit<Prisma.PostFindManyArgs, "where">;
-  }): Promise<Post[]> {
+  }) {
     return this.repository.findMany({
       where: {
         userId,
         integrationId,
+        comments: {
+          some: {}, // This ensures only posts with comments are returned
+        },
       },
       include: {
         comments: true,

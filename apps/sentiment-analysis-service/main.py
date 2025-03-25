@@ -15,9 +15,13 @@ aspect_extractor = ATEPCCheckpointManager.get_aspect_extractor(
     checkpoint='english')
 
 
+class TextItem(BaseModel):
+    id: str
+    value: str
+
 # Request format
 class SentimentRequest(BaseModel):
-    texts: List[str]
+    data: List[TextItem]
 
 # Define the output model
 
@@ -25,7 +29,9 @@ class SentimentRequest(BaseModel):
 # Endpoint
 @app.post("/analyze")
 def analyze(request: SentimentRequest) -> List[Dict[str, Any]]:
-    texts = request.texts
+    input_data = request.data
+    texts = [item.value for item in input_data]
+    ids = [item.id for item in input_data]
 
     # General sentiment (DistilBERT)
     general_results = general_sentiment_pipeline(texts)
@@ -36,17 +42,20 @@ def analyze(request: SentimentRequest) -> List[Dict[str, Any]]:
 
     # Combine results
     combined = []
-    for text, general, aspect in zip(texts, general_results, absa_results):
+    for _id, text, general, aspect in zip(ids, texts, general_results, absa_results):
+        aspect_sentiments = [
+            {"aspect": asp, "sentiment": sent}
+            for asp, sent in zip(aspect["aspect"], aspect["sentiment"])
+        ]
+
         combined.append({
+            "id": _id,
             "text": text,
             "general_sentiment": {
                 "label": general["label"],
                 "score": general["score"]
             },
-            "aspect_sentiment": {
-                "aspects": aspect["aspect"],
-                "sentiments": aspect["sentiment"]
-            }
+            "aspect_sentiment": aspect_sentiments
         })
 
     return combined
