@@ -26,7 +26,7 @@ const JobsPage = async () => {
     if (integrations.length === 0) {
       return (
         <Box p="xl">
-          <Group position="apart" mb="lg">
+          <Group mb="lg">
             <div>
               <Title order={2}>Jobs</Title>
               <Text color="dimmed">
@@ -54,7 +54,7 @@ const JobsPage = async () => {
 
     return (
       <Box p="xl">
-        <Group position="apart" mb="lg">
+        <Group mb="lg">
           <div>
             <Title order={2}>Jobs</Title>
             <Text color="dimmed">

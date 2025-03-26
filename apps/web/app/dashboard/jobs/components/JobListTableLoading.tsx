@@ -12,7 +12,7 @@ import {
 export default function JobListTableLoading() {
   return (
     <Box>
-      <Table withBorder>
+      <Table>
         <TableThead>
           <TableTr>
             <TableTh></TableTh>

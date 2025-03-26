@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import { JobStatus, TaskStatus, TaskType } from "@repo/db";
 
 // Create this service or use an existing one
@@ -81,7 +81,6 @@ export default async function JobListTable({ userId }: { userId: string }) {
 
             return (
               <TableTr
-                value={`task-${task.id}`}
                 key={task.id}
                 className="cursor-pointer hover:bg-gray-50"
               >
@@ -92,12 +91,12 @@ export default async function JobListTable({ userId }: { userId: string }) {
                   </Badge>
                 </TableTd>
                 <TableTd>
-                  <Group spacing="xs">
+                  <Group>
                     <Text size="sm">{task.integration.provider.name}</Text>
                   </Group>
                 </TableTd>
                 <TableTd>
-                  <Group spacing="xs">
+                  <Group gap="xs">
                     <Badge color={getStatusColor(task.status)}>
                       {formatEnumValue(task.status)}
                     </Badge>
@@ -110,14 +109,14 @@ export default async function JobListTable({ userId }: { userId: string }) {
                 </TableTd>
                 <TableTd style={{ width: 200 }}>
                   <Box>
-                    <Group position="apart" mb={5}>
+                    <Group mb={5}>
                       <Text size="xs">
                         {completedJobs} of {totalJobs} jobs
                       </Text>
                       <Text size="xs">{progressPercentage}%</Text>
                     </Group>
-                    <Progress
-                      sections={[
+                    {/* <Progress
+                      value={[
                         {
                           value: (completedJobs / Math.max(totalJobs, 1)) * 100,
                           color: "green",
@@ -127,7 +126,7 @@ export default async function JobListTable({ userId }: { userId: string }) {
                           color: "red",
                         },
                       ]}
-                    />
+                    /> */}
                   </Box>
                 </TableTd>
                 <TableTd>
