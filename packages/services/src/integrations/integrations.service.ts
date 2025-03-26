@@ -121,12 +121,13 @@ export class CoreIntegrationService {
     }
 
     try {
-      return await this.repository.update(providerId, {
+      return await this.repository.update(integration?.id, {
         accessToken,
         refreshToken,
         refreshTokenExpiresAt: accessTokenExpiry,
       });
     } catch (error) {
+      console.log("Error updating integration:", error);
       throw new IntegrationError(
         "Failed to update integration",
         "INTEGRATION_UPDATE_ERROR"

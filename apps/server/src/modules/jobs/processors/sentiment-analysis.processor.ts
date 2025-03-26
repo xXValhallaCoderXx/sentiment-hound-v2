@@ -20,7 +20,7 @@ interface IAnalysisResponse {
     {
       aspect: string;
 
-      label: string;
+      sentiment: string;
     },
   ];
 }
@@ -65,10 +65,21 @@ export class SentimentAnalysisProcessor {
       score: comment.general_sentiment.score,
       aspects: comment.aspect_sentiment.map((aspect) => ({
         aspect: aspect.aspect,
-        sentiment: aspect.label,
+        sentiment: aspect.sentiment,
       })),
     }));
     console.log('processedComments', processedComments);
+
+    for (const comment of processedComments) {
+      await commentsService.updateCommentSentiment(
+        parseInt(comment.id),
+        comment.sentiment,
+        comment.aspects,
+      );
+    }
+
+    console.log('UPDATE COMPLETED');
+
     // ...existing code to analyze sentiment using an AI service...
     await jobService.markJobAsCompleted(job.id);
   }

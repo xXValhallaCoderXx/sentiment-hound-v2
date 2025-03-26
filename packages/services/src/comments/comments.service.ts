@@ -21,9 +21,10 @@ export class CoreCommentService {
 
   async updateCommentSentiment(
     commentId: number,
-    sentiment: number,
-    aspects: { aspect: string; sentiment: number }[]
+    sentiment: string,
+    aspects: { aspect: string; sentiment: string }[]
   ): Promise<Comment> {
+    console.log("ASPESCTS: ", aspects);
     // Update the sentiment of the comment
     const updatedComment = await this.repository.update(commentId, {
       sentiment,
@@ -42,25 +43,5 @@ export class CoreCommentService {
     });
 
     return updatedComment;
-  }
-
-  async analyzeSentiment(id: number) {
-    const comment = await this.getComment(id);
-
-    // Update status to in progress
-    // await this.repository.update(id, {
-    //   sentimentStatus: SentimentStatus.IN_PROGRESS,
-    // });
-
-    // try {
-    //   // TODO: Implement actual sentiment analysis
-    //   const sentiment = Math.random(); // Placeholder
-    //   return await this.repository.updateSentiment(id, sentiment);
-    // } catch (error) {
-    //   await this.repository.update(id, {
-    //     sentimentStatus: SentimentStatus.FAILED,
-    //   });
-    //   throw error;
-    // }
   }
 }

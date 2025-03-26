@@ -74,17 +74,17 @@ export class YoutubeContentService {
     let currentAccessToken = youtubeIntegration.accessToken;
     if (accessTokenExpiryDate < currentTime) {
       console.log("ACCESS TOKEN EXPIRED");
-      const refreshToken = await youtubeService.refreshAccessToken(userId);
+      const refreshToken = await youtubeService.refreshAccessToken(
+        youtubeIntegration?.refreshToken
+      );
       console.log("NEW TOKEN: ", refreshToken);
 
-      const { accessToken, expiresAt } = refreshToken;
-      currentAccessToken = accessToken;
       await integrationsService.updateIntegrationAuthCredentials({
         userId,
         providerId: youtubeIntegration.providerId,
-        accessToken,
+        accessToken: refreshToken.accessToken,
         refreshToken: refreshToken.refreshToken,
-        accessTokenExpiry: expiresAt,
+        accessTokenExpiry: refreshToken.expiresAt,
       });
       console.log("REFESH DONE");
     }

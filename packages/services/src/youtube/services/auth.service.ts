@@ -32,10 +32,20 @@ export class YoutubeAuthService {
     refreshToken: string
   ): Promise<IYoutubeRefreshToken> {
     const params = new URLSearchParams();
-    params.append("client_id", process.env.AUTH_GOOGLE_ID as string);
-    params.append("client_secret", process.env.AUTH_GOOGLE_SECRET as string);
+    params.append(
+      "client_id",
+      "80558175919-njvaidu8l8b2b8kgruefbs364im90ia9.apps.googleusercontent.com" as string
+    );
+    params.append(
+      "client_secret",
+      "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" as string
+    );
     params.append("refresh_token", refreshToken);
     params.append("grant_type", "refresh_token");
+    console.log("GOOGLE ID: ", process.env.AUTH_GOOGLE_ID);
+    console.log("GOOGLE SECRET: ", process.env.AUTH_GOOGLE_SECRET);
+    console.log("REFRESH TOKEN: ", refreshToken);
+
 
     const response = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",

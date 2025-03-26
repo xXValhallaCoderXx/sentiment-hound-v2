@@ -120,7 +120,8 @@ model Comment {
   id              Int               @id @default(autoincrement())
   commentId       String
   content         String
-  sentiment       Float?
+  sentiment       String?
+  score           String?
   sentimentStatus SentimentStatus   @default(PENDING)
   postId          Int
   post            Post              @relation(fields: [postId], references: [id])
@@ -132,7 +133,8 @@ model Comment {
 model AspectAnalysis {
   id            Int           @id @default(autoincrement())
   aspect        String
-  sentiment     Float
+  sentiment     String
+  score         String?
   commentId     Int
   comment       Comment        @relation(fields: [commentId], references: [id], onDelete: Cascade)
   createdAt     DateTime       @default(now())
