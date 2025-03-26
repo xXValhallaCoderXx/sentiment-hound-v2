@@ -34,12 +34,14 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
       integrationId: String(currentIntegration.id),
     });
 
+    console.log("Integration posts:", integrationPosts);
+
     return (
       <Box p={16}>
         <Box className="mt-4">
           <ActionPanel providerId={currentIntegration.id} name={slug} />
         </Box>
-        {/* <PostListTable data={integrationPosts} /> */}
+        <PostListTable data={integrationPosts} />
       </Box>
     );
   } catch (error) {
