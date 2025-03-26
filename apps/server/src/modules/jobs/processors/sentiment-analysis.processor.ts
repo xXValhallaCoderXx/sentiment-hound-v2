@@ -39,12 +39,13 @@ export class SentimentAnalysisProcessor {
       integrationId: String(integration.id),
     });
 
-    // @ts-ignore
-    // const comments = posts?.comments;
+
 
     const comments = posts?.map((post) => post?.comments)?.flat();
     const preparedComments = comments?.map((comment) => ({
+      // @ts-ignore
       id: String(comment.id),
+      // @ts-ignore
       value: comment.content,
     }));
     console.log('preparedComments', preparedComments);

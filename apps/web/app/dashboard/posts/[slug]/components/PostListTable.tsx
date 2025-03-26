@@ -1,25 +1,25 @@
-"use client";
-import { Post } from "@repo/db";
 import React from "react";
 import {
   Box,
   Table,
+  Tooltip,
   Text,
-  Progress,
-  Group,
   Avatar,
   Badge,
-  ActionIcon,
+  TableTr,
+  TableTd,
+  TableTbody,
+  TableThead,
+  TableTh,
+  Flex,
+  Stack,
+  Button,
 } from "@mantine/core";
-import { IconEye } from "@tabler/icons-react";
-import Link from "next/link";
 
-interface PostWithSentiment extends Post {
-  comments: Comment[];
-}
+import { ProcessedPost } from "@repo/services";
 
 interface PostsTableProps {
-  data: PostWithSentiment[];
+  data: ProcessedPost[];
 }
 
 const PostListTable = ({ data }: PostsTableProps) => {
@@ -34,145 +34,86 @@ const PostListTable = ({ data }: PostsTableProps) => {
   return (
     <Box className="mt-4">
       <Table striped highlightOnHover>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Post</Table.Th>
-            <Table.Th>Published</Table.Th>
-            <Table.Th>Comments</Table.Th>
-            <Table.Th>Sentiment Overview</Table.Th>
-            <Table.Th>Top Aspects</Table.Th>
-            <Table.Th>Actions</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
+        <TableThead>
+          <TableTr>
+            <TableTh>Post</TableTh>
+            <TableTh>Published</TableTh>
+            <TableTh>Comments</TableTh>
+            <TableTh>Sentiment Overview</TableTh>
+            <TableTh>Top Aspects</TableTh>
+            <TableTh>Actions</TableTh>
+          </TableTr>
+        </TableThead>
+        <TableTbody>
           {data.map((post) => {
-            // Calculate sentiment stats
-            const sentimentCounts = post.comments.reduce(
-              (acc, comment) => {
-                if (comment.sentiment === "POSITIVE") acc.positive++;
-                else if (comment.sentiment === "NEGATIVE") acc.negative++;
-                else acc.neutral++;
-                return acc;
-              },
-              { positive: 0, neutral: 0, negative: 0 }
-            );
-
-            // Calculate percentages
-            const total = post.comments.length || 1;
-            const positivePercent = Math.round(
-              (sentimentCounts.positive / total) * 100
-            );
-            const negativePercent = Math.round(
-              (sentimentCounts.negative / total) * 100
-            );
-            const neutralPercent = 100 - positivePercent - negativePercent;
-
-            // Extract top aspects
-            const aspects = post.comments
-              .flatMap((comment) => comment.aspectAnalyses || [])
-              .reduce(
-                (acc, aspect) => {
-                  acc[aspect.aspect] = acc[aspect.aspect] || {
-                    count: 0,
-                    positive: 0,
-                    negative: 0,
-                  };
-                  acc[aspect.aspect].count++;
-                  acc[aspect.aspect][aspect.sentiment.toLowerCase()]++;
-                  return acc;
-                },
-                {} as Record<
-                  string,
-                  { count: number; positive: number; negative: number }
-                >
-              );
-
-            const topAspects = Object.entries(aspects)
-              .sort((a, b) => b[1].count - a[1].count)
-              .slice(0, 3);
-
             return (
-              <Table.Tr key={post.id}>
-                <Table.Td>
-                  <Group>
-                    {post.imageUrl && (
-                      <Avatar src={post.imageUrl} size="md" radius="sm" />
-                    )}
-                    <div>
+              <TableTr key={post.id}>
+                <TableTd maw={300}>
+                  <Flex gap={8} maw={300}>
+                    <Avatar src={post?.imageUrl} size="md" radius="sm" />
+                    <Stack gap={2} maw={300}>
                       <Text size="sm" fw={500}>
                         {post.title}
                       </Text>
-                      {post.description && (
-                        <Text size="xs" color="dimmed" lineClamp={1}>
-                          {post.description}
-                        </Text>
-                      )}
-                    </div>
-                  </Group>
-                </Table.Td>
-                <Table.Td>
+                      <Text size="xs" color="dimmed" truncate="end">
+                        {post.description}
+                      </Text>
+                    </Stack>
+                  </Flex>
+                </TableTd>
+                <TableTd>
                   <Text size="sm">
                     {new Date(post.publishedAt).toLocaleDateString()}
                   </Text>
-                </Table.Td>
-                <Table.Td>
+                </TableTd>
+                <TableTd>
                   <Badge>{post.comments.length}</Badge>
-                </Table.Td>
-                <Table.Td>
+                </TableTd>
+                <TableTd>
                   <Box>
-                    <Group position="apart" mb={5}>
+                    <Stack gap={4}>
                       <Text size="xs" color="green">
-                        Positive: {positivePercent}%
+                        Positive: {post?.sentimentCounts?.positive}%
                       </Text>
                       <Text size="xs" color="red">
-                        Negative: {negativePercent}%
+                        Negative: {post?.sentimentCounts?.negative}%
                       </Text>
-                    </Group>
-                    <Progress
-                      sections={[
-                        { value: positivePercent, color: "green" },
-                        { value: neutralPercent, color: "gray" },
-                        { value: negativePercent, color: "red" },
-                      ]}
-                    />
+                      <Text size="xs" color="gray">
+                        Neutral: {post?.sentimentCounts?.neutral}%
+                      </Text>
+                    </Stack>
                   </Box>
-                </Table.Td>
-                <Table.Td>
-                  {topAspects.length > 0 ? (
-                    <Group spacing={4} direction="column">
-                      {topAspects.map(([aspect, stats]) => (
-                        <Badge
-                          key={aspect}
-                          color={
-                            stats.positive > stats.negative ? "green" : "red"
-                          }
-                          variant="light"
-                          size="sm"
-                        >
-                          {aspect}
-                        </Badge>
-                      ))}
-                    </Group>
-                  ) : (
-                    <Text size="xs" color="dimmed">
-                      No aspects analyzed
-                    </Text>
-                  )}
-                </Table.Td>
-                <Table.Td>
-                  <Link
-                    href={`/dashboard/posts/${post?.integration?.provider?.name}/${post.id}`}
-                    passHref
-                  >
-                    <ActionIcon variant="subtle">
-                      <IconEye size={16} />
-                    </ActionIcon>
-                  </Link>
-                </Table.Td>
-              </Table.Tr>
+                </TableTd>
+                <TableTd>
+                  <Stack gap={4}>
+                    <Tooltip
+                      withArrow
+                      label={Object.keys(post?.aspectAnalyses?.positive)?.join(
+                        ", "
+                      )}
+                    >
+                      <Badge color="green" variant="light" size="sm">
+                        Positive -{" "}
+                        {Object.keys(post?.aspectAnalyses?.positive)?.length}
+                      </Badge>
+                    </Tooltip>
+                    <Badge color="red" variant="light" size="sm">
+                      Negative -{" "}
+                      {Object.keys(post?.aspectAnalyses?.negative)?.length || 0}
+                    </Badge>
+                    <Badge color="gray" variant="light" size="sm">
+                      Neutral -{" "}
+                      {Object.keys(post?.aspectAnalyses?.neutral)?.length || 0}
+                    </Badge>
+                  </Stack>
+                </TableTd>
+                <TableTd>
+                  <Button size="xs">Something</Button>
+                </TableTd>
+              </TableTr>
             );
           })}
-        </Table.Tbody>
+        </TableTbody>
       </Table>
     </Box>
   );

@@ -28,20 +28,17 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
       );
     }
 
-    // Get posts for this integration
-    const integrationPosts = await postService.getUserIntegrationPosts({
+    const computedPosts = await postService.getComputedIntegrationList({
       userId: session.user.id,
-      integrationId: String(currentIntegration.id),
+      integrationId: currentIntegration.id,
     });
-
-    console.log("Integration posts:", integrationPosts);
 
     return (
       <Box p={16}>
         <Box className="mt-4">
           <ActionPanel providerId={currentIntegration.id} name={slug} />
         </Box>
-        <PostListTable data={integrationPosts} />
+        <PostListTable data={computedPosts} />
       </Box>
     );
   } catch (error) {

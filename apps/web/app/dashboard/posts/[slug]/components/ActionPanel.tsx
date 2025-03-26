@@ -1,11 +1,8 @@
 import React from "react";
 import { Group, Badge, Flex } from "@mantine/core";
-import RefreshButton from "./RefreshButton";
 import { TaskType } from "@repo/db";
 import FullSyncButton from "./FullSyncButton";
 import { addNewTask } from "@/slices/tasks/tasks.actions";
-// import AnalyzeButton from "./AnalyzeButton";
-// import FilterButton from "./FilterButton";
 
 interface ActionPanelProps {
   name: string;
@@ -14,10 +11,10 @@ interface ActionPanelProps {
 
 const ActionPanel = ({ name, providerId }: ActionPanelProps) => {
   return (
-    <Flex justify="space-between" align="center" mb={4}>
+    <Flex justify="space-between" align="center" mt={8} mb={16}>
       <Group>
-        <Badge color="blue" variant="light">
-          Connected
+        <Badge color="gray" variant="light">
+          Last sync: 2 hours ago
         </Badge>
       </Group>
 
@@ -39,7 +36,6 @@ const ActionPanel = ({ name, providerId }: ActionPanelProps) => {
             value={TaskType.FULL_SYNC}
           />
         </form>
-        <RefreshButton name={name} />
       </Group>
     </Flex>
   );

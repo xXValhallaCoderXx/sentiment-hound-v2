@@ -17,6 +17,7 @@ import { CommentRepository } from "./comments/comments.repository";
 
 export * from "./posts/post.interface";
 
+
 // Create singleton instances of repositories
 const queueRepository = new QueueRepository(prisma);
 const providerRepository = new ProviderRepository(prisma);

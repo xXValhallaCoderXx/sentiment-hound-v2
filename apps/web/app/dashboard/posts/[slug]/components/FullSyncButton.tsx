@@ -12,7 +12,6 @@ const FullSyncButton: FC = () => {
       loading={pending}
       type="submit"
       color="blue"
-      mt="md"
       radius="md"
     >
       Full Sync

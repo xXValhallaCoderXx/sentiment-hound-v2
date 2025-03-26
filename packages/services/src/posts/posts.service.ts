@@ -1,6 +1,8 @@
-import { Post, Prisma, prisma } from "@repo/db";
+import { Comment, Post, Prisma, prisma } from "@repo/db";
 import { PostRepository } from "./posts.repository";
 import { ICreatePost } from "./post.interface";
+import { PostWithComments, ProcessedPost } from "./post.interface";
+
 export class CorePostService {
   constructor(private repository: PostRepository) {}
 
@@ -46,6 +48,78 @@ export class CorePostService {
     });
   }
 
+  async getComputedIntegrationList({
+    userId,
+    integrationId,
+    args,
+  }: {
+    userId: string;
+    integrationId: number;
+    args?: Omit<Prisma.PostFindManyArgs, "where">;
+  }): Promise<ProcessedPost[]> {
+    const posts = await this.repository.findMany({
+      where: {
+        userId,
+        integrationId,
+        comments: {
+          some: {}, // This ensures only posts with comments are returned
+        },
+      },
+      include: {
+        comments: {
+          include: {
+            aspectAnalyses: true,
+          },
+        },
+      },
+      ...args,
+    });
+
+    return posts.map((post: any) => {
+      const sentimentCounts = post.comments.reduce(
+        (acc: any, comment: Comment) => {
+          if (comment.sentiment === "POSITIVE") acc.positive++;
+          else if (comment.sentiment === "NEGATIVE") acc.negative++;
+          else acc.neutral++;
+          return acc;
+        },
+        { positive: 0, neutral: 0, negative: 0 }
+      );
+
+      const totalComments = post.comments.length || 1;
+      const sentimentPercentages = {
+        positive: Math.round((sentimentCounts.positive / totalComments) * 100),
+        neutral: Math.round((sentimentCounts.neutral / totalComments) * 100),
+        negative: Math.round((sentimentCounts.negative / totalComments) * 100),
+      };
+
+      const aspectAnalyses = post.comments.reduce(
+        (acc: any, comment: any) => {
+          comment.aspectAnalyses.forEach((aspect: any) => {
+            const sentiment = aspect.sentiment.toLowerCase();
+            if (!acc[sentiment][aspect.aspect]) {
+              acc[sentiment][aspect.aspect] = 0;
+            }
+            acc[sentiment][aspect.aspect]++;
+          });
+          return acc;
+        },
+        {
+          positive: {} as Record<string, number>,
+          neutral: {} as Record<string, number>,
+          negative: {} as Record<string, number>,
+        }
+      );
+
+      return {
+        ...post,
+        sentimentCounts,
+        sentimentPercentages,
+        aspectAnalyses,
+      };
+    });
+  }
+
   async findUserIntegrationPosts({
     userId,
     integrationId,
@@ -54,7 +128,7 @@ export class CorePostService {
     userId: string;
     integrationId: number;
     args?: Omit<Prisma.PostFindManyArgs, "where">;
-  }) {
+  }): Promise<PostWithComments[]> {
     return this.repository.findMany({
       where: {
         userId,
@@ -64,10 +138,14 @@ export class CorePostService {
         },
       },
       include: {
-        comments: true,
+        comments: {
+          include: {
+            aspectAnalyses: true,
+          },
+        },
       },
       ...args,
-    });
+    }) as Promise<PostWithComments[]>;
   }
   async findByUserId(
     userId: string,
