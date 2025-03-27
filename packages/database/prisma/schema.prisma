@@ -6,12 +6,14 @@
 
 generator client {
   provider = "prisma-client-js"
+  output = "../generated/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 
 model User {
   id            String          @id @default(cuid())
@@ -118,7 +120,8 @@ model Comment {
   id              Int               @id @default(autoincrement())
   commentId       String
   content         String
-  sentiment       Float?
+  sentiment       String?
+  score           String?
   sentimentStatus SentimentStatus   @default(PENDING)
   postId          Int
   post            Post              @relation(fields: [postId], references: [id])
@@ -130,7 +133,8 @@ model Comment {
 model AspectAnalysis {
   id            Int           @id @default(autoincrement())
   aspect        String
-  sentiment     Float
+  sentiment     String
+  score         String?
   commentId     Int
   comment       Comment        @relation(fields: [commentId], references: [id], onDelete: Cascade)
   createdAt     DateTime       @default(now())
@@ -159,6 +163,7 @@ model Job {
   taskId        Int
   task          Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
   data          Json         // Data needed for the job, e.g., post IDs or integration details
+  queue         Queue?       // New relationship (one-to-one)
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
@@ -172,6 +177,27 @@ model Plan {
   updatedAt     DateTime @default(now())
 }
 
+model Queue {
+  id            Int         @id @default(autoincrement())
+  status        QueueStatus @default(NEW)
+  jobId         Int        @unique  // Added @unique here
+  job           Job        @relation(fields: [jobId], references: [id])
+  payload       Json
+  processingAt  DateTime?
+  isDead        Boolean    @default(false)
+  attempts      Int        @default(0)
+  maxAttempts   Int        @default(3)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+enum QueueStatus {
+  NEW
+  PROCESSING
+  DONE
+  FAILED
+}
+
 enum SentimentStatus {
   PENDING
   IN_PROGRESS
@@ -183,6 +209,7 @@ enum TaskType {
   FULL_SYNC
   PARTIAL_SYNC
   ANALYZE_COMMENTS
+  FETCH_CONTENT
   OTHER
 }
 

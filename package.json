@@ -1,25 +1,20 @@
 {
-  "name": "nextjs-nestjs-trpc",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "hello-world",
+  "private": true,
   "scripts": {
-    "dev": "pnpm run --parallel dev",
-    "build": "pnpm run --parallel build",
-    "db:push": "pnpm --filter database run db:push",
-    "db:generate": "pnpm --filter database run db:generate",
-    "db:wipe": "pnpm --filter database run db:wipe",
-    "db:seed": "pnpm --filter database run db:seed",
-    "db:reset": "pnpm run db:wipe && pnpm run db:push && pnpm run db:generate && pnpm run db:seed",
-    "build:server": "pnpm --filter server build",
-    "build:database": "pnpm --filter database build",
-    "build:services": "pnpm --filter services build",
-    "build:web": "pnpm --filter web build",
-    "start:server": "pnpm --filter server start:prod",
-    "start:web": "pnpm --filter web start",
-    "postinstall": "pnpm --filter database run db:generate"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:watch": "turbo dev services:watch",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "turbo": "^2.4.2",
+    "typescript": "5.7.3"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  }
 }
