@@ -20,10 +20,22 @@ import { JobStatus, TaskStatus, TaskType } from "@repo/db";
 // Create this service or use an existing one
 import { prisma } from "@repo/db";
 
-export default async function JobListTable({ userId }: { userId: string }) {
-  // Fetch tasks with their jobs
+interface JobListTableProps {
+  userId: string;
+  filters: { status?: TaskStatus; type?: TaskType };
+}
+
+export default async function JobListTable({
+  userId,
+  filters,
+}: JobListTableProps) {
+  // Fetch tasks with their jobs based on filters
   const tasks = await prisma.task.findMany({
-    where: { userId },
+    where: {
+      userId,
+      status: filters.status,
+      type: filters.type,
+    },
     include: {
       jobs: true,
       integration: {
@@ -115,26 +127,12 @@ export default async function JobListTable({ userId }: { userId: string }) {
                       </Text>
                       <Text size="xs">{progressPercentage}%</Text>
                     </Group>
-                    {/* <Progress
-                      value={[
-                        {
-                          value: (completedJobs / Math.max(totalJobs, 1)) * 100,
-                          color: "green",
-                        },
-                        {
-                          value: (failedJobs / Math.max(totalJobs, 1)) * 100,
-                          color: "red",
-                        },
-                      ]}
-                    /> */}
                   </Box>
                 </TableTd>
                 <TableTd>
-                  {/* {format(new Date(task.createdAt), "MMM d, yyyy HH:mm")} */}
                   {dayjs(new Date(task.createdAt)).format("DD/MM/YYYY")}
                 </TableTd>
                 <TableTd>
-                  {/* {format(new Date(task.updatedAt), "MMM d, yyyy HH:mm")} */}
                   {dayjs(new Date(task.updatedAt)).format("DD/MM/YYYY")}
                 </TableTd>
               </TableTr>
@@ -181,86 +179,4 @@ function formatEnumValue(value: string) {
     .replace(/_/g, " ")
     .toLowerCase()
     .replace(/\b\w/g, (l) => l.toUpperCase());
-}
-
-{
-  /* <AccordionPanel>
-<Card withBorder>
-  <Text fw={500} mb="md">
-    Jobs for Tasksss #{task.id}
-  </Text>
-
-  <Table>
-    <TableThead>
-      <TableTr>
-        <TableTh>Job ID</TableTh>
-        <TableTh>Type</TableTh>
-        <TableTh>Status</TableTh>
-        <TableTh>Created</TableTh>
-        <TableTh>Updated</TableTh>
-      </TableTr>
-    </TableThead>
-    <TableTbody>
-      {task.jobs.map((job) => (
-        <TableTr key={job.id}>
-          <TableTd>{job.id}</TableTd>
-          <TableTd>
-            <Badge>{formatEnumValue(job.type)}</Badge>
-          </TableTd>
-          <TableTd>
-            <Badge color={getStatusColor(job.status)}>
-              {formatEnumValue(job.status)}
-            </Badge>
-          </TableTd>
-          <TableTd>
-            {format(
-              new Date(job.createdAt),
-              "MMM d, yyyy HH:mm"
-            )} 
-          </TableTd>
-          <TableTd>
-             {format(
-              new Date(job.updatedAt),
-              "MMM d, yyyy HH:mm"
-            )} 
-          </TableTd>
-        </TableTr>
-      ))}
-    </TableTbody>
-  </Table>
-
-  {(task.errorMessage ||
-    task.jobs.some((job) => job.errorMessage)) && (
-    <Box mt="md">
-      <Text fw={500} color="red" mb="sm">
-        Error Details
-      </Text>
-
-      {task.errorMessage && (
-        <Card withBorder mb="sm">
-          <Text fw={500} size="sm">
-            Task Error
-          </Text>
-          <Text size="sm" color="dimmed">
-            {task.errorMessage}
-          </Text>
-        </Card>
-      )}
-
-      {task.jobs
-        .filter((job) => job.errorMessage)
-        .map((job) => (
-          <Card key={job.id} withBorder mb="sm">
-            <Text fw={500} size="sm">
-              Job #{job.id} Error
-            </Text>
-            <Text size="sm" color="dimmed">
-              {job.errorMessage}
-            </Text>
-          </Card>
-        ))}
-    </Box>
-  )}
-</Card>
-</AccordionPanel> */
 }

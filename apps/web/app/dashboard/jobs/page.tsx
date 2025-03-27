@@ -4,9 +4,15 @@ import { Box, Title, Text, Group, Button } from "@mantine/core";
 import { IconListCheck } from "@tabler/icons-react";
 import JobListTable from "./components/JobListTable";
 import JobListTableLoading from "./components/JobListTableLoading";
+import TaskFilter from "./components/TaskFilter";
 import { integrationsService } from "@repo/services";
+import { TaskStatus, TaskType } from "@repo/db";
 
-const JobsPage = async () => {
+const JobsPage = async ({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) => {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -16,6 +22,12 @@ const JobsPage = async () => {
       </Box>
     );
   }
+
+  const { status, type } = await searchParams;
+  const filters = {
+    status: status as TaskStatus | undefined,
+    type: type as TaskType | undefined,
+  };
 
   try {
     // Check if user has any integrations
@@ -63,8 +75,10 @@ const JobsPage = async () => {
           </div>
         </Group>
 
+        <TaskFilter />
+
         <Suspense fallback={<JobListTableLoading />}>
-          <JobListTable userId={session.user.id} />
+          <JobListTable userId={session.user.id} filters={filters} />
         </Suspense>
       </Box>
     );

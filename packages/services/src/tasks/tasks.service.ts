@@ -53,7 +53,6 @@ export class CoreTaskService {
       },
     });
 
-
     // Create appropriate jobs based on task type
     if (task.id) {
       switch (taskType) {
@@ -113,5 +112,12 @@ export class CoreTaskService {
   async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
     // Update task with new status using repository update method
     return this.repository.update(id, { status });
+  }
+
+  async getFilteredTasks(
+    userId: string,
+    filters: { status?: TaskStatus; type?: TaskType }
+  ): Promise<Task[]> {
+    return this.repository.findFilteredTasks(userId, filters);
   }
 }
