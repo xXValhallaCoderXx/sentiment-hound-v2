@@ -1,5 +1,20 @@
 import { Comment, SentimentStatus, Prisma, prisma } from "@repo/db";
 import { CommentRepository } from "./comments.repository";
+
+
+type CommentWithRelations = Comment & {
+  post: {
+    integration: {
+      provider: {
+        name: string;
+      };
+    };
+  };
+  aspectAnalyses: Array<{
+    aspect: string;
+    sentiment: string;
+  }>;
+};
 export class CoreCommentService {
   constructor(private repository: CommentRepository) {}
 
@@ -17,6 +32,70 @@ export class CoreCommentService {
       throw new Error("Comment not found");
     }
     return comment;
+  }
+
+  async getUserCommentsWithFilters({
+    userId,
+    providerId,
+    sentiment,
+    aspect,
+  }: {
+    userId: string;
+    providerId?: number;
+    sentiment?: string;
+    aspect?: string;
+  }): Promise<
+    Array<{
+      id: number;
+      content: string;
+      sentiment: string | null;
+      provider: string;
+      aspects: Array<{ aspect: string; sentiment: string }>;
+    }>
+  > {
+    const comments = await this.repository.findMany({
+      where: {
+        post: {
+          userId,
+          integration: providerId
+            ? {
+                providerId,
+              }
+            : undefined,
+        },
+        sentiment: sentiment ? sentiment : undefined,
+        aspectAnalyses: aspect
+          ? {
+              some: {
+                aspect,
+              },
+            }
+          : undefined,
+      },
+      include: {
+        post: {
+          include: {
+            integration: {
+              include: {
+                provider: true,
+              },
+            },
+          },
+        },
+        aspectAnalyses: true,
+      },
+    });
+
+    return (comments as CommentWithRelations[]).map((comment) => ({
+      id: comment.id,
+      content: comment.content,
+      sentiment: comment.sentiment,
+      provider: comment.post?.integration.provider.name,
+      aspects: comment.aspectAnalyses?.map((aspect: any) => ({
+        aspect: aspect.aspect,
+        sentiment: aspect.sentiment,
+      })),
+    }));
   }
 
   async updateCommentSentiment(

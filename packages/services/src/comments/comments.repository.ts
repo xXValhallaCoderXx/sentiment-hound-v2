@@ -46,14 +46,8 @@ export class CommentRepository {
     });
   }
 
-  async findMany(
-    where: Prisma.CommentWhereInput,
-    args?: Omit<Prisma.CommentFindManyArgs, "where">
-  ): Promise<Comment[]> {
-    return this.prisma.comment.findMany({
-      where,
-      ...args,
-    });
+  async findMany(args?: Prisma.CommentFindManyArgs): Promise<Comment[]> {
+    return this.prisma.comment.findMany(args || {});
   }
 
   async update(
