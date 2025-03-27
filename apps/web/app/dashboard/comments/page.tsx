@@ -3,11 +3,16 @@ import { Suspense } from "react";
 import { Title, Group, Box, Text } from "@mantine/core";
 import { IconListCheck } from "@tabler/icons-react";
 import { commentsService } from "@repo/services";
+import CommentFilters from "./components/CommentFilters";
 import CommentsTable from "./components/CommentsTable";
 
 import { integrationsService } from "@repo/services";
 
-const JobsPage = async () => {
+const CommentsPage = async ({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) => {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -19,13 +24,15 @@ const JobsPage = async () => {
   }
 
   try {
-    // Check if user has any integrations
-    const integrations = await integrationsService.getUserIntegrations(
-      session.user.id
-    );
+    // Extract filters from query parameters
+    const { providerId, sentiment, aspect } = searchParams;
 
+    // Fetch filtered comments
     const comments = await commentsService.getUserCommentsWithFilters({
       userId: session.user.id,
+      providerId: providerId ? parseInt(providerId) : undefined,
+      sentiment: sentiment || undefined,
+      aspect: aspect || undefined,
     });
 
     console.log("COMMENTS: ", comments);
@@ -40,6 +47,7 @@ const JobsPage = async () => {
             </Text>
           </div>
         </Group>
+        <CommentFilters />
         <CommentsTable data={comments} />
       </Box>
     );
@@ -53,4 +61,4 @@ const JobsPage = async () => {
   }
 };
 
-export default JobsPage;
+export default CommentsPage;
