@@ -1,12 +1,9 @@
 import { auth } from "@/lib/next-auth.lib";
-import { Suspense } from "react";
 import { Title, Group, Box, Text } from "@mantine/core";
-import { IconListCheck } from "@tabler/icons-react";
 import { commentsService } from "@repo/services";
 import CommentFilters from "./components/CommentFilters";
 import CommentsTable from "./components/CommentsTable";
-
-import { integrationsService } from "@repo/services";
+import CommentDrawer from "./components/CommentDrawer";
 
 const CommentsPage = async ({
   searchParams,
@@ -14,6 +11,11 @@ const CommentsPage = async ({
   searchParams: Record<string, string>;
 }) => {
   const session = await auth();
+  const { providerId, sentiment, aspect, commentId } = await searchParams;
+
+  const selectedComment = commentId
+    ? await commentsService.getComment(parseInt(commentId))
+    : null;
 
   if (!session?.user?.id) {
     return (
@@ -24,18 +26,12 @@ const CommentsPage = async ({
   }
 
   try {
-    // Extract filters from query parameters
-    const { providerId, sentiment, aspect } = searchParams;
-
-    // Fetch filtered comments
     const comments = await commentsService.getUserCommentsWithFilters({
       userId: session.user.id,
       providerId: providerId ? parseInt(providerId) : undefined,
       sentiment: sentiment || undefined,
       aspect: aspect || undefined,
     });
-
-    console.log("COMMENTS: ", comments);
 
     return (
       <Box p="xl">
@@ -49,6 +45,10 @@ const CommentsPage = async ({
         </Group>
         <CommentFilters />
         <CommentsTable data={comments} />
+        <CommentDrawer
+          opened={!!selectedComment}
+          selectedComment={selectedComment}
+        />
       </Box>
     );
   } catch (error) {

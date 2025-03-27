@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import {
   Box,
   Table,
@@ -48,7 +49,11 @@ const CommentsTable: React.FC<CommentsTableProps> = ({ data }) => {
           {data.map((comment) => (
             <TableTr key={comment.id}>
               <TableTd>
-                <Text size="sm">{comment.content}</Text>
+                <Link href={`?commentId=${comment.id}`}>
+                  <Text size="sm" style={{ cursor: "pointer" }}>
+                    {comment.content}
+                  </Text>
+                </Link>
               </TableTd>
               <TableTd>
                 {comment.sentiment ? (
