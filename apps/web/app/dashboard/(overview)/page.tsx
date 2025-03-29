@@ -30,7 +30,9 @@ const DashboardPage = async ({
           <Flex w="70%">
             <RecentMentions />
           </Flex>
-          <Notifications />
+          <Flex w="30%">
+            <Notifications />
+          </Flex>
         </Flex>
       </Stack>
     </Box>
