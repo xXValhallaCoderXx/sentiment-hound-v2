@@ -21,7 +21,7 @@ const DashboardPage = async ({
   // const posts = await postService.getPosts({ page: 1, limit: 10 });
 
   return (
-    <Box bg="red" h="100%" p={16}>
+    <Box>
       <Stack gap={16}>
         <StatsCards />
         <TrendCards />
