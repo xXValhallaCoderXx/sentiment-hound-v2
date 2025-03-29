@@ -1,4 +1,4 @@
-export { StatsCards } from "./StatsCards";
+export { default as StatsCards } from "./StatsCards";
 export { default as ListSearch } from "./Search";
 export { default as TrendCards } from "./TrendCharts";
 export { default as AspectSection } from "./AspectSection";

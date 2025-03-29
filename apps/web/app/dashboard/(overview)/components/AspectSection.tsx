@@ -1,5 +1,5 @@
 import { Paper, Flex, Title } from "@mantine/core";
-import AspectDashboardCard from "@/components/molecules/AspectDasboardCard";
+import DashboardSentimentCard from "@/components/molecules/DashboardSentimentCard";
 
 const aspectData = [
   {
@@ -33,7 +33,7 @@ const AspectSection = () => {
 
       <Flex w="100%" gap={16}>
         {aspectData.map((aspect, index) => (
-          <AspectDashboardCard
+          <DashboardSentimentCard
             key={index}
             title={aspect.title}
             description={aspect.description}
