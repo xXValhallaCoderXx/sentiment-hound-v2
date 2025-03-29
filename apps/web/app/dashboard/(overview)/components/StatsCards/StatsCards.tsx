@@ -6,10 +6,11 @@ const data = [
   { title: "Revenue", value: "$13,456", diff: 34 },
   { title: "Profit", value: "$4,145", diff: -13 },
   { title: "Coupons usage", value: "745", diff: 18 },
+  { title: "Coupons ussssage", value: "745", diff: 18 },
 ];
 
 const StatsCards = () => {
-  const stats = data.map((stat) => {
+  const stats = data.map((stat, index) => {
     const DiffIcon = stat.diff > 0 ? IconIceCream : IconIceCream;
 
     return (
@@ -56,7 +57,7 @@ const StatsCards = () => {
 
   return (
     <div className={classes.root}>
-      <SimpleGrid cols={{ base: 1, sm: 3 }}>{stats}</SimpleGrid>
+      <SimpleGrid cols={{ base: 1, sm: 4 }}>{stats}</SimpleGrid>
     </div>
   );
 };

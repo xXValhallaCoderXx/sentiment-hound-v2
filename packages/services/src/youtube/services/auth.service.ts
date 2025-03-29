@@ -46,7 +46,6 @@ export class YoutubeAuthService {
     console.log("GOOGLE SECRET: ", process.env.AUTH_GOOGLE_SECRET);
     console.log("REFRESH TOKEN: ", refreshToken);
 
-
     const response = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: {
@@ -71,5 +70,23 @@ export class YoutubeAuthService {
       expiresAt,
       expiresIn: expires_in,
     };
+  }
+
+  async revokeToken(refreshToken: string) {
+    const response = await fetch(
+      `https://oauth2.googleapis.com/revoke?token=${refreshToken}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to revoke token");
+    }
+
+    return true;
   }
 }

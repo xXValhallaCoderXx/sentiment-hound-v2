@@ -78,6 +78,7 @@ model Integration {
   refreshToken String
   refreshTokenExpiresAt DateTime
   userId       String
+  isActive     Boolean    @default(false)
   user         User     @relation(fields: [userId], references: [id])
   providerId   Int
   provider     Provider @relation(fields: [providerId], references: [id])

@@ -1,6 +1,6 @@
 import { integrationsService, postService } from "@repo/services";
 import { auth } from "@/lib/next-auth.lib";
-import { Box } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import PostListTable from "./components/PostListTable";
 import ActionPanel from "./components/ActionPanel";
 
@@ -38,7 +38,11 @@ const PostListPage = async ({ params }: { params: { slug: string } }) => {
         <Box className="mt-4">
           <ActionPanel providerId={currentIntegration.id} name={slug} />
         </Box>
-        <PostListTable data={computedPosts} />
+        {computedPosts?.length > 0 ? (
+          <PostListTable data={computedPosts} />
+        ) : (
+          <Flex justify="center">No posts found for this provider.</Flex>
+        )}
       </Box>
     );
   } catch (error) {

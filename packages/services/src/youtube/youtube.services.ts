@@ -44,6 +44,10 @@ export class YoutubeService {
     return this.authService.refreshAccessToken(refreshToken);
   }
 
+  async revokeRefreshToken(refreshToken: string): Promise<boolean> {
+    return this.authService.revokeToken(refreshToken);
+  }
+
   // async fetchYoutubePosts(userId: string, retry = true): Promise<IYouTubePost[]> {
   //   return this.contentService.fetchYoutubePosts(userId, retry);
   // }
