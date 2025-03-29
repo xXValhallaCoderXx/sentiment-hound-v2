@@ -18,6 +18,8 @@ export interface IDashboardSentimentCardProps {
   };
 }
 
+const ICON_SIZE = 24;
+
 const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
   title = "No Data Found",
   description,
@@ -31,7 +33,10 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
       // If custom icon is provided, use it
       const CustomIcon = icon;
       return (
-        <CustomIcon size={16} style={{ marginLeft: "auto", marginTop: 4 }} />
+        <CustomIcon
+          size={ICON_SIZE}
+          style={{ marginLeft: "auto", marginTop: 4 }}
+        />
       );
     }
 
@@ -44,7 +49,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
       case "positive":
         return (
           <IconArrowNarrowUp
-            size={16}
+            size={ICON_SIZE}
             color="green"
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
@@ -52,7 +57,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
       case "negative":
         return (
           <IconArrowNarrowDown
-            size={16}
+            size={ICON_SIZE}
             color="red"
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
@@ -61,7 +66,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
       default:
         return (
           <IconLine
-            size={16}
+            size={ICON_SIZE}
             color="gray"
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
@@ -77,7 +82,9 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         </Title>
         {getSentimentIcon()}
       </Flex>
-      <Text>{description}</Text>
+      <Title order={2} fw={700}>
+        {description}
+      </Title>
     </Card>
   );
 };

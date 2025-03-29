@@ -10,7 +10,7 @@ const TrendCards = () => {
             Sentiment Trend
           </Title>
           <LineChart
-            h={300}
+            h={250}
             data={Linedata}
             dataKey="date"
             series={[
@@ -27,7 +27,7 @@ const TrendCards = () => {
           <Title order={4} mb={8}>
             Sentiment Overview
           </Title>
-          <PieChart h={300} data={donutData} />
+          <PieChart h={250} data={donutData} />
         </Card>
       </Box>
     </Flex>

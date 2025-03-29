@@ -2,24 +2,41 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Box, Button, Text } from "@mantine/core";
-import { IconIceCream } from "@tabler/icons-react";
+import {
+  IconIceCream,
+  IconLayoutDashboard,
+  IconListCheck,
+  IconChartBarPopular,
+  IconArticle,
+  IconMessageCircle,
+  IconPlugConnected,
+  IconUserScan,
+} from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 import classes from "./SideDrawer.module.css";
 
 const sidebarLinks = [
-  { href: "/dashboard", label: "Dashboard", icon: IconIceCream },
+  { href: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   {
     group: "Management",
     items: [
-      { href: "/dashboard/jobs", label: "Jobs", icon: IconIceCream },
-      { href: "/dashboard/analyse", label: "Analyse", icon: IconIceCream },
+      { href: "/dashboard/jobs", label: "Jobs", icon: IconListCheck },
+      {
+        href: "/dashboard/analyse",
+        label: "Analyse",
+        icon: IconChartBarPopular,
+      },
     ],
   },
   {
     group: "Content",
     items: [
-      { href: "/dashboard/posts", label: "Posts", icon: IconIceCream },
-      { href: "/dashboard/comments", label: "Comments", icon: IconIceCream },
+      { href: "/dashboard/posts", label: "Posts", icon: IconArticle },
+      {
+        href: "/dashboard/comments",
+        label: "Comments",
+        icon: IconMessageCircle,
+      },
     ],
   },
   {
@@ -28,9 +45,9 @@ const sidebarLinks = [
       {
         href: "/dashboard/integrations",
         label: "Integrations",
-        icon: IconIceCream,
+        icon: IconPlugConnected,
       },
-      { href: "/dashboard/profile", label: "Profile", icon: IconIceCream },
+      { href: "/dashboard/profile", label: "Profile", icon: IconUserScan },
     ],
   },
 ];
