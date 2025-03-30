@@ -1,12 +1,23 @@
-import { Paper } from "@mantine/core";
+import DashboardNotificationCard from "@/components/molecules/DashboardNotificationCard";
+import { Paper, Stack, Title } from "@mantine/core";
 
 const Notifications = () => {
   return (
     <Paper p={16} w="100%" withBorder>
-      <h2 className="text-2xl font-bold">Notifications</h2>
-      <div className="flex flex-col gap-2">
-        <p className="text-gray-500">No notifications yet.</p>
-      </div>
+      <Stack>
+        <Title>Notifications</Title>
+        <DashboardNotificationCard
+          title="New comment on your post"
+          message="John Doe commented on your post: 'Great article!'"
+          buttonLabel="View"
+        />
+        <DashboardNotificationCard
+          title="New comment on your post"
+          message="John Doe commented on your post: 'Great article!'"
+          buttonLabel="View"
+          type="success"
+        />
+      </Stack>
     </Paper>
   );
 };
