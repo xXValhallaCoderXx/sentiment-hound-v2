@@ -14,7 +14,11 @@ const JobsPage = async ({
   searchParams: Record<string, string>;
 }) => {
   const session = await auth();
-  const { status, type } = await searchParams;
+  const { status, type, page = "1", pageSize = "10" } = searchParams;
+
+  // Convert page and pageSize to numbers
+  const currentPage = parseInt(page, 10);
+  const itemsPerPage = parseInt(pageSize, 10);
 
   if (!session?.user?.id) {
     return (
@@ -23,7 +27,6 @@ const JobsPage = async ({
       </Box>
     );
   }
-
 
   try {
     const integrations = await integrationsService.getUserIntegrations(
@@ -78,6 +81,10 @@ const JobsPage = async ({
             filters={{
               status: status as TaskStatus | undefined,
               type: type as TaskType | undefined,
+            }}
+            pagination={{
+              page: currentPage,
+              pageSize: itemsPerPage,
             }}
           />
         </Suspense>

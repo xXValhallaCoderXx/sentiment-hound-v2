@@ -11,7 +11,18 @@ const CommentsPage = async ({
   searchParams: Record<string, string>;
 }) => {
   const session = await auth();
-  const { providerId, sentiment, aspect, commentId } = await searchParams;
+  const {
+    providerId,
+    sentiment,
+    aspect,
+    commentId,
+    page = "1",
+    pageSize = "10",
+  } = searchParams;
+
+  // Convert pagination params to numbers
+  const currentPage = parseInt(page, 10);
+  const itemsPerPage = parseInt(pageSize, 10);
 
   const selectedComment = commentId
     ? await commentsService.getComment(parseInt(commentId))
@@ -26,11 +37,13 @@ const CommentsPage = async ({
   }
 
   try {
-    const comments = await commentsService.getUserCommentsWithFilters({
+    const paginatedComments = await commentsService.getUserCommentsWithFilters({
       userId: session.user.id,
       providerId: providerId ? parseInt(providerId) : undefined,
       sentiment: sentiment || undefined,
       aspect: aspect || undefined,
+      page: currentPage,
+      pageSize: itemsPerPage,
     });
 
     return (
@@ -44,7 +57,20 @@ const CommentsPage = async ({
           </div>
         </Group>
         <CommentFilters />
-        <CommentsTable data={comments} />
+        <CommentsTable
+          data={paginatedComments.data}
+          pagination={{
+            page: paginatedComments.page,
+            pageSize: paginatedComments.pageSize,
+            total: paginatedComments.total,
+            totalPages: paginatedComments.totalPages,
+          }}
+          filters={{
+            providerId,
+            sentiment,
+            aspect,
+          }}
+        />
         <CommentDrawer
           opened={!!selectedComment}
           selectedComment={selectedComment}
@@ -52,10 +78,10 @@ const CommentsPage = async ({
       </Box>
     );
   } catch (error) {
-    console.error("Error loading jobs page:", error);
+    console.error("Error loading comments page:", error);
     return (
       <Box p="xl" ta="center">
-        <Text color="red">An error occurred while loading jobs data</Text>
+        <Text color="red">An error occurred while loading comments data</Text>
       </Box>
     );
   }

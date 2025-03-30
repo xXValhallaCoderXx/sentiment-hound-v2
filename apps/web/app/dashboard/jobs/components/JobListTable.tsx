@@ -8,7 +8,6 @@ import {
   TableTbody,
   Text,
   Badge,
-
   Group,
   Card,
   Tooltip,
@@ -16,6 +15,7 @@ import {
 import { IconAlertCircle } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { JobStatus, TaskStatus, TaskType } from "@repo/db";
+import PaginationControls from "./PaginationControls";
 
 // Create this service or use an existing one
 import { prisma } from "@repo/db";
@@ -23,31 +23,56 @@ import { prisma } from "@repo/db";
 interface JobListTableProps {
   userId: string;
   filters: { status?: TaskStatus; type?: TaskType };
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
 }
 
 export default async function JobListTable({
   userId,
   filters,
+  pagination,
 }: JobListTableProps) {
-  // Fetch tasks with their jobs based on filters
-  const tasks = await prisma.task.findMany({
-    where: {
-      userId,
-      status: filters.status,
-      type: filters.type,
-    },
-    include: {
-      jobs: true,
-      integration: {
-        include: {
-          provider: true,
+  const { page, pageSize } = pagination;
+
+  // Calculate pagination values
+  const skip = (page - 1) * pageSize;
+
+  // Fetch tasks with pagination
+  const [tasks, totalCount] = await Promise.all([
+    prisma.task.findMany({
+      where: {
+        userId,
+        status: filters.status,
+        type: filters.type,
+      },
+      include: {
+        jobs: true,
+        integration: {
+          include: {
+            provider: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take: pageSize,
+    }),
+
+    prisma.task.count({
+      where: {
+        userId,
+        status: filters.status,
+        type: filters.type,
+      },
+    }),
+  ]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   if (!tasks || tasks.length === 0) {
     return (
@@ -140,6 +165,18 @@ export default async function JobListTable({
           })}
         </TableTbody>
       </Table>
+
+      {/* Pagination Controls */}
+      <PaginationControls
+        currentPage={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        totalItems={totalCount}
+        searchParams={{
+          status: filters.status,
+          type: filters.type,
+        }}
+      />
     </Box>
   );
 }

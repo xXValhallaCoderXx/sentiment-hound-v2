@@ -1,7 +1,7 @@
 import React from "react";
 import { Group, Badge, Flex } from "@mantine/core";
 import { TaskType } from "@repo/db";
-import FullSyncButton from "./FullSyncButton";
+// import FullSyncButton from "./FullSyncButton";
 import { addNewTask } from "@/slices/tasks/tasks.actions";
 
 interface ActionPanelProps {
@@ -20,7 +20,7 @@ const ActionPanel = ({ name, providerId }: ActionPanelProps) => {
 
       <Group>
         <form action={addNewTask}>
-          <FullSyncButton />
+          {/* <FullSyncButton /> */}
           <input
             type="text"
             hidden
