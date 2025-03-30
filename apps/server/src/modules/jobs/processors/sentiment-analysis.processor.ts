@@ -39,7 +39,20 @@ export class SentimentAnalysisProcessor {
     });
 
     const comments = posts?.map((post) => post?.comments)?.flat();
-    const preparedComments = comments?.map((comment) => ({
+
+    // Filter out comments that already have a sentimentStatus of COMPLETED
+    const pendingComments = comments?.filter(
+      (comment) => comment?.sentimentStatus !== 'COMPLETED',
+    );
+
+    // If there are no pending comments, mark the job as completed and return
+    if (!pendingComments?.length) {
+      this.logger.log(`No pending comments to analyze for job id=${job.id}`);
+      await jobService.markJobAsCompleted(job.id);
+      return;
+    }
+
+    const preparedComments = pendingComments?.map((comment) => ({
       // @ts-ignore
       id: String(comment.id),
       // @ts-ignore

@@ -55,6 +55,10 @@ export class YoutubeService {
   async fetchAllYoutubePosts(userId: string) {
     return this.contentService.fetchAllYoutubePosts(userId);
   }
+
+  async fetchSingleYoutubeVideo(userId: string, videoUrl: string) {
+    return this.contentService.fetchSingleYoutubeVideo(userId, videoUrl);
+  }
 }
 
 export const youtubeService = new YoutubeService();
