@@ -33,29 +33,47 @@ export class CoreTaskService {
   }
 
   async createTask({
-    providerId,
+    integrationId,
     taskType,
     userId,
+    extraData,
   }: {
     userId: string;
-    providerId?: string | FormDataEntryValue;
+    integrationId?: number;
     taskType?: TaskType;
+    extraData?: any;
   }): Promise<Task> {
-    const integrationId = Number(providerId) || 0;
-
+    console.log("TAAASK TAAASK TAAASK: ", taskType);
     // Create the task first
     const task = await this.repository.create({
       data: {
         type: taskType || TaskType.OTHER,
         integrationId,
         userId,
+
         status: TaskStatus.PENDING,
       },
     });
-
+    console.log("TASK CREATED: ", task);
     // Create appropriate jobs based on task type
     if (task.id) {
       switch (taskType) {
+        case TaskType.ANALYZE_POST:
+          console.log("Task Type: ANALYZE_POST");
+          // Full sync needs both fetching and analyzing
+          await jobService.createJob({
+            taskId: task.id,
+            type: JobType.FETCH_INDIVIDUAL_POST_CONTNENT,
+            data: { integrationId, extraData },
+          });
+          await jobService.createJob({
+            taskId: task.id,
+            type: JobType.ANALYZE_CONTENT_SENTIMENT,
+            data: { integrationId },
+          });
+
+          break;
+
         case TaskType.FULL_SYNC:
           console.log("Task Type: FULL_SYNC");
           // Full sync needs both fetching and analyzing

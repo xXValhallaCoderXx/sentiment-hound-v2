@@ -78,6 +78,7 @@ model Integration {
   refreshToken String
   refreshTokenExpiresAt DateTime
   userId       String
+  isActive     Boolean    @default(false)
   user         User     @relation(fields: [userId], references: [id])
   providerId   Int
   provider     Provider @relation(fields: [providerId], references: [id])
@@ -208,6 +209,7 @@ enum SentimentStatus {
 enum TaskType {
   FULL_SYNC
   PARTIAL_SYNC
+  ANALYZE_POST
   ANALYZE_COMMENTS
   FETCH_CONTENT
   OTHER
@@ -229,5 +231,6 @@ enum JobStatus {
 
 enum JobType {
   FETCH_CONTENT
+  FETCH_INDIVIDUAL_POST_CONTNENT
   ANALYZE_CONTENT_SENTIMENT
 }

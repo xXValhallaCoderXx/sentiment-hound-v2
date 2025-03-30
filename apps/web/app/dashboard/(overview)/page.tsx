@@ -1,4 +1,11 @@
-import { StatsCards, ListSearch } from "./components";
+import { Stack, Flex, Box } from "@mantine/core";
+import {
+  StatsCards,
+  RecentMentions,
+  TrendCards,
+  Notifications,
+  AspectSection,
+} from "./components";
 // import { postService } from "services";
 
 const DashboardPage = async ({
@@ -14,13 +21,21 @@ const DashboardPage = async ({
   // const posts = await postService.getPosts({ page: 1, limit: 10 });
 
   return (
-    <div className="h-full px-4 py-4">
-      <StatsCards />
-      ssssss
-      <div className="mt-4">
-        <ListSearch placeholder="Search me" />
-      </div>
-    </div>
+    <Box>
+      <Stack gap={16}>
+        <StatsCards />
+        <TrendCards />
+        <AspectSection />
+        <Flex gap={16}>
+          <Flex w="70%">
+            <RecentMentions />
+          </Flex>
+          <Flex w="30%">
+            <Notifications />
+          </Flex>
+        </Flex>
+      </Stack>
+    </Box>
   );
 };
 

@@ -14,6 +14,7 @@ const JobsPage = async ({
   searchParams: Record<string, string>;
 }) => {
   const session = await auth();
+  const { status, type } = await searchParams;
 
   if (!session?.user?.id) {
     return (
@@ -23,14 +24,8 @@ const JobsPage = async ({
     );
   }
 
-  const { status, type } = await searchParams;
-  const filters = {
-    status: status as TaskStatus | undefined,
-    type: type as TaskType | undefined,
-  };
 
   try {
-    // Check if user has any integrations
     const integrations = await integrationsService.getUserIntegrations(
       session.user.id
     );
@@ -78,7 +73,13 @@ const JobsPage = async ({
         <TaskFilter />
 
         <Suspense fallback={<JobListTableLoading />}>
-          <JobListTable userId={session.user.id} filters={filters} />
+          <JobListTable
+            userId={session.user.id}
+            filters={{
+              status: status as TaskStatus | undefined,
+              type: type as TaskType | undefined,
+            }}
+          />
         </Suspense>
       </Box>
     );

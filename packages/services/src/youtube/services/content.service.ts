@@ -244,5 +244,128 @@ export class YoutubeContentService {
       return [];
     }
   }
+
+  async fetchSingleYoutubeVideo(
+    userId: string,
+    videoUrl: string
+  ): Promise<IFetchAllYoutubePostsResponse | null> {
+    const youtubeIntegration =
+      await integrationsService.getUserIntegrationByName(userId, "youtube");
+
+    if (!youtubeIntegration) {
+      throw new Error("YouTube integration not found for user");
+    }
+
+    // Extract video ID from URL
+    const videoId = this.extractVideoIdFromUrl(videoUrl);
+    if (!videoId) {
+      throw new Error("Invalid YouTube video URL");
+    }
+
+    // Check token and refresh if needed
+    const accessTokenExpiryDate = new Date(
+      youtubeIntegration.refreshTokenExpiresAt
+    );
+    const currentTime = new Date();
+    let currentAccessToken = youtubeIntegration.accessToken;
+
+    if (accessTokenExpiryDate < currentTime) {
+      console.log("ACCESS TOKEN EXPIRED");
+      const refreshToken = await youtubeService.refreshAccessToken(
+        youtubeIntegration?.refreshToken
+      );
+      console.log("NEW TOKEN: ", refreshToken);
+
+      await integrationsService.updateIntegrationAuthCredentials({
+        userId,
+        providerId: youtubeIntegration.providerId,
+        accessToken: refreshToken.accessToken,
+        refreshToken: refreshToken.refreshToken,
+        accessTokenExpiry: refreshToken.expiresAt,
+      });
+
+      currentAccessToken = refreshToken.accessToken;
+      console.log("REFRESH DONE");
+    }
+
+    const headers = {
+      Authorization: `Bearer ${currentAccessToken}`,
+    };
+
+    // Get video details
+    try {
+      // Fetch video data
+      const videoResponse = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}`,
+        { headers }
+      );
+
+      if (!videoResponse.ok) {
+        throw new Error(
+          `Failed to fetch video data: ${videoResponse.statusText}`
+        );
+      }
+
+      const videoData = await videoResponse.json();
+
+      if (!videoData.items || videoData.items.length === 0) {
+        throw new Error("Video not found");
+      }
+
+      const videoItem = videoData.items[0];
+      const snippet = videoItem.snippet;
+      const statistics = videoItem.statistics;
+
+      // Create video object
+      const video = {
+        id: videoId,
+        title: snippet.title,
+        description: snippet.description,
+        publishedAt: snippet.publishedAt,
+        thumbnail: snippet.thumbnails.default.url,
+        statistics: statistics,
+        comments: [], // Will be populated next
+      };
+
+      // Fetch comments for the video
+      console.log(`Fetching comments for video ${videoId}...`);
+      const comments = await this.fetchVideoComments(videoId, headers);
+      console.log(`Fetched ${comments.length} comments for video ${videoId}`);
+
+      // Add comments to the video object
+      // @ts-ignore
+      video.comments = comments;
+
+      return video;
+    } catch (error) {
+      console.error(`Error fetching YouTube video ${videoId}:`, error);
+      return null;
+    }
+  }
+
+  private extractVideoIdFromUrl(url: string): string | null | undefined {
+    // Handle different URL formats
+    let videoId = null;
+
+    // Standard YouTube URL: https://www.youtube.com/watch?v=VIDEO_ID
+    const standardMatch = url.match(/youtube\.com\/watch\?v=([^&]+)/);
+    if (standardMatch) {
+      videoId = standardMatch[1];
+    }
+
+    // Short URL: https://youtu.be/VIDEO_ID
+    const shortMatch = url.match(/youtu\.be\/([^?&]+)/);
+    if (shortMatch) {
+      videoId = shortMatch[1];
+    }
+
+    // Embed URL: https://www.youtube.com/embed/VIDEO_ID
+    const embedMatch = url.match(/youtube\.com\/embed\/([^?&]+)/);
+    if (embedMatch) {
+      videoId = embedMatch[1];
+    }
+
+    return videoId;
+  }
 }
 

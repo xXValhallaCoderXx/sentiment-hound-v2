@@ -3,7 +3,11 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/next-auth.lib";
 
 import { Integration } from "@repo/db";
-import { integrationsService, providerService } from "@repo/services";
+import {
+  integrationsService,
+  providerService,
+  youtubeService,
+} from "@repo/services";
 
 interface ErrorResponse {
   error: string;
@@ -89,19 +93,7 @@ export async function revokeIntegration(formData: FormData) {
 
   // Handle YouTube token revocation
   if (provider && provider.name === "youtube") {
-    const response = await fetch(
-      `https://oauth2.googleapis.com/revoke?token=${integration.accessToken}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-    console.log("REVOKE TOKEN: ", response);
-    if (!response.ok) {
-      console.error("Failed to revoke Google token");
-    }
+    await youtubeService.revokeRefreshToken(integration.refreshToken);
   }
 
   // // Delete the integration from our database

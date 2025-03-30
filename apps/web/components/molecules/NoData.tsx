@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Link from "next/link";
-import { Box, Title, Text, Button } from "@mantine/core";
+import { IconMoodEmpty } from "@tabler/icons-react";
+import { Flex, Title, Text, Button } from "@mantine/core";
 
 interface INoDataProps {
   title?: string;
@@ -15,20 +16,20 @@ interface INoDataProps {
 const NoData: FC<INoDataProps> = ({
   title = "No Data Found",
   description,
-  icon,
+  icon = IconMoodEmpty,
   redirectCta,
 }) => {
   return (
-    <Box className=" flex flex-col items-center justify-center gap-2">
-      {icon}
+    <Flex direction="column" align="center" justify="center" gap={8}>
+      <IconMoodEmpty size={64} color="gray" opacity={0.3} />
       <Title>{title}</Title>
-      <Text>{description}</Text>
+      <Text mt={-4}>{description}</Text>
       {redirectCta && (
         <Link href={redirectCta.href}>
           <Button>{redirectCta.label}</Button>
         </Link>
       )}
-    </Box>
+    </Flex>
   );
 };
 

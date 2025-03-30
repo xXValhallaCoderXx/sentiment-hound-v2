@@ -30,7 +30,7 @@ const DashboardLayout = ({ children }: any) => {
       <AppShellNavbar p="md">
         <SideDrawerNavigation />
       </AppShellNavbar>
-      <AppShellMain>
+      <AppShellMain bg="#F9FAFB">
         <Notifications />
         {children}
       </AppShellMain>

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+
 import "./globals.css";
 import "@mantine/core/styles.css";
+import "@mantine/charts/styles.css";
 
 import {
   ColorSchemeScript,
@@ -9,14 +10,6 @@ import {
   mantineHtmlProps,
 } from "@mantine/core";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
