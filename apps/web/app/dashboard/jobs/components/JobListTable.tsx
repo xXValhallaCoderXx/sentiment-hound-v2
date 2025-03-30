@@ -8,7 +8,7 @@ import {
   TableTbody,
   Text,
   Badge,
-  Progress,
+
   Group,
   Card,
   Tooltip,

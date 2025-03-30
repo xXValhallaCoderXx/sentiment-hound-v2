@@ -20,21 +20,26 @@ export async function addNewTask(data: FormData): Promise<void> {
   try {
     const session = await auth();
     const userId = session?.user?.id as string;
-    const providerId = data.get("providerId") ?? "";
+    const integrationId = data.get("integrationId") as string;
     const taskType = data.get("taskType") as TaskType;
 
-    // For FULL_SYNC tasks on YouTube, extract additional data (e.g., youtubeChannelId)
-    // let extraData = {};
-    // if (taskType === TaskType.FULL_SYNC) {
-    //   extraData = {
-    //     youtubeChannelId: data.get("youtubeChannelId") as string,
-    //   };
-    // }
+    // Parse the extraData JSON that contains the URL
+    let extraData = {};
+    const extraDataString = data.get("extraData") as string;
+
+    if (extraDataString) {
+      try {
+        extraData = JSON.parse(extraDataString);
+      } catch (e) {
+        console.error("Error parsing extraData:", e);
+      }
+    }
 
     await taskService.createTask({
-      providerId,
+      integrationId: Number(integrationId),
       taskType,
       userId,
+      extraData,
     });
   } catch (error) {
     throw new Error(

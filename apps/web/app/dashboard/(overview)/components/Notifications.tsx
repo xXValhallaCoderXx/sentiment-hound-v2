@@ -5,7 +5,7 @@ const Notifications = () => {
   return (
     <Paper p={16} w="100%" withBorder>
       <Stack>
-        <Title>Notifications</Title>
+        <Title order={4}>Notifications</Title>
         <DashboardNotificationCard
           title="New comment on your post"
           message="John Doe commented on your post: 'Great article!'"

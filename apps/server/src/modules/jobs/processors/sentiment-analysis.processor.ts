@@ -5,7 +5,6 @@ import {
   jobService,
   postService,
   integrationsService,
-  providerService,
   commentsService,
 } from '@repo/services';
 
@@ -38,8 +37,6 @@ export class SentimentAnalysisProcessor {
       userId: integration.userId,
       integrationId: String(integration.id),
     });
-
-
 
     const comments = posts?.map((post) => post?.comments)?.flat();
     const preparedComments = comments?.map((comment) => ({

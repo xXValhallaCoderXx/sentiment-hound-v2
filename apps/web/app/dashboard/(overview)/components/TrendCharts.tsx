@@ -12,11 +12,12 @@ const TrendCards = () => {
           <LineChart
             h={250}
             data={Linedata}
+            withLegend
             dataKey="date"
             series={[
-              { name: "Apples", color: "indigo.6" },
-              { name: "Oranges", color: "blue.6" },
-              { name: "Tomatoes", color: "teal.6" },
+              { name: "Positive", color: "indigo.6" },
+              { name: "Negative", color: "blue.6" },
+              { name: "Neutral", color: "teal.6" },
             ]}
             curveType="linear"
           />
@@ -27,7 +28,16 @@ const TrendCards = () => {
           <Title order={4} mb={8}>
             Sentiment Overview
           </Title>
-          <PieChart h={250} data={donutData} />
+          <Flex justify="center">
+            <PieChart
+              withLabels
+              // tooltipDataSource="segment"
+              labelsType="percent"
+              withTooltip
+              h={250}
+              data={donutData}
+            />
+          </Flex>
         </Card>
       </Box>
     </Flex>
@@ -46,32 +56,32 @@ export const donutData = [
 const Linedata = [
   {
     date: "Mar 22",
-    Apples: 2890,
-    Oranges: 2338,
-    Tomatoes: 2452,
+    Positive: 2890,
+    Negative: 2338,
+    Neutral: 2452,
   },
   {
     date: "Mar 23",
-    Apples: 2756,
-    Oranges: 2103,
-    Tomatoes: 2402,
+    Positive: 2756,
+    Negative: 2103,
+    Neutral: 2402,
   },
   {
     date: "Mar 24",
-    Apples: 3322,
-    Oranges: 986,
-    Tomatoes: 1821,
+    Positive: 3322,
+    Negative: 986,
+    Neutral: 1821,
   },
   {
     date: "Mar 25",
-    Apples: 3470,
-    Oranges: 2108,
-    Tomatoes: 2809,
+    Positive: 3470,
+    Negative: 2108,
+    Neutral: 2809,
   },
   {
     date: "Mar 26",
-    Apples: 3129,
-    Oranges: 1726,
-    Tomatoes: 2290,
+    Positive: 3129,
+    Negative: 1726,
+    Neutral: 2290,
   },
 ];

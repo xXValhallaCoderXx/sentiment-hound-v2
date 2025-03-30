@@ -1,8 +1,8 @@
 import { auth } from "@/lib/next-auth.lib";
-import { Box, Title, Text, Group, Button, Flex } from "@mantine/core";
-import { IconListCheck } from "@tabler/icons-react";
+import { Box, Title, Text, Group, Flex } from "@mantine/core";
 import { integrationsService } from "@repo/services";
 import NoData from "@/components/molecules/NoData";
+import YoutubeUrlForm from "./components/YoutubeUrlForm";
 
 const AnalysePage = async ({
   searchParams,
@@ -42,11 +42,11 @@ const AnalysePage = async ({
           <div>
             <Title order={2}>Analyse Content</Title>
             <Text color="dimmed">
-              View you content and decide which you want to sync
+              View your content and decide which you want to sync
             </Text>
           </div>
         </Group>
-        Hahaha
+        <YoutubeUrlForm />
       </Box>
     );
   } catch (error) {

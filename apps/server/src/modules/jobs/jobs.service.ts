@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { JobType } from '@repo/db';
 import { ContentFetchProcessor } from './processors/content-fetch.processor';
 import { SentimentAnalysisProcessor } from './processors/sentiment-analysis.processor';
-
-export enum JobType {
-  FETCH_CONTENT = 'FETCH_CONTENT',
-  ANALYZE_CONTENT_SENTIMENT = 'ANALYZE_CONTENT_SENTIMENT',
-}
-
+import { PostFetchProcessor } from './processors/post-fetch.processor';
 export interface Job {
   id: number;
   type: JobType;
@@ -23,11 +19,14 @@ export class JobsService {
   constructor(
     private readonly contentFetchProcessor: ContentFetchProcessor,
     private readonly sentimentAnalysisProcessor: SentimentAnalysisProcessor,
+    private readonly postFetchProcessor: PostFetchProcessor,
   ) {
     // Register job processors
     this.processors[JobType.FETCH_CONTENT] = this.contentFetchProcessor;
     this.processors[JobType.ANALYZE_CONTENT_SENTIMENT] =
       this.sentimentAnalysisProcessor;
+    this.processors[JobType.FETCH_INDIVIDUAL_POST_CONTNENT] =
+      this.postFetchProcessor;
   }
 
   async processJob(job: Job) {
