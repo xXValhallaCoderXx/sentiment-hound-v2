@@ -5,6 +5,7 @@ import {
   Text,
   Badge,
   Group,
+  Progress,
   Button,
   Image,
   Box,
@@ -16,6 +17,10 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandYoutube,
+  IconArrowUp,
+  IconArrowDown,
+  IconExternalLink,
+  IconFileExport,
 } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -67,69 +72,118 @@ const PostListItem = ({
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Flex justify="space-between" align="center">
-        <Flex align="center" gap={8}>
+        <Flex align="center" gap={16}>
           {getProviderIcon()}
           <Flex direction="column">
-            <Text fw={500} truncate>
-              {title || `Post from ${provider}`}
-            </Text>
+            <Flex gap={8}>
+              <Text fw={600} truncate>
+                {title || `Post from ${provider}`}
+              </Text>
+              <Badge color="green" size="xs" mt={4} className="capitalize">
+                Analyzed
+              </Badge>
+            </Flex>
             <Text size="sm" color="dimmed">
-              {postDate}
+              Published: {postDate}
             </Text>
           </Flex>
         </Flex>
-        <Flex>
+        <Flex gap={16}>
           <Button
             component={Link}
             href={postUrl || "#"}
+            size="xs"
             target="_blank"
-            variant="light"
-            fullWidth
-            mt="md"
-            radius="md"
+            variant="outline"
+            radius="sm"
+            color="black"
+            rightSection={<IconFileExport size={16} />}
+          >
+            Export CSV
+          </Button>
+          <Button
+            component={Link}
+            href={postUrl || "#"}
+            size="xs"
+            target="_blank"
+            variant="outline"
+            color="black"
+            radius="sm"
+            rightSection={<IconExternalLink size={16} />}
           >
             View Post
           </Button>
         </Flex>
       </Flex>
-      <Flex mt={16}>
-        <Flex direction="column" w="25%">
-          <Title order={5}>Comments</Title>
-          <Title order={3}>{commentsCount}</Title>
+      <Flex mt={16} gap={96}>
+        <Flex direction="column">
+          <Title order={6}>Comments</Title>
+          <Title mt={8} order={3}>
+            {commentsCount}
+          </Title>
         </Flex>
-        <Flex direction="column" w="25%">
-          <Title order={5}>Sentiment Distribution</Title>
+        <Flex direction="column">
+          <Title order={6}>Sentiment Distribution</Title>
 
-          <Flex gap={8} direction="column" w="25%">
-            <Badge color="green">
-              Positive: {sentimentDistribution.positive}%
-            </Badge>
-            <Badge color="yellow">
-              Neutral: {sentimentDistribution.neutral}%
-            </Badge>
-            <Badge color="red">
-              Negative: {sentimentDistribution.negative}%
-            </Badge>
+          <Flex gap={8} direction="column" pr={16}>
+            <Flex align="center" gap={8}>
+              <Progress
+                styles={{ root: { backgroundColor: "#BBF7D0" } }}
+                value={sentimentDistribution.positive}
+                color="green"
+                size="md"
+                style={{ flex: 1 }}
+              />
+              <Text size="xs">{sentimentDistribution.positive}%</Text>
+            </Flex>
+            <Flex align="center" gap={8}>
+              <Progress
+                styles={{ root: { backgroundColor: "#FEF08A" } }}
+                value={sentimentDistribution.neutral}
+                color="#EAB308"
+                size="md"
+                style={{ flex: 1 }}
+              />
+              <Text size="xs">{sentimentDistribution.neutral}%</Text>
+            </Flex>
+            <Flex align="center" gap={8}>
+              <Progress
+                styles={{
+                  root: { backgroundColor: "#FECACA" },
+                }}
+                value={sentimentDistribution.negative}
+                color="#EF4444"
+                size="md"
+                style={{ flex: 1 }}
+              />
+              <Text size="xs">{sentimentDistribution.negative}%</Text>
+            </Flex>
           </Flex>
         </Flex>
-        <Flex direction="column" w="25%">
-          <Title order={5}>Top Aspects</Title>
+        <Flex direction="column">
+          <Title order={6}>Top Aspects</Title>
           <Flex direction="column" gap={8} mb="md">
             {topAspects.map((aspect, index) => (
-              <Badge key={index} color="blue">
-                {aspect}
-              </Badge>
+              <Flex gap={4} pl={2} key={index}>
+                <Text fw={500} className="capitalize" size="xs">
+                  {aspect}
+                </Text>
+                <IconArrowUp size={16} color="green" />
+              </Flex>
             ))}
           </Flex>
         </Flex>
-        <Flex direction="column" w="25%">
-          <Title order={5}>Areas of Concern</Title>
+        <Flex direction="column">
+          <Title order={6}>Areas of Concern</Title>
 
           <Flex direction="column" gap={8} mb="md">
             {areasOfConcern.map((concern, index) => (
-              <Badge key={index} color="red">
-                {concern}
-              </Badge>
+              <Flex gap={4} pl={2} key={index}>
+                <Text fw={500} className="capitalize" size="xs">
+                  {concern}
+                </Text>
+                <IconArrowDown size={16} color="red" />
+              </Flex>
             ))}
           </Flex>
         </Flex>

@@ -5,7 +5,7 @@ import PostListItem from "@/components/molecules/PostListItem";
 import PaginationControl from "./PaginationControl";
 
 interface PostsTableProps {
-  data: ProcessedPost[];
+  data: any;
   pagination?: {
     page: number;
     totalPages: number;
@@ -24,8 +24,10 @@ const PostListTable = ({ data, pagination }: PostsTableProps) => {
     );
   }
 
+  console.log("DATA: ", data);
+
   // Format the data for PostListItem
-  const formattedPosts = data.map((post) => {
+  const formattedPosts = data.map((post: ProcessedPost) => {
     // Calculate the top aspects (most mentioned positive aspects)
     const positiveAspects = Object.entries(post?.aspectAnalyses?.positive || {})
       .sort(([, countA], [, countB]) => (countB as number) - (countA as number))
@@ -60,7 +62,7 @@ const PostListTable = ({ data, pagination }: PostsTableProps) => {
   return (
     <Stack gap="md">
       <SimpleGrid cols={{ base: 1 }} spacing="md" verticalSpacing="md">
-        {formattedPosts.map((post) => (
+        {formattedPosts.map((post: any) => (
           <PostListItem
             key={post.id}
             provider={post.provider as any}

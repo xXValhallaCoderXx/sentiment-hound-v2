@@ -14,7 +14,7 @@ const JobsPage = async ({
   searchParams: Record<string, string>;
 }) => {
   const session = await auth();
-  const { status, type, page = "1", pageSize = "10" } = searchParams;
+  const { status, type, page = "1", pageSize = "10" } = await searchParams;
 
   // Convert page and pageSize to numbers
   const currentPage = parseInt(page, 10);

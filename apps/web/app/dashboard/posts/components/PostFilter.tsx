@@ -125,67 +125,14 @@ const PostFilter: React.FC<PostFilterProps> = ({ currentFilters }) => {
           ]}
           clearable
         />
-      </Group>
-
-      <Group mb="md">
-        {/* <DateInput
-          valueFormat="YYYY-MM-DD"
-          label="Start Date"
-          placeholder="Filter from"
-          value={startDate}
-          onChange={setStartDate}
-          clearable
-        /> */}
-
-        {/* <DateInput
-          valueFormat="YYYY-MM-DD"
-          label="End Date"
-          placeholder="Filter to"
-          value={endDate}
-          onChange={setEndDate}
-          clearable
-        /> */}
-
-        <Select
-          label="Sort By"
-          placeholder="Sort field"
-          value={sortBy}
-          onChange={(value) => setSortBy(value || "createdAt")}
-          data={[
-            { value: "createdAt", label: "Created Date" },
-            { value: "publishedAt", label: "Published Date" },
-            { value: "title", label: "Title" },
-            { value: "commentCount", label: "Comment Count" },
-          ]}
-        />
-
-        <Select
-          label="Sort Order"
-          placeholder="Sort direction"
-          value={sortOrder}
-          onChange={(value) => setSortOrder(value || "desc")}
-          data={[
-            { value: "desc", label: "Descending" },
-            { value: "asc", label: "Ascending" },
-          ]}
-          leftSection={
-            sortOrder === "asc" ? (
-              <IconSortAscending size={16} />
-            ) : (
-              <IconSortDescending size={16} />
-            )
-          }
-        />
-      </Group>
-
-      <Group>
         <Button
           onClick={handleApplyFilters}
           leftSection={<IconFilter size={16} />}
+          color="black"
         >
           Apply Filters
         </Button>
-        <Button variant="outline" onClick={handleClearFilters}>
+        <Button variant="outline" onClick={handleClearFilters} color="black">
           Clear Filters
         </Button>
       </Group>
@@ -194,3 +141,64 @@ const PostFilter: React.FC<PostFilterProps> = ({ currentFilters }) => {
 };
 
 export default PostFilter;
+
+{
+  /* <Group mb="md"> */
+}
+{
+  /* <DateInput
+  valueFormat="YYYY-MM-DD"
+  label="Start Date"
+  placeholder="Filter from"
+  value={startDate}
+  onChange={setStartDate}
+  clearable
+/> */
+}
+
+{
+  /* <DateInput
+  valueFormat="YYYY-MM-DD"
+  label="End Date"
+  placeholder="Filter to"
+  value={endDate}
+  onChange={setEndDate}
+  clearable
+/> */
+}
+
+{
+  /* <Select
+  label="Sort By"
+  placeholder="Sort field"
+  value={sortBy}
+  onChange={(value) => setSortBy(value || "createdAt")}
+  data={[
+    { value: "createdAt", label: "Created Date" },
+    { value: "publishedAt", label: "Published Date" },
+    { value: "title", label: "Title" },
+    { value: "commentCount", label: "Comment Count" },
+  ]}
+/>
+
+<Select
+  label="Sort Order"
+  placeholder="Sort direction"
+  value={sortOrder}
+  onChange={(value) => setSortOrder(value || "desc")}
+  data={[
+    { value: "desc", label: "Descending" },
+    { value: "asc", label: "Ascending" },
+  ]}
+  leftSection={
+    sortOrder === "asc" ? (
+      <IconSortAscending size={16} />
+    ) : (
+      <IconSortDescending size={16} />
+    )
+  }
+/> */
+}
+{
+  /* </Group> */
+}
