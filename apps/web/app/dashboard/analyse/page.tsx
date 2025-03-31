@@ -1,6 +1,6 @@
 import { auth } from "@/lib/next-auth.lib";
 import { Box, Title, Text, Group, Flex } from "@mantine/core";
-import { integrationsService } from "@repo/services";
+import { integrationsService, providerService } from "@repo/services";
 import NoData from "@/components/molecules/NoData";
 import YoutubeUrlForm from "./components/YoutubeUrlForm";
 
@@ -25,6 +25,12 @@ const AnalysePage = async ({
       session.user.id
     );
 
+    const providers = await providerService.getProviderByName("youtube");
+
+    const youtubeIntegration = integrations.find(
+      (integration) => integration.providerId === providers.id
+    );
+
     if (integrations.length < 1) {
       return (
         <Flex align="center" justify="center">
@@ -46,7 +52,7 @@ const AnalysePage = async ({
             </Text>
           </div>
         </Group>
-        <YoutubeUrlForm />
+        <YoutubeUrlForm integration={String(youtubeIntegration?.providerId)} />
       </Box>
     );
   } catch (error) {

@@ -113,7 +113,6 @@ model Post {
   integrationId   Int
   integration     Integration  @relation(fields: [integrationId], references: [id])
   comments        Comment[]
-  jobPosts        JobPost[]    // New relation
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 }
@@ -166,23 +165,8 @@ model Job {
   task          Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
   data          Json         // Data needed for the job, e.g., post IDs or integration details
   queue         Queue?       // New relationship (one-to-one)
-  jobPosts      JobPost[]    // New relation
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-}
-
-// New model to track Jobs and Posts relationships
-model JobPost {
-  id            Int          @id @default(autoincrement())
-  jobId         Int
-  job           Job          @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  postId        Int
-  post          Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
-  status        JobPostStatus @default(PENDING)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-
-  @@unique([jobId, postId]) // Ensure a post is only linked once per job
 }
 
 model Plan {
@@ -249,11 +233,4 @@ enum JobType {
   FETCH_CONTENT
   FETCH_INDIVIDUAL_POST_CONTNENT
   ANALYZE_CONTENT_SENTIMENT
-}
-
-enum JobPostStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-  FAILED
 }

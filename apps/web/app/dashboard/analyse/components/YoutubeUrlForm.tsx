@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Button, TextInput, Flex, Text } from "@mantine/core";
 import { addNewTask } from "@/slices/tasks/tasks.actions";
 import { useForm } from "@mantine/form";
-import { TaskType } from "@repo/db";
+import { Integration, TaskType } from "@repo/db";
 
-const YoutubeUrlForm = () => {
+const YoutubeUrlForm = ({ integration }: { integration: string }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
+  console.log("Integrations: ", integration);
   const form = useForm({
     initialValues: {
       url: "",
@@ -32,7 +32,7 @@ const YoutubeUrlForm = () => {
 
     try {
       const formData = new FormData();
-      formData.append("integrationId", "6");
+      formData.append("integrationId", integration);
       formData.append("taskType", TaskType.ANALYZE_POST);
 
       // Add the URL to extraData
