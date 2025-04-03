@@ -10,12 +10,15 @@ import {
   Badge,
   Group,
   Card,
+  Stack,
+  SimpleGrid,
   Tooltip,
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { JobStatus, TaskStatus, TaskType } from "@repo/db";
 import PaginationControls from "./PaginationControls";
+import JobListItem from "@/components/molecules/JobListItem";
 
 // Create this service or use an existing one
 import { prisma } from "@repo/db";
@@ -88,97 +91,116 @@ export default async function JobListTable({
   }
 
   return (
-    <Box>
-      <Table striped highlightOnHover>
-        <TableThead>
-          <TableTr>
-            <TableTh>ID</TableTh>
-            <TableTh>Type</TableTh>
-            <TableTh>Integration</TableTh>
-            <TableTh>Status</TableTh>
-            <TableTh>Progress</TableTh>
-            <TableTh>Created</TableTh>
-            <TableTh>Updated</TableTh>
-          </TableTr>
-        </TableThead>
-        <TableTbody>
-          {tasks.map((task) => {
-            const totalJobs = task.jobs.length;
-            const completedJobs = task.jobs.filter(
-              (job) => job.status === JobStatus.COMPLETED
-            ).length;
-            const failedJobs = task.jobs.filter(
-              (job) => job.status === JobStatus.FAILED
-            ).length;
-            const progressPercentage =
-              totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0;
-
-            const hasErrors =
-              task.errorMessage || task.jobs.some((job) => job.errorMessage);
-
-            return (
-              <TableTr
-                key={task.id}
-                className="cursor-pointer hover:bg-gray-50"
-              >
-                <TableTd>{task.id}</TableTd>
-                <TableTd>
-                  <Badge color={getTaskTypeColor(task.type)}>
-                    {formatEnumValue(task.type)}
-                  </Badge>
-                </TableTd>
-                <TableTd>
-                  <Group>
-                    <Text size="sm">{task.integration.provider.name}</Text>
-                  </Group>
-                </TableTd>
-                <TableTd>
-                  <Group gap="xs">
-                    <Badge color={getStatusColor(task.status)}>
-                      {formatEnumValue(task.status)}
-                    </Badge>
-                    {hasErrors && (
-                      <Tooltip label="This task has errors">
-                        <IconAlertCircle size={16} color="red" />
-                      </Tooltip>
-                    )}
-                  </Group>
-                </TableTd>
-                <TableTd style={{ width: 200 }}>
-                  <Box>
-                    <Group mb={5}>
-                      <Text size="xs">
-                        {completedJobs} of {totalJobs} jobs
-                      </Text>
-                      <Text size="xs">{progressPercentage}%</Text>
-                    </Group>
-                  </Box>
-                </TableTd>
-                <TableTd>
-                  {dayjs(new Date(task.createdAt)).format("DD/MM/YYYY")}
-                </TableTd>
-                <TableTd>
-                  {dayjs(new Date(task.updatedAt)).format("DD/MM/YYYY")}
-                </TableTd>
-              </TableTr>
-            );
-          })}
-        </TableTbody>
-      </Table>
-
-      {/* Pagination Controls */}
-      <PaginationControls
-        currentPage={page}
-        totalPages={totalPages}
-        pageSize={pageSize}
-        totalItems={totalCount}
-        searchParams={{
-          status: filters.status,
-          type: filters.type,
-        }}
+    <Stack gap="md">
+      <SimpleGrid cols={{ base: 1 }} spacing="md" verticalSpacing="md">
+        {tasks.map((post: any, index: any) => (
+          <JobListItem key={index} post={post} />
+        ))}
+      </SimpleGrid>
+      {/* 
+  {pagination && pagination.totalPages > 1 && (
+    <Center mt="lg">
+      <PaginationControl
+        currentPage={pagination.page}
+        totalPages={pagination.totalPages}
       />
-    </Box>
+    </Center>
+  )} */}
+    </Stack>
   );
+
+  // return (
+  //   <Box>
+  //     <Table striped highlightOnHover>
+  //       <TableThead>
+  //         <TableTr>
+  //           <TableTh>ID</TableTh>
+  //           <TableTh>Type</TableTh>
+  //           <TableTh>Integration</TableTh>
+  //           <TableTh>Status</TableTh>
+  //           <TableTh>Progress</TableTh>
+  //           <TableTh>Created</TableTh>
+  //           <TableTh>Updated</TableTh>
+  //         </TableTr>
+  //       </TableThead>
+  //       <TableTbody>
+  //         {tasks.map((task) => {
+  //           const totalJobs = task.jobs.length;
+  //           const completedJobs = task.jobs.filter(
+  //             (job) => job.status === JobStatus.COMPLETED
+  //           ).length;
+  //           const failedJobs = task.jobs.filter(
+  //             (job) => job.status === JobStatus.FAILED
+  //           ).length;
+  //           const progressPercentage =
+  //             totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0;
+
+  //           const hasErrors =
+  //             task.errorMessage || task.jobs.some((job) => job.errorMessage);
+
+  //           return (
+  //             <TableTr
+  //               key={task.id}
+  //               className="cursor-pointer hover:bg-gray-50"
+  //             >
+  //               <TableTd>{task.id}</TableTd>
+  //               <TableTd>
+  //                 <Badge color={getTaskTypeColor(task.type)}>
+  //                   {formatEnumValue(task.type)}
+  //                 </Badge>
+  //               </TableTd>
+  //               <TableTd>
+  //                 <Group>
+  //                   <Text size="sm">{task.integration.provider.name}</Text>
+  //                 </Group>
+  //               </TableTd>
+  //               <TableTd>
+  //                 <Group gap="xs">
+  //                   <Badge color={getStatusColor(task.status)}>
+  //                     {formatEnumValue(task.status)}
+  //                   </Badge>
+  //                   {hasErrors && (
+  //                     <Tooltip label="This task has errors">
+  //                       <IconAlertCircle size={16} color="red" />
+  //                     </Tooltip>
+  //                   )}
+  //                 </Group>
+  //               </TableTd>
+  //               <TableTd style={{ width: 200 }}>
+  //                 <Box>
+  //                   <Group mb={5}>
+  //                     <Text size="xs">
+  //                       {completedJobs} of {totalJobs} jobs
+  //                     </Text>
+  //                     <Text size="xs">{progressPercentage}%</Text>
+  //                   </Group>
+  //                 </Box>
+  //               </TableTd>
+  //               <TableTd>
+  //                 {dayjs(new Date(task.createdAt)).format("DD/MM/YYYY")}
+  //               </TableTd>
+  //               <TableTd>
+  //                 {dayjs(new Date(task.updatedAt)).format("DD/MM/YYYY")}
+  //               </TableTd>
+  //             </TableTr>
+  //           );
+  //         })}
+  //       </TableTbody>
+  //     </Table>
+
+  //     {/* Pagination Controls */}
+  //     <PaginationControls
+  //       currentPage={page}
+  //       totalPages={totalPages}
+  //       pageSize={pageSize}
+  //       totalItems={totalCount}
+  //       searchParams={{
+  //         status: filters.status,
+  //         type: filters.type,
+  //       }}
+  //     />
+  //   </Box>
+  // );
 }
 
 // Helper functions
