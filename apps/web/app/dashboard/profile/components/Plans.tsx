@@ -12,7 +12,7 @@ import {
 import { FC } from "react";
 import { planService } from "@repo/services";
 import PlanSubmitButton from "./PlanSubmitButton";
-import { addUserToPlan } from "@/actions/plans.action";
+
 
 const Plans: FC<{ searchParams: { status?: string } }> = async ({
   searchParams,
@@ -31,12 +31,11 @@ const Plans: FC<{ searchParams: { status?: string } }> = async ({
 
       <Grid gutter={12} className="mt-4">
         {plans?.map((plan, index) => {
-          // const isUsersPlan = userPlan?.id === plan.id;
           const isUsersPlan = false; // Placeholder for actual logic
           return (
             <GridCol span={4} key={index}>
               <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <form action={addUserToPlan}>
+                <form>
                   <CardSection>
                     <Image
                       src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
@@ -56,9 +55,10 @@ const Plans: FC<{ searchParams: { status?: string } }> = async ({
                     {plan.description}
                   </Text>
 
-                  <PlanSubmitButton isUsersPlan={isUsersPlan} />
-
-                  <input type="hidden" name="planId" value={plan.id} />
+                  <PlanSubmitButton
+                    planId={String(plan.id)}
+                    isUsersPlan={isUsersPlan}
+                  />
                 </form>
               </Card>
             </GridCol>

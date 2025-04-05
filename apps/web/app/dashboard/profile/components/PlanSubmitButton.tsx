@@ -1,24 +1,49 @@
 "use client";
-import { FC } from "react";
+import { FC, useTransition, useState } from "react";
 import { Button } from "@mantine/core";
 import { useFormStatus } from "react-dom";
+import { addUserToPlan } from "@/actions/plans.action";
+
 interface IPlanSubmitButtonProps {
   isUsersPlan: boolean;
+  planId: string;
 }
 
-const PlanSubmitButton: FC<IPlanSubmitButtonProps> = ({ isUsersPlan }) => {
-  const { pending } = useFormStatus();
+const PlanSubmitButton: FC<IPlanSubmitButtonProps> = ({
+  isUsersPlan,
+  planId,
+}) => {
+  // Local UI states to display success/errors
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
+  // useTransition for showing a pending state if needed
+  const [isPending, startTransition] = useTransition();
+
+  const handleOnClick = async () => {
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    startTransition(async () => {
+      try {
+        const message = await addUserToPlan({ planId });
+        console.log("Message: ", message);
+        setSuccessMessage("weee");
+      } catch (error: any) {
+        setErrorMessage(error.message || "Something went wrong.");
+      }
+    });
+  };
   return (
     <Button
       disabled={isUsersPlan}
-      type="submit"
+      onClick={handleOnClick}
       color="blue"
       fullWidth
       mt="md"
       radius="md"
     >
-      {pending ? "Creating ..." : "Create"}
+      {isPending ? "Creating ..." : "Create"}
     </Button>
   );
 };

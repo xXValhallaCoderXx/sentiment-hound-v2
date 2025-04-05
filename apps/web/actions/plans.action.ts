@@ -16,19 +16,20 @@ type ActionResponse<T> =
   | { data: null; error: ErrorResponse };
 
 interface IAddUserToPlan {
-  userId: string;
+
   planId: string;
 }
 
-export async function addUserToPlan(formData: FormData): Promise<void> {
+export async function addUserToPlan(data: IAddUserToPlan): Promise<boolean> {
   const session = await auth();
   const userId = session?.user?.id;
-  const planId = formData.get("planId") as string;
+  const planId = data.planId;
+
   try {
     await planService.addUserToPlan(planId, String(userId));
-    redirect("/dashboard/profile?status=success");
+    return true;
   } catch (error: any) {
     console.error("Error adding user to plan:", error);
-    redirect("/dashboard/profile?status=error");
+    return false;
   }
 }
