@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { JobType } from '@repo/db';
+import { SubTaskType } from '@repo/db';
 import { ContentFetchProcessor } from './processors/content-fetch.processor';
 import { SentimentAnalysisProcessor } from './processors/sentiment-analysis.processor';
 import { PostFetchProcessor } from './processors/post-fetch.processor';
 export interface Job {
   id: number;
-  type: JobType;
+  type: SubTaskType;
   data: any;
 }
 
@@ -13,7 +13,7 @@ export interface Job {
 export class JobsService {
   // Modified to use Partial<Record<...>>
   private processors: Partial<
-    Record<JobType, { process: (job: Job) => Promise<void> }>
+    Record<SubTaskType, { process: (job: Job) => Promise<void> }>
   > = {};
 
   constructor(
@@ -22,10 +22,10 @@ export class JobsService {
     private readonly postFetchProcessor: PostFetchProcessor,
   ) {
     // Register job processors
-    this.processors[JobType.FETCH_CONTENT] = this.contentFetchProcessor;
-    this.processors[JobType.ANALYZE_CONTENT_SENTIMENT] =
+    this.processors[SubTaskType.FETCH_CONTENT] = this.contentFetchProcessor;
+    this.processors[SubTaskType.ANALYZE_CONTENT_SENTIMENT] =
       this.sentimentAnalysisProcessor;
-    this.processors[JobType.FETCH_INDIVIDUAL_POST_CONTNENT] =
+    this.processors[SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT] =
       this.postFetchProcessor;
   }
 

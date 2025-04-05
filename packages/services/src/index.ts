@@ -10,8 +10,8 @@ import { QueueRepository } from "./queues/queues.repository";
 import { CoreQueueService } from "./queues/queues.service";
 import { TaskRepository } from "./tasks/tasks.repository";
 import { CoreTaskService } from "./tasks/tasks.service";
-import { JobRepository } from "./jobs/jobs.repository";
-import { CoreJobService } from "./jobs/jobs.service";
+import { JobRepository } from "./sub-tasks/sub-tasks.repository";
+import { CoreJobService } from "./sub-tasks/sun-tasks.service";
 import { CoreCommentService } from "./comments/comments.service";
 import { CommentRepository } from "./comments/comments.repository";
 

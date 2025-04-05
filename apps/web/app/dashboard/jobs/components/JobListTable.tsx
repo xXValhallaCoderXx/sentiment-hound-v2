@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { JobStatus, TaskStatus, TaskType } from "@repo/db";
+import { SubTaskStatus, TaskStatus, TaskType } from "@repo/db";
 import PaginationControls from "./PaginationControls";
 
 // Create this service or use an existing one
@@ -48,7 +48,7 @@ export default async function JobListTable({
         type: filters.type,
       },
       include: {
-        jobs: true,
+        subTasks: true,
         integration: {
           include: {
             provider: true,
@@ -103,18 +103,19 @@ export default async function JobListTable({
         </TableThead>
         <TableTbody>
           {tasks.map((task) => {
-            const totalJobs = task.jobs.length;
-            const completedJobs = task.jobs.filter(
-              (job) => job.status === JobStatus.COMPLETED
+            const totalJobs = task.subTasks.length;
+            const completedJobs = task.subTasks.filter(
+              (job) => job.status === SubTaskStatus.COMPLETED
             ).length;
-            const failedJobs = task.jobs.filter(
-              (job) => job.status === JobStatus.FAILED
+            const failedJobs = task.subTasks.filter(
+              (job) => job.status === SubTaskStatus.FAILED
             ).length;
             const progressPercentage =
               totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0;
 
             const hasErrors =
-              task.errorMessage || task.jobs.some((job) => job.errorMessage);
+              task.errorMessage ||
+              task.subTasks.some((job) => job.errorMessage);
 
             return (
               <TableTr
@@ -182,7 +183,7 @@ export default async function JobListTable({
 }
 
 // Helper functions
-function getStatusColor(status: TaskStatus | JobStatus) {
+function getStatusColor(status: TaskStatus | SubTaskStatus) {
   switch (status) {
     case "COMPLETED":
       return "green";
