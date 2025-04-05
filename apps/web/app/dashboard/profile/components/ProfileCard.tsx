@@ -17,7 +17,14 @@ interface IProfileCardProps {
 }
 
 const ProfileCard = async ({ id }: IProfileCardProps) => {
-  const user = await userService.findUserById(id);
+  const user = await userService.findUserById({
+    id,
+    args: {
+      include: {
+        plan: true,
+      },
+    },
+  });
   console.log("USER: ", user);
   if (!user) {
     return <Text>User not found</Text>;

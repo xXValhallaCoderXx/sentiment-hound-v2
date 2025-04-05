@@ -16,6 +16,8 @@ import { CoreCommentService } from "./comments/comments.service";
 import { CommentRepository } from "./comments/comments.repository";
 import { UserRepository } from "./users/users.repository";
 import { CoreUserService } from "./users/users.service";
+import { PlanRepository } from "./plans/plans.repository";
+import { CorePlanService } from "./plans/plans.service";
 
 export * from "./posts/post.interface";
 
@@ -28,6 +30,7 @@ const taskRepository = new TaskRepository(prisma);
 const jobRepository = new JobRepository(prisma);
 const commentRepository = new CommentRepository(prisma);
 const userRepository = new UserRepository(prisma);
+const planRepository = new PlanRepository(prisma);
 
 // Create singleton instances of services
 export const providerService = new CoreProviderService(providerRepository);
@@ -42,3 +45,4 @@ export const taskService = new CoreTaskService(taskRepository);
 export const jobService = new CoreJobService(jobRepository);
 export const commentsService = new CoreCommentService(commentRepository);
 export const userService = new CoreUserService(userRepository);
+export const planService = new CorePlanService(planRepository);

@@ -18,11 +18,7 @@ import Plans from "./components/Plans";
 const ProfilePage = async (props: any) => {
   const session = await auth();
   const userId = session?.user?.id;
-  console.log("USER ID: ", userId);
-  // const user = await userService.getUserById(userId as string);
-  // const plans = await planService.getPlans();
-  const user = {};
-  const plans = [];
+
   return (
     <PageLayout title="Profile" description="User profile page">
       <Stack gap={16}>
@@ -39,10 +35,11 @@ const ProfilePage = async (props: any) => {
             </Card>
           </Flex>
         </Flex>
-        <Card withBorder>
-          <Title order={4}>Plans</Title>
-        </Card>
       </Stack>
+      <Box mt={24}>
+        <Title order={3}>Subscription Details</Title>
+        <Plans />
+      </Box>
       {/* {props?.searchParams?.planUpdated === "true" && (
         <Box pos="absolute" right={60} top={60}>
           <Link href="/dashboard/profile">
@@ -57,30 +54,10 @@ const ProfilePage = async (props: any) => {
           </Link>
         </Box>
       )}
-      <Flex className="gap-3">
-        <Title>Profile</Title>
-        <Avatar
-          src={user?.image}
-          className="rounded-full"
-          size="md"
-          radius="md"
-        />
-      </Flex>
-      <Box className="mt-4">
-        <Title order={4}>Basic Information</Title>
-        <Stack className="mt-2 mb-8">
-          <Flex className="items-center gap-2">
-            <Title order={6}>Name</Title>
-            <Text size="sm">{user?.name}</Text>
-          </Flex>
-          <Flex className="items-center gap-2">
-            <Title order={6}>Email</Title>
-            <Text size="sm">{user?.email}</Text>
-          </Flex>
-        </Stack>
-      </Box>
-      <Title>Plan</Title>
-      <Plans plans={plans} userPlan={user?.plan} /> */}
+
+  
+
+       */}
     </PageLayout>
   );
 };

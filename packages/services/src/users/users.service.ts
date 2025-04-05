@@ -1,5 +1,6 @@
 import { Prisma, User } from "@repo/db";
 import { UserRepository } from "./users.repository";
+import { IGetUserParams } from "./user.interface";
 
 export class CoreUserService {
   constructor(private repository: UserRepository) {}
@@ -8,8 +9,8 @@ export class CoreUserService {
     return this.repository.findUnique({ email });
   }
 
-  findUserById(id: string): Promise<User | null> {
-    return this.repository.findById(id);
+  findUserById(data: IGetUserParams): Promise<User | null> {
+    return this.repository.findById(data.id, data?.args);
   }
 
   updateUser(
