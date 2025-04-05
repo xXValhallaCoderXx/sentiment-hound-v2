@@ -1,24 +1,17 @@
 import { auth } from "@/lib/next-auth.lib";
 import PageLayout from "@/components/templates/PageLayout";
-import Link from "next/link";
-import {
-  Avatar,
-  Card,
-  Flex,
-  Box,
-  Text,
-  Title,
-  Stack,
-  Notification,
-} from "@mantine/core";
+import { Card, Flex, Box, Title, Stack } from "@mantine/core";
 import ProfileCard from "./components/ProfileCard";
-// import { userService, planService } from "services";
 import Plans from "./components/Plans";
 
-const ProfilePage = async (props: any) => {
+const ProfilePage = async ({
+  searchParams,
+}: {
+  searchParams: { status?: string };
+}) => {
   const session = await auth();
   const userId = session?.user?.id;
-
+  const params = await searchParams;
   return (
     <PageLayout title="Profile" description="User profile page">
       <Stack gap={16}>
@@ -38,26 +31,8 @@ const ProfilePage = async (props: any) => {
       </Stack>
       <Box mt={24}>
         <Title order={3}>Subscription Details</Title>
-        <Plans />
+        <Plans searchParams={params} />
       </Box>
-      {/* {props?.searchParams?.planUpdated === "true" && (
-        <Box pos="absolute" right={60} top={60}>
-          <Link href="/dashboard/profile">
-            <Notification
-              icon={<CheckCircle />}
-              color="teal"
-              title="Plan updated!"
-              mt="md"
-            >
-              You have successfully updated your plan
-            </Notification>
-          </Link>
-        </Box>
-      )}
-
-  
-
-       */}
     </PageLayout>
   );
 };
