@@ -1,13 +1,4 @@
-import {
-  Box,
-  Avatar,
-  Text,
-  Button,
-  Badge,
-  Stack,
-  Group,
-  Flex,
-} from "@mantine/core";
+import { Box, Avatar, Text, Badge, Stack, Group, Flex } from "@mantine/core";
 import { userService } from "@repo/services";
 import Image from "next/image";
 import dayjs from "dayjs";
@@ -33,26 +24,16 @@ const ProfileCard = async ({ id }: IProfileCardProps) => {
   return (
     <Box>
       <Group>
-        {user?.image ? (
-          <Image
-            src={user?.image}
-            alt="Logo"
-            width={40}
-            height={40}
-            style={{ borderRadius: "50%" }}
-          />
-        ) : (
-          <Avatar src={user.image} radius="xl" size="lg" />
-        )}
+        <Avatar src={user.image} radius="xl" size="lg" />
 
         <Stack gap={0}>
-          <Text fw={500} size="lg">
+          <Text fw={500} size="md">
             {user.name || "Unknown User"}
           </Text>
-          <Text size="sm" color="dimmed">
+          <Text size="sm" c="dimmed">
             {user.email}
           </Text>
-          <Text size="sm" color="dimmed">
+          <Text size="sm" c="dimmed">
             Member since: {dayjs(new Date(user.createdAt)).format("DD/MM/YYYY")}
           </Text>
         </Stack>
@@ -63,8 +44,8 @@ const ProfileCard = async ({ id }: IProfileCardProps) => {
           Current Plan:
         </Text>
         <Badge color="dark" radius="sm" size="md">
-          {/* {user.plan?.name || "Free"} */}
-          Free
+          {/* @ts-ignore */}
+          {user?.plan?.name || "Free"}
         </Badge>
       </Flex>
     </Box>

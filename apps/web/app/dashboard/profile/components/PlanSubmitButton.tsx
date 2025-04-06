@@ -1,7 +1,7 @@
 "use client";
 import { FC, useTransition, useState } from "react";
 import { Button } from "@mantine/core";
-import { useFormStatus } from "react-dom";
+import { notifications } from "@mantine/notifications";
 import { addUserToPlan } from "@/actions/plans.action";
 
 interface IPlanSubmitButtonProps {
@@ -28,7 +28,10 @@ const PlanSubmitButton: FC<IPlanSubmitButtonProps> = ({
       try {
         const message = await addUserToPlan({ planId });
         console.log("Message: ", message);
-        setSuccessMessage("weee");
+        notifications.show({
+          title: "Default notification",
+          message: "Do not forget to star Mantine on GitHub! 🌟",
+        });
       } catch (error: any) {
         setErrorMessage(error.message || "Something went wrong.");
       }

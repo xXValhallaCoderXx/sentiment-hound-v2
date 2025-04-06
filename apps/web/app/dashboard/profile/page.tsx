@@ -3,22 +3,29 @@ import PageLayout from "@/components/templates/PageLayout";
 import { Card, Flex, Box, Title, Stack } from "@mantine/core";
 import ProfileCard from "./components/ProfileCard";
 import Plans from "./components/Plans";
+import { userService } from "@repo/services";
 
-const ProfilePage = async ({
-  searchParams,
-}: {
-  searchParams: { status?: string };
-}) => {
+const ProfilePage = async () => {
   const session = await auth();
   const userId = session?.user?.id;
-  const params = await searchParams;
+
+  const user = await userService.findUserById({
+    id: String(userId),
+    args: {
+      include: {
+        plan: true,
+      },
+    },
+  });
   return (
     <PageLayout title="Profile" description="User profile page">
       <Stack gap={16}>
         <Flex gap={16}>
           <Flex w="33%">
             <Card withBorder w="100%">
-              <Title order={4}>Plan</Title>
+              <Title ml={4} mb={4} order={3}>
+                Plan
+              </Title>
               <ProfileCard id={String(userId)} />
             </Card>
           </Flex>
@@ -31,7 +38,7 @@ const ProfilePage = async ({
       </Stack>
       <Box mt={24}>
         <Title order={3}>Subscription Details</Title>
-        <Plans searchParams={params} />
+        <Plans userPlanId={String(user?.planId)} />
       </Box>
     </PageLayout>
   );

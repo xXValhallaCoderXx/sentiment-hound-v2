@@ -14,24 +14,17 @@ import { planService } from "@repo/services";
 import PlanSubmitButton from "./PlanSubmitButton";
 
 
-const Plans: FC<{ searchParams: { status?: string } }> = async ({
-  searchParams,
-}) => {
-  const status = searchParams.status;
+interface IPlansProps {
+  userPlanId: string;
+}
 
+const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
   const plans = await planService.getPlans();
   return (
     <Box>
-      {status === "success" && (
-        <Text color="green">Plan updated successfully!</Text>
-      )}
-      {status === "error" && (
-        <Text color="red">Failed to update the plan. Please try again.</Text>
-      )}
-
       <Grid gutter={12} className="mt-4">
         {plans?.map((plan, index) => {
-          const isUsersPlan = false; // Placeholder for actual logic
+          const isUsersPlan = Number(userPlanId) === plan.id; // Placeholder for actual logic
           return (
             <GridCol span={4} key={index}>
               <Card shadow="sm" padding="lg" radius="md" withBorder>
