@@ -1,4 +1,4 @@
-import { JobType, TaskType } from "@repo/db";
+import { TaskType } from "@repo/db";
 import {
   Card,
   Flex,
