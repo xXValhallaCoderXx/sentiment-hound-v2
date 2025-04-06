@@ -21,6 +21,9 @@
     "db:generate": {
       "cache": false
     },
+    "db:format": {
+      "cache": false
+    },
     "db:reset": {
       "cache": false
     },

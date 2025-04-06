@@ -1,4 +1,4 @@
-import { Task, TaskType, TaskStatus, JobType } from "@repo/db";
+import { Task, TaskType, TaskStatus, SubTaskType } from "@repo/db";
 import { TaskRepository } from "./tasks.repository";
 import { jobService } from "..";
 
@@ -63,12 +63,12 @@ export class CoreTaskService {
           // Full sync needs both fetching and analyzing
           await jobService.createJob({
             taskId: task.id,
-            type: JobType.FETCH_INDIVIDUAL_POST_CONTNENT,
+            type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
             data: { integrationId, extraData },
           });
           await jobService.createJob({
             taskId: task.id,
-            type: JobType.ANALYZE_CONTENT_SENTIMENT,
+            type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
           });
 
@@ -79,12 +79,12 @@ export class CoreTaskService {
           // Full sync needs both fetching and analyzing
           await jobService.createJob({
             taskId: task.id,
-            type: JobType.FETCH_CONTENT,
+            type: SubTaskType.FETCH_CONTENT,
             data: { integrationId },
           });
           await jobService.createJob({
             taskId: task.id,
-            type: JobType.ANALYZE_CONTENT_SENTIMENT,
+            type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
           });
 
@@ -95,7 +95,7 @@ export class CoreTaskService {
           // Partial sync just needs to fetch new content
           await jobService.createJob({
             taskId: task.id,
-            type: JobType.FETCH_CONTENT,
+            type: SubTaskType.FETCH_CONTENT,
 
             data: { integrationId },
           });
@@ -107,12 +107,12 @@ export class CoreTaskService {
           // Just need sentiment analysis
           await jobService.createJob({
             taskId: task.id,
-            type: JobType.FETCH_CONTENT,
+            type: SubTaskType.FETCH_CONTENT,
             data: { integrationId },
           });
           await jobService.createJob({
             taskId: task.id,
-            type: JobType.ANALYZE_CONTENT_SENTIMENT,
+            type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
           });
           break;

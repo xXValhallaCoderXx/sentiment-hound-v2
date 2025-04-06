@@ -10,13 +10,16 @@ import { QueueRepository } from "./queues/queues.repository";
 import { CoreQueueService } from "./queues/queues.service";
 import { TaskRepository } from "./tasks/tasks.repository";
 import { CoreTaskService } from "./tasks/tasks.service";
-import { JobRepository } from "./jobs/jobs.repository";
-import { CoreJobService } from "./jobs/jobs.service";
+import { JobRepository } from "./sub-tasks/sub-tasks.repository";
+import { CoreJobService } from "./sub-tasks/sun-tasks.service";
 import { CoreCommentService } from "./comments/comments.service";
 import { CommentRepository } from "./comments/comments.repository";
+import { UserRepository } from "./users/users.repository";
+import { CoreUserService } from "./users/users.service";
+import { PlanRepository } from "./plans/plans.repository";
+import { CorePlanService } from "./plans/plans.service";
 
 export * from "./posts/post.interface";
-
 
 // Create singleton instances of repositories
 const queueRepository = new QueueRepository(prisma);
@@ -26,6 +29,8 @@ const postRepository = new PostRepository(prisma);
 const taskRepository = new TaskRepository(prisma);
 const jobRepository = new JobRepository(prisma);
 const commentRepository = new CommentRepository(prisma);
+const userRepository = new UserRepository(prisma);
+const planRepository = new PlanRepository(prisma);
 
 // Create singleton instances of services
 export const providerService = new CoreProviderService(providerRepository);
@@ -39,3 +44,5 @@ export const queueService = new CoreQueueService(queueRepository);
 export const taskService = new CoreTaskService(taskRepository);
 export const jobService = new CoreJobService(jobRepository);
 export const commentsService = new CoreCommentService(commentRepository);
+export const userService = new CoreUserService(userRepository);
+export const planService = new CorePlanService(planRepository);

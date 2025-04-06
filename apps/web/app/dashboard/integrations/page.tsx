@@ -3,18 +3,16 @@ import { Suspense } from "react";
 import IntegrationCardsSkeleton from "./components/IntegrationCardsSkeleton";
 import IntegrationAlert from "./components/IntegrationAlert";
 import IntegrationCards from "./components/IntegrationCards";
+import PageLayout from "@/components/templates/PageLayout";
 
 const IntegrationsPage = async () => {
   return (
-    <Box p={16}>
+    <PageLayout
+      title="Integrations"
+      description="Connect your social accounts to seamlessly integrate and manage your content within our application."
+    >
       <Box className="px-4">
-        <Title>Integrations</Title>
-        <Text>
-          Connect your social accounts to seamlessly integrate and manage your
-          content within our application.
-          <br />
-          Select an integration below to get started.
-        </Text>
+        <Text>Select an integration below to get started.</Text>
 
         <IntegrationAlert />
         <Box mt={32} maw={1420}>
@@ -23,7 +21,7 @@ const IntegrationsPage = async () => {
           </Suspense>
         </Box>
       </Box>
-    </Box>
+    </PageLayout>
   );
 };
 

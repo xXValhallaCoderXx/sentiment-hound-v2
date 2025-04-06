@@ -16,9 +16,8 @@ import {
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { JobStatus, TaskStatus, TaskType } from "@repo/db";
+import { SubTaskStatus, TaskStatus, TaskType } from "@repo/db";
 import PaginationControls from "./PaginationControls";
-import JobListItem from "@/components/molecules/JobListItem";
 
 // Create this service or use an existing one
 import { prisma } from "@repo/db";
@@ -51,7 +50,7 @@ export default async function JobListTable({
         type: filters.type,
       },
       include: {
-        jobs: true,
+        subTasks: true,
         integration: {
           include: {
             provider: true,
@@ -204,7 +203,7 @@ export default async function JobListTable({
 }
 
 // Helper functions
-function getStatusColor(status: TaskStatus | JobStatus) {
+function getStatusColor(status: TaskStatus | SubTaskStatus) {
   switch (status) {
     case "COMPLETED":
       return "green";
