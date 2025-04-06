@@ -9,9 +9,9 @@ interface IPageLayoutProps {
 
 const PageLayout: FC<IPageLayoutProps> = ({ title, description, children }) => {
   return (
-    <Box className="px-4">
-      <Title>{title}</Title>
-      {description && <Text>{description}</Text>}
+    <Box p={8}>
+      <Title order={2}>{title}</Title>
+      {description && <Text fs="italic">{description}</Text>}
       <Box mt={16}>{children}</Box>
     </Box>
   );

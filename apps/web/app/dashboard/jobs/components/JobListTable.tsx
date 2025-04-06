@@ -8,14 +8,14 @@ import {
   TableTbody,
   Text,
   Badge,
-
   Group,
   Card,
   Tooltip,
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { JobStatus, TaskStatus, TaskType } from "@repo/db";
+import { SubTaskStatus, TaskStatus, TaskType } from "@repo/db";
+import PaginationControls from "./PaginationControls";
 
 // Create this service or use an existing one
 import { prisma } from "@repo/db";
@@ -23,31 +23,56 @@ import { prisma } from "@repo/db";
 interface JobListTableProps {
   userId: string;
   filters: { status?: TaskStatus; type?: TaskType };
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
 }
 
 export default async function JobListTable({
   userId,
   filters,
+  pagination,
 }: JobListTableProps) {
-  // Fetch tasks with their jobs based on filters
-  const tasks = await prisma.task.findMany({
-    where: {
-      userId,
-      status: filters.status,
-      type: filters.type,
-    },
-    include: {
-      jobs: true,
-      integration: {
-        include: {
-          provider: true,
+  const { page, pageSize } = pagination;
+
+  // Calculate pagination values
+  const skip = (page - 1) * pageSize;
+
+  // Fetch tasks with pagination
+  const [tasks, totalCount] = await Promise.all([
+    prisma.task.findMany({
+      where: {
+        userId,
+        status: filters.status,
+        type: filters.type,
+      },
+      include: {
+        subTasks: true,
+        integration: {
+          include: {
+            provider: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take: pageSize,
+    }),
+
+    prisma.task.count({
+      where: {
+        userId,
+        status: filters.status,
+        type: filters.type,
+      },
+    }),
+  ]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   if (!tasks || tasks.length === 0) {
     return (
@@ -78,18 +103,19 @@ export default async function JobListTable({
         </TableThead>
         <TableTbody>
           {tasks.map((task) => {
-            const totalJobs = task.jobs.length;
-            const completedJobs = task.jobs.filter(
-              (job) => job.status === JobStatus.COMPLETED
+            const totalJobs = task.subTasks.length;
+            const completedJobs = task.subTasks.filter(
+              (job) => job.status === SubTaskStatus.COMPLETED
             ).length;
-            const failedJobs = task.jobs.filter(
-              (job) => job.status === JobStatus.FAILED
+            const failedJobs = task.subTasks.filter(
+              (job) => job.status === SubTaskStatus.FAILED
             ).length;
             const progressPercentage =
               totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0;
 
             const hasErrors =
-              task.errorMessage || task.jobs.some((job) => job.errorMessage);
+              task.errorMessage ||
+              task.subTasks.some((job) => job.errorMessage);
 
             return (
               <TableTr
@@ -140,12 +166,24 @@ export default async function JobListTable({
           })}
         </TableTbody>
       </Table>
+
+      {/* Pagination Controls */}
+      <PaginationControls
+        currentPage={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        totalItems={totalCount}
+        searchParams={{
+          status: filters.status,
+          type: filters.type,
+        }}
+      />
     </Box>
   );
 }
 
 // Helper functions
-function getStatusColor(status: TaskStatus | JobStatus) {
+function getStatusColor(status: TaskStatus | SubTaskStatus) {
   switch (status) {
     case "COMPLETED":
       return "green";

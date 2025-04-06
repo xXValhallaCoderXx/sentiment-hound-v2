@@ -31,7 +31,7 @@ const DashboardLayout = ({ children }: any) => {
         <SideDrawerNavigation />
       </AppShellNavbar>
       <AppShellMain bg="#F9FAFB">
-        <Notifications />
+        <Notifications position="top-right" />
         {children}
       </AppShellMain>
     </AppShell>

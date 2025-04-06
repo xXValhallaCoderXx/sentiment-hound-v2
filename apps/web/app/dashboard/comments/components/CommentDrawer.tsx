@@ -1,11 +1,12 @@
 "use client";
 
 import { Drawer, Box, Text } from "@mantine/core";
+
 import { useRouter } from "next/navigation";
 
 interface CommentDrawerProps {
   opened: boolean;
-  selectedComment: Comment | null;
+  selectedComment: any;
 }
 
 const CommentDrawer: React.FC<CommentDrawerProps> = ({

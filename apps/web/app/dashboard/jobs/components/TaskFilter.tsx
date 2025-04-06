@@ -1,15 +1,36 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Select, Button, Group } from "@mantine/core";
 import { TaskStatus, TaskType } from "@repo/db";
 
 const TaskFilter: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get current filter values from URL
+  const currentStatus = searchParams.get("status") as TaskStatus | null;
+  const currentType = searchParams.get("type") as TaskType | null;
 
   const handleApplyFilters = (status?: TaskStatus, type?: TaskType) => {
-    const params = new URLSearchParams();
-    if (status) params.set("status", status);
-    if (type) params.set("type", type);
+    // Create new params object from current params to preserve pagination
+    const params = new URLSearchParams(searchParams.toString());
+
+    // Update or remove status filter
+    if (status) {
+      params.set("status", status);
+    } else {
+      params.delete("status");
+    }
+
+    // Update or remove type filter
+    if (type) {
+      params.set("type", type);
+    } else {
+      params.delete("type");
+    }
+
+    // Reset to page 1 when filters change
+    params.set("page", "1");
 
     router.push(`?${params.toString()}`);
   };
@@ -28,11 +49,11 @@ const TaskFilter: React.FC = () => {
               .replace(/\b\w/g, (l) => l.toUpperCase()),
           }))}
           onChange={(value) =>
-            handleApplyFilters(value as TaskStatus, undefined)
+            handleApplyFilters(value as TaskStatus, currentType || undefined)
           }
+          value={currentStatus || null}
           clearable
         />
-
         <Select
           label="Type"
           placeholder="Select type"
@@ -43,10 +64,12 @@ const TaskFilter: React.FC = () => {
               .toLowerCase()
               .replace(/\b\w/g, (l) => l.toUpperCase()),
           }))}
-          onChange={(value) => handleApplyFilters(undefined, value as TaskType)}
+          onChange={(value) =>
+            handleApplyFilters(currentStatus || undefined, value as TaskType)
+          }
+          value={currentType || null}
           clearable
         />
-
         <Button onClick={() => handleApplyFilters(undefined, undefined)}>
           Clear Filters
         </Button>

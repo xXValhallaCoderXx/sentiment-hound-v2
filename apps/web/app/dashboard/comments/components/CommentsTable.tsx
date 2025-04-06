@@ -12,6 +12,7 @@ import {
   Tooltip,
   Text,
 } from "@mantine/core";
+import { Pagination } from "@/components/molecules/Pagination";
 
 interface Comment {
   id: number;
@@ -23,9 +24,20 @@ interface Comment {
 
 interface CommentsTableProps {
   data: Comment[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
+  filters?: Record<string, string | undefined>;
 }
 
-const CommentsTable: React.FC<CommentsTableProps> = ({ data }) => {
+const CommentsTable: React.FC<CommentsTableProps> = ({
+  data,
+  pagination,
+  filters = {},
+}) => {
   if (!data || data.length === 0) {
     return (
       <Box p="md">
@@ -111,6 +123,15 @@ const CommentsTable: React.FC<CommentsTableProps> = ({ data }) => {
           ))}
         </TableTbody>
       </Table>
+
+      {/* Pagination component */}
+      <Pagination
+        currentPage={pagination.page}
+        totalPages={pagination.totalPages}
+        pageSize={pagination.pageSize}
+        totalItems={pagination.total}
+        searchParams={filters}
+      />
     </Box>
   );
 };

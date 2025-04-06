@@ -15,6 +15,15 @@ type CommentWithRelations = Comment & {
     sentiment: string;
   }>;
 };
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 export class CoreCommentService {
   constructor(private repository: CommentRepository) {}
 
@@ -39,13 +48,17 @@ export class CoreCommentService {
     providerId,
     sentiment,
     aspect,
+    page = 1,
+    pageSize = 10,
   }: {
     userId: string;
     providerId?: number;
     sentiment?: string;
     aspect?: string;
+    page?: number;
+    pageSize?: number;
   }): Promise<
-    Array<{
+    PaginatedResult<{
       id: number;
       content: string;
       sentiment: string | null;
@@ -53,49 +66,78 @@ export class CoreCommentService {
       aspects: Array<{ aspect: string; sentiment: string }>;
     }>
   > {
-    const comments = await this.repository.findMany({
-      where: {
-        post: {
-          userId,
-          integration: providerId
-            ? {
-                providerId,
-              }
-            : undefined,
-        },
-        sentiment: sentiment ? sentiment : undefined,
-        aspectAnalyses: aspect
+    // Calculate pagination values
+    const skip = (page - 1) * pageSize;
+
+    // Construct the where clause for filtering
+    const whereClause = {
+      post: {
+        userId,
+        integration: providerId
           ? {
-              some: {
-                aspect,
-              },
+              providerId,
             }
           : undefined,
       },
-      include: {
-        post: {
-          include: {
-            integration: {
-              include: {
-                provider: true,
+      sentiment: sentiment ? sentiment : undefined,
+      aspectAnalyses: aspect
+        ? {
+            some: {
+              aspect,
+            },
+          }
+        : undefined,
+    };
+
+    // Get comments with pagination
+    const [comments, totalCount] = await Promise.all([
+      this.repository.findMany({
+        where: whereClause,
+        include: {
+          post: {
+            include: {
+              integration: {
+                include: {
+                  provider: true,
+                },
               },
             },
           },
+          aspectAnalyses: true,
         },
-        aspectAnalyses: true,
-      },
-    });
+        skip,
+        take: pageSize,
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      this.repository.count(whereClause), // Fix: Pass whereClause directly as the first parameter
+    ]);
 
-    return (comments as CommentWithRelations[]).map((comment) => ({
-      id: comment.id,
-      content: comment.content,
-      sentiment: comment.sentiment,
-      provider: comment.post?.integration.provider.name,
-      aspects: comment.aspectAnalyses?.map((aspect: any) => ({
-        aspect: aspect.aspect,
-        sentiment: aspect.sentiment,
-      })),
-    }));
+    // Calculate total pages
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    // Format the comments
+    const formattedComments = (comments as CommentWithRelations[]).map(
+      (comment) => ({
+        id: comment.id,
+        content: comment.content,
+        sentiment: comment.sentiment,
+        provider: comment.post?.integration.provider.name,
+        aspects: comment.aspectAnalyses?.map((aspect: any) => ({
+          aspect: aspect.aspect,
+          sentiment: aspect.sentiment,
+        })),
+      })
+    );
+
+    return {
+      data: formattedComments,
+      total: totalCount,
+      page,
+      pageSize,
+      totalPages,
+    };
   }
 
   async updateCommentSentiment(

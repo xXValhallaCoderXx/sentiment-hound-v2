@@ -11,10 +11,12 @@
   "scripts": {
     "db:build": "tsc -p tsconfig.build.json",
     "db:push": "prisma db push --accept-data-loss",
+    "db:format": "prisma format",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
     "db:deploy": "prisma migrate deploy",
-    "db:seed": "node ./dist/seed.js"
+    "db:seed": "node ./dist/seed.js",
+    "db:reset": "prisma db push --force-reset --accept-data-loss"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
