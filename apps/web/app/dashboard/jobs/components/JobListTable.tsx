@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 import dayjs from "dayjs";
+import JobListItem from "@/components/molecules/JobListItem";
 import { SubTaskStatus, TaskStatus, TaskType } from "@repo/db";
 import PaginationControls from "./PaginationControls";
 
