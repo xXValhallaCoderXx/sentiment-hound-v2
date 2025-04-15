@@ -24,8 +24,6 @@ const PostListTable = ({ data, pagination }: PostsTableProps) => {
     );
   }
 
-  console.log("DATA: ", data);
-
   // Format the data for PostListItem
   const formattedPosts = data.map((post: ProcessedPost) => {
     // Calculate the top aspects (most mentioned positive aspects)

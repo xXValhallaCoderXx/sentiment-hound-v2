@@ -10,7 +10,7 @@ const YoutubeUrlForm = ({ integration }: { integration: string }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  console.log("Integrations: ", integration);
+
   const form = useForm({
     initialValues: {
       url: "",

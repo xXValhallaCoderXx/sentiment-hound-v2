@@ -16,7 +16,7 @@ const ProfileCard = async ({ id }: IProfileCardProps) => {
       },
     },
   });
-  console.log("USER: ", user);
+
   if (!user) {
     return <Text>User not found</Text>;
   }

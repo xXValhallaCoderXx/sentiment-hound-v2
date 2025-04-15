@@ -70,7 +70,6 @@ export async function getAllIntegrations(): Promise<ActionResponse<Integration[]
 }
 
 export async function revokeIntegration(formData: FormData) {
-  console.log("LETS GO: ", formData);
   const session = await auth();
   const userId = session?.user?.id;
   const providerId = formData.get("providerId");

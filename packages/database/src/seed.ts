@@ -8,7 +8,7 @@ import {
   TaskStatus,
 } from "../generated/client";
 
-const userId = "cm93xj51n0000sb3mc95m03nl";
+const userId = "cm990wl1j0000i03x67ed3r8s";
 
 const prisma = new PrismaClient();
 

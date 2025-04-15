@@ -105,7 +105,7 @@ export async function refreshAccessToken(): Promise<ActionResponse<boolean>> {
 
     const result = await youtubeService.refreshAccessToken(x?.refreshToken);
 
-    console.log("RESSSULT: ", result);
+
     return { data: true, error: null };
   } catch (error: any) {
     return {

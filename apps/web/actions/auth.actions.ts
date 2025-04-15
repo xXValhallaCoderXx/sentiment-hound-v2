@@ -102,7 +102,7 @@ export async function revokeIntegration(formData: FormData) {
         },
       }
     );
-    console.log("REVOKE TOKEN: ", response);
+
     if (!response.ok) {
       console.error("Failed to revoke Google token");
     }
