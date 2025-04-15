@@ -1,38 +1,19 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { Drawer, Button, Group } from "@mantine/core";
-import { revalidatePathAction } from "@/actions/navigation.actions";
-import { FC } from "react";
+import { FC, Suspense } from "react";
+import JobDetail from "./JobDetail";
+import JobDetailDrawerClient from "./JobDetailClient";
 
 interface IJobDetailDrawerProps {
-  isOpen: boolean;
-  onClose?: () => void;
+  jobId: string;
 }
 
-const JobDetailDrawer: FC<IJobDetailDrawerProps> = ({ isOpen, onClose }) => {
-  const router = useRouter();
-  const handleOnClose = () => {
-    if (onClose) {
-      onClose();
-    }
-    revalidatePathAction("/dashboard/jobs");
-    router.push("/dashboard/jobs");
-  };
-
+const JobDetailDrawer: FC<IJobDetailDrawerProps> = ({ jobId }) => {
   return (
-    <Drawer
-      opened={isOpen}
-      position="right"
-      onClose={handleOnClose}
-      title="Register"
-      styles={{
-        title: { fontSize: 20 },
-      }}
-      padding="lg"
-      size="md"
-    >
-      Weee
-    </Drawer>
+    <JobDetailDrawerClient jobId={jobId}>
+      <Suspense fallback={<div>Loading</div>}>
+        <JobDetail jobId={jobId} />
+      </Suspense>
+    </JobDetailDrawerClient>
   );
 };
+
 export default JobDetailDrawer;

@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Job } from '../jobs.service';
 import {
-  jobService,
+  subtaskService,
   postService,
   integrationsService,
   commentsService,
@@ -50,7 +50,7 @@ export class SentimentAnalysisProcessor {
     // If there are no pending comments, mark the job as completed and return
     if (!pendingComments?.length) {
       this.logger.log(`No pending comments to analyze for job id=${job.id}`);
-      await jobService.markJobAsCompleted(job.id);
+      await subtaskService.markSubTaskAsCompleted(job.id);
       return;
     }
 
@@ -118,7 +118,7 @@ export class SentimentAnalysisProcessor {
     }
 
     this.logger.log(`All batches processed for job id=${job.id}`);
-    await jobService.markJobAsCompleted(job.id);
+    await subtaskService.markSubTaskAsCompleted(job.id);
   }
 
   /**

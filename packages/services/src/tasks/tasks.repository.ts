@@ -1,37 +1,86 @@
-import { BaseRepository } from "../common/base.repository";
-import { Task, PrismaClient, Prisma, TaskStatus, TaskType } from "@repo/db";
+import { Task, PrismaClient, Prisma } from "@repo/db";
 
-export class TaskRepository extends BaseRepository<"task"> {
-  constructor(prisma: PrismaClient) {
-    super(prisma, "task");
+export class TaskRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async create(args: Prisma.TaskCreateArgs): Promise<Task> {
+    return this.prisma.task.create(args);
   }
 
-  async findByUserId(
-    userId: string,
-    args?: Omit<Prisma.TaskFindManyArgs, "where">
-  ): Promise<Task[]> {
-    return this.findMany({ userId }, args);
+  async createMany(args: Prisma.TaskCreateManyArgs) {
+    return this.prisma.task.createMany(args);
+  }
+
+  async findAll(args?: Prisma.TaskFindManyArgs): Promise<Task[]> {
+    return this.prisma.task.findMany(args || {});
+  }
+
+  async findById(
+    id: string | number,
+    args?: Omit<Prisma.TaskFindUniqueArgs, "where">
+  ) {
+    const idNumber = typeof id === "string" ? parseInt(id) : id;
+    return this.prisma.task.findUnique({
+      where: { id: idNumber },
+      ...args,
+    });
+  }
+
+  async findUnique(
+    where: Prisma.TaskWhereUniqueInput,
+    args?: Omit<Prisma.TaskFindUniqueArgs, "where">
+  ) {
+    return this.prisma.task.findUnique({
+      where,
+      ...args,
+    });
+  }
+
+  async findFirst(
+    where: Prisma.TaskWhereInput,
+    args?: Omit<Prisma.TaskFindFirstArgs, "where">
+  ) {
+    return this.prisma.task.findFirst({
+      where,
+      ...args,
+    });
+  }
+
+  async findMany(args: Prisma.TaskFindManyArgs) {
+    return this.prisma.task.findMany(args);
   }
 
   async update(
-    id: number,
+    id: string | number,
     data: Prisma.TaskUpdateInput,
     args?: Omit<Prisma.TaskUpdateArgs, "where" | "data">
-  ): Promise<Task> {
-    return super.update(id, data, args);
+  ) {
+    const idNumber = typeof id === "string" ? parseInt(id) : id;
+    return this.prisma.task.update({
+      where: { id: idNumber },
+      data,
+      ...args,
+    });
   }
 
-  async findFilteredTasks(
-    userId: string,
-    filters: { status?: TaskStatus; type?: TaskType },
-    args?: Omit<Prisma.TaskFindManyArgs, "where">
-  ): Promise<Task[]> {
-    const where: Prisma.TaskWhereInput = {
-      userId,
-      status: filters.status,
-      type: filters.type,
-    };
+  async delete(
+    id: string | number,
+    args?: Omit<Prisma.TaskDeleteArgs, "where">
+  ) {
+    const idNumber = typeof id === "string" ? parseInt(id) : id;
+    return this.prisma.task.delete({
+      where: { id: idNumber },
+      ...args,
+    });
+  }
 
-    return this.findMany(where, args);
+  async count(
+    where: Prisma.TaskWhereInput,
+    args?: Omit<Prisma.TaskCountArgs, "where">
+  ) {
+    return this.prisma.task.count({
+      where,
+      ...args,
+    });
   }
 }

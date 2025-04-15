@@ -55,7 +55,7 @@ const JobsPage = async ({
           }}
         />
       </Suspense>
-      <JobDetailDrawer isOpen={Boolean(jobId)} />
+      <JobDetailDrawer jobId={jobId || ""} />
     </PageLayout>
   );
 };

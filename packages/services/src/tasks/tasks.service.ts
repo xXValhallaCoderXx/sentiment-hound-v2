@@ -1,6 +1,6 @@
 import { Task, TaskType, TaskStatus, SubTaskType } from "@repo/db";
 import { TaskRepository } from "./tasks.repository";
-import { jobService } from "..";
+import { subtaskService } from "..";
 
 export class CoreTaskService {
   constructor(private repository: TaskRepository) {}
@@ -8,7 +8,7 @@ export class CoreTaskService {
   async getTask(id: number): Promise<Task> {
     const task = await this.repository.findById(id);
     if (!task) {
-      throw new Error("Task not found");
+      throw new Error("Sub Task not found");
     }
 
     // Shared business logic goes here
@@ -18,11 +18,12 @@ export class CoreTaskService {
 
   async getAllTasks(): Promise<Task[]> {
     // Include jobs relation for each task
-    return this.repository.findAll({ include: { jobs: true } });
+    return this.repository.findAll({ include: { subTasks: true } });
   }
 
   async getTasksByUserId(userId: string): Promise<Task[]> {
-    return this.repository.findByUserId(userId);
+    const tasks = await this.repository.findAll({ where: { userId } });
+    return tasks;
   }
 
   async toggleTaskCompletion(id: number): Promise<Task> {
@@ -39,11 +40,10 @@ export class CoreTaskService {
     extraData,
   }: {
     userId: string;
-    integrationId?: number;
+    integrationId: number;
     taskType?: TaskType;
     extraData?: any;
   }): Promise<Task> {
-    console.log("TAAASK TAAASK TAAASK: ", taskType);
     // Create the task first
     const task = await this.repository.create({
       data: {
@@ -54,19 +54,19 @@ export class CoreTaskService {
         status: TaskStatus.PENDING,
       },
     });
-    console.log("TASK CREATED: ", task);
+    console.log("Sub Task CREATED: ", task);
     // Create appropriate jobs based on task type
     if (task.id) {
       switch (taskType) {
         case TaskType.ANALYZE_POST:
-          console.log("Task Type: ANALYZE_POST");
+          console.log("Sub Task Type: ANALYZE_POST");
           // Full sync needs both fetching and analyzing
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
             data: { integrationId, extraData },
           });
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
@@ -75,14 +75,14 @@ export class CoreTaskService {
           break;
 
         case TaskType.FULL_SYNC:
-          console.log("Task Type: FULL_SYNC");
+          console.log("Sub Task Type: FULL_SYNC");
           // Full sync needs both fetching and analyzing
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
             data: { integrationId },
           });
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
@@ -91,9 +91,9 @@ export class CoreTaskService {
           break;
 
         case TaskType.PARTIAL_SYNC:
-          console.log("Task Type: PARTIAL_SYNC");
+          console.log("Sub Task Type: PARTIAL_SYNC");
           // Partial sync just needs to fetch new content
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
 
@@ -103,14 +103,14 @@ export class CoreTaskService {
           break;
 
         case TaskType.ANALYZE_COMMENTS:
-          console.log("Task Type: ANALYZE_COMMENTS");
+          console.log("Sub Task Type: ANALYZE_COMMENTS");
           // Just need sentiment analysis
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
             data: { integrationId },
           });
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
@@ -119,7 +119,7 @@ export class CoreTaskService {
 
         default:
           // For OTHER or unspecified types, no jobs are created
-          console.log("Task Type: OTHER");
+          console.log("Sub Task Type: OTHER");
           break;
       }
     }
@@ -136,6 +136,6 @@ export class CoreTaskService {
     userId: string,
     filters: { status?: TaskStatus; type?: TaskType }
   ): Promise<Task[]> {
-    return this.repository.findFilteredTasks(userId, filters);
+    return this.repository.findAll({ where: { userId, ...filters } });
   }
 }
