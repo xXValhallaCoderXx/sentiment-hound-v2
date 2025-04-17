@@ -54,7 +54,7 @@ export class QueueService {
     }
 
     // Mark the task as COMPLETED after all jobs have been processed
-    // await taskService.updateTaskStatus(pendingTask.id, 'COMPLETED');
-    // this.logger.log(`Task id ${pendingTask.id} processed.`);
+    await taskService.updateTaskStatus(pendingTask.id, 'COMPLETED');
+    this.logger.log(`Task id ${pendingTask.id} processed.`);
   }
 }
