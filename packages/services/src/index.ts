@@ -41,7 +41,7 @@ export const postService = new CorePostService(postRepository);
 export const youtubeService = new YoutubeService();
 
 export const queueService = new CoreQueueService(queueRepository);
-export const taskService = new CoreTaskService(taskRepository);
+export const taskService = new CoreTaskService(taskRepository, prisma);
 export const subtaskService = new CoreSubTaskService(subtaskRepository);
 export const commentsService = new CoreCommentService(commentRepository);
 export const userService = new CoreUserService(userRepository);

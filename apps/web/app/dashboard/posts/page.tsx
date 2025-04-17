@@ -28,39 +28,43 @@ export default async function PostsDefaultPage({
   if (!session?.user?.id) {
     return <Box>You must be logged in to view this page</Box>;
   }
-
+  const {
+    page,
+    pageSize,
+    providerId,
+    sentiment,
+    startDate,
+    endDate,
+    sortBy,
+    sortOrder,
+    searchTerm,
+  } = await searchParams;
   // Get pagination parameters from URL
-  const page = parseInt(searchParams.page || "1", 10);
-  const pageSize = parseInt(searchParams.pageSize || "9", 10);
+  const pageFilter = parseInt(page || "1", 10);
+  const pageSizeFilter = parseInt(pageSize || "9", 10);
 
   // Get filter parameters
-  const providerId = searchParams.providerId
-    ? parseInt(searchParams.providerId)
-    : undefined;
-  const sentiment = searchParams.sentiment || undefined;
-  const startDate = searchParams.startDate
-    ? new Date(searchParams.startDate)
-    : undefined;
-  const endDate = searchParams.endDate
-    ? new Date(searchParams.endDate)
-    : undefined;
-  const searchTerm = searchParams.searchTerm || undefined;
-  const sortBy = searchParams.sortBy || "createdAt";
-  const sortOrder = searchParams.sortOrder || "desc";
+  const providerIdFilter = providerId ? parseInt(providerId) : undefined;
+  const sentimentFilter = sentiment || undefined;
+  const startDateFilter = startDate ? new Date(startDate) : undefined;
+  const endDateFilter = endDate ? new Date(endDate) : undefined;
+  const searchTermFilter = searchTerm || undefined;
+  const sortByFilter = sortBy || "createdAt";
+  const sortOrderFilter = sortOrder || "desc";
 
   // Get posts with filters and pagination
   const postsData = await postService.getUserProcessedPosts({
     userId: session.user.id,
     includeComments: true,
     includeAspectAnalyses: true,
-    page,
-    pageSize,
-    providerId,
-    startDate,
-    endDate,
-    searchTerm,
-    sortBy,
-    sortOrder: sortOrder as "asc" | "desc",
+    page: pageFilter,
+    pageSize: pageSizeFilter,
+    providerId: providerIdFilter,
+    startDate: startDateFilter,
+    endDate: endDateFilter,
+    searchTerm: searchTermFilter,
+    sortBy: sortByFilter,
+    sortOrder: sortOrderFilter as "asc" | "desc",
     onlyWithComments: true,
   });
 
@@ -76,8 +80,8 @@ export default async function PostsDefaultPage({
               currentFilters={{
                 providerId: providerId?.toString(),
                 sentiment,
-                startDate: startDate?.toISOString().split("T")[0],
-                endDate: endDate?.toISOString().split("T")[0],
+                startDate: startDateFilter?.toISOString().split("T")[0],
+                endDate: endDateFilter?.toISOString().split("T")[0],
                 searchTerm,
                 sortBy,
                 sortOrder,
@@ -88,7 +92,7 @@ export default async function PostsDefaultPage({
             <PostListTable
               data={postsData.data}
               pagination={{
-                page,
+                page: pageFilter,
                 totalPages: postsData.totalPages,
                 onPageChange: (newPage) => {
                   // This will be handled by a client component

@@ -18,7 +18,7 @@ const CommentsPage = async ({
     commentId,
     page = "1",
     pageSize = "10",
-  } = searchParams;
+  } = await searchParams;
 
   // Convert pagination params to numbers
   const currentPage = parseInt(page, 10);

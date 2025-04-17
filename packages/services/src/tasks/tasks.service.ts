@@ -1,25 +1,54 @@
-import { Task, TaskType, TaskStatus, SubTaskType } from "@repo/db";
+import {
+  Task,
+  TaskType,
+  TaskStatus,
+  SubTaskType,
+  Prisma,
+  prisma,
+  PrismaClient,
+} from "@repo/db";
 import { TaskRepository } from "./tasks.repository";
 import { subtaskService } from "..";
 
 export class CoreTaskService {
-  constructor(private repository: TaskRepository) {}
+  constructor(
+    private repository: TaskRepository,
+    private prisma: PrismaClient
+  ) {}
 
-  async getTask(id: number): Promise<Task> {
-    const task = await this.repository.findById(id);
+  async getTask<T extends Prisma.TaskDefaultArgs>(
+    args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
+  ): Promise<Prisma.TaskGetPayload<T>> {
+    const task = await this.prisma.task.findFirst(args);
     if (!task) {
-      throw new Error("Sub Task not found");
+      throw new Error("Task not found");
     }
-
-    // Shared business logic goes here
-    // For example: task validation, transformation, etc.
     return task;
   }
 
-  async getAllTasks(): Promise<Task[]> {
-    // Include jobs relation for each task
-    return this.repository.findAll({ include: { subTasks: true } });
+  async getTaskById(args?: Prisma.TaskFindFirstArgs) {
+    const task = await this.prisma.task.findFirst(args);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+
+    return task;
   }
+
+  async getAllTasks<T extends Prisma.TaskDefaultArgs>(
+    args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
+  ): Promise<Prisma.TaskGetPayload<T>> {
+    const task = await this.prisma.task.findFirst(args);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    return task;
+  }
+
+  // async getAllTasks(): Promise<Task[]> {
+  //   // Include jobs relation for each task
+  //   return this.repository.findAll({ include: { subTasks: true } });
+  // }
 
   async getTasksByUserId(userId: string): Promise<Task[]> {
     const tasks = await this.repository.findAll({ where: { userId } });
@@ -28,7 +57,10 @@ export class CoreTaskService {
 
   async toggleTaskCompletion(id: number): Promise<Task> {
     // Validate task exists before toggling
-    return await this.getTask(id);
+    return await this.getTask({
+      where: { id },
+      include: { subTasks: { include: { subTaskComments: true } } },
+    });
 
     // return this.repository.toggleComplete(id);
   }
@@ -139,3 +171,41 @@ export class CoreTaskService {
     return this.repository.findAll({ where: { userId, ...filters } });
   }
 }
+
+// import {
+//   Task,
+//   TaskType,
+//   TaskStatus,
+//   SubTaskType,
+//   Prisma,
+//   PrismaClient,
+// } from "@repo/db";
+// import { TaskRepository } from "./tasks.repository";
+
+// export class CoreTaskService {
+//   constructor(
+//     private repository: TaskRepository,
+//     private prisma: PrismaClient
+//   ) {}
+
+//   async getTask<T extends Prisma.TaskDefaultArgs>(
+//     args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
+//   ): Promise<Prisma.TaskGetPayload<T>> {
+//     const task = await this.prisma.task.findFirst(args);
+//     if (!task) {
+//       throw new Error("Task not found");
+//     }
+//     return task;
+//   }
+//   async toggleTaskCompletion(id: number) {
+//     // Validate task exists before toggling
+//     const x = await this.getTask({
+//       where: { id },
+//       include: { subTasks: { include: { subTaskComments: true } } },
+//     });
+
+//     return x;
+
+//     // return this.repository.toggleComplete(id);
+//   }
+// }
