@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Button, TextInput, Flex, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { Button, TextInput, Flex } from "@mantine/core";
 import { addNewTask } from "@/slices/tasks/tasks.actions";
 import { useForm } from "@mantine/form";
-import { Integration, TaskType } from "@repo/db";
+import { TaskType } from "@repo/db";
 
 const YoutubeUrlForm = ({ integration }: { integration: string }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -27,8 +26,6 @@ const YoutubeUrlForm = ({ integration }: { integration: string }) => {
 
   const handleSubmit = async (values: typeof form.values) => {
     setIsSubmitting(true);
-    setError(null);
-    setSuccess(false);
 
     try {
       const formData = new FormData();
@@ -40,10 +37,18 @@ const YoutubeUrlForm = ({ integration }: { integration: string }) => {
       formData.append("extraData", extraData);
 
       await addNewTask(formData);
-      setSuccess(true);
+      notifications.show({
+        title: "Success",
+        message: "YouTube URL submitted successfully!",
+        color: "green",
+      });
       form.reset();
     } catch (error) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      notifications.show({
+        title: "Error",
+        message: error instanceof Error ? error.message : "An error occurred",
+        color: "red",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -59,13 +64,6 @@ const YoutubeUrlForm = ({ integration }: { integration: string }) => {
           {...form.getInputProps("url")}
           disabled={isSubmitting}
         />
-
-        {/* Hidden fields */}
-
-        {error && <Text color="red">{error}</Text>}
-        {success && (
-          <Text color="green">YouTube URL submitted successfully!</Text>
-        )}
 
         <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
           Submit

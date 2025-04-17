@@ -17,6 +17,7 @@ const JOB_TYPE_MAP = {
   [TaskType.ANALYZE_POST]: "Analyzing content",
 };
 
+
 const JobListItem = ({ post }: any) => {
   return (
     <Link href={`/dashboard/jobs?jobId=${post.id}`} passHref legacyBehavior>

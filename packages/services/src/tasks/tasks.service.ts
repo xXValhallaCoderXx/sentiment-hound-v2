@@ -7,19 +7,18 @@ import {
   prisma,
   PrismaClient,
 } from "@repo/db";
-import { TaskRepository } from "./tasks.repository";
 import { subtaskService } from "..";
 
 export class CoreTaskService {
-  constructor(
-    private repository: TaskRepository,
-    private prisma: PrismaClient
-  ) {}
+  private model: Prisma.TaskDelegate;
+  constructor(private prisma: PrismaClient) {
+    this.model = prisma.task;
+  }
 
   async getTask<T extends Prisma.TaskDefaultArgs>(
     args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
   ): Promise<Prisma.TaskGetPayload<T>> {
-    const task = await this.prisma.task.findFirst(args);
+    const task = await this.model.findFirst(args);
     if (!task) {
       throw new Error("Task not found");
     }
@@ -27,7 +26,7 @@ export class CoreTaskService {
   }
 
   async getTaskById(args?: Prisma.TaskFindFirstArgs) {
-    const task = await this.prisma.task.findFirst(args);
+    const task = await this.model.findFirst(args);
     if (!task) {
       throw new Error("Task not found");
     }
@@ -36,13 +35,17 @@ export class CoreTaskService {
   }
 
   async getAllTasks<T extends Prisma.TaskDefaultArgs>(
-    args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
-  ): Promise<Prisma.TaskGetPayload<T>> {
-    const task = await this.prisma.task.findFirst(args);
+    args?: Prisma.SelectSubset<T, Prisma.TaskFindManyArgs>
+  ): Promise<Prisma.TaskGetPayload<T>[]> {
+    const task = await this.model.findMany(args);
     if (!task) {
       throw new Error("Task not found");
     }
     return task;
+  }
+
+  async getAllTasks2(args: Prisma.TaskDefaultArgs) {
+    return this.model.findMany(args);
   }
 
   // async getAllTasks(): Promise<Task[]> {
@@ -51,7 +54,7 @@ export class CoreTaskService {
   // }
 
   async getTasksByUserId(userId: string): Promise<Task[]> {
-    const tasks = await this.repository.findAll({ where: { userId } });
+    const tasks = await this.model.findMany({ where: { userId } });
     return tasks;
   }
 
@@ -77,7 +80,7 @@ export class CoreTaskService {
     extraData?: any;
   }): Promise<Task> {
     // Create the task first
-    const task = await this.repository.create({
+    const task = await this.model.create({
       data: {
         type: taskType || TaskType.OTHER,
         integrationId,
@@ -96,7 +99,7 @@ export class CoreTaskService {
           await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
-            data: { integrationId, extraData },
+            data: { integrationId, ...extraData },
           });
           await subtaskService.createSubTask({
             taskId: task.id,
@@ -161,14 +164,17 @@ export class CoreTaskService {
 
   async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
     // Update task with new status using repository update method
-    return this.repository.update(id, { status });
+    return this.model.update({
+      where: { id },
+      data: { status },
+    });
   }
 
   async getFilteredTasks(
     userId: string,
     filters: { status?: TaskStatus; type?: TaskType }
   ): Promise<Task[]> {
-    return this.repository.findAll({ where: { userId, ...filters } });
+    return this.model.findMany({ where: { userId, ...filters } });
   }
 }
 
@@ -191,7 +197,7 @@ export class CoreTaskService {
 //   async getTask<T extends Prisma.TaskDefaultArgs>(
 //     args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
 //   ): Promise<Prisma.TaskGetPayload<T>> {
-//     const task = await this.prisma.task.findFirst(args);
+//     const task = await this.model.findFirst(args);
 //     if (!task) {
 //       throw new Error("Task not found");
 //     }

@@ -22,7 +22,7 @@ export class PostFetchProcessor {
       String(integration.providerId),
     );
 
-    const videoUrl = job.data.extraData.url;
+    const videoUrl = job.data.url;
 
     if (!videoUrl) {
       this.logger.error(`No video URL provided in job ${job.id}`);

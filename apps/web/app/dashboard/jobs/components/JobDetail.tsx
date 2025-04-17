@@ -13,7 +13,9 @@ const JobDetail: FC<JobDetailProps> = async ({ jobId }) => {
     where: { id: parseInt(jobId) },
     include: { subTasks: { include: { subTaskComments: true } } },
   });
-
+  x.subTasks?.map((y) => {
+    console.log("SUB TASK: ", y);
+  });
   return (
     <Stack>
       <Flex align="center" justify="space-between">

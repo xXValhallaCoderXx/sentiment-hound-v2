@@ -93,7 +93,7 @@ export default async function JobListTable({
   return (
     <Stack gap="md">
       <SimpleGrid cols={{ base: 1 }} spacing="md" verticalSpacing="md">
-        {tasks.map((post: any, index: any) => (
+        {tasks.map((post, index: number) => (
           <JobListItem key={index} post={post} />
         ))}
       </SimpleGrid>
