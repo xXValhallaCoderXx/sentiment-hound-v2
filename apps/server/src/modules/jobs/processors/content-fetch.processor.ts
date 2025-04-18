@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Job } from '../jobs.service';
 import {
-  jobService,
+  subtaskService,
   integrationsService,
   providerService,
   youtubeService,
@@ -25,7 +25,7 @@ export class ContentFetchProcessor {
     // TODO - Make this constant
     if (provider.name === 'youtube') {
       console.log('Fetching content from Youtube');
-      const user = await jobService.getUserForJob(job.id);
+      const user = await subtaskService.getUserForSubTask(job.id);
       const results = await youtubeService.fetchAllYoutubePosts(user?.id);
 
       // Prepare posts and comments data
@@ -68,6 +68,6 @@ export class ContentFetchProcessor {
     }
 
     // ...existing code to fetch content based on job.data...
-    await jobService.markJobAsCompleted(job.id);
+    await subtaskService.markSubTaskAsCompleted(job.id);
   }
 }

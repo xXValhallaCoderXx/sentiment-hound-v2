@@ -32,14 +32,8 @@ export class YoutubeAuthService {
     refreshToken: string
   ): Promise<IYoutubeRefreshToken> {
     const params = new URLSearchParams();
-    params.append(
-      "client_id",
-      "80558175919-njvaidu8l8b2b8kgruefbs364im90ia9.apps.googleusercontent.com" as string
-    );
-    params.append(
-      "client_secret",
-      "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" as string
-    );
+    params.append("client_id", process.env.AUTH_GOOGLE_ID as string);
+    params.append("client_secret", process.env.AUTH_GOOGLE_SECRET as string);
     params.append("refresh_token", refreshToken);
     params.append("grant_type", "refresh_token");
     console.log("GOOGLE ID: ", process.env.AUTH_GOOGLE_ID);
@@ -84,7 +78,7 @@ export class YoutubeAuthService {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to revoke token");
+      throw new Error(response.statusText || "Failed to revoke token");
     }
 
     return true;

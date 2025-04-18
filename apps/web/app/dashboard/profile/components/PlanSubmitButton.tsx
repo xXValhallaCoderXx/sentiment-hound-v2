@@ -27,7 +27,7 @@ const PlanSubmitButton: FC<IPlanSubmitButtonProps> = ({
     startTransition(async () => {
       try {
         const message = await addUserToPlan({ planId });
-        console.log("Message: ", message);
+
         notifications.show({
           title: "Default notification",
           message: "Do not forget to star Mantine on GitHub! 🌟",

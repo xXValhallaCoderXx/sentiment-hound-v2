@@ -2,11 +2,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Job } from '../jobs.service';
 import {
-  jobService,
+  subtaskService,
   postService,
   integrationsService,
   commentsService,
 } from '@repo/services';
+import { prisma } from '@repo/db';
 
 interface IAnalysisResponse {
   id: string;
@@ -35,29 +36,33 @@ export class SentimentAnalysisProcessor {
       job.data.integrationId,
     );
 
-    const posts = await postService.getUserIntegrationPosts({
-      userId: integration.userId,
-      integrationId: String(integration.id),
+    const pendingComments = await prisma.comment.findMany({
+      where: {
+        sentimentStatus: 'PENDING',
+        post: {
+          integrationId: integration.id,
+        },
+      },
     });
 
-    const comments = posts?.map((post) => post?.comments)?.flat();
-
-    // Filter out comments that already have a sentimentStatus of COMPLETED
-    const pendingComments = comments?.filter(
-      (comment) => comment?.sentimentStatus !== 'COMPLETED',
-    );
+    await prisma.subTaskComment.createMany({
+      data: pendingComments.map((comment) => ({
+        subTaskId: job.id,
+        commentId: comment.id,
+        status: 'PENDING',
+      })),
+      skipDuplicates: true,
+    });
 
     // If there are no pending comments, mark the job as completed and return
     if (!pendingComments?.length) {
       this.logger.log(`No pending comments to analyze for job id=${job.id}`);
-      await jobService.markJobAsCompleted(job.id);
+      await subtaskService.markSubTaskAsCompleted(job.id);
       return;
     }
 
     const preparedComments = pendingComments?.map((comment) => ({
-      // @ts-ignore
       id: String(comment.id),
-      // @ts-ignore
       value: comment.content,
     }));
 
@@ -103,11 +108,51 @@ export class SentimentAnalysisProcessor {
 
         // Update each comment in the current batch
         for (const comment of processedComments) {
-          await commentsService.updateCommentSentiment(
-            parseInt(comment.id),
-            comment.sentiment,
-            comment.aspects,
-          );
+          const commentId = parseInt(comment.id);
+
+          try {
+            // Update Comment sentiment data
+            await commentsService.updateCommentSentiment(
+              commentId,
+              comment.sentiment,
+              comment.aspects,
+            );
+
+            // Update SubTaskComment status
+            await prisma.subTaskComment.update({
+              where: {
+                subTaskId_commentId: {
+                  subTaskId: job.id,
+                  commentId: commentId,
+                },
+              },
+              data: {
+                status: 'COMPLETED',
+                analysis: JSON.stringify(comment), // or just sentiment summary
+              },
+            });
+          } catch (error) {
+            this.logger.error(
+              `Failed to update comment/subtaskComment for commentId=${commentId}`,
+            );
+
+            // Mark subtask comment as failed
+            await prisma.subTaskComment.update({
+              where: {
+                subTaskId_commentId: {
+                  subTaskId: job.id,
+                  commentId: commentId,
+                },
+              },
+              data: {
+                status: 'FAILED',
+                analysis: JSON.stringify({
+                  error: error.message,
+                  commentId,
+                }),
+              },
+            });
+          }
         }
 
         this.logger.log(`Batch ${i + 1}/${batches.length} completed`);
@@ -118,7 +163,7 @@ export class SentimentAnalysisProcessor {
     }
 
     this.logger.log(`All batches processed for job id=${job.id}`);
-    await jobService.markJobAsCompleted(job.id);
+    await subtaskService.markSubTaskAsCompleted(job.id);
   }
 
   /**

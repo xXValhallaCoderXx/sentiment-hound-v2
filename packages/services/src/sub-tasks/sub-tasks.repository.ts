@@ -1,7 +1,7 @@
 import { BaseRepository } from "../common/base.repository";
 import { PrismaClient, Prisma, SubTask } from "@repo/db";
 
-export class JobRepository extends BaseRepository<"subTask"> {
+export class SubTaskRepository extends BaseRepository<"subTask"> {
   constructor(prisma: PrismaClient) {
     super(prisma, "subTask");
   }

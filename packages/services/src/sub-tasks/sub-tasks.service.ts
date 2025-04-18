@@ -1,26 +1,25 @@
 import { SubTask, SubTaskStatus, SubTaskType, Task, User } from "@repo/db";
-import { JobRepository } from "./sub-tasks.repository";
+import { SubTaskRepository } from "./sub-tasks.repository";
 
-export class CoreJobService {
-  constructor(private repository: JobRepository) {}
+export class CoreSubTaskService {
+  constructor(private repository: SubTaskRepository) {}
 
-  async getJob(id: number): Promise<SubTask> {
-    const job = await this.repository.findById(id);
-    if (!job) {
-      throw new Error("Job not found");
+  async getSubTask(id: number): Promise<SubTask> {
+    try {
+      const job = await this.repository.findById(id);
+
+      return job;
+    } catch {
+      throw new Error("Subtask not found");
     }
-
-    // Shared business logic goes here
-    // For example: task validation, transformation, etc.
-    return job;
   }
 
-  async getAllJobs(): Promise<SubTask[]> {
+  async getAllSubTasks(): Promise<SubTask[]> {
     // Include jobs relation for each task
     return this.repository.findAll({ include: { jobs: true } });
   }
 
-  async createJob({
+  async createSubTask({
     taskId,
     type,
     data,
@@ -38,7 +37,7 @@ export class CoreJobService {
     });
   }
 
-  async getJobWithUser(
+  async getSubTaskWithUser(
     id: number
   ): Promise<SubTask & { task: Task & { user: User } }> {
     const job = await this.repository.findById(id, {
@@ -52,25 +51,25 @@ export class CoreJobService {
     });
 
     if (!job) {
-      throw new Error("Job not found");
+      throw new Error("SubTask not found");
     }
 
     return job;
   }
 
-  async getUserForJob(id: number): Promise<User> {
-    const job = await this.getJobWithUser(id);
+  async getUserForSubTask(id: number): Promise<User> {
+    const job = await this.getSubTaskWithUser(id);
     return job.task.user;
   }
 
-  async markJobAsFailed(jobId: string, error: string): Promise<SubTask> {
+  async markSubTaskAsFailed(jobId: string, error: string): Promise<SubTask> {
     return this.repository.update(Number(jobId), {
       status: SubTaskStatus.FAILED,
       errorMessage: error,
     });
   }
 
-  async markJobAsCompleted(jobId: number): Promise<SubTask> {
+  async markSubTaskAsCompleted(jobId: number): Promise<SubTask> {
     return this.repository.update(Number(jobId), {
       status: SubTaskStatus.COMPLETED,
     });

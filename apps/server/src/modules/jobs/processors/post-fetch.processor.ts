@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Job } from '../jobs.service';
 import {
-  jobService,
+  subtaskService,
   integrationsService,
   providerService,
   youtubeService,
@@ -22,18 +22,21 @@ export class PostFetchProcessor {
       String(integration.providerId),
     );
 
-    const videoUrl = job.data.extraData.url;
+    const videoUrl = job.data.url;
 
     if (!videoUrl) {
       this.logger.error(`No video URL provided in job ${job.id}`);
-      await jobService.markJobAsFailed(String(job.id), 'No video URL provided');
+      await subtaskService.markSubTaskAsFailed(
+        String(job.id),
+        'No video URL provided',
+      );
       return;
     }
 
     // TODO - Make this constant
     if (provider.name === 'youtube') {
       console.log('Fetching content from Youtube');
-      const user = await jobService.getUserForJob(job.id);
+      const user = await subtaskService.getUserForSubTask(job.id);
 
       try {
         // Fetch single video data
@@ -89,14 +92,14 @@ export class PostFetchProcessor {
           throw new Error(`Failed to find created post for video ${result.id}`);
         }
 
-        await jobService.markJobAsCompleted(job.id);
+        await subtaskService.markSubTaskAsCompleted(job.id);
       } catch (error) {
         this.logger.error(`Error processing video: ${error.message}`);
-        await jobService.markJobAsFailed(String(job.id), error.message);
+        await subtaskService.markSubTaskAsFailed(String(job.id), error.message);
       }
     } else {
       this.logger.warn(`Provider ${provider.name} not supported`);
-      await jobService.markJobAsFailed(
+      await subtaskService.markSubTaskAsFailed(
         String(job.id),
         'Provider not supported',
       );

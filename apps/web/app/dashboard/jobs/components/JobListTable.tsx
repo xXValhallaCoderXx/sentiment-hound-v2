@@ -10,10 +10,13 @@ import {
   Badge,
   Group,
   Card,
+  Stack,
+  SimpleGrid,
   Tooltip,
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 import dayjs from "dayjs";
+import JobListItem from "@/components/molecules/JobListItem";
 import { SubTaskStatus, TaskStatus, TaskType } from "@repo/db";
 import PaginationControls from "./PaginationControls";
 
@@ -48,10 +51,21 @@ export default async function JobListTable({
         type: filters.type,
       },
       include: {
-        subTasks: true,
         integration: {
           include: {
             provider: true,
+          },
+        },
+        subTasks: {
+          where: {
+            type: "ANALYZE_CONTENT_SENTIMENT",
+          },
+          include: {
+            subTaskComments: {
+              select: {
+                status: true,
+              },
+            },
           },
         },
       },
@@ -70,6 +84,7 @@ export default async function JobListTable({
       },
     }),
   ]);
+  
 
   // Calculate total pages
   const totalPages = Math.ceil(totalCount / pageSize);
@@ -88,98 +103,16 @@ export default async function JobListTable({
   }
 
   return (
-    <Box>
-      <Table striped highlightOnHover>
-        <TableThead>
-          <TableTr>
-            <TableTh>ID</TableTh>
-            <TableTh>Type</TableTh>
-            <TableTh>Integration</TableTh>
-            <TableTh>Status</TableTh>
-            <TableTh>Progress</TableTh>
-            <TableTh>Created</TableTh>
-            <TableTh>Updated</TableTh>
-          </TableTr>
-        </TableThead>
-        <TableTbody>
-          {tasks.map((task) => {
-            const totalJobs = task.subTasks.length;
-            const completedJobs = task.subTasks.filter(
-              (job) => job.status === SubTaskStatus.COMPLETED
-            ).length;
-            const failedJobs = task.subTasks.filter(
-              (job) => job.status === SubTaskStatus.FAILED
-            ).length;
-            const progressPercentage =
-              totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0;
-
-            const hasErrors =
-              task.errorMessage ||
-              task.subTasks.some((job) => job.errorMessage);
-
-            return (
-              <TableTr
-                key={task.id}
-                className="cursor-pointer hover:bg-gray-50"
-              >
-                <TableTd>{task.id}</TableTd>
-                <TableTd>
-                  <Badge color={getTaskTypeColor(task.type)}>
-                    {formatEnumValue(task.type)}
-                  </Badge>
-                </TableTd>
-                <TableTd>
-                  <Group>
-                    <Text size="sm">{task.integration.provider.name}</Text>
-                  </Group>
-                </TableTd>
-                <TableTd>
-                  <Group gap="xs">
-                    <Badge color={getStatusColor(task.status)}>
-                      {formatEnumValue(task.status)}
-                    </Badge>
-                    {hasErrors && (
-                      <Tooltip label="This task has errors">
-                        <IconAlertCircle size={16} color="red" />
-                      </Tooltip>
-                    )}
-                  </Group>
-                </TableTd>
-                <TableTd style={{ width: 200 }}>
-                  <Box>
-                    <Group mb={5}>
-                      <Text size="xs">
-                        {completedJobs} of {totalJobs} jobs
-                      </Text>
-                      <Text size="xs">{progressPercentage}%</Text>
-                    </Group>
-                  </Box>
-                </TableTd>
-                <TableTd>
-                  {dayjs(new Date(task.createdAt)).format("DD/MM/YYYY")}
-                </TableTd>
-                <TableTd>
-                  {dayjs(new Date(task.updatedAt)).format("DD/MM/YYYY")}
-                </TableTd>
-              </TableTr>
-            );
-          })}
-        </TableTbody>
-      </Table>
-
-      {/* Pagination Controls */}
-      <PaginationControls
-        currentPage={page}
-        totalPages={totalPages}
-        pageSize={pageSize}
-        totalItems={totalCount}
-        searchParams={{
-          status: filters.status,
-          type: filters.type,
-        }}
-      />
-    </Box>
+    <Stack gap="md">
+      <SimpleGrid cols={{ base: 1 }} spacing="md" verticalSpacing="md">
+        {tasks.map((post, index: number) => (
+          <JobListItem key={index} post={post} />
+        ))}
+      </SimpleGrid>
+    </Stack>
   );
+
+
 }
 
 // Helper functions

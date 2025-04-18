@@ -1,33 +1,69 @@
-import { Task, TaskType, TaskStatus, SubTaskType } from "@repo/db";
-import { TaskRepository } from "./tasks.repository";
-import { jobService } from "..";
+import {
+  Task,
+  TaskType,
+  TaskStatus,
+  SubTaskType,
+  Prisma,
+  prisma,
+  PrismaClient,
+} from "@repo/db";
+import { subtaskService } from "..";
 
 export class CoreTaskService {
-  constructor(private repository: TaskRepository) {}
+  private model: Prisma.TaskDelegate;
+  constructor(private prisma: PrismaClient) {
+    this.model = prisma.task;
+  }
 
-  async getTask(id: number): Promise<Task> {
-    const task = await this.repository.findById(id);
+  async getTask<T extends Prisma.TaskDefaultArgs>(
+    args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
+  ): Promise<Prisma.TaskGetPayload<T>> {
+    const task = await this.model.findFirst(args);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    return task;
+  }
+
+  async getTaskById(args?: Prisma.TaskFindFirstArgs) {
+    const task = await this.model.findFirst(args);
     if (!task) {
       throw new Error("Task not found");
     }
 
-    // Shared business logic goes here
-    // For example: task validation, transformation, etc.
     return task;
   }
 
-  async getAllTasks(): Promise<Task[]> {
-    // Include jobs relation for each task
-    return this.repository.findAll({ include: { jobs: true } });
+  async getAllTasks<T extends Prisma.TaskDefaultArgs>(
+    args?: Prisma.SelectSubset<T, Prisma.TaskFindManyArgs>
+  ): Promise<Prisma.TaskGetPayload<T>[]> {
+    const task = await this.model.findMany(args);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    return task;
   }
 
+  async getAllTasks2(args: Prisma.TaskDefaultArgs) {
+    return this.model.findMany(args);
+  }
+
+  // async getAllTasks(): Promise<Task[]> {
+  //   // Include jobs relation for each task
+  //   return this.repository.findAll({ include: { subTasks: true } });
+  // }
+
   async getTasksByUserId(userId: string): Promise<Task[]> {
-    return this.repository.findByUserId(userId);
+    const tasks = await this.model.findMany({ where: { userId } });
+    return tasks;
   }
 
   async toggleTaskCompletion(id: number): Promise<Task> {
     // Validate task exists before toggling
-    return await this.getTask(id);
+    return await this.getTask({
+      where: { id },
+      include: { subTasks: { include: { subTaskComments: true } } },
+    });
 
     // return this.repository.toggleComplete(id);
   }
@@ -39,13 +75,12 @@ export class CoreTaskService {
     extraData,
   }: {
     userId: string;
-    integrationId?: number;
+    integrationId: number;
     taskType?: TaskType;
     extraData?: any;
   }): Promise<Task> {
-    console.log("TAAASK TAAASK TAAASK: ", taskType);
     // Create the task first
-    const task = await this.repository.create({
+    const task = await this.model.create({
       data: {
         type: taskType || TaskType.OTHER,
         integrationId,
@@ -54,19 +89,19 @@ export class CoreTaskService {
         status: TaskStatus.PENDING,
       },
     });
-    console.log("TASK CREATED: ", task);
+    console.log("Sub Task CREATED: ", task);
     // Create appropriate jobs based on task type
     if (task.id) {
       switch (taskType) {
         case TaskType.ANALYZE_POST:
-          console.log("Task Type: ANALYZE_POST");
+          console.log("Sub Task Type: ANALYZE_POST");
           // Full sync needs both fetching and analyzing
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
-            data: { integrationId, extraData },
+            data: { integrationId, ...extraData },
           });
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
@@ -75,14 +110,14 @@ export class CoreTaskService {
           break;
 
         case TaskType.FULL_SYNC:
-          console.log("Task Type: FULL_SYNC");
+          console.log("Sub Task Type: FULL_SYNC");
           // Full sync needs both fetching and analyzing
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
             data: { integrationId },
           });
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
@@ -91,9 +126,9 @@ export class CoreTaskService {
           break;
 
         case TaskType.PARTIAL_SYNC:
-          console.log("Task Type: PARTIAL_SYNC");
+          console.log("Sub Task Type: PARTIAL_SYNC");
           // Partial sync just needs to fetch new content
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
 
@@ -103,14 +138,14 @@ export class CoreTaskService {
           break;
 
         case TaskType.ANALYZE_COMMENTS:
-          console.log("Task Type: ANALYZE_COMMENTS");
+          console.log("Sub Task Type: ANALYZE_COMMENTS");
           // Just need sentiment analysis
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
             data: { integrationId },
           });
-          await jobService.createJob({
+          await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
@@ -119,7 +154,7 @@ export class CoreTaskService {
 
         default:
           // For OTHER or unspecified types, no jobs are created
-          console.log("Task Type: OTHER");
+          console.log("Sub Task Type: OTHER");
           break;
       }
     }
@@ -129,13 +164,54 @@ export class CoreTaskService {
 
   async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
     // Update task with new status using repository update method
-    return this.repository.update(id, { status });
+    return this.model.update({
+      where: { id },
+      data: { status },
+    });
   }
 
   async getFilteredTasks(
     userId: string,
     filters: { status?: TaskStatus; type?: TaskType }
   ): Promise<Task[]> {
-    return this.repository.findFilteredTasks(userId, filters);
+    return this.model.findMany({ where: { userId, ...filters } });
   }
 }
+
+// import {
+//   Task,
+//   TaskType,
+//   TaskStatus,
+//   SubTaskType,
+//   Prisma,
+//   PrismaClient,
+// } from "@repo/db";
+// import { TaskRepository } from "./tasks.repository";
+
+// export class CoreTaskService {
+//   constructor(
+//     private repository: TaskRepository,
+//     private prisma: PrismaClient
+//   ) {}
+
+//   async getTask<T extends Prisma.TaskDefaultArgs>(
+//     args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
+//   ): Promise<Prisma.TaskGetPayload<T>> {
+//     const task = await this.model.findFirst(args);
+//     if (!task) {
+//       throw new Error("Task not found");
+//     }
+//     return task;
+//   }
+//   async toggleTaskCompletion(id: number) {
+//     // Validate task exists before toggling
+//     const x = await this.getTask({
+//       where: { id },
+//       include: { subTasks: { include: { subTaskComments: true } } },
+//     });
+
+//     return x;
+
+//     // return this.repository.toggleComplete(id);
+//   }
+// }

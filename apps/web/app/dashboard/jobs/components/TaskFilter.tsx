@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Box, Select, Button, Group } from "@mantine/core";
+import { Box, Select, Button, Group, Flex } from "@mantine/core";
 import { TaskStatus, TaskType } from "@repo/db";
 
 const TaskFilter: React.FC = () => {
@@ -36,8 +36,8 @@ const TaskFilter: React.FC = () => {
   };
 
   return (
-    <Box mb="lg">
-      <Group>
+    <Flex justify="flex-end" mb="lg">
+      <Flex gap={16}>
         <Select
           label="Status"
           placeholder="Select status"
@@ -70,11 +70,13 @@ const TaskFilter: React.FC = () => {
           value={currentType || null}
           clearable
         />
-        <Button onClick={() => handleApplyFilters(undefined, undefined)}>
-          Clear Filters
-        </Button>
-      </Group>
-    </Box>
+        <Flex align="flex-end">
+          <Button onClick={() => handleApplyFilters(undefined, undefined)}>
+            Clear Filters
+          </Button>
+        </Flex>
+      </Flex>
+    </Flex>
   );
 };
 

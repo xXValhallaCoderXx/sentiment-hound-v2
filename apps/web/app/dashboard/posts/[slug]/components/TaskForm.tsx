@@ -27,7 +27,7 @@ const TaskForm = ({ providerId }: TaskFormProps) => {
       // You can add any extra data needed for specific task types
       const extraData = JSON.stringify({});
       formData.append("extraData", extraData);
-      console.log("EXTRA DATA: ", extraData);
+
       //   await addNewTask(formData);
     } catch (error) {
       setError(error instanceof Error ? error.message : "An error occurred");
