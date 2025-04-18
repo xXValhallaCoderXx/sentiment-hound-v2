@@ -12,13 +12,39 @@ import {
 import Image from "next/image";
 import dayjs from "dayjs";
 import Link from "next/link";
+import relativeTime from "dayjs/plugin/relativeTime";
+// import relativeTime from 'dayjs/plugin/relativeTime' // ES 2015
+
+dayjs.extend(relativeTime);
 
 const JOB_TYPE_MAP = {
   [TaskType.ANALYZE_POST]: "Analyzing content",
 };
 
+function calculateProgress(subTasks: any) {
+  const analyzeTask = subTasks.find(
+    (st: any) => st.type === "ANALYZE_CONTENT_SENTIMENT"
+  );
+  if (!analyzeTask || !analyzeTask.subTaskComments) return null;
+
+  const total = analyzeTask.subTaskComments.length;
+  const completed = analyzeTask.subTaskComments.filter(
+    (c: any) => c.status === "COMPLETED"
+  ).length;
+
+  return {
+    completed,
+    total,
+    percent: Math.round((completed / total) * 100),
+  };
+}
 
 const JobListItem = ({ post }: any) => {
+  console.log("POST", post);
+  const progress = calculateProgress(post.subTasks);
+
+  const estimatedTime = post.updatedAt.getTime() - post.createdAt.getTime();
+  const durationInMinutes = Math.ceil(estimatedTime / 60000);
   return (
     <Link href={`/dashboard/jobs?jobId=${post.id}`} passHref legacyBehavior>
       <Card component="a" shadow="sm" radius="md" withBorder>
@@ -59,9 +85,9 @@ const JobListItem = ({ post }: any) => {
           <Card w="100%" withBorder shadow="xs">
             <Stack gap={4}>
               <Text fw={600}>Progress</Text>
-              <Progress value={50} />
+              <Progress value={progress?.percent ?? 0} />
               <Text size="xs" c="dimmed">
-                75%
+                {progress?.percent}%
               </Text>
             </Stack>
           </Card>
@@ -70,32 +96,34 @@ const JobListItem = ({ post }: any) => {
               <Text fw={600}>Job Details</Text>
               <Flex justify="space-between">
                 <Text size="sm">Started</Text>
-                <Text size="sm">2 Hours Ago</Text>
+                <Text> {dayjs(post.createdAt).fromNow(true)} ago</Text>
               </Flex>
               <Flex justify="space-between">
                 <Text size="sm">Comments Processed</Text>
-                <Text size="sm">184 / 245</Text>
+                <Text size="sm">
+                  {progress?.completed ?? 0} / {progress?.total ?? 0}
+                </Text>
               </Flex>
               <Flex justify="space-between">
-                <Text size="sm">Estimated Time</Text>
-                <Text size="sm">43 Minutes</Text>
+                <Text size="sm">Processing Time</Text>
+                <Text size="sm">{durationInMinutes} Minutes</Text>
               </Flex>
             </Stack>
           </Card>
           <Card w="100%" withBorder shadow="xs">
             <Stack gap={0}>
-              <Text fw={600}>Job Details</Text>
+              <Text fw={600}>Job Metadata</Text>
               <Flex justify="space-between">
-                <Text size="sm">Started</Text>
-                <Text size="sm">2 Hours Ago</Text>
+                <Text size="sm">Failed Comments</Text>
+                <Text size="sm">-</Text>
               </Flex>
               <Flex justify="space-between">
-                <Text size="sm">Comments Processed</Text>
-                <Text size="sm">184 / 245</Text>
+                <Text size="sm">Retry Status</Text>
+                <Text size="sm">-</Text>
               </Flex>
               <Flex justify="space-between">
-                <Text size="sm">Estimated Time</Text>
-                <Text size="sm">43 Minutes</Text>
+                <Text size="sm">Last Attempt</Text>
+                <Text size="sm">-</Text>
               </Flex>
             </Stack>
           </Card>

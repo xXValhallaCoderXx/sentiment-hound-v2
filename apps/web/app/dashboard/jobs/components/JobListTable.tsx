@@ -51,10 +51,21 @@ export default async function JobListTable({
         type: filters.type,
       },
       include: {
-        subTasks: true,
         integration: {
           include: {
             provider: true,
+          },
+        },
+        subTasks: {
+          where: {
+            type: "ANALYZE_CONTENT_SENTIMENT",
+          },
+          include: {
+            subTaskComments: {
+              select: {
+                status: true,
+              },
+            },
           },
         },
       },
@@ -73,6 +84,7 @@ export default async function JobListTable({
       },
     }),
   ]);
+  
 
   // Calculate total pages
   const totalPages = Math.ceil(totalCount / pageSize);
