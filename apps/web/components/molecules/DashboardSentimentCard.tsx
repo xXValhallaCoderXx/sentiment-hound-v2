@@ -4,7 +4,7 @@ import {
   IconArrowNarrowDown,
   IconLine,
 } from "@tabler/icons-react";
-import { Card, Title, Text, Flex } from "@mantine/core";
+import { Card, Title, Flex } from "@mantine/core";
 
 export interface IDashboardSentimentCardProps {
   title?: string;

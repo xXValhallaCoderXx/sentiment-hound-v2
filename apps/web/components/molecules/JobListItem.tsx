@@ -1,4 +1,4 @@
-import { TaskType } from "@repo/db";
+import { TaskType, Post } from "@repo/db";
 import {
   Card,
   Flex,
@@ -6,7 +6,6 @@ import {
   Badge,
   Progress,
   Stack,
-  Paper,
   Button,
 } from "@mantine/core";
 import Image from "next/image";
