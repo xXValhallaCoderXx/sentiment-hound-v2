@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/next-auth.lib";
-import { redirect } from "next/navigation";
 import {
   youtubeService,
   providerService,
   integrationsService,
 } from "@repo/services";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   const code = req?.nextUrl.searchParams.get("code");
 
   if (!code) {
@@ -34,8 +33,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
       refreshTokenExpiresAt: integration.refreshTokenExpiresAt,
     });
 
-    redirect("/dashboard/integrations?success=true");
+    NextResponse.redirect("/dashboard/integrations?success=true");
   } else {
-    redirect("/dashboard/integrations?success=false");
+    NextResponse.redirect("/dashboard/integrations?success=false");
   }
 }

@@ -61,7 +61,7 @@ export default async function JobListTable({
             type: "ANALYZE_CONTENT_SENTIMENT",
           },
           include: {
-            subTaskComments: {
+            subTaskMentions: {
               select: {
                 status: true,
               },

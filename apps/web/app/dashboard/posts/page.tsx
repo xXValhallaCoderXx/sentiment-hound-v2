@@ -8,20 +8,11 @@ import LoadingList from "./components/LoadingList";
 import PageLayout from "@/components/templates/PageLayout";
 import PostFilter from "./components/PostFilter";
 
+
 export default async function PostsDefaultPage({
   searchParams,
 }: {
-  searchParams: {
-    page?: string;
-    pageSize?: string;
-    providerId?: string;
-    sentiment?: string;
-    startDate?: string;
-    endDate?: string;
-    searchTerm?: string;
-    sortBy?: string;
-    sortOrder?: "asc" | "desc";
-  };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
   // Get the current authenticated user
   const session = await auth();

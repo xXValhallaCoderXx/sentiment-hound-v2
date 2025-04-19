@@ -5,7 +5,7 @@ import {
   subtaskService,
   postService,
   integrationsService,
-  commentsService,
+  mentionService,
 } from '@repo/services';
 import { prisma } from '@repo/db';
 
@@ -36,7 +36,7 @@ export class SentimentAnalysisProcessor {
       job.data.integrationId,
     );
 
-    const pendingComments = await prisma.comment.findMany({
+    const pendingComments = await prisma.mention.findMany({
       where: {
         sentimentStatus: 'PENDING',
         post: {
@@ -45,10 +45,10 @@ export class SentimentAnalysisProcessor {
       },
     });
 
-    await prisma.subTaskComment.createMany({
+    await prisma.subTaskMention.createMany({
       data: pendingComments.map((comment) => ({
         subTaskId: job.id,
-        commentId: comment.id,
+        mentionId: comment.id,
         status: 'PENDING',
       })),
       skipDuplicates: true,
@@ -112,18 +112,18 @@ export class SentimentAnalysisProcessor {
 
           try {
             // Update Comment sentiment data
-            await commentsService.updateCommentSentiment(
+            await mentionService.updateCommentSentiment(
               commentId,
               comment.sentiment,
               comment.aspects,
             );
 
             // Update SubTaskComment status
-            await prisma.subTaskComment.update({
+            await prisma.subTaskMention.update({
               where: {
-                subTaskId_commentId: {
+                subTaskId_mentionId: {
                   subTaskId: job.id,
-                  commentId: commentId,
+                  mentionId: commentId,
                 },
               },
               data: {
@@ -137,11 +137,11 @@ export class SentimentAnalysisProcessor {
             );
 
             // Mark subtask comment as failed
-            await prisma.subTaskComment.update({
+            await prisma.subTaskMention.update({
               where: {
-                subTaskId_commentId: {
+                subTaskId_mentionId: {
                   subTaskId: job.id,
-                  commentId: commentId,
+                  mentionId: commentId,
                 },
               },
               data: {

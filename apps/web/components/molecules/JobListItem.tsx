@@ -25,10 +25,10 @@ function calculateProgress(subTasks: any) {
   const analyzeTask = subTasks.find(
     (st: any) => st.type === "ANALYZE_CONTENT_SENTIMENT"
   );
-  if (!analyzeTask || !analyzeTask.subTaskComments) return null;
+  if (!analyzeTask || !analyzeTask.subTaskMentions) return null;
 
-  const total = analyzeTask.subTaskComments.length;
-  const completed = analyzeTask.subTaskComments.filter(
+  const total = analyzeTask.subTaskMentions.length;
+  const completed = analyzeTask.subTaskMentions.filter(
     (c: any) => c.status === "COMPLETED"
   ).length;
 

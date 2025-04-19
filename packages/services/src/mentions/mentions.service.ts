@@ -26,11 +26,11 @@ export interface PaginatedResult<T> {
 export class CoreMentionService {
   constructor(private repository: MentionRepository) {}
 
-  async createComment(comment: Prisma.MentionCreateArgs) {
+  async createMention(comment: Prisma.MentionCreateArgs) {
     return this.repository.create(comment);
   }
 
-  async createManyComments(comments: Prisma.MentionCreateManyArgs) {
+  async createManyMentions(comments: Prisma.MentionCreateManyArgs) {
     return this.repository.createMany(comments);
   }
 

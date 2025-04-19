@@ -7,7 +7,7 @@ import YoutubeUrlForm from "./components/YoutubeUrlForm";
 const AnalysePage = async ({
   searchParams,
 }: {
-  searchParams: Record<string, string>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const session = await auth();
   const { status, type } = await searchParams;

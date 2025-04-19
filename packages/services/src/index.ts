@@ -26,7 +26,7 @@ const providerRepository = new ProviderRepository(prisma);
 const integrationRepository = new IntegrationRepository(prisma);
 const postRepository = new PostRepository(prisma);
 const subtaskRepository = new SubTaskRepository(prisma);
-const commentRepository = new MentionRepository(prisma);
+const mentionRepository = new MentionRepository(prisma);
 const userRepository = new UserRepository(prisma);
 const planRepository = new PlanRepository(prisma);
 
@@ -41,6 +41,6 @@ export const youtubeService = new YoutubeService();
 export const queueService = new CoreQueueService(queueRepository);
 export const taskService = new CoreTaskService(prisma);
 export const subtaskService = new CoreSubTaskService(subtaskRepository);
-export const commentsService = new CoreMentionService(commentRepository);
+export const mentionService = new CoreMentionService(mentionRepository);
 export const userService = new CoreUserService(userRepository);
 export const planService = new CorePlanService(planRepository);

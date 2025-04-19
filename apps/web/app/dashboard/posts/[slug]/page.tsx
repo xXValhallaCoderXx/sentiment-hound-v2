@@ -4,8 +4,12 @@ import { Box, Flex } from "@mantine/core";
 // import PostListTable from "../components/PostListTable";
 // import ActionPanel from "./components/ActionPanel";
 
-const PostListPage = async ({ params }: { params: { slug: string } }) => {
-  const { slug } = await params;
+const PostListPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) => {
+  const { slug } = await searchParams;
 
   // Get the current authenticated user
   const session = await auth();

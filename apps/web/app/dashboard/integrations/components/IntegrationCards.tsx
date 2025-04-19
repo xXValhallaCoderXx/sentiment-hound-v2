@@ -1,5 +1,14 @@
 import Image from "next/image";
-import { Text, Grid, GridCol, Card, Divider, Flex } from "@mantine/core";
+import {
+  Text,
+  Grid,
+  GridCol,
+  Card,
+  Divider,
+  Flex,
+  Stack,
+  Title,
+} from "@mantine/core";
 import { getAllProviders } from "@/actions/providers.actions";
 import IntegrationButton from "./IntegrationButton";
 import {
@@ -14,40 +23,49 @@ const IntegrationCards = async () => {
   const userIntegrations = await getUserIntegrations();
 
   return (
-    <Grid className="mt-4">
-      {providers?.data?.map((provider) => {
-        const isConnected = userIntegrations?.data?.find(
-          (integration) => integration.providerId === provider.id
-        );
+    <Stack>
+      <Grid className="mt-4">
+        {providers?.data?.map((provider) => {
+          const isConnected = userIntegrations?.data?.find(
+            (integration) => integration.providerId === provider.id
+          );
 
-        return (
-          <GridCol key={provider.id} span={4}>
-            <form action={isConnected ? revokeIntegration : integrateProvider}>
-              <Card shadow="md">
-                <Flex mb={12} align="center" gap={8}>
-                  <Image
-                    alt="provider-image"
-                    height={35}
-                    width={35}
-                    src={`/images/logos/${provider?.image}`}
+          return (
+            <GridCol key={provider.id} span={4}>
+              <form
+                action={isConnected ? revokeIntegration : integrateProvider}
+              >
+                <Card shadow="md">
+                  <Flex mb={12} align="center" gap={8}>
+                    <Image
+                      alt="provider-image"
+                      height={35}
+                      width={35}
+                      src={`/images/logos/${provider?.image}`}
+                    />
+                    <Text size="lg" fw={500} className="capitalize">
+                      {provider.name}
+                    </Text>
+                  </Flex>
+                  <Text size="xs">{provider.description}</Text>
+                  <Divider mt={16} />
+                  <input type="hidden" name="providerId" value={provider.id} />
+                  <IntegrationButton
+                    isDisabled={provider.name !== "youtube"}
+                    isConnected={Boolean(isConnected?.id)}
                   />
-                  <Text size="lg" fw={500} className="capitalize">
-                    {provider.name}
-                  </Text>
-                </Flex>
-                <Text size="xs">{provider.description}</Text>
-                <Divider mt={16} />
-                <input type="hidden" name="providerId" value={provider.id} />
-                <IntegrationButton
-                  isDisabled={provider.name !== "youtube"}
-                  isConnected={Boolean(isConnected?.id)}
-                />
-              </Card>
-            </form>
-          </GridCol>
-        );
-      })}
-    </Grid>
+                </Card>
+              </form>
+            </GridCol>
+          );
+        })}
+      </Grid>
+      <Stack>
+        <Title order={3} mt={32}>
+          Default Integrations
+        </Title>
+      </Stack>
+    </Stack>
   );
 };
 
