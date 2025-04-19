@@ -3,18 +3,18 @@ import PageLayout from "@/components/templates/PageLayout";
 import { Card, Flex, Box, Title, Stack } from "@mantine/core";
 import ProfileCard from "./components/ProfileCard";
 import Plans from "./components/Plans";
-import { userService } from "@repo/services";
+import { prisma } from "@repo/db";
 
 const ProfilePage = async () => {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const user = await userService.findUserById({
-    id: String(userId),
-    args: {
-      include: {
-        plan: true,
-      },
+  const user = await prisma.user.findUnique({
+    where: {
+      id: String(userId),
+    },
+    include: {
+      plan: true,
     },
   });
   return (
@@ -26,7 +26,7 @@ const ProfilePage = async () => {
               <Title ml={4} mb={4} order={3}>
                 Plan
               </Title>
-              <ProfileCard id={String(userId)} />
+              <ProfileCard user={user} id={String(userId)} />
             </Card>
           </Flex>
           <Flex w="33%">

@@ -62,7 +62,7 @@ export class CoreTaskService {
     // Validate task exists before toggling
     return await this.getTask({
       where: { id },
-      include: { subTasks: { include: { subTaskComments: true } } },
+      include: { subTasks: { include: { subTaskMentions: true } } },
     });
 
     // return this.repository.toggleComplete(id);

@@ -48,7 +48,7 @@ export class IntegrationRepository extends BaseRepository<"integration"> {
 
   async deleteRelatedRecords(integrationId: number): Promise<void> {
     // First, delete comments related to posts
-    await this.prisma.comment.deleteMany({
+    await this.prisma.mention.deleteMany({
       where: {
         post: {
           integrationId,

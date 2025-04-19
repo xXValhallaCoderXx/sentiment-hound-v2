@@ -15,20 +15,21 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String        @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  integrations  Integration[]
-  posts         Post[]
-  tasks         Task[]
-  planId        Int?
-  plan          Plan?         @relation(fields: [planId], references: [id])
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id              String           @id @default(cuid())
+  name            String?
+  email           String           @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  integrations    Integration[]
+  trackedKeywords TrackedKeyword[]
+  posts           Post[]
+  tasks           Task[]
+  planId          Int?
+  plan            Plan?            @relation(fields: [planId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
 
 model Account {
@@ -88,13 +89,14 @@ model Integration {
 }
 
 model Provider {
-  id           Int           @id @default(autoincrement())
-  name         String        @unique
-  image        String
-  description  String?
-  integrations Integration[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now())
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  image           String
+  description     String?
+  integrations    Integration[]
+  trackedKeywords TrackedKeyword[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now())
 }
 
 model Post {
@@ -111,24 +113,37 @@ model Post {
   user          User        @relation(fields: [userId], references: [id])
   integrationId Int
   integration   Integration @relation(fields: [integrationId], references: [id])
-  comments      Comment[]
+  mentions      Mention[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
 
-model Comment {
-  id              Int              @id @default(autoincrement())
-  commentId       String
+model Mention {
+  id              Int             @id @default(autoincrement())
+  remoteId        String
+  sourceType      MentionSource
   content         String
   sentiment       String?
   score           String?
-  sentimentStatus SentimentStatus  @default(PENDING)
-  postId          Int
-  post            Post             @relation(fields: [postId], references: [id])
-  aspectAnalyses  AspectAnalysis[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  SubTaskComment  SubTaskComment[]
+  mentionId       Int
+  sentimentStatus SentimentStatus @default(PENDING)
+  sourceUrl       String? // e.g. permalink or video URL
+  author          String? // username or channel name
+  originLabel     String? // subreddit, video title, etc.
+
+  postId Int?
+  post   Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  trackedKeywordId Int?
+  trackedKeyword   TrackedKeyword? @relation(fields: [trackedKeywordId], references: [id], onDelete: Cascade)
+
+  aspectAnalyses AspectAnalysis[]
+  subTaskMention SubTaskMention[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([remoteId, sourceType])
 }
 
 model AspectAnalysis {
@@ -136,8 +151,8 @@ model AspectAnalysis {
   aspect    String
   sentiment String
   score     String?
-  commentId Int
-  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  mentionId Int
+  mention   Mention  @relation(fields: [mentionId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -165,24 +180,24 @@ model SubTask {
   task            Task             @relation(fields: [taskId], references: [id], onDelete: Cascade)
   data            Json // Data needed for the job, e.g., post IDs or integration details
   queue           Queue? // New relationship (one-to-one)
-  subTaskComments SubTaskComment[]
+  subTaskMentions SubTaskMention[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 }
 
-model SubTaskComment {
+model SubTaskMention {
   id        Int @id @default(autoincrement())
   subTaskId Int
-  commentId Int
+  mentionId Int
 
-  status   SubTaskCommentStatus @default(PENDING)
+  status   SubTaskMentionStatus @default(PENDING)
   analysis String?
 
   // Foreign keys
   subTask SubTask @relation(fields: [subTaskId], references: [id], onDelete: Cascade)
-  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  mention Mention @relation(fields: [mentionId], references: [id], onDelete: Cascade)
 
-  @@unique([subTaskId, commentId])
+  @@unique([subTaskId, mentionId])
 }
 
 model Plan {
@@ -206,6 +221,21 @@ model Queue {
   maxAttempts  Int         @default(3)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+}
+
+model TrackedKeyword {
+  id         Int       @id @default(autoincrement())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerId Int
+  provider   Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  keyword    String
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  Mention    Mention[]
+
+  @@unique([userId, keyword, providerId]) // Prevents duplicate tracking
 }
 
 enum QueueStatus {
@@ -249,11 +279,21 @@ enum SubTaskType {
   FETCH_CONTENT
   FETCH_INDIVIDUAL_POST_CONTNENT
   ANALYZE_CONTENT_SENTIMENT
+  FETCH_REDDIT_KEYWORD_MENTIONS
 }
 
-enum SubTaskCommentStatus {
+enum SubTaskMentionStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
   FAILED
+}
+
+enum MentionSource {
+  YOUTUBE
+  REDDIT
+  FACEBOOK
+  INSTAGRAM
+  TIKTOK
+  LINKEDIN
 }
