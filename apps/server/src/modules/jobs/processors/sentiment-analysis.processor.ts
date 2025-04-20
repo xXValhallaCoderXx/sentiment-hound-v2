@@ -3,7 +3,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Job } from '../jobs.service';
 import {
   subtaskService,
-  postService,
   integrationsService,
   mentionService,
 } from '@repo/services';
@@ -112,7 +111,7 @@ export class SentimentAnalysisProcessor {
 
           try {
             // Update Comment sentiment data
-            await mentionService.updateCommentSentiment(
+            await mentionService.updateMentionSentiment(
               commentId,
               comment.sentiment,
               comment.aspects,

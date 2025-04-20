@@ -25,7 +25,7 @@ const CommentsPage = async ({
   const itemsPerPage = parseInt(String(pageSize), 10);
 
   const selectedComment = commentId
-    ? await mentionService.getComment(parseInt(String(commentId)))
+    ? await mentionService.getMention(parseInt(String(commentId)))
     : null;
 
   if (!session?.user?.id) {
@@ -37,7 +37,7 @@ const CommentsPage = async ({
   }
 
   try {
-    const paginatedComments = await mentionService.getUserCommentsWithFilters({
+    const paginatedComments = await mentionService.getUserMentionsWithFilters({
       userId: session.user.id,
       providerId: providerId ? parseInt(String(providerId)) : undefined,
       sentiment: String(sentiment) || undefined,

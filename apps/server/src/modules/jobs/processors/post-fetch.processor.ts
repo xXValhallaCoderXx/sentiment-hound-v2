@@ -8,7 +8,6 @@ import {
   mentionService,
   postService,
 } from '@repo/services';
-import { prisma } from '@repo/db';
 
 @Injectable()
 export class PostFetchProcessor {

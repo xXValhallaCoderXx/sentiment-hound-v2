@@ -34,15 +34,15 @@ export class CoreMentionService {
     return this.repository.createMany(comments);
   }
 
-  async getComment(id: number): Promise<Mention> {
+  async getMention(id: number): Promise<Mention> {
     const comment = await this.repository.findById(id);
     if (!comment) {
-      throw new Error("Comment not found");
+      throw new Error("Mention not found");
     }
     return comment;
   }
 
-  async getUserCommentsWithFilters({
+  async getUserMentionsWithFilters({
     userId,
     providerId,
     sentiment,
@@ -139,7 +139,7 @@ export class CoreMentionService {
     };
   }
 
-  async updateCommentSentiment(
+  async updateMentionSentiment(
     commentId: number,
     sentiment: string,
     aspects: { aspect: string; sentiment: string }[]

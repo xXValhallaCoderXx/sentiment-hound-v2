@@ -10,7 +10,7 @@ const CommentDetailsPage = async ({
   const commentId = parseInt(String(id));
 
   try {
-    const comment = await mentionService.getComment(commentId);
+    const comment = await mentionService.getMention(commentId);
 
     return (
       <Box p="xl">
