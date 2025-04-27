@@ -17,6 +17,7 @@ import { UserRepository } from "./users/users.repository";
 import { CoreUserService } from "./users/users.service";
 import { PlanRepository } from "./plans/plans.repository";
 import { CorePlanService } from "./plans/plans.service";
+import { TrackedKeywordService } from "./tracked-keywords/tracked-keywords.service";
 
 export * from "./posts/post.interface";
 
@@ -37,6 +38,7 @@ export const integrationsService = new CoreIntegrationService(
 );
 export const postService = new CorePostService(postRepository);
 export const youtubeService = new YoutubeService();
+export const trackedKeywordService = new TrackedKeywordService();
 
 export const queueService = new CoreQueueService(queueRepository);
 export const taskService = new CoreTaskService(prisma);
