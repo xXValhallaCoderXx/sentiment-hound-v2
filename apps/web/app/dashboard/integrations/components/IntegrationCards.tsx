@@ -51,7 +51,9 @@ const IntegrationCards = async () => {
                   <Divider mt={16} />
                   <input type="hidden" name="providerId" value={provider.id} />
                   <IntegrationButton
-                    isDisabled={provider.name !== "youtube"}
+                    isDisabled={
+                      provider.name !== "youtube" && provider.name !== "reddit"
+                    }
                     isConnected={Boolean(isConnected?.id)}
                   />
                 </Card>
