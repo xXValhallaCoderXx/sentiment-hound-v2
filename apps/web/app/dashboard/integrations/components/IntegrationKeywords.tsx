@@ -14,7 +14,7 @@ const IntegrationKeywords = async () => {
     },
     include: {
       provider: true,
-      Mention: true,
+      mention: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -35,7 +35,7 @@ const IntegrationKeywords = async () => {
             <li key={keyword.id}>
               <strong>{keyword.keyword}</strong> - {keyword.provider.name}
               <ul>
-                {keyword.Mention.map((mention) => (
+                {keyword.mention.map((mention) => (
                   <li key={mention.id}>{mention.id}</li>
                 ))}
               </ul>

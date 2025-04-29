@@ -13,28 +13,39 @@ export async function GET(req: NextRequest) {
     return Response.error();
   }
   const session = await auth();
+    const baseUrl = req.nextUrl.origin; // Get the base URL
 
-  if (session?.user) {
-    const userId = session.user.id as string;
-    const integration = await youtubeService.connectYoutubeIntegration(code);
+    if (session?.user) {
+      const userId = session.user.id as string;
+      const integration = await youtubeService.connectYoutubeIntegration(code);
 
-    const youtube = await providerService.getProviderByName("youtube");
+      const youtube = await providerService.getProviderByName("youtube");
 
-    if (!youtube) {
-      throw new Error("YouTube provider not found");
+      if (!youtube) {
+        throw new Error("YouTube provider not found");
+      }
+
+      await integrationsService.createIntegration({
+        providerId: youtube.id,
+        accessToken: integration.accessToken,
+        refreshToken: integration.refreshToken,
+        accountId: integration.youtubeAccountId,
+        userId,
+        refreshTokenExpiresAt: integration.refreshTokenExpiresAt,
+      });
+
+      // Construct absolute URL
+      const successUrl = new URL(
+        "/dashboard/integrations?success=true",
+        baseUrl
+      );
+      return NextResponse.redirect(successUrl);
+    } else {
+      // Construct absolute URL
+      const failureUrl = new URL(
+        "/dashboard/integrations?success=false",
+        baseUrl
+      );
+      return NextResponse.redirect(failureUrl);
     }
-
-    await integrationsService.createIntegration({
-      providerId: youtube.id,
-      accessToken: integration.accessToken,
-      refreshToken: integration.refreshToken,
-      accountId: integration.youtubeAccountId,
-      userId,
-      refreshTokenExpiresAt: integration.refreshTokenExpiresAt,
-    });
-
-    NextResponse.redirect("/dashboard/integrations?success=true");
-  } else {
-    NextResponse.redirect("/dashboard/integrations?success=false");
-  }
 }

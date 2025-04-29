@@ -233,7 +233,7 @@ model TrackedKeyword {
   isActive   Boolean   @default(true)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @default(now())
-  Mention    Mention[]
+  mention    Mention[]
 
   @@unique([userId, keyword, providerId]) // Prevents duplicate tracking
 }
