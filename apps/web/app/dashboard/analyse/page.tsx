@@ -58,9 +58,7 @@ const AnalysePage = async ({
           </div>
         </Group>
         <Stack gap={16}>
-          <YoutubeUrlForm
-            integration={String(youtubeIntegration?.providerId)}
-          />
+          <YoutubeUrlForm integration={String(youtubeIntegration?.id)} />
           <Stack>
             <Title order={3}>Reddit</Title>
             <RedditJobButton

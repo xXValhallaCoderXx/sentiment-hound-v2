@@ -2,7 +2,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Job } from '../jobs.service';
 import { prisma } from '@repo/db';
-import { redditService } from '@repo/services';
+import {
+  redditService,
+  postService,
+  integrationsService,
+  mentionService,
+} from '@repo/services';
 
 @Injectable()
 export class RedditFetchProcessor {
@@ -24,7 +29,9 @@ export class RedditFetchProcessor {
       },
     });
 
-    console.log('TRACKED KEYWORDS: ', trackedKeywords);
+    const integration = await integrationsService.getIntegration(
+      job.data.integrationId,
+    );
 
     for (const keyword of trackedKeywords) {
       this.logger.log(`Searching Reddit for keyword: "${keyword.keyword}"`);
@@ -36,6 +43,53 @@ export class RedditFetchProcessor {
 
       for (const post of results) {
         console.log('POST: ', post);
+        try {
+          await postService.createUserPosts([
+            {
+              remoteId: post.id,
+              commentCount: post?.comments.length,
+              integrationId: integration.id,
+              userId: keyword.user.id,
+              title: post.content,
+
+              postUrl: '',
+              publishedAt: post.createdAt,
+            },
+          ]);
+
+          const createdPost = await postService.findPostsBasedOnRemoteIds([
+            post.id,
+          ]);
+          const comments = post?.comments.map((comment) => ({
+            content: comment.content,
+            mentionId: comment.id,
+            postId: createdPost[0].id,
+          }));
+
+          if (createdPost && createdPost.length > 0) {
+            // Store comments in database
+            for (const comment of comments) {
+              console.log('COMMENT: ', comment);
+              await mentionService.createMention({
+                data: {
+                  content: comment.content,
+                  remoteId: comment.mentionId,
+                  mentionId: Number(comment.mentionId),
+                  sourceType: 'YOUTUBE',
+                  post: { connect: { id: createdPost[0].id } }, // Connect to the created post
+                },
+              });
+            }
+
+            this.logger.log(
+              `Successfully processed video ${post.id} with ${comments.length} comments`,
+            );
+          } else {
+            throw new Error(`Failed to find created post for video ${post.id}`);
+          }
+        } catch (error) {
+          this.logger.error(`Failed to process post: ${post.id}`, error);
+        }
       }
 
       //   for (const result of results) {
