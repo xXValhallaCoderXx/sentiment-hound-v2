@@ -1,7 +1,7 @@
 import { prisma } from "@repo/db";
 import { auth } from "@/lib/next-auth.lib";
-import { Button, Stack, TextInput, Select, Group, Text } from "@mantine/core"; // Added Text to imports
-import { addNewKeyword } from "@/actions/keywords.actions";
+import { Button, Stack, TextInput, Select, Group, Text } from "@mantine/core";
+import { addNewKeyword, deleteKeyword } from "@/actions/keywords.actions";
 import { revalidatePath } from "next/cache";
 
 const IntegrationKeywords = async () => {
@@ -11,7 +11,6 @@ const IntegrationKeywords = async () => {
   }
   const userId = session.user.id;
 
-  // Fetch keywords and integrations in parallel
   const [keywords, integrations] = await Promise.all([
     prisma.trackedKeyword.findMany({
       where: { userId },
@@ -24,7 +23,6 @@ const IntegrationKeywords = async () => {
     }),
   ]);
 
-  // Define the inline server action
   async function addKeywordAction(formData: FormData) {
     "use server";
 
@@ -37,14 +35,13 @@ const IntegrationKeywords = async () => {
     }
 
     try {
-      // The action expects providerId as a number, but FormData gives string
       const providerIdNum = parseInt(providerId, 10);
       if (isNaN(providerIdNum)) {
         console.error("Invalid providerId");
         return;
       }
       await addNewKeyword({
-        integration: { userId, providerId: providerIdNum }, // Pass numeric providerId
+        integration: { userId, providerId: providerIdNum },
         value: keyword,
       });
       revalidatePath("/dashboard/integrations");
@@ -53,7 +50,6 @@ const IntegrationKeywords = async () => {
     }
   }
 
-  // Delete Keyword Server Action
   async function deleteKeywordAction(formData: FormData) {
     "use server";
 
@@ -70,37 +66,24 @@ const IntegrationKeywords = async () => {
         console.error("Invalid keywordId");
         return;
       }
-      // Authorization check
-      const keywordToDelete = await prisma.trackedKeyword.findUnique({
-        where: { id: keywordIdNum },
-        select: { userId: true },
-      });
 
-      if (keywordToDelete?.userId !== userId) {
-        console.error("Unauthorized attempt to delete keyword");
-        return;
-      }
-
-      await prisma.trackedKeyword.delete({
-        where: { id: keywordIdNum },
-      });
-      revalidatePath("/dashboard/integrations");
+      await deleteKeyword({ keywordId: keywordIdNum, userId });
     } catch (error) {
-      console.error("Failed to delete keyword:", error);
-      // Add user-facing error handling if desired
+      console.error(
+        "Error occurred during keyword deletion (from component):",
+        error
+      );
     }
   }
 
   return (
     <Stack>
-      {/* Form to add a new keyword */}
       <form action={addKeywordAction}>
         <Group>
           <Select
             name="providerId"
             placeholder="Select provider"
             data={integrations.map((integration) => ({
-              // Ensure value is a string for Mantine Select
               value: integration.providerId.toString(),
               label: integration.provider.name,
             }))}
@@ -115,18 +98,12 @@ const IntegrationKeywords = async () => {
       </form>
 
       <div>
-        {/* Updated keyword list with delete buttons */}
         <Stack gap="xs">
-          {" "}
-          {/* Use Stack for vertical spacing */}
           {keywords.map((keyword) => (
             <Group key={keyword.id} justify="space-between">
-              {" "}
-              {/* Use Group for horizontal layout */}
               <Text>
                 <strong>{keyword.keyword}</strong> - {keyword.provider.name}
               </Text>
-              {/* Form for deleting this specific keyword */}
               <form action={deleteKeywordAction}>
                 <input type="hidden" name="keywordId" value={keyword.id} />
                 <Button type="submit" variant="outline" color="red" size="xs">

@@ -1,8 +1,9 @@
 import { auth } from "@/lib/next-auth.lib";
-import { Box, Title, Text, Group, Flex } from "@mantine/core";
+import { Box, Title, Text, Group, Flex, Stack } from "@mantine/core";
 import { integrationsService, providerService } from "@repo/services";
 import NoData from "@/components/molecules/NoData";
 import YoutubeUrlForm from "./components/YoutubeUrlForm";
+import RedditJobButton from "./components/RedditJobButton";
 
 const AnalysePage = async ({
   searchParams,
@@ -26,6 +27,10 @@ const AnalysePage = async ({
     );
 
     const providers = await providerService.getProviderByName("youtube");
+    const redditProvider = await providerService.getProviderByName("reddit");
+    const redditIntegration = integrations.find(
+      (integration) => integration.providerId === redditProvider.id
+    );
 
     const youtubeIntegration = integrations.find(
       (integration) => integration.providerId === providers.id
@@ -52,7 +57,18 @@ const AnalysePage = async ({
             </Text>
           </div>
         </Group>
-        <YoutubeUrlForm integration={String(youtubeIntegration?.providerId)} />
+        <Stack gap={16}>
+          <YoutubeUrlForm
+            integration={String(youtubeIntegration?.providerId)}
+          />
+          <Stack>
+            <Title order={3}>Reddit</Title>
+            <RedditJobButton
+              integration={String(redditIntegration?.id)}
+              userId={session.user.id}
+            />
+          </Stack>
+        </Stack>
       </Box>
     );
   } catch (error) {

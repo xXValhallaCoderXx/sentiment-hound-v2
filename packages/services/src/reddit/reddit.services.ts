@@ -15,6 +15,10 @@ export class RedditService {
   async fetchAllPosts(userId: string) {
     return this.contentService.fetchPosts(userId);
   }
+
+  async searchMention(keyword: string) {
+    return this.contentService.searchMention(keyword);
+  }
 }
 
 export const redditService = new RedditService();

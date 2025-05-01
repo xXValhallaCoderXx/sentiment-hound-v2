@@ -80,6 +80,10 @@ export class CoreTaskService {
     extraData?: any;
   }): Promise<Task> {
     // Create the task first
+    console.log("Sub Task Type: ", taskType);
+    console.log("Sub Task integrationId: ", integrationId);
+    console.log("Sub Task userId: ", userId);
+    console.log("Sub Task extraData: ", extraData);
     const task = await this.model.create({
       data: {
         type: taskType || TaskType.OTHER,
@@ -89,23 +93,44 @@ export class CoreTaskService {
         status: TaskStatus.PENDING,
       },
     });
+    const integration = await prisma.integration.findUnique({
+      where: { id: integrationId },
+      include: { provider: true },
+    });
     console.log("Sub Task CREATED: ", task);
     // Create appropriate jobs based on task type
     if (task.id) {
       switch (taskType) {
         case TaskType.ANALYZE_POST:
           console.log("Sub Task Type: ANALYZE_POST");
-          // Full sync needs both fetching and analyzing
-          await subtaskService.createSubTask({
-            taskId: task.id,
-            type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
-            data: { integrationId, ...extraData },
-          });
-          await subtaskService.createSubTask({
-            taskId: task.id,
-            type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
-            data: { integrationId },
-          });
+
+          if (integration?.provider.name === "reddit") {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.FETCH_REDDIT_KEYWORD_MENTIONS,
+              data: { integrationId, ...extraData },
+            });
+
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
+              data: { integrationId },
+            });
+          }
+
+          if (integration?.provider.name === "youtube") {
+            // Full sync needs both fetching and analyzing
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
+              data: { integrationId, ...extraData },
+            });
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
+              data: { integrationId },
+            });
+          }
 
           break;
 

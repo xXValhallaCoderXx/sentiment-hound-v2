@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Job } from '../jobs.service';
 import { prisma } from '@repo/db';
-// import { redditService } from '@repo/services';
+import { redditService } from '@repo/services';
 
 @Injectable()
 export class RedditFetchProcessor {
@@ -14,19 +14,29 @@ export class RedditFetchProcessor {
     );
 
     const trackedKeywords = await prisma.trackedKeyword.findMany({
-      where: {
-        isActive: true,
-        provider: { name: 'Reddit' },
-      },
+      // where: {
+      //   isActive: true,
+      //   provider: { name: 'Reddit' },
+      // },
       include: {
         user: true,
+        provider: true,
       },
     });
+
+    console.log('TRACKED KEYWORDS: ', trackedKeywords);
 
     for (const keyword of trackedKeywords) {
       this.logger.log(`Searching Reddit for keyword: "${keyword.keyword}"`);
 
-      //   const results = await redditService.searchMentions(keyword.keyword);
+      const results = await redditService.searchMention(keyword.keyword);
+      this.logger.log(
+        `Found ${results.length} mentions for keyword: "${keyword.keyword}"`,
+      );
+
+      for (const post of results) {
+        console.log('POST: ', post);
+      }
 
       //   for (const result of results) {
       //     try {

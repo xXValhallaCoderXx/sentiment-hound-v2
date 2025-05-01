@@ -1,7 +1,8 @@
 import { TaskType } from "@repo/db";
 
 export interface IAddTaskDto {
-  providerId: string;
+  providerId?: string;
+  integrationId?: string;
   userId: string;
   type: TaskType;
 }
