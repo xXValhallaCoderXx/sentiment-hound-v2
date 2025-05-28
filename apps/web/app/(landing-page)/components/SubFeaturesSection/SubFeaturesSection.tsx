@@ -7,12 +7,12 @@ import {
   rem,
   Paper,
 } from "@mantine/core";
-import { 
-  IconShieldLock, 
-  IconDeviceAnalytics, 
+import {
+  IconShieldLock,
+  IconDeviceAnalytics,
   IconCloudComputing,
   IconHeartRateMonitor,
-  IconSupportFilled
+  IconHelpCircle as IconSupportFilled,
 } from "@tabler/icons-react";
 import classes from "./SubFeatures.module.css";
 
