@@ -1,24 +1,30 @@
 {
-  "name": "database",
-  "version": "1.0.0",
+  "name": "@repo/db",
+  "version": "0.0.0",
   "main": "dist/index.js",
-  "source": "src/index.ts",
-  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "db:push": "npx prisma db push --accept-data-loss",
-    "db:generate": "npx prisma generate",
-    "db:wipe": "npx prisma migrate reset --force --skip-seed",
-    "db:seed": "ts-node src/initial-seed.ts",
-    "build": "tsc",
-    "dev": "tsc -w"
+    "db:build": "tsc -p tsconfig.build.json",
+    "db:push": "prisma db push --accept-data-loss",
+    "db:format": "prisma format",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev --skip-generate",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "node ./dist/seed.js",
+    "db:reset": "prisma db push --force-reset --accept-data-loss"
   },
   "devDependencies": {
-    "@types/node": "^20.14.9",
-    "prisma": "^5.16.1",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.13.2",
+    "prisma": "^6.3.1",
     "ts-node": "^10.9.1"
   },
   "dependencies": {
-    "@prisma/client": "5.16.1",
-    "typescript": "^5.1.3"
+    "@prisma/client": "^6.3.1"
   }
 }

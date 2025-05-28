@@ -1,3 +1,4 @@
+version: "3.7"
 services:
     postgres:
         image: postgres:14
@@ -7,18 +8,6 @@ services:
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=postgres
         ports:
-          - '5432:5432'
-        volumes: 
+          - "5432:5432"
+        volumes:
           - ./postgres-data:/var/lib/postgresql/data
-        container_name: "sentiment-hound-dev"
-    cache:
-        image: redis:6.2-alpine
-        restart: always
-        ports:
-          - '6379:6379'
-        command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-        volumes: 
-          - cache:/data
-volumes:
-  cache:
-    driver: local

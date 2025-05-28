@@ -1,13 +1,5 @@
 {
-  "compilerOptions": {
-    "target": "ES6",
-    "lib": ["ES2020", "DOM"],
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  },
-  "include": ["*.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["dist", "build", "node_modules"]
+  "extends": "@repo/typescript-config/base.json",
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "tsup.config.ts"],
+  "exclude": ["node_modules"]
 }

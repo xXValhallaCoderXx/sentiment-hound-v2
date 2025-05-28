@@ -1,47 +1,151 @@
+import { Integration } from "@repo/db";
+import { IntegrationRepository } from "./integrations.repository";
 import {
-  integrationsRepository,
-  IntegrationsRepository,
-} from "./integrations.repository";
-import {
-  ICreateIntegrationDTO,
-  IUpdateCredentialsDTO,
-} from "./intefrations.dto";
+  IntegrationError,
+  IntegrationNotFoundError,
+  IntegrationValidationError,
+  IntegrationAuthenticationError,
+} from "./integrations.errors";
 
-interface IGetUserIntegration {
+interface ICreateIntegration {
   userId: string;
-  name: string;
+  accountId: string;
+  providerId: number;
+  accessToken: string;
+  refreshToken: string;
+  refreshTokenExpiresAt: Date;
 }
-class IntegrationsService {
-  private integrationsRepository: IntegrationsRepository;
+export class CoreIntegrationService {
+  constructor(private repository: IntegrationRepository) {}
 
-  constructor(integrationsRepository: IntegrationsRepository) {
-    this.integrationsRepository = integrationsRepository;
+  async getIntegration(id: number): Promise<Integration> {
+    console.log("Getting integration with ID:", id);
+    const integration = await this.repository.findById(id);
+    if (!integration) {
+      throw new IntegrationNotFoundError(id);
+    }
+    return integration;
   }
 
-  async getUserIntegrations(userId: string) {
-    return this.integrationsRepository.getUserIntegrations(userId);
+  getIntegrationUserIntegrationByProviderId(
+    providerId: number,
+    userId: string
+  ): Promise<Integration | null> {
+    return this.repository.findByProviderIdAndUserId(providerId, userId);
   }
 
-  async getUserIntegration({ userId, name }: IGetUserIntegration) {
-    return this.integrationsRepository.getUserIntegration(userId, name);
+  async getAllIntegrations(): Promise<Integration[]> {
+    const integration = await this.repository.findAll();
+    if (!integration) {
+      throw new IntegrationNotFoundError("No integrations found");
+    }
+    return integration;
   }
 
-  async deleteUserIntegration(userId: string, providerId: string) {
-    return this.integrationsRepository.deleteUserIntegration(
-      userId,
-      providerId
+  async getUserIntegrations(userId: string): Promise<Integration[]> {
+    if (!userId) {
+      throw new IntegrationValidationError("User ID is required");
+    }
+    return this.repository.findByUserId(userId);
+  }
+
+  async getUserIntegrationByName(
+    userId: string,
+    providerName: string
+  ): Promise<Integration | null> {
+    if (!userId || !providerName) {
+      throw new IntegrationValidationError(
+        "User ID and provider name are required"
+      );
+    }
+    return this.repository.findByUserIdAndProviderName(userId, providerName);
+  }
+
+  async createIntegration({
+    userId,
+    accessToken,
+    accountId,
+    providerId,
+    refreshToken,
+    refreshTokenExpiresAt,
+  }: ICreateIntegration): Promise<Integration> {
+    // Validation
+    if (!userId || !accountId || !providerId) {
+      throw new IntegrationValidationError("Missing required fields");
+    }
+
+    if (!accessToken) {
+      throw new IntegrationAuthenticationError("Access token is required");
+    }
+
+    try {
+      return await this.repository.create({
+        data: {
+          userId,
+          accountId,
+          providerId,
+          accessToken,
+          refreshToken,
+          refreshTokenExpiresAt,
+        },
+      });
+
+    } catch (error) {
+      throw new IntegrationError(
+        "Failed to create integration",
+        "INTEGRATION_CREATE_ERROR"
+      );
+    }
+  }
+
+  async updateIntegrationAuthCredentials({
+    providerId,
+    userId,
+    accessToken,
+    refreshToken,
+    accessTokenExpiry,
+  }: {
+    providerId: number;
+    userId: string;
+    accessToken: string;
+    refreshToken: string;
+    accessTokenExpiry: Date;
+  }): Promise<Integration> {
+    // Verify the integration exists before attempting to update
+    const integration = await this.repository.findByProviderIdAndUserId(
+      providerId,
+      userId
     );
+    if (!integration) {
+      throw new IntegrationNotFoundError(providerId);
+    }
+
+    try {
+      return await this.repository.update(integration?.id, {
+        accessToken,
+        refreshToken,
+        refreshTokenExpiresAt: accessTokenExpiry,
+      });
+    } catch (error) {
+      console.log("Error updating integration:", error);
+      throw new IntegrationError(
+        "Failed to update integration",
+        "INTEGRATION_UPDATE_ERROR"
+      );
+    }
   }
 
-  async createIntegration(data: ICreateIntegrationDTO) {
-    return this.integrationsRepository.createIntegration(data);
-  }
+  async deleteIntegration(id: number): Promise<void> {
+    // Verify the integration exists before attempting to delete
+    const integration = await this.repository.findById(id);
+    if (!integration) {
+      throw new IntegrationNotFoundError(id);
+    }
 
-  async updateIntegrationAuthCredentials(data: IUpdateCredentialsDTO) {
-    return this.integrationsRepository.updateIntegrationAuthCredentials(data);
+    // Delete related records first (this needs to be implemented in your repository)
+    await this.repository.deleteRelatedRecords(id);
+
+    // Then delete the integration
+    await this.repository.delete(id);
   }
 }
-
-export const integrationsService = new IntegrationsService(
-  integrationsRepository
-);

@@ -1,95 +1,69 @@
-import { prisma } from "database";
-import {
-  ICreateIntegrationDTO,
-  IUpdateCredentialsDTO,
-} from "./intefrations.dto";
+import { BaseRepository } from "../common/base.repository";
+import { Integration, PrismaClient, Prisma } from "@repo/db";
 
-export class IntegrationsRepository {
-  async getProviders() {
-    return await prisma.user.findMany();
+export class IntegrationRepository extends BaseRepository<"integration"> {
+  constructor(prisma: PrismaClient) {
+    super(prisma, "integration");
   }
 
-  async findFirst(where: any) {
-    return await prisma.integration.findFirst({ where });
+  async findByUserId(
+    userId: string,
+    args?: Omit<Prisma.IntegrationFindManyArgs, "where">
+  ): Promise<Integration[]> {
+    return this.findMany({ userId }, args);
   }
 
-  async getUserIntegrations(userId: string) {
-    return prisma.integration.findMany({
-      where: { userId },
-      include: { provider: true },
-    });
+  async findByProviderIdAndUserId(
+    providerId: number,
+    userId: string,
+    args?: Omit<Prisma.IntegrationFindFirstArgs, "where">
+  ): Promise<Integration | null> {
+    return this.findFirst({ providerId, userId }, args);
   }
 
-  async getUserIntegration(userId: string, name: string) {
-    return prisma.integration.findFirst({
-      where: { userId, provider: { name } },
-      include: { provider: true },
-    });
-  }
-
-  async deleteUserIntegration(userId: string, providerId: string) {
-    // return prisma.integration.deleteMany({
-    //   where: { userId, providerId: parseInt(providerId) },
-    // });
-
-    return prisma.$transaction(async (tx) => {
-      // First delete all related tasks
-      await tx.task.deleteMany({
-        where: {
-          integration: {
-            userId,
-
-            providerId: parseInt(providerId),
-          },
-        },
-      });
-
-      // Then delete the integration
-      return tx.integration.deleteMany({
-        where: {
-          userId,
-          providerId: parseInt(providerId),
-        },
-      });
-    });
-  }
-
-  async createIntegration(data: ICreateIntegrationDTO) {
-    const { providerId, remoteId, accessToken, refreshToken } = data;
-    await prisma.integration.create({
-      data: {
-        provider: {
-          connect: {
-            id: providerId,
-          },
-        },
-        accountId: remoteId,
-        accessToken,
-        refreshToken,
-        refreshTokenExpiresAt: data.refreshTokenExpiry,
-        user: {
-          connect: {
-            id: data.userId,
-          },
-        },
+  async findByUserIdAndProviderName(
+    userId: string,
+    providerName: string,
+    args?: Omit<Prisma.IntegrationFindFirstArgs, "where">
+  ): Promise<Integration | null> {
+    return this.findFirst(
+      {
+        userId,
+        provider: { name: providerName },
       },
-    });
+      {
+        include: { provider: true },
+        ...args,
+      }
+    );
   }
 
-  async updateIntegrationAuthCredentials(data: IUpdateCredentialsDTO) {
-    // Update the integration credentials
-    await prisma.integration.update({
+  async update(
+    id: number,
+    data: Prisma.IntegrationUpdateInput,
+    args?: Omit<Prisma.IntegrationUpdateArgs, "where" | "data">
+  ): Promise<Integration> {
+    return super.update(id, data, args);
+  }
+
+  async deleteRelatedRecords(integrationId: number): Promise<void> {
+    // First, delete comments related to posts
+    await this.prisma.comment.deleteMany({
       where: {
-        id: data?.providerId,
-        userId: data?.userId,
+        post: {
+          integrationId,
+        },
       },
-      data: {
-        accessToken: data?.accessToken,
-        refreshToken: data?.refreshToken,
-        refreshTokenExpiresAt: data?.accessTokenExpiry,
-      },
+    });
+
+    // Then delete posts (and their related comments)
+    await this.prisma.post.deleteMany({
+      where: { integrationId },
+    });
+
+    // Finally, delete tasks (and their related jobs)
+    await this.prisma.task.deleteMany({
+      where: { integrationId },
     });
   }
 }
-
-export const integrationsRepository = new IntegrationsRepository();
