@@ -1,23 +1,26 @@
 .footer {
-    margin-top: rem(120px);
+    margin-top: rem(80px);
     padding-top: calc(var(--mantine-spacing-xl) * 2);
-    padding-bottom: calc(var(--mantine-spacing-xl) * 2);
-    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+    padding-bottom: calc(var(--mantine-spacing-xl) * 1.5);
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
     border-top: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
 }
 
 .logo {
-    max-width: rem(200px);
+    max-width: rem(220px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 
     @media (max-width: $mantine-breakpoint-sm) {
-        display: flex;
-        flex-direction: column;
         align-items: center;
     }
 }
 
 .description {
-    margin-top: rem(5px);
+    margin-top: rem(10px);
+    font-size: rem(14px);
+    color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-gray-4));
 
     @media (max-width: $mantine-breakpoint-sm) {
         margin-top: var(--mantine-spacing-xs);
@@ -28,6 +31,7 @@
 .inner {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 
     @media (max-width: $mantine-breakpoint-sm) {
         flex-direction: column;
@@ -38,6 +42,7 @@
 .groups {
     display: flex;
     flex-wrap: wrap;
+    gap: rem(50px);
 
     @media (max-width: $mantine-breakpoint-sm) {
         display: none;
@@ -52,11 +57,13 @@
     display: block;
     color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-1));
     font-size: var(--mantine-font-size-sm);
-    padding-top: rem(3px);
-    padding-bottom: rem(3px);
+    padding-top: rem(5px);
+    padding-bottom: rem(5px);
+    transition: color 0.2s ease;
 
     &:hover {
-        text-decoration: underline;
+        text-decoration: none;
+        color: var(--mantine-color-blue-5);
     }
 }
 
@@ -66,7 +73,7 @@
     font-family:
         Greycliff CF,
         var(--mantine-font-family);
-    margin-bottom: calc(var(--mantine-spacing-xs) / 2);
+    margin-bottom: var(--mantine-spacing-sm);
     color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
 }
 
@@ -76,16 +83,26 @@
     align-items: center;
     margin-top: var(--mantine-spacing-xl);
     padding-top: var(--mantine-spacing-xl);
-    padding-bottom: var(--mantine-spacing-xl);
+    padding-bottom: var(--mantine-spacing-md);
     border-top: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
 
     @media (max-width: $mantine-breakpoint-sm) {
         flex-direction: column;
+        gap: var(--mantine-spacing-md);
     }
 }
 
 .social {
     @media (max-width: $mantine-breakpoint-sm) {
         margin-top: var(--mantine-spacing-xs);
+    }
+}
+
+.socialIcon {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    margin-left: rem(4px);
+
+    &:hover {
+        transform: scale(1.1);
     }
 }

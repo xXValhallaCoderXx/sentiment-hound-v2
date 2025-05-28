@@ -5,40 +5,60 @@ import {
   Container,
   SimpleGrid,
   rem,
+  Box,
 } from "@mantine/core";
-import { IconIceCream } from "@tabler/icons-react";
+import { 
+  IconCloudComputing,
+  IconShieldCheck, 
+  IconReportAnalytics,
+  IconApi, 
+  IconClock24, 
+  IconAdjustments 
+} from "@tabler/icons-react";
 import classes from "./SubFeatures.module.css";
 
-export const MOCKDATA = [
+const featureData = [
   {
-    icon: IconIceCream,
-    title: "Extreme performance",
+    icon: IconCloudComputing,
+    title: "Cloud-Based Solution",
     description:
-      "This dust is actually a powerful poison that will even make a pro wrestler sick, Regice cloaks itself with frigid air of -328 degrees Fahrenheit",
+      "Our platform is fully cloud-based, ensuring you can access your sentiment analysis data from anywhere, anytime without complex setup.",
+    color: "blue",
   },
   {
-    icon: IconIceCream,
-    title: "Privacy focused",
+    icon: IconShieldCheck,
+    title: "Data Privacy & Security",
     description:
-      "People say it can run at the same speed as lightning striking, Its icy body is so cold, it will not melt even if it is immersed in magma",
+      "We prioritize your data security with enterprise-grade encryption and compliance with global privacy standards.",
+    color: "green",
   },
   {
-    icon: IconIceCream,
-    title: "No third parties",
+    icon: IconReportAnalytics,
+    title: "Comprehensive Reporting",
     description:
-      "They’re popular, but they’re rare. Trainers who show them off recklessly may be targeted by thieves",
+      "Generate detailed reports with actionable insights and visualizations that help you understand sentiment trends at a glance.",
+    color: "violet",
   },
   {
-    icon: IconIceCream,
-    title: "Secure by default",
+    icon: IconApi,
+    title: "API Integration",
     description:
-      "Although it still can’t fly, its jumping power is outstanding, in Alola the mushrooms on Paras don’t grow up quite right",
+      "Seamlessly integrate with your existing tools through our robust API, enabling automated workflows and real-time data access.",
+    color: "orange",
   },
   {
-    icon: IconIceCream,
-    title: "24/7 Support",
+    icon: IconClock24,
+    title: "24/7 Monitoring",
     description:
-      "Rapidash usually can be seen casually cantering in the fields and plains, Skitty is known to chase around after its own tail",
+      "Set up continuous monitoring of sentiment across all your platforms to catch issues before they escalate into major problems.",
+    color: "cyan",
+  },
+  {
+    icon: IconAdjustments,
+    title: "Customizable Analysis",
+    description:
+      "Tailor your sentiment analysis parameters to focus on what matters most to your business with flexible configuration options.",
+    color: "pink",
   },
 ];
 
@@ -46,51 +66,54 @@ interface FeatureProps {
   icon: React.FC<any>;
   title: React.ReactNode;
   description: React.ReactNode;
+  color: string;
 }
 
-function Feature({ icon: Icon, title, description }: FeatureProps) {
+function Feature({ icon: Icon, title, description, color }: FeatureProps) {
   return (
-    <div>
-      <ThemeIcon variant="light" size={40} radius={40}>
-        <Icon style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+    <Box className={classes.feature}>
+      <ThemeIcon variant="light" size={50} radius="md" color={color} className={classes.featureIcon}>
+        <Icon style={{ width: rem(22), height: rem(22) }} stroke={1.5} />
       </ThemeIcon>
-      <Text mt="sm" mb={7}>
+      <Text mt="sm" mb={7} fw={600} fz="md" className={classes.featureTitle}>
         {title}
       </Text>
       <Text size="sm" c="dimmed" lh={1.6}>
         {description}
       </Text>
-    </div>
+    </Box>
   );
 }
 
 const SubFeaturesSection = () => {
-  const features = MOCKDATA.map((feature, index) => (
+  const features = featureData.map((feature, index) => (
     <Feature {...feature} key={index} />
   ));
 
   return (
-    <Container className={classes.wrapper}>
-      <Title className={classes.title}>
-        Integrate effortlessly with any technology stack
-      </Title>
+    <Box className={classes.sectionWrapper}>
+      <Container className={classes.wrapper}>
+        <Title className={classes.title}>
+          Advanced features that power your insights
+        </Title>
 
-      <Container size={560} p={0}>
-        <Text size="sm" className={classes.description}>
-          Every once in a while, you’ll see a Golbat that’s missing some fangs.
-          This happens when hunger drives it to try biting a Steel-type Pokémon.
-        </Text>
+        <Container size={560} p={0}>
+          <Text size="sm" className={classes.description}>
+            Sentiment Hound offers a comprehensive suite of tools designed to help businesses 
+            of all sizes leverage the power of sentiment analysis to drive growth and customer satisfaction.
+          </Text>
+        </Container>
+
+        <SimpleGrid
+          mt={60}
+          cols={{ base: 1, sm: 2, md: 3 }}
+          spacing={{ base: "xl", md: 30 }}
+          verticalSpacing={{ base: "xl", md: 30 }}
+        >
+          {features}
+        </SimpleGrid>
       </Container>
-
-      <SimpleGrid
-        mt={60}
-        cols={{ base: 1, sm: 2, md: 3 }}
-        spacing={{ base: "xl", md: 50 }}
-        verticalSpacing={{ base: "xl", md: 50 }}
-      >
-        {features}
-      </SimpleGrid>
-    </Container>
+    </Box>
   );
 };
 

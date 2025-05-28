@@ -1,36 +1,40 @@
 import { Text, Container, ActionIcon, Group, rem } from "@mantine/core";
-import { IconIceCream } from "@tabler/icons-react";
+import { 
+  IconBrandTwitter, 
+  IconBrandInstagram, 
+  IconBrandLinkedin,
+  IconBrandGithub 
+} from "@tabler/icons-react";
 import Image from "next/image";
-
 import Link from "next/link";
 import classes from "./footer.module.css";
 
 const data = [
   {
-    title: "About",
+    title: "Product",
     links: [
       { label: "Features", link: "#" },
       { label: "Pricing", link: "#" },
-      { label: "Support", link: "#" },
-      { label: "Forums", link: "#" },
+      { label: "Use Cases", link: "#" },
+      { label: "API", link: "#" },
     ],
   },
   {
-    title: "Project",
+    title: "Resources",
     links: [
-      { label: "Contribute", link: "#" },
-      { label: "Media assets", link: "#" },
-      { label: "Changelog", link: "#" },
-      { label: "Releases", link: "#" },
+      { label: "Documentation", link: "#" },
+      { label: "Knowledge Base", link: "#" },
+      { label: "Blog", link: "#" },
+      { label: "Community", link: "#" },
     ],
   },
   {
-    title: "Community",
+    title: "Company",
     links: [
-      { label: "Join Discord", link: "#" },
-      { label: "Follow on Twitter", link: "#" },
-      { label: "Email newsletter", link: "#" },
-      { label: "GitHub discussions", link: "#" },
+      { label: "About Us", link: "#" },
+      { label: "Careers", link: "#" },
+      { label: "Contact", link: "#" },
+      { label: "Press Kit", link: "#" },
     ],
   },
 ];
@@ -57,20 +61,20 @@ const Footer = () => {
         <div className={classes.logo}>
           <Image
             src="/images/logos/main-logo.png"
-            alt=""
+            alt="Sentiment Hound Logo"
             height={50}
             width={50}
             className="mx-auto"
           />
-          <Text size="xs" c="dimmed" className={classes.description}>
-            Build fully functional accessible web applications faster than ever
+          <Text size="sm" fw={500} className={classes.description}>
+            Transforming sentiment data into actionable insights
           </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
       </Container>
       <Container className={classes.afterFooter}>
         <Text c="dimmed" size="sm">
-          © 2020 mantine.dev. All rights reserved.
+          © {new Date().getFullYear()} Sentiment Hound. All rights reserved.
         </Text>
 
         <Group
@@ -79,19 +83,24 @@ const Footer = () => {
           justify="flex-end"
           wrap="nowrap"
         >
-          <ActionIcon size="lg" color="gray" variant="subtle">
-            <IconIceCream style={{ width: rem(18), height: rem(18) }} />
+          <ActionIcon size="lg" color="blue" variant="subtle" className={classes.socialIcon}>
+            <IconBrandTwitter style={{ width: rem(18), height: rem(18) }} />
           </ActionIcon>
-          <ActionIcon size="lg" color="gray" variant="subtle">
-            <IconIceCream style={{ width: rem(18), height: rem(18) }} />
+          <ActionIcon size="lg" color="violet" variant="subtle" className={classes.socialIcon}>
+            <IconBrandInstagram style={{ width: rem(18), height: rem(18) }} />
           </ActionIcon>
-          <ActionIcon size="lg" color="gray" variant="subtle">
-            <IconIceCream style={{ width: rem(18), height: rem(18) }} />
+          <ActionIcon size="lg" color="indigo" variant="subtle" className={classes.socialIcon}>
+            <IconBrandLinkedin style={{ width: rem(18), height: rem(18) }} />
+          </ActionIcon>
+          <ActionIcon size="lg" color="gray" variant="subtle" className={classes.socialIcon}>
+            <IconBrandGithub style={{ width: rem(18), height: rem(18) }} />
           </ActionIcon>
         </Group>
       </Container>
     </footer>
   );
 };
+
+export default Footer;
 
 export default Footer;

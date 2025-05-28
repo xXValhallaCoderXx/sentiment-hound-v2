@@ -1,6 +1,16 @@
+.container {
+    margin-top: rem(40px);
+    position: relative;
+    padding-top: rem(40px);
+    padding-bottom: rem(60px);
+}
+
 .title {
     font-size: rem(34px);
     font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: rem(10px);
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
 
     @media (max-width: $mantine-breakpoint-sm) {
         font-size: rem(24px);
@@ -10,6 +20,8 @@
 .description {
     max-width: rem(600px);
     margin: auto;
+    font-size: rem(16px);
+    line-height: 1.6;
 
     &::after {
         content: '';
@@ -25,9 +37,28 @@
 
 .card {
     border: rem(1px) solid light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5));
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--mantine-shadow-md);
+    }
+}
+
+.cardIcon {
+    margin-bottom: var(--mantine-spacing-md);
+    box-shadow: var(--mantine-shadow-xs);
 }
 
 .cardTitle {
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--mantine-spacing-xs);
+
     &::after {
         content: '';
         display: block;
@@ -36,4 +67,17 @@
         height: rem(2px);
         margin-top: var(--mantine-spacing-sm);
     }
+}
+
+.platformGroup {
+    margin-top: rem(30px);
+    margin-bottom: rem(10px);
+}
+
+.platformBadge {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+    padding: rem(4px) rem(10px);
+    border-radius: rem(16px);
+    box-shadow: var(--mantine-shadow-xs);
+    margin: 0 rem(5px);
 }
