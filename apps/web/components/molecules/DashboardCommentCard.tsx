@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { Flex, Avatar, Text, Badge, Title } from "@mantine/core";
+// Import useMantineTheme
+import { Flex, Avatar, Text, Badge, Title, useMantineTheme } from "@mantine/core";
 
 interface IDashboardCommentCardProps {
   title?: string;
@@ -14,13 +15,16 @@ const DashboardCommentCard: FC<IDashboardCommentCardProps> = ({
   sentimentType,
   icon,
 }) => {
+  const theme = useMantineTheme(); // Get the theme object
+
   return (
     <Flex gap={8} direction="column" p={8}>
       <Flex gap={8} align="center">
         <Avatar />
         <Title order={4}>Sara Jonson</Title>
-        <Text c="gray">@sarajon</Text>
-        <Text c="gray" size="xs">
+        {/* Use theme color for gray text */}
+        <Text c={theme.colors.gray[6]}>@sarajon</Text>
+        <Text c={theme.colors.gray[6]} size="xs">
           2 Hrs ago
         </Text>
       </Flex>
@@ -31,6 +35,9 @@ const DashboardCommentCard: FC<IDashboardCommentCardProps> = ({
         habitasse platea dictumst.
       </Text>
       <Flex gap={16} align="center">
+        {/* Badge color should already use theme if 'gray' is a theme color.
+            If a specific shade is needed, it can be theme.colors.gray[shade].
+            Assuming 'gray' as a direct color prop is sufficient for now. */}
         <Badge color="gray" variant="light">
           2 hours ago
         </Badge>

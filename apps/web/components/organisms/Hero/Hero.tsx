@@ -29,8 +29,9 @@ const Hero = () => {
           <Button
             size="xl"
             className={classes.control}
-            variant="gradient"
-            gradient={{ from: "blue", to: "cyan" }}
+            color="primary"
+            // variant="gradient"
+            // gradient={{ from: "blue", to: "cyan" }}
             leftSection={<IconChartBar size={20} />}
           >
             Start Free Trial
