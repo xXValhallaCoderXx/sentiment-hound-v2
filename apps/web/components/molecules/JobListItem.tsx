@@ -7,6 +7,7 @@ import {
   Progress,
   Stack,
   Button,
+  useMantineTheme, // Import useMantineTheme
 } from "@mantine/core";
 import Image from "next/image";
 import dayjs from "dayjs";
@@ -39,6 +40,7 @@ function calculateProgress(subTasks: any) {
 }
 
 const JobListItem = ({ post }: any) => {
+  const theme = useMantineTheme(); // Get the theme object
   console.log("POST", post);
   const progress = calculateProgress(post.subTasks);
 
@@ -67,14 +69,26 @@ const JobListItem = ({ post }: any) => {
                 <Text mt={4} size="sm">
                   {dayjs(new Date(post.updatedAt)).format("DD/MM/YYYY")}
                 </Text>
-                <Badge color="green" size="xs" mt={4} className="capitalize">
+                {/* Use theme color for Badge */}
+                <Badge
+                  color={theme.colors.green[6]}
+                  size="xs"
+                  mt={4}
+                  className="capitalize"
+                >
                   {post?.status}
                 </Badge>
               </Flex>
             </Stack>
           </Flex>
           <Flex>
-            <Button disabled size="xs" variant="outline" color="red">
+            {/* Use theme color for Button */}
+            <Button
+              disabled
+              size="xs"
+              variant="outline"
+              color={theme.colors.red[6]}
+            >
               Cancel Job
             </Button>
           </Flex>

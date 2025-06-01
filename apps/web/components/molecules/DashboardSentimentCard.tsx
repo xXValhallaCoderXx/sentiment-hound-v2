@@ -4,7 +4,7 @@ import {
   IconArrowNarrowDown,
   IconLine,
 } from "@tabler/icons-react";
-import { Card, Title, Flex } from "@mantine/core";
+import { Card, Title, Flex, useMantineTheme } from "@mantine/core";
 
 export interface IDashboardSentimentCardProps {
   title?: string;
@@ -27,10 +27,11 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
   showIcon = true,
   icon,
 }) => {
+  const theme = useMantineTheme();
+
   // Determine which icon to display based on sentiment type
   const getSentimentIcon = () => {
     if (icon) {
-      // If custom icon is provided, use it
       const CustomIcon = icon;
       return (
         <CustomIcon
@@ -44,13 +45,13 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
       return null;
     }
 
-    // Choose icon based on sentiment type
+    // Choose icon based on sentiment type and use theme colors
     switch (sentimentType.toLowerCase()) {
       case "positive":
         return (
           <IconArrowNarrowUp
             size={ICON_SIZE}
-            color="green"
+            color={theme.other.sentimentPositive || theme.colors.green[6]}
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
@@ -58,7 +59,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         return (
           <IconArrowNarrowDown
             size={ICON_SIZE}
-            color="red"
+            color={theme.other.sentimentNegative || theme.colors.red[6]}
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
@@ -67,7 +68,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         return (
           <IconLine
             size={ICON_SIZE}
-            color="gray"
+            color={theme.other.sentimentNeutral || theme.colors.gray[6]}
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
