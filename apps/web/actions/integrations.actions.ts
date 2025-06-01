@@ -120,5 +120,24 @@ export const integrateProvider = async (formData: FormData) => {
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.AUTH_GOOGLE_ID}&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&access_type=offline&prompt=consent`;
     redirect(authUrl);
   }
+
+  if (provider && provider.name === "reddit") {
+    console.log("Reddit integration not implemented yet");
+    const result = await integrationsService.createIntegration({
+      userId,
+      accessToken: "N/A",
+      accountId: "N/A",
+      providerId: Number(providerId),
+      refreshToken: "N/A",
+      refreshTokenExpiresAt: new Date(),
+    });
+
+    if (result) {
+      console.log("Integration created successfully:", result);
+    } else {
+      console.error("Failed to create integration for Reddit");
+    }
+    redirect("/dashboard/integrations");
+  }
 };
 

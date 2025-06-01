@@ -24,12 +24,12 @@ function getSubTaskStatusSummary(subTask: any) {
     IN_PROGRESS: 0,
   };
 
-  subTask.subTaskComments.forEach((c: any) => {
+  subTask.subTaskMentions.forEach((c: any) => {
     // @ts-ignore
     counts[c.status] = (counts[c.status] || 0) + 1;
   });
 
-  const total = subTask.subTaskComments.length;
+  const total = subTask.subTaskMentions.length;
   const completed = counts.COMPLETED;
 
   return {
@@ -52,7 +52,7 @@ const JobDetail: FC<JobDetailProps> = async ({ jobId }) => {
       },
       subTasks: {
         include: {
-          subTaskComments: {
+          subTaskMentions: {
             select: {
               status: true,
             },

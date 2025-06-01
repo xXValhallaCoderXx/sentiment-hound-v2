@@ -3,6 +3,7 @@ import { SubTaskType } from '@repo/db';
 import { ContentFetchProcessor } from './processors/content-fetch.processor';
 import { SentimentAnalysisProcessor } from './processors/sentiment-analysis.processor';
 import { PostFetchProcessor } from './processors/post-fetch.processor';
+import { RedditFetchProcessor } from './processors/reddit-fetch-processor';
 export interface Job {
   id: number;
   type: SubTaskType;
@@ -20,6 +21,7 @@ export class JobsService {
     private readonly contentFetchProcessor: ContentFetchProcessor,
     private readonly sentimentAnalysisProcessor: SentimentAnalysisProcessor,
     private readonly postFetchProcessor: PostFetchProcessor,
+    private readonly redditFetchProcessor: RedditFetchProcessor,
   ) {
     // Register job processors
     this.processors[SubTaskType.FETCH_CONTENT] = this.contentFetchProcessor;
@@ -27,6 +29,8 @@ export class JobsService {
       this.sentimentAnalysisProcessor;
     this.processors[SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT] =
       this.postFetchProcessor;
+    this.processors[SubTaskType.FETCH_REDDIT_KEYWORD_MENTIONS] =
+      this.redditFetchProcessor;
   }
 
   async processJob(job: Job) {

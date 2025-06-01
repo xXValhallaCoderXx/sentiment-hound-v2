@@ -5,7 +5,7 @@ import {
   integrationsService,
   providerService,
   youtubeService,
-  commentsService,
+  mentionService,
   postService,
 } from '@repo/services';
 
@@ -64,9 +64,9 @@ export class PostFetchProcessor {
 
         // Prepare comments data
         const comments = result.comments.map((comment) => ({
-          commentId: comment.id,
+          mentionId: comment.id,
           content: comment.textOriginal,
-          postId: result.id,
+          postId: parseInt(result.id),
         }));
 
         // Store post in database
@@ -80,8 +80,14 @@ export class PostFetchProcessor {
         if (createdPost && createdPost.length > 0) {
           // Store comments in database
           for (const comment of comments) {
-            await commentsService.createComment({
-              data: { ...comment, postId: createdPost[0].id },
+            await mentionService.createMention({
+              data: {
+                content: comment.content,
+                remoteId: comment.mentionId,
+                mentionId: Number(comment.mentionId),
+                sourceType: 'YOUTUBE',
+                post: { connect: { id: createdPost[0].id } }, // Connect to the created post
+              },
             });
           }
 

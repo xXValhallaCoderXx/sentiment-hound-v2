@@ -11,12 +11,14 @@ import { CoreQueueService } from "./queues/queues.service";
 import { CoreTaskService } from "./tasks/tasks.service";
 import { SubTaskRepository } from "./sub-tasks/sub-tasks.repository";
 import { CoreSubTaskService } from "./sub-tasks/sub-tasks.service";
-import { CoreCommentService } from "./comments/comments.service";
-import { CommentRepository } from "./comments/comments.repository";
+import { CoreMentionService } from "./mentions/mentions.service";
+import { MentionRepository } from "./mentions/mentions.repository";
 import { UserRepository } from "./users/users.repository";
 import { CoreUserService } from "./users/users.service";
 import { PlanRepository } from "./plans/plans.repository";
 import { CorePlanService } from "./plans/plans.service";
+import { TrackedKeywordService } from "./tracked-keywords/tracked-keywords.service";
+import { RedditService } from "./reddit/reddit.services";
 
 export * from "./posts/post.interface";
 
@@ -26,7 +28,7 @@ const providerRepository = new ProviderRepository(prisma);
 const integrationRepository = new IntegrationRepository(prisma);
 const postRepository = new PostRepository(prisma);
 const subtaskRepository = new SubTaskRepository(prisma);
-const commentRepository = new CommentRepository(prisma);
+const mentionRepository = new MentionRepository(prisma);
 const userRepository = new UserRepository(prisma);
 const planRepository = new PlanRepository(prisma);
 
@@ -37,10 +39,12 @@ export const integrationsService = new CoreIntegrationService(
 );
 export const postService = new CorePostService(postRepository);
 export const youtubeService = new YoutubeService();
+export const trackedKeywordService = new TrackedKeywordService();
+export const redditService = new RedditService();
 
 export const queueService = new CoreQueueService(queueRepository);
 export const taskService = new CoreTaskService(prisma);
 export const subtaskService = new CoreSubTaskService(subtaskRepository);
-export const commentsService = new CoreCommentService(commentRepository);
+export const mentionService = new CoreMentionService(mentionRepository);
 export const userService = new CoreUserService(userRepository);
 export const planService = new CorePlanService(planRepository);

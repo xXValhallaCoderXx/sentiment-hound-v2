@@ -8,14 +8,7 @@ import {
 } from "./components";
 // import { postService } from "services";
 
-const DashboardPage = async ({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}) => {
+const DashboardPage = async () => {
   // const query = searchParams?.query || "";
   // const currentPage = Number(searchParams?.page) || 1;
   // const posts = await postService.getPosts({ page: 1, limit: 10 });

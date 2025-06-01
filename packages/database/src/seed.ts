@@ -1,6 +1,6 @@
 import {
   PrismaClient,
-  SubTaskCommentStatus,
+  SubTaskMentionStatus,
   SubTaskType,
   SubTaskStatus,
   SentimentStatus,
@@ -46,6 +46,12 @@ const seed = async () => {
       name: "facebook",
       description:
         "Fetch all the comments from your facebook posts and analyze their sentiment.",
+      image: "facebook-logo.png",
+    },
+    {
+      name: "reddit",
+      description:
+        "Fetch all the comments from your reddit posts and keywords to analyze their sentiment.",
       image: "facebook-logo.png",
     },
   ];

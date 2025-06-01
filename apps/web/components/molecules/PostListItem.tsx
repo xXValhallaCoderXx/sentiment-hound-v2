@@ -1,15 +1,10 @@
 import {
   Card,
-  CardSection,
   Flex,
   Text,
   Badge,
-  Group,
   Progress,
   Button,
-  Image,
-  Box,
-  Stack,
   Title,
 } from "@mantine/core";
 import {
@@ -49,8 +44,8 @@ const PostListItem = ({
   topAspects,
   areasOfConcern,
   title,
-  description,
-  imageUrl,
+  // description,
+  // imageUrl,
   postUrl,
 }: PostListItemProps) => {
   // Get the appropriate provider icon

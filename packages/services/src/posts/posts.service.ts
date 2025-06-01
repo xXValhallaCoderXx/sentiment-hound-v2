@@ -1,4 +1,4 @@
-import { Comment, Post, Prisma, prisma } from "@repo/db";
+import { Mention, Post, Prisma, prisma } from "@repo/db";
 import { PostRepository } from "./posts.repository";
 import { ICreatePost } from "./post.interface";
 import { PostWithComments, ProcessedPost } from "./post.interface";
@@ -76,7 +76,7 @@ export class CorePostService {
 
     // Only include posts with comments if specified
     if (onlyWithComments) {
-      whereClause.comments = {
+      whereClause.mentions = {
         some: {},
       };
     }
@@ -85,7 +85,7 @@ export class CorePostService {
     const includeOptions: Prisma.PostInclude = {};
 
     if (includeComments) {
-      includeOptions.comments = {
+      includeOptions.mentions = {
         include: includeAspectAnalyses
           ? {
               aspectAnalyses: true,
@@ -121,7 +121,7 @@ export class CorePostService {
       processedPosts = posts.map((post: any) => {
         // Calculate sentiment counts and percentages
         const sentimentCounts = post.comments.reduce(
-          (acc: any, comment: Comment) => {
+          (acc: any, comment: Mention) => {
             if (comment.sentiment === "POSITIVE") acc.positive++;
             else if (comment.sentiment === "NEGATIVE") acc.negative++;
             else acc.neutral++;
@@ -208,7 +208,7 @@ export class CorePostService {
         },
       },
       include: {
-        comments: true,
+        mentions: true,
       },
     });
   }
@@ -239,12 +239,12 @@ export class CorePostService {
       where: {
         userId,
         integrationId,
-        comments: {
+        mentions: {
           some: {}, // This ensures only posts with comments are returned
         },
       },
       include: {
-        comments: {
+        mentions: {
           include: {
             aspectAnalyses: true,
           },
@@ -255,7 +255,7 @@ export class CorePostService {
 
     return posts.map((post: any) => {
       const sentimentCounts = post.comments.reduce(
-        (acc: any, comment: Comment) => {
+        (acc: any, comment: Mention) => {
           if (comment.sentiment === "POSITIVE") acc.positive++;
           else if (comment.sentiment === "NEGATIVE") acc.negative++;
           else acc.neutral++;
@@ -311,12 +311,12 @@ export class CorePostService {
       where: {
         userId,
         integrationId,
-        comments: {
+        mentions: {
           some: {}, // This ensures only posts with comments are returned
         },
       },
       include: {
-        comments: {
+        mentions: {
           include: {
             aspectAnalyses: true,
           },
@@ -362,7 +362,7 @@ export class CorePostService {
     return this.repository.createMany({ data });
   }
 
-  async batchCreateComments(data: Prisma.CommentCreateManyInput[]) {
-    return prisma.comment.createMany({ data });
+  async batchCreateComments(data: Prisma.MentionCreateManyInput[]) {
+    return prisma.mention.createMany({ data });
   }
 }

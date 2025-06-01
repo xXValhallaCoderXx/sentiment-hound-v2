@@ -13,7 +13,7 @@ import JobDetailDrawer from "./components/JobDetailDrawer";
 const JobsPage = async ({
   searchParams,
 }: {
-  searchParams: Record<string, string>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const session = await auth();
   const {
