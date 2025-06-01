@@ -14,7 +14,7 @@ const IntegrationKeywords = async () => {
   const [keywords, integrations] = await Promise.all([
     prisma.trackedKeyword.findMany({
       where: { userId },
-      include: { provider: true, mention: true },
+      include: { provider: true },
       orderBy: { createdAt: "desc" },
     }),
     prisma.integration.findMany({

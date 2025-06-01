@@ -1,4 +1,4 @@
-import { trackedKeywordService } from "@repo/services";
+// import { trackedKeywordService } from "@repo/services";
 import { prisma } from "@repo/db";
 import { revalidatePath } from "next/cache";
 
@@ -15,11 +15,11 @@ interface AddKeywordParams {
 
 // Use defined types instead of any
 export const addNewKeyword = ({ integration, value }: AddKeywordParams) => {
-  return trackedKeywordService.createKeyword({
-    userId: integration.userId,
-    providerId: integration.providerId,
-    keyword: value,
-  });
+  // return trackedKeywordService.createKeyword({
+  //   userId: integration.userId,
+  //   providerId: integration.providerId,
+  //   keyword: value,
+  // });
 };
 
 // New deleteKeyword action
@@ -48,7 +48,7 @@ export const deleteKeyword = async ({
     }
 
     // Corrected call: Pass keywordId directly as a number
-    await trackedKeywordService.deleteKeyword(keywordId);
+    // await trackedKeywordService.deleteKeyword(keywordId);
 
     // Revalidate the path after successful deletion
     revalidatePath("/dashboard/integrations");

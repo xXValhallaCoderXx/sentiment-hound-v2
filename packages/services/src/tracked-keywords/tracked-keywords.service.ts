@@ -20,7 +20,7 @@ export class TrackedKeywordService {
       where: { userId },
       include: {
         provider: true,
-        mention: true,
+        // mention: true,
       },
       orderBy: {
         createdAt: "desc",
