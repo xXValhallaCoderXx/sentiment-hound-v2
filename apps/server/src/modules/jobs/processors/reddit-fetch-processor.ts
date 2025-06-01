@@ -75,7 +75,7 @@ export class RedditFetchProcessor {
                   content: comment.content,
                   remoteId: comment.mentionId,
                   mentionId: Number(comment.mentionId),
-                  sourceType: 'YOUTUBE',
+                  sourceType: 'REDDIT',
                   post: { connect: { id: createdPost[0].id } }, // Connect to the created post
                 },
               });
