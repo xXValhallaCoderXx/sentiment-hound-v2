@@ -1,6 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/next-auth.lib";
+import { ActionResponse, createErrorResponse } from "@/lib/types";
 
 import { Integration } from "@repo/db";
 import {
@@ -9,28 +10,16 @@ import {
   youtubeService,
 } from "@repo/services";
 
-interface ErrorResponse {
-  error: string;
-  code: string;
-  status: number;
-}
-
-type ActionResponse<T> =
-  | { data: T; error: null }
-  | { data: null; error: ErrorResponse };
-
-export async function getUserIntegrations(): Promise<ActionResponse<Integration[]>> {
+export async function getUserIntegrations(): Promise<
+  ActionResponse<Integration[]>
+> {
   try {
     const data = await integrationsService.getAllIntegrations();
     return { data, error: null };
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }
@@ -44,27 +33,21 @@ export async function getIntegration(
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }
 
-export async function getAllIntegrations(): Promise<ActionResponse<Integration[]>> {
+export async function getAllIntegrations(): Promise<
+  ActionResponse<Integration[]>
+> {
   try {
     const data = await integrationsService.getAllIntegrations();
     return { data, error: null };
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }
@@ -140,4 +123,3 @@ export const integrateProvider = async (formData: FormData) => {
     redirect("/dashboard/integrations");
   }
 };
-
