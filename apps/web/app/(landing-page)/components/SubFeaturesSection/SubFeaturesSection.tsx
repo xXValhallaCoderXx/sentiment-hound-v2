@@ -5,40 +5,47 @@ import {
   Container,
   SimpleGrid,
   rem,
+  Paper,
 } from "@mantine/core";
-import { IconIceCream } from "@tabler/icons-react";
+import {
+  IconShieldLock,
+  IconDeviceAnalytics,
+  IconCloudComputing,
+  IconHeartRateMonitor,
+  IconHelpCircle as IconSupportFilled,
+} from "@tabler/icons-react";
 import classes from "./SubFeatures.module.css";
 
 export const MOCKDATA = [
   {
-    icon: IconIceCream,
-    title: "Extreme performance",
+    icon: IconDeviceAnalytics,
+    title: "High Performance",
     description:
-      "This dust is actually a powerful poison that will even make a pro wrestler sick, Regice cloaks itself with frigid air of -328 degrees Fahrenheit",
+      "Our optimized algorithms process millions of data points in seconds, providing real-time insights without delay.",
   },
   {
-    icon: IconIceCream,
-    title: "Privacy focused",
+    icon: IconShieldLock,
+    title: "Privacy Focused",
     description:
-      "People say it can run at the same speed as lightning striking, Its icy body is so cold, it will not melt even if it is immersed in magma",
+      "Your data security is our priority. All information is encrypted and processed following strict privacy standards.",
   },
   {
-    icon: IconIceCream,
-    title: "No third parties",
+    icon: IconCloudComputing,
+    title: "Cloud Native",
     description:
-      "They’re popular, but they’re rare. Trainers who show them off recklessly may be targeted by thieves",
+      "Deploy anywhere with our cloud-native architecture. Scale effortlessly as your data needs grow.",
   },
   {
-    icon: IconIceCream,
-    title: "Secure by default",
+    icon: IconHeartRateMonitor,
+    title: "Real-time Monitoring",
     description:
-      "Although it still can’t fly, its jumping power is outstanding, in Alola the mushrooms on Paras don’t grow up quite right",
+      "Track sentiment changes as they happen with our real-time monitoring dashboard and receive instant alerts.",
   },
   {
-    icon: IconIceCream,
+    icon: IconSupportFilled,
     title: "24/7 Support",
     description:
-      "Rapidash usually can be seen casually cantering in the fields and plains, Skitty is known to chase around after its own tail",
+      "Our dedicated support team is available around the clock to ensure your sentiment analysis runs smoothly.",
   },
 ];
 
@@ -50,17 +57,22 @@ interface FeatureProps {
 
 function Feature({ icon: Icon, title, description }: FeatureProps) {
   return (
-    <div>
-      <ThemeIcon variant="light" size={40} radius={40}>
-        <Icon style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+    <Paper p="md" radius="md" className={classes.featureCard} withBorder>
+      <ThemeIcon
+        variant="light"
+        size={50}
+        radius={50}
+        className={classes.featureIcon}
+      >
+        <Icon style={{ width: rem(24), height: rem(24) }} stroke={1.5} />
       </ThemeIcon>
-      <Text mt="sm" mb={7}>
+      <Text fw={700} fz="lg" mt="sm" mb={7}>
         {title}
       </Text>
       <Text size="sm" c="dimmed" lh={1.6}>
         {description}
       </Text>
-    </div>
+    </Paper>
   );
 }
 
@@ -72,21 +84,22 @@ const SubFeaturesSection = () => {
   return (
     <Container className={classes.wrapper}>
       <Title className={classes.title}>
-        Integrate effortlessly with any technology stack
+        Enterprise-grade Features for Everyone
       </Title>
 
       <Container size={560} p={0}>
         <Text size="sm" className={classes.description}>
-          Every once in a while, you’ll see a Golbat that’s missing some fangs.
-          This happens when hunger drives it to try biting a Steel-type Pokémon.
+          Sentiment Hound provides powerful tools that are accessible to
+          organizations of all sizes. Leverage enterprise capabilities without
+          the enterprise price tag.
         </Text>
       </Container>
 
       <SimpleGrid
         mt={60}
         cols={{ base: 1, sm: 2, md: 3 }}
-        spacing={{ base: "xl", md: 50 }}
-        verticalSpacing={{ base: "xl", md: 50 }}
+        spacing={{ base: "xl", md: 30 }}
+        verticalSpacing={{ base: "xl", md: 30 }}
       >
         {features}
       </SimpleGrid>

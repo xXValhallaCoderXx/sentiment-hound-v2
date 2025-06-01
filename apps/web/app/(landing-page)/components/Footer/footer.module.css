@@ -8,8 +8,11 @@
 
 .logo {
     max-width: rem(200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -18,8 +21,9 @@
 
 .description {
     margin-top: rem(5px);
+    text-align: center;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         margin-top: var(--mantine-spacing-xs);
         text-align: center;
     }
@@ -28,18 +32,21 @@
 .inner {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         flex-direction: column;
         align-items: center;
     }
 }
+    
+
 
 .groups {
     display: flex;
     flex-wrap: wrap;
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         display: none;
     }
 }
@@ -79,13 +86,13 @@
     padding-bottom: var(--mantine-spacing-xl);
     border-top: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
 
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         flex-direction: column;
     }
 }
 
 .social {
-    @media (max-width: $mantine-breakpoint-sm) {
+    @media (max-width: var(--mantine-breakpoint-sm)) {
         margin-top: var(--mantine-spacing-xs);
     }
 }

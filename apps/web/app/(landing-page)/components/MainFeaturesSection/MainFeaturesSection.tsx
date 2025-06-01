@@ -1,33 +1,37 @@
 import {
-
   Title,
   Text,
   Card,
   SimpleGrid,
   Container,
   rem,
+  Group,
 } from "@mantine/core";
-import { IconIceCream } from "@tabler/icons-react";
+import {
+  IconMessageSearch,
+  IconChartDonut3,
+  IconAspectRatio,
+} from "@tabler/icons-react";
 import classes from "./MainFeatures.module.css";
 
 const mockdata = [
   {
-    title: "Disocver what your users are saying",
+    title: "Discover what your users are saying",
     description:
-      "Empower your business strategy with real-time insights and data-driven decisions",
-    icon: IconIceCream,
+      "Harness our advanced AI to uncover valuable insights from customer feedback across all your channels.",
+    icon: IconMessageSearch,
   },
   {
     title: "Analyze Historical Data",
     description:
-      "Harness the power of historical data to predict future trends and make informed decisions",
-    icon: IconIceCream,
+      "Track sentiment trends over time to predict future patterns and make data-informed strategic decisions.",
+    icon: IconChartDonut3,
   },
   {
-    title: "More than just, sentiment analysis",
+    title: "More than just sentiment analysis",
     description:
-      "With aspect based analysis, you can dive deeper into the data and understand the nuances of your users' feedback",
-    icon: IconIceCream,
+      "With aspect-based analysis, understand the specific features or attributes driving customer sentiment.",
+    icon: IconAspectRatio,
   },
 ];
 
@@ -40,13 +44,16 @@ const MainFeaturesSection = () => {
       className={classes.card}
       padding="xl"
     >
-      <feature.icon
-        style={{ width: rem(50), height: rem(50) }}
-        stroke={String(2)}
-      />
-      <Text fz="lg" fw={500} className={classes.cardTitle} mt="md">
-        {feature.title}
-      </Text>
+      <Group wrap="nowrap" gap="md" align="flex-start" mb="md">
+        <feature.icon
+          style={{ width: rem(50), height: rem(50) }}
+          stroke={1.5}
+          color="var(--mantine-color-blue-filled)"
+        />
+        <Text fz="lg" fw={600} className={classes.cardTitle}>
+          {feature.title}
+        </Text>
+      </Group>
       <Text fz="sm" c="dimmed" mt="sm">
         {feature.description}
       </Text>
@@ -54,21 +61,23 @@ const MainFeaturesSection = () => {
   ));
 
   return (
-    <Container size="lg" py="xl">
-      <Title order={2} className={classes.title} ta="center" mt="sm">
-        Integrate effortlessly with most social platforms
-      </Title>
+    <div className={classes.mainFeatureWrapper}>
+      <Container size="lg" py="xl">
+        <Title order={2} className={classes.title} ta="center" mt="sm">
+          Transform Data into Actionable Insights
+        </Title>
 
-      <Text c="dimmed" className={classes.description} ta="center" mt="md">
-        Make data-driven choices with confidence and stay ahead of the curve.
-        Experience the power of our sentiment analysis product today and
-        revolutionize your decision-making process.
-      </Text>
+        <Text c="dimmed" className={classes.description} ta="center" mt="md">
+          Make data-driven decisions with confidence and stay ahead of the
+          curve. Experience the power of our sentiment analysis product today
+          and revolutionize your decision-making process.
+        </Text>
 
-      <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={50}>
-        {features}
-      </SimpleGrid>
-    </Container>
+        <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={50}>
+          {features}
+        </SimpleGrid>
+      </Container>
+    </div>
   );
 };
 
