@@ -19,10 +19,10 @@ export class RedditFetchProcessor {
     );
 
     const trackedKeywords = await prisma.trackedKeyword.findMany({
-      // where: {
-      //   isActive: true,
-      //   provider: { name: 'Reddit' },
-      // },
+      where: {
+        isActive: true,
+        provider: { name: 'Reddit' },
+      },
       include: {
         user: true,
         provider: true,
@@ -33,26 +33,32 @@ export class RedditFetchProcessor {
       job.data.integrationId,
     );
 
+    if (!integration) {
+      throw new Error(`Integration not found: ${job.data.integrationId}`);
+    }
+
     for (const keyword of trackedKeywords) {
       this.logger.log(`Searching Reddit for keyword: "${keyword.keyword}"`);
 
-      const results = await redditService.searchMention(keyword.keyword);
+      // Use OAuth token if available for better rate limits
+      const results = await redditService.searchMention(
+        keyword.keyword,
+        integration.accessToken
+      );
       this.logger.log(
         `Found ${results.length} mentions for keyword: "${keyword.keyword}"`,
       );
 
       for (const post of results) {
-        console.log('POST: ', post);
         try {
           await postService.createUserPosts([
             {
               remoteId: post.id,
-              commentCount: post?.comments.length,
+              commentCount: post?.comments?.length || 0,
               integrationId: integration.id,
               userId: keyword.user.id,
-              title: post.content,
-
-              postUrl: '',
+              title: post.content.substring(0, 255), // Ensure title fits database constraints
+              postUrl: post.permalink,
               publishedAt: post.createdAt,
             },
           ]);
@@ -60,79 +66,38 @@ export class RedditFetchProcessor {
           const createdPost = await postService.findPostsBasedOnRemoteIds([
             post.id,
           ]);
-          const comments = post?.comments.map((comment) => ({
-            content: comment.content,
-            mentionId: comment.id,
-            postId: createdPost[0].id,
-          }));
 
           if (createdPost && createdPost.length > 0) {
             // Store comments in database
-            for (const comment of comments) {
-              console.log('COMMENT: ', comment);
+            for (const comment of post.comments || []) {
               await mentionService.createMention({
                 data: {
                   content: comment.content,
-                  remoteId: comment.mentionId,
-                  mentionId: Number(comment.mentionId),
+                  remoteId: comment.id,
+                  mentionId: parseInt(comment.id, 36), // Convert Reddit's base36 ID to number
                   sourceType: 'REDDIT',
-                  post: { connect: { id: createdPost[0].id } }, // Connect to the created post
+                  author: comment.author,
+                  sourceUrl: post.permalink,
+                  originLabel: post.subreddit,
+                  publishedAt: comment.createdAt,
+                  trackedKeywordId: keyword.id,
+                  sentimentStatus: 'PENDING',
+                  post: { connect: { id: createdPost[0].id } },
                 },
               });
             }
 
             this.logger.log(
-              `Successfully processed video ${post.id} with ${comments.length} comments`,
+              `Successfully processed Reddit post ${post.id} with ${post.comments?.length || 0} comments`,
             );
           } else {
-            throw new Error(`Failed to find created post for video ${post.id}`);
+            throw new Error(`Failed to find created post for Reddit post ${post.id}`);
           }
         } catch (error) {
-          this.logger.error(`Failed to process post: ${post.id}`, error);
+          this.logger.error(`Failed to process Reddit post: ${post.id}`, error);
         }
       }
 
-      //   for (const result of results) {
-      //     try {
-      //       await prisma.mention.upsert({
-      //         where: {
-      //           remoteId_sourceType: {
-      //             remoteId: result.id,
-      //             sourceType: 'REDDIT',
-      //           },
-      //         },
-      //         update: {},
-      //         create: {
-      //           remoteId: result.id,
-      //           sourceType: 'REDDIT',
-      //           content: result.text,
-      //           author: result.author,
-      //           sourceUrl: result.permalink,
-      //           originLabel: result.subreddit,
-      //           publishedAt: result.createdAt,
-      //           trackedKeywordId: keyword.id,
-      //           sentimentStatus: 'PENDING',
-      //         },
-      //       });
-
-      //       await prisma.subTaskMention.create({
-      //         data: {
-      //           subTaskId: job.id,
-      //           mention: {
-      //             connect: {
-      //               remoteId_sourceType: {
-      //                 remoteId: result.id,
-      //                 sourceType: 'REDDIT',
-      //               },
-      //             },
-      //           },
-      //         },
-      //         skipDuplicates: true,
-      //       });
-      //     } catch (error) {
-      //       this.logger.error(`Failed to process mention: ${result.id}`, error);
-      //     }
-      //   }
     }
 
     await prisma.subTask.update({

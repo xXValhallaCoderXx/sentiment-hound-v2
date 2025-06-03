@@ -8,6 +8,7 @@ import {
   integrationsService,
   providerService,
   youtubeService,
+  redditService,
 } from "@repo/services";
 
 export async function getUserIntegrations(): Promise<
@@ -78,6 +79,11 @@ export async function revokeIntegration(formData: FormData) {
     await youtubeService.revokeRefreshToken(integration.refreshToken);
   }
 
+  // Handle Reddit token revocation
+  if (provider && provider.name === "reddit") {
+    await redditService.revokeIntegration(integration.accessToken);
+  }
+
   // // Delete the integration from our database
   await integrationsService.deleteIntegration(integration.id);
   redirect("/dashboard/integrations");
@@ -105,21 +111,13 @@ export const integrateProvider = async (formData: FormData) => {
   }
 
   if (provider && provider.name === "reddit") {
-    console.log("Reddit integration not implemented yet");
-    const result = await integrationsService.createIntegration({
-      userId,
-      accessToken: "N/A",
-      accountId: "N/A",
-      providerId: Number(providerId),
-      refreshToken: "N/A",
-      refreshTokenExpiresAt: new Date(),
-    });
-
-    if (result) {
-      console.log("Integration created successfully:", result);
-    } else {
-      console.error("Failed to create integration for Reddit");
-    }
-    redirect("/dashboard/integrations");
+    // Generate a random state parameter for security
+    const state = Math.random().toString(36).substring(2, 15);
+    
+    // Store state in session or another secure way if needed
+    // For now, we'll use a simple random string
+    
+    const authUrl = redditService.generateAuthUrl(state);
+    redirect(authUrl);
   }
 };
