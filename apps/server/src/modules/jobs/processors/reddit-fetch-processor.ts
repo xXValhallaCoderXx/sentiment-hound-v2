@@ -74,7 +74,10 @@ export class RedditFetchProcessor {
                 data: {
                   content: comment.content,
                   remoteId: comment.id,
-                  mentionId: parseInt(comment.id, 36), // Convert Reddit's base36 ID to number
+                  mentionId: Math.abs(comment.id.split('').reduce((a, b) => {
+                    a = ((a << 5) - a) + b.charCodeAt(0);
+                    return a & a;
+                  }, 0)), // Simple hash of Reddit comment ID
                   sourceType: 'REDDIT',
                   author: comment.author,
                   sourceUrl: post.permalink,

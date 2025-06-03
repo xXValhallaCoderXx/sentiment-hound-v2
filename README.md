@@ -38,6 +38,22 @@ This monorepo is managed using `pnpm` and `Turborepo`. It consists of the follow
         ```env
         DATABASE_URL="postgresql://postgres:postgres@localhost:5432/sentiment-hound?schema=public"
         ```
+    *   For Reddit integration support, add the following to your environment files:
+        ```env
+        # Reddit OAuth Configuration
+        REDDIT_CLIENT_ID=your_reddit_client_id
+        REDDIT_CLIENT_SECRET=your_reddit_client_secret
+        REDDIT_USER_AGENT=your_app_name:version (by /u/yourusername)
+        
+        # NextAuth Configuration (required for OAuth callbacks)
+        NEXTAUTH_URL=http://localhost:3000
+        ```
+        To obtain Reddit OAuth credentials:
+        1. Go to [Reddit App Preferences](https://www.reddit.com/prefs/apps)
+        2. Click "Create App" or "Create Another App"
+        3. Choose "web app" as the app type
+        4. Set redirect URI to `http://localhost:3000/api/auth/reddit/callback` (or your deployed domain)
+        5. Copy the client ID and secret to your environment variables
 
 ## Running the Application
 

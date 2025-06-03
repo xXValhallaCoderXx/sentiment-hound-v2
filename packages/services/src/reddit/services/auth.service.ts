@@ -9,12 +9,22 @@ export class RedditAuthService {
   private readonly clientSecret = process.env.REDDIT_CLIENT_SECRET;
   private readonly userAgent = process.env.REDDIT_USER_AGENT || "sentiment-hound-v2:1.0.0";
 
+  constructor() {
+    if (!this.clientId || !this.clientSecret) {
+      console.warn("Reddit OAuth credentials not configured. Please set REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET environment variables.");
+    }
+  }
+
   async generateAuthFromCode(code: string): Promise<{
     accessToken: string;
     refreshToken?: string;
     expiresIn: number;
     accountId: string;
   }> {
+    if (!this.clientId || !this.clientSecret) {
+      throw new Error("Reddit OAuth credentials not configured. Please set REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET environment variables.");
+    }
+
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
     const redirectUri = `${baseUrl}/api/auth/reddit/callback`;
 
@@ -35,10 +45,15 @@ export class RedditAuthService {
     });
 
     if (!response.ok) {
-      throw new Error(`Reddit OAuth failed: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Reddit OAuth failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     const tokenData: IRedditAuthResponse = await response.json();
+
+    if (!tokenData.access_token) {
+      throw new Error("Reddit OAuth response missing access token");
+    }
 
     // Get user info to retrieve account ID
     const userResponse = await fetch("https://oauth.reddit.com/api/v1/me", {
@@ -49,7 +64,8 @@ export class RedditAuthService {
     });
 
     if (!userResponse.ok) {
-      throw new Error("Failed to fetch Reddit user info");
+      const errorText = await userResponse.text();
+      throw new Error(`Failed to fetch Reddit user info: ${userResponse.status} ${userResponse.statusText} - ${errorText}`);
     }
 
     const userData = await userResponse.json();
@@ -117,11 +133,15 @@ export class RedditAuthService {
   }
 
   generateAuthUrl(state: string): string {
+    if (!this.clientId) {
+      throw new Error("Reddit client ID not configured. Please set REDDIT_CLIENT_ID environment variable.");
+    }
+
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
     const redirectUri = `${baseUrl}/api/auth/reddit/callback`;
     
     const params = new URLSearchParams({
-      client_id: this.clientId!,
+      client_id: this.clientId,
       response_type: "code",
       state,
       redirect_uri: redirectUri,
