@@ -22,6 +22,11 @@ export class RedditFetchProcessor {
       where: {
         isActive: true,
         provider: { name: 'Reddit' },
+        user: { 
+          integrations: {
+            some: { id: job.data.integrationId }
+          }
+        }
       },
       include: {
         user: true,
@@ -36,6 +41,17 @@ export class RedditFetchProcessor {
     if (!integration) {
       throw new Error(`Integration not found: ${job.data.integrationId}`);
     }
+
+    if (trackedKeywords.length === 0) {
+      this.logger.log(`No active Reddit keywords found for integration ${job.data.integrationId}`);
+      await prisma.subTask.update({
+        where: { id: job.id },
+        data: { status: 'COMPLETED' },
+      });
+      return;
+    }
+
+    this.logger.log(`Found ${trackedKeywords.length} Reddit keywords to process`);
 
     for (const keyword of trackedKeywords) {
       this.logger.log(`Searching Reddit for keyword: "${keyword.keyword}"`);
