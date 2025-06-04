@@ -1,8 +1,4 @@
-import {
-  MantineThemeOverride,
-  MantineColorsTuple,
-  MantineTheme,
-} from "@mantine/core";
+import { MantineThemeOverride, MantineColorsTuple } from "@mantine/core";
 
 // Simplified color palette - use semantic names
 const colors: Record<string, MantineColorsTuple> = {

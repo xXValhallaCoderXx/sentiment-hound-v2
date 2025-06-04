@@ -2,7 +2,7 @@
 import { Alert } from "@mantine/core";
 
 import { useRouter, useSearchParams } from "next/navigation";
-const IntegrationAlert = (params: any) => {
+const IntegrationAlert = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const handleOnCloseAlert = () => {

@@ -1,19 +1,13 @@
 import { FC } from "react";
 import { Flex, Avatar, Text, Badge, Title } from "@mantine/core";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IDashboardCommentCardProps {
-  title?: string;
-  description?: string;
-  sentimentType?: string;
-  icon?: any;
+  // This interface is intentionally empty as the component currently uses hardcoded data.
+  // Props can be added here if the component needs to receive data dynamically in the future.
 }
 
-const DashboardCommentCard: FC<IDashboardCommentCardProps> = ({
-  title,
-  description,
-  sentimentType,
-  icon,
-}) => {
+const DashboardCommentCard: FC<IDashboardCommentCardProps> = () => {
   return (
     <Flex gap={8} direction="column" p={8}>
       <Flex gap={8} align="center">

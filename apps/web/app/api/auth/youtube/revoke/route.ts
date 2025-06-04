@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/next-auth.lib";
+import { NextResponse } from "next/server";
 
 export async function POST() {
   // const session = await auth();

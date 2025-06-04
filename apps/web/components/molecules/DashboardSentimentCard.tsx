@@ -11,7 +11,7 @@ export interface IDashboardSentimentCardProps {
   description?: string;
   sentimentType?: string;
   showIcon?: boolean;
-  icon?: any;
+  icon?: React.ElementType;
   redirectCta?: {
     label: string;
     href: string;

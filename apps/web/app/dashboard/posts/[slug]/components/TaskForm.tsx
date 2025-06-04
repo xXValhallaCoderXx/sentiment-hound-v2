@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button, Select, Text } from "@mantine/core";
-import { addNewTask } from "@/slices/tasks/tasks.actions";
 import { TaskType } from "@repo/db";
 
 interface TaskFormProps {

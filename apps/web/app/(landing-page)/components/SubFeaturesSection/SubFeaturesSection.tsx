@@ -13,6 +13,7 @@ import {
   IconCloudComputing,
   IconHeartRateMonitor,
   IconHelpCircle as IconSupportFilled,
+  type IconProps,
 } from "@tabler/icons-react";
 import classes from "./SubFeatures.module.css";
 
@@ -50,7 +51,7 @@ export const MOCKDATA = [
 ];
 
 interface FeatureProps {
-  icon: React.FC<any>;
+  icon: React.FC<IconProps>;
   title: React.ReactNode;
   description: React.ReactNode;
 }
@@ -64,7 +65,7 @@ function Feature({ icon: Icon, title, description }: FeatureProps) {
         radius={50}
         className={classes.featureIcon}
       >
-        <Icon style={{ width: rem(24), height: rem(24) }} stroke={1.5} />
+        <Icon style={{ width: rem(24), height: rem(24) }} stroke="1.5" />
       </ThemeIcon>
       <Text fw={700} fz="lg" mt="sm" mb={7}>
         {title}

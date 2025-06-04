@@ -1,6 +1,5 @@
-import { integrationsService, postService } from "@repo/services";
 import { auth } from "@/lib/next-auth.lib";
-import { Box, Flex } from "@mantine/core";
+import { Box } from "@mantine/core";
 // import PostListTable from "../components/PostListTable";
 // import ActionPanel from "./components/ActionPanel";
 

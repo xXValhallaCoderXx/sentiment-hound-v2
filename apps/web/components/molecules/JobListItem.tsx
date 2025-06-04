@@ -1,4 +1,4 @@
-import { TaskType, Post } from "@repo/db";
+import { TaskType } from "@repo/db";
 import {
   Card,
   Flex,
@@ -20,15 +20,17 @@ const JOB_TYPE_MAP = {
   [TaskType.ANALYZE_POST]: "Analyzing content",
 };
 
-function calculateProgress(subTasks: any) {
+function calculateProgress(
+  subTasks: { type: string; subTaskMentions: { status: string }[] }[]
+) {
   const analyzeTask = subTasks.find(
-    (st: any) => st.type === "ANALYZE_CONTENT_SENTIMENT"
+    (st) => st.type === "ANALYZE_CONTENT_SENTIMENT"
   );
   if (!analyzeTask || !analyzeTask.subTaskMentions) return null;
 
   const total = analyzeTask.subTaskMentions.length;
   const completed = analyzeTask.subTaskMentions.filter(
-    (c: any) => c.status === "COMPLETED"
+    (c) => c.status === "COMPLETED"
   ).length;
 
   return {
@@ -38,7 +40,24 @@ function calculateProgress(subTasks: any) {
   };
 }
 
-const JobListItem = ({ post }: any) => {
+interface JobListItemProps {
+  post: {
+    id: number;
+    type: TaskType;
+    updatedAt: Date;
+    createdAt: Date;
+    status: string;
+    integration: {
+      provider: {
+        image: string;
+        name: string;
+      };
+    };
+    subTasks: { type: string; subTaskMentions: { status: string }[] }[];
+  };
+}
+
+const JobListItem = ({ post }: JobListItemProps) => {
   console.log("POST", post);
   const progress = calculateProgress(post.subTasks);
 
@@ -57,8 +76,7 @@ const JobListItem = ({ post }: any) => {
             />
             <Stack gap={0}>
               <Text size="lg" fw={600}>
-                {/* @ts-ignore */}
-                {JOB_TYPE_MAP[post?.type]} for{" "}
+                {JOB_TYPE_MAP[post?.type as keyof typeof JOB_TYPE_MAP]} for{" "}
                 <span className="capitalize">
                   {post?.integration?.provider?.name}
                 </span>
@@ -67,24 +85,14 @@ const JobListItem = ({ post }: any) => {
                 <Text mt={4} size="sm">
                   {dayjs(new Date(post.updatedAt)).format("DD/MM/YYYY")}
                 </Text>
-                <Badge
-                  color="success"
-                  size="xs"
-                  mt={4}
-                  className="capitalize"
-                >
+                <Badge color="success" size="xs" mt={4} className="capitalize">
                   {post?.status}
                 </Badge>
               </Flex>
             </Stack>
           </Flex>
           <Flex>
-            <Button
-              disabled
-              size="xs"
-              variant="outline"
-              color="error"
-            >
+            <Button disabled size="xs" variant="outline" color="error">
               Cancel Job
             </Button>
           </Flex>

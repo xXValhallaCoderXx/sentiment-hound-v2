@@ -11,7 +11,7 @@ import { Notifications } from "@mantine/notifications";
 import { SideDrawerNavigation } from "../organisms/SideDrawerNavigation";
 import { AuthenticatedNavigationMenu } from "../organisms/AuthenticatedNavigationMenu";
 
-const DashboardLayout = ({ children }: any) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [opened, { toggle }] = useDisclosure();
 
   return (
@@ -39,4 +39,3 @@ const DashboardLayout = ({ children }: any) => {
 };
 
 export default DashboardLayout;
-

@@ -16,7 +16,8 @@ interface INoDataProps {
 const NoData: FC<INoDataProps> = ({
   title = "No Data Found",
   description,
-  icon = IconMoodEmpty,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  icon = IconMoodEmpty, // Keep default icon if not provided
   redirectCta,
 }) => {
   return (

@@ -1,11 +1,11 @@
 import { auth } from "@/lib/next-auth.lib";
 import { Suspense } from "react";
-import { Box, Title, Text, Group, Button } from "@mantine/core";
-import { IconListCheck } from "@tabler/icons-react";
+import { Box, Text } from "@mantine/core"; // Removed Title, Group, Button
+// import { IconListCheck } from "@tabler/icons-react"; // Unused
 import JobListTable from "./components/JobListTable";
 import JobListTableLoading from "./components/JobListTableLoading";
 import TaskFilter from "./components/TaskFilter";
-import { integrationsService } from "@repo/services";
+// import { integrationsService } from "@repo/services"; // Unused
 import { TaskStatus, TaskType } from "@repo/db";
 import PageLayout from "@/components/templates/PageLayout";
 import JobDetailDrawer from "./components/JobDetailDrawer";

@@ -2,11 +2,16 @@ import { Box, Avatar, Text, Badge, Stack, Group, Flex } from "@mantine/core";
 import dayjs from "dayjs";
 
 interface IProfileCardProps {
-  id: string;
-  user: any;
+  user: {
+    image: string | null;
+    name: string | null;
+    email: string;
+    createdAt: Date;
+    plan: { name: string } | null;
+  };
 }
 
-const ProfileCard = async ({ id, user }: IProfileCardProps) => {
+const ProfileCard = async ({ user }: IProfileCardProps) => {
   return (
     <Box>
       <Group>

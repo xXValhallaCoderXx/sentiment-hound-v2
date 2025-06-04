@@ -1,9 +1,8 @@
 "use client";
 import { FC, useState } from "react";
 import { notifications } from "@mantine/notifications";
-import { Button, TextInput, Flex } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { addNewTask2 } from "@/slices/tasks/tasks.actions";
-import { useForm } from "@mantine/form";
 import { TaskType } from "@repo/db";
 
 interface IRedditJobButtonProps {

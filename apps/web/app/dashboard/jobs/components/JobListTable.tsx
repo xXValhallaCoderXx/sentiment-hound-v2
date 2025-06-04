@@ -1,24 +1,9 @@
-import {
-  Box,
-  Table,
-  TableThead,
-  TableTr,
-  TableTh,
-  TableTd,
-  TableTbody,
-  Text,
-  Badge,
-  Group,
-  Card,
-  Stack,
-  SimpleGrid,
-  Tooltip,
-} from "@mantine/core";
-import { IconAlertCircle } from "@tabler/icons-react";
-import dayjs from "dayjs";
+import { Text, Card, Stack, SimpleGrid } from "@mantine/core";
+// import { IconAlertCircle } from "@tabler/icons-react"; // Unused
+// import dayjs from "dayjs"; // Unused
 import JobListItem from "@/components/molecules/JobListItem";
-import { SubTaskStatus, TaskStatus, TaskType } from "@repo/db";
-import PaginationControls from "./PaginationControls";
+import { TaskStatus, TaskType } from "@repo/db"; // SubTaskStatus was unused
+// import PaginationControls from "./PaginationControls"; // Unused
 
 // Create this service or use an existing one
 import { prisma } from "@repo/db";
@@ -43,7 +28,7 @@ export default async function JobListTable({
   const skip = (page - 1) * pageSize;
 
   // Fetch tasks with pagination
-  const [tasks, totalCount] = await Promise.all([
+  const [tasks] = await Promise.all([
     prisma.task.findMany({
       where: {
         userId,
@@ -84,10 +69,8 @@ export default async function JobListTable({
       },
     }),
   ]);
-  
 
-  // Calculate total pages
-  const totalPages = Math.ceil(totalCount / pageSize);
+  // const totalPages = Math.ceil(totalCount / pageSize); // Unused
 
   if (!tasks || tasks.length === 0) {
     return (
@@ -111,43 +94,6 @@ export default async function JobListTable({
       </SimpleGrid>
     </Stack>
   );
-
-
 }
 
-// Helper functions
-function getStatusColor(status: TaskStatus | SubTaskStatus) {
-  switch (status) {
-    case "COMPLETED":
-      return "green";
-    case "FAILED":
-      return "red";
-    case "IN_PROGRESS":
-      return "blue";
-    case "PENDING":
-    default:
-      return "gray";
-  }
-}
-
-function getTaskTypeColor(type: TaskType) {
-  switch (type) {
-    case "FETCH_CONTENT":
-      return "blue";
-    case "ANALYZE_COMMENTS":
-      return "violet";
-    case "FULL_SYNC":
-      return "orange";
-    case "PARTIAL_SYNC":
-      return "teal";
-    default:
-      return "gray";
-  }
-}
-
-function formatEnumValue(value: string) {
-  return value
-    .replace(/_/g, " ")
-    .toLowerCase()
-    .replace(/\b\w/g, (l) => l.toUpperCase());
-}
+// Helper functions (getStatusColor, getTaskTypeColor, formatEnumValue were unused)

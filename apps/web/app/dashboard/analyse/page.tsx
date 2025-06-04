@@ -11,7 +11,7 @@ const AnalysePage = async ({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const session = await auth();
-  const { status, type } = await searchParams;
+  await searchParams; // status and type are not used, but searchParams might be needed later
 
   if (!session?.user?.id) {
     return (

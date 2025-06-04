@@ -2,7 +2,6 @@ import { SimpleGrid } from "@mantine/core";
 import DashboardSentimentCard, {
   IDashboardSentimentCardProps,
 } from "@/components/molecules/DashboardSentimentCard";
-import { IconMessage } from "@tabler/icons-react";
 
 const data: IDashboardSentimentCardProps[] = [
   {

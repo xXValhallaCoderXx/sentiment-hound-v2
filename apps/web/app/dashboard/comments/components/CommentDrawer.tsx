@@ -4,9 +4,16 @@ import { Drawer, Box, Text } from "@mantine/core";
 
 import { useRouter } from "next/navigation";
 
+interface ISelectedComment {
+  content: string;
+  sentiment: string;
+  provider: string;
+  // aspects: Array<{ aspect: string; sentiment: string }>; // Assuming structure for aspects
+}
+
 interface CommentDrawerProps {
   opened: boolean;
-  selectedComment: any;
+  selectedComment: ISelectedComment | null; // Allow null for loading state
 }
 
 const CommentDrawer: React.FC<CommentDrawerProps> = ({
