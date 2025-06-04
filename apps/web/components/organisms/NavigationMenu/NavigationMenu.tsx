@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Group, Anchor, Text } from "@mantine/core";
 import { SignInButton } from "@/components/molecules/SignInButton";
+import { ThemeToggle } from "@/components/molecules/ThemeToggle";
 
 const NavigationMenu = () => {
   return (
@@ -22,6 +23,7 @@ const NavigationMenu = () => {
       </Group>
 
       <Group gap="lg">
+        <ThemeToggle />
         <SignInButton />
         <Anchor href="#" c="gray.8" fw={500}>
           Home
