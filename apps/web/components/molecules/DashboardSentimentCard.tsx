@@ -49,7 +49,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         return (
           <IconArrowNarrowUp
             size={ICON_SIZE}
-            color="var(--mantine-color-success-6)"
+            color="success"
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
@@ -57,7 +57,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         return (
           <IconArrowNarrowDown
             size={ICON_SIZE}
-            color="var(--mantine-color-error-6)"
+            color="error"
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
@@ -66,7 +66,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         return (
           <IconLine
             size={ICON_SIZE}
-            color="var(--mantine-color-gray-6)"
+            color="dimmed"
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );

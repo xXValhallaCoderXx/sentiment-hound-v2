@@ -58,9 +58,9 @@ const PostListItem = ({
       case "instagram":
         return <IconBrandInstagram size={24} />;
       case "youtube":
-        return <IconBrandYoutube color="var(--mantine-color-error-6)" size={32} />;
+        return <IconBrandYoutube color="error" size={32} />;
       default:
-        return <IconBrandYoutube color="var(--mantine-color-error-6)" size={32} />;
+        return <IconBrandYoutube color="error" size={32} />;
     }
   };
 
@@ -158,7 +158,7 @@ const PostListItem = ({
                 <Text fw={500} className="capitalize" size="xs">
                   {aspect}
                 </Text>
-                <IconArrowUp size={16} color="var(--mantine-color-success-6)" />
+                <IconArrowUp size={16} color="success" />
               </Flex>
             ))}
           </Flex>
@@ -172,7 +172,7 @@ const PostListItem = ({
                 <Text fw={500} className="capitalize" size="xs">
                   {concern}
                 </Text>
-                <IconArrowDown size={16} color="var(--mantine-color-error-6)" />
+                <IconArrowDown size={16} color="error" />
               </Flex>
             ))}
           </Flex>
