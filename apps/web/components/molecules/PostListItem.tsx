@@ -58,9 +58,9 @@ const PostListItem = ({
       case "instagram":
         return <IconBrandInstagram size={24} />;
       case "youtube":
-        return <IconBrandYoutube color="red" size={32} />;
+        return <IconBrandYoutube color="var(--mantine-color-error-6)" size={32} />;
       default:
-        return <IconBrandYoutube color="red" size={32} />;
+        return <IconBrandYoutube color="var(--mantine-color-error-6)" size={32} />;
     }
   };
 
@@ -74,7 +74,7 @@ const PostListItem = ({
               <Text fw={600} truncate>
                 {title || `Post from ${provider}`}
               </Text>
-              <Badge color="green" size="xs" mt={4} className="capitalize">
+              <Badge color="success" size="xs" mt={4} className="capitalize">
                 Analyzed
               </Badge>
             </Flex>
@@ -91,7 +91,7 @@ const PostListItem = ({
             target="_blank"
             variant="outline"
             radius="sm"
-            color="black"
+            color="secondary"
             rightSection={<IconFileExport size={16} />}
           >
             Export CSV
@@ -102,7 +102,7 @@ const PostListItem = ({
             size="xs"
             target="_blank"
             variant="outline"
-            color="black"
+            color="secondary"
             radius="sm"
             rightSection={<IconExternalLink size={16} />}
           >
@@ -123,9 +123,8 @@ const PostListItem = ({
           <Flex gap={8} direction="column" pr={16}>
             <Flex align="center" gap={8}>
               <Progress
-                styles={{ root: { backgroundColor: "#BBF7D0" } }}
                 value={sentimentDistribution.positive}
-                color="green"
+                color="success"
                 size="md"
                 style={{ flex: 1 }}
               />
@@ -133,9 +132,8 @@ const PostListItem = ({
             </Flex>
             <Flex align="center" gap={8}>
               <Progress
-                styles={{ root: { backgroundColor: "#FEF08A" } }}
                 value={sentimentDistribution.neutral}
-                color="#EAB308"
+                color="warning"
                 size="md"
                 style={{ flex: 1 }}
               />
@@ -143,11 +141,8 @@ const PostListItem = ({
             </Flex>
             <Flex align="center" gap={8}>
               <Progress
-                styles={{
-                  root: { backgroundColor: "#FECACA" },
-                }}
                 value={sentimentDistribution.negative}
-                color="#EF4444"
+                color="error"
                 size="md"
                 style={{ flex: 1 }}
               />
@@ -163,7 +158,7 @@ const PostListItem = ({
                 <Text fw={500} className="capitalize" size="xs">
                   {aspect}
                 </Text>
-                <IconArrowUp size={16} color="green" />
+                <IconArrowUp size={16} color="var(--mantine-color-success-6)" />
               </Flex>
             ))}
           </Flex>
@@ -177,7 +172,7 @@ const PostListItem = ({
                 <Text fw={500} className="capitalize" size="xs">
                   {concern}
                 </Text>
-                <IconArrowDown size={16} color="red" />
+                <IconArrowDown size={16} color="var(--mantine-color-error-6)" />
               </Flex>
             ))}
           </Flex>

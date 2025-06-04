@@ -30,7 +30,7 @@ const CommentDetailsPage = async ({
     console.error("Error fetching comment details:", error);
     return (
       <Box p="xl" ta="center">
-        <Text color="red">An error occurred while loading comment details</Text>
+        <Text c="error">An error occurred while loading comment details</Text>
       </Box>
     );
   }

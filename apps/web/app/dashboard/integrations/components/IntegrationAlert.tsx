@@ -13,7 +13,7 @@ const IntegrationAlert = (params: any) => {
     searchParams?.get("success") === "true" && (
       <Alert
         variant="light"
-        color="green"
+        color="success"
         title="Integration Success"
         withCloseButton
         className="mt-4"
