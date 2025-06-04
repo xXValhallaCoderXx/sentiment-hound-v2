@@ -28,7 +28,7 @@ const RedditJobButton: FC<IRedditJobButtonProps> = ({
       });
       notifications.show({
         title: "Success",
-        message: "YouTube URL submitted successfully!",
+        message: "Reddit keyword search submitted successfully!",
         color: "green",
       });
     } catch (error) {
