@@ -1,6 +1,5 @@
 import { FC } from "react";
-// Import useMantineTheme
-import { Alert, Button, Group, Text, useMantineTheme } from "@mantine/core";
+import { Alert, Button, Group, Text } from "@mantine/core";
 import {
   IconAlertTriangle,
   IconCheck,
@@ -24,8 +23,6 @@ const DashboardNotificationCard: FC<IStatusAlertProps> = ({
   buttonLabel,
   onClick,
 }) => {
-  const theme = useMantineTheme(); // Get the theme object
-
   const icon =
     type === "success" ? (
       <IconCheck size={20} />
@@ -35,28 +32,26 @@ const DashboardNotificationCard: FC<IStatusAlertProps> = ({
       <IconInfoCircle size={20} /> // Default to info icon
     );
 
-  // Use theme colors
+  // Use semantic theme colors
   const color =
     type === "success"
-      ? theme.colors.green[6] // Or theme.other.sentimentPositive if defined
+      ? "success"
       : type === "warning"
-        ? theme.colors.yellow[6] // Or a specific warning color from theme
-        : theme.colors.blue[6]; // Or a specific info color from theme
+        ? "warning"
+        : "primary"; // Use primary for info
 
   return (
     <Alert
       icon={icon}
       title={<Text fw={600}>{title}</Text>}
-      color={color} // Apply theme color
+      color={color} // Apply semantic theme color
       radius="md"
       withCloseButton={false} // Assuming this is intentional, otherwise could be true
     >
       <Text mb="sm">{message}</Text>
       {buttonLabel && onClick && (
         <Group justify="start">
-          {/* Button color can also be themed, e.g., theme.primaryColor or a specific theme.colors */}
-          {/* For now, 'dark' is a valid Mantine color prop that respects theme */}
-          <Button variant="filled" color="dark" size="xs" onClick={onClick}>
+          <Button variant="filled" color="secondary" size="xs" onClick={onClick}>
             {buttonLabel}
           </Button>
         </Group>
