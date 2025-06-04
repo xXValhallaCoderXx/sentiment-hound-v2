@@ -22,11 +22,11 @@ export class RedditFetchProcessor {
       where: {
         isActive: true,
         provider: { name: 'Reddit' },
-        user: { 
+        user: {
           integrations: {
-            some: { id: job.data.integrationId }
-          }
-        }
+            some: { id: job.data.integrationId },
+          },
+        },
       },
       include: {
         user: true,
@@ -43,7 +43,9 @@ export class RedditFetchProcessor {
     }
 
     if (trackedKeywords.length === 0) {
-      this.logger.log(`No active Reddit keywords found for integration ${job.data.integrationId}`);
+      this.logger.log(
+        `No active Reddit keywords found for integration ${job.data.integrationId}`,
+      );
       await prisma.subTask.update({
         where: { id: job.id },
         data: { status: 'COMPLETED' },
@@ -51,7 +53,9 @@ export class RedditFetchProcessor {
       return;
     }
 
-    this.logger.log(`Found ${trackedKeywords.length} Reddit keywords to process`);
+    this.logger.log(
+      `Found ${trackedKeywords.length} Reddit keywords to process`,
+    );
 
     for (const keyword of trackedKeywords) {
       this.logger.log(`Searching Reddit for keyword: "${keyword.keyword}"`);
@@ -59,7 +63,7 @@ export class RedditFetchProcessor {
       // Use OAuth token if available for better rate limits
       const results = await redditService.searchMention(
         keyword.keyword,
-        integration.accessToken
+        integration.accessToken,
       );
       this.logger.log(
         `Found ${results.length} mentions for keyword: "${keyword.keyword}"`,
@@ -90,16 +94,18 @@ export class RedditFetchProcessor {
                 data: {
                   content: comment.content,
                   remoteId: comment.id,
-                  mentionId: Math.abs(comment.id.split('').reduce((a, b) => {
-                    a = ((a << 5) - a) + b.charCodeAt(0);
-                    return a & a;
-                  }, 0)), // Simple hash of Reddit comment ID
+                  mentionId: Math.abs(
+                    comment.id.split('').reduce((a, b) => {
+                      a = (a << 5) - a + b.charCodeAt(0);
+                      return a & a;
+                    }, 0),
+                  ), // Simple hash of Reddit comment ID
                   sourceType: 'REDDIT',
                   author: comment.author,
                   sourceUrl: post.permalink,
                   originLabel: post.subreddit,
-                  publishedAt: comment.createdAt,
-                  trackedKeywordId: keyword.id,
+                  createdAt: comment.createdAt,
+                  // trackedKeywordId: keyword.id,
                   sentimentStatus: 'PENDING',
                   post: { connect: { id: createdPost[0].id } },
                 },
@@ -107,16 +113,19 @@ export class RedditFetchProcessor {
             }
 
             this.logger.log(
-              `Successfully processed Reddit post ${post.id} with ${post.comments?.length || 0} comments`,
+              `Successfully processed Reddit post ${post.id} with ${
+                post.comments?.length || 0
+              } comments`,
             );
           } else {
-            throw new Error(`Failed to find created post for Reddit post ${post.id}`);
+            throw new Error(
+              `Failed to find created post for Reddit post ${post.id}`,
+            );
           }
         } catch (error) {
           this.logger.error(`Failed to process Reddit post: ${post.id}`, error);
         }
       }
-
     }
 
     await prisma.subTask.update({
