@@ -91,7 +91,7 @@ const IntegrationKeywords = async () => {
             clearable={false}
           />
           <TextInput name="keyword" placeholder="Enter keyword" required />
-          <Button type="submit" variant="outline" color="blue">
+          <Button type="submit" variant="outline" color="primary">
             Add Keyword
           </Button>
         </Group>
@@ -106,7 +106,7 @@ const IntegrationKeywords = async () => {
               </Text>
               <form action={deleteKeywordAction}>
                 <input type="hidden" name="keywordId" value={keyword.id} />
-                <Button type="submit" variant="outline" color="red" size="xs">
+                <Button type="submit" variant="outline" color="error" size="xs">
                   Delete
                 </Button>
               </form>

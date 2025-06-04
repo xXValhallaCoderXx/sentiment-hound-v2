@@ -81,7 +81,7 @@ const CommentsPage = async ({
     console.error("Error loading comments page:", error);
     return (
       <Box p="xl" ta="center">
-        <Text color="red">An error occurred while loading comments data</Text>
+        <Text c="error">An error occurred while loading comments data</Text>
       </Box>
     );
   }
