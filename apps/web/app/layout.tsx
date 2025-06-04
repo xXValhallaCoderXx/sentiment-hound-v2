@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import {
+  MantineProvider,
+  ColorSchemeScript,
+  mantineHtmlProps,
+} from "@mantine/core";
 import { theme } from "../lib/theme";
 import "@mantine/core/styles.css";
 
@@ -19,12 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" {...mantineHtmlProps}>
       <head>
-        <ColorSchemeScript defaultColorScheme="auto" />
+        <ColorSchemeScript defaultColorScheme="light" />
       </head>
       <body className={inter.className}>
-        <MantineProvider theme={theme} defaultColorScheme="auto">
+        <MantineProvider theme={theme} defaultColorScheme="light">
           {children}
         </MantineProvider>
       </body>

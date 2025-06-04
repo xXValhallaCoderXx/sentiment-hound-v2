@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { postService } from "@repo/services";
 import { Suspense } from "react";
 import { auth } from "@/lib/next-auth.lib";
@@ -7,7 +6,6 @@ import PostListTable from "./components/PostListTable";
 import LoadingList from "./components/LoadingList";
 import PageLayout from "@/components/templates/PageLayout";
 import PostFilter from "./components/PostFilter";
-
 
 export default async function PostsDefaultPage({
   searchParams,
@@ -79,12 +77,12 @@ export default async function PostsDefaultPage({
               }}
             />
           </Box>
-          {postsData.data.length > 0 ? (
+          {postsData?.data?.length > 0 ? (
             <PostListTable
-              data={postsData.data}
+              data={postsData?.data}
               pagination={{
                 page: pageFilter,
-                totalPages: postsData.totalPages,
+                totalPages: postsData.totalPages || 0,
                 onPageChange: (newPage) => {
                   // This will be handled by a client component
                 },
