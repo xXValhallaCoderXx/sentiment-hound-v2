@@ -1,4 +1,4 @@
-import { Stack, Flex, Box } from "@mantine/core";
+import { Stack, Box, SimpleGrid } from "@mantine/core";
 import {
   StatsCards,
   RecentMentions,
@@ -14,19 +14,15 @@ const DashboardPage = async () => {
   // const posts = await postService.getPosts({ page: 1, limit: 10 });
 
   return (
-    <Box>
-      <Stack gap={16}>
+    <Box p={{ base: 8, sm: 0 }}>
+      <Stack gap={{ base: 12, sm: 16 }}>
         <StatsCards />
         <TrendCards />
         <AspectSection />
-        <Flex gap={16}>
-          <Flex w="70%">
-            <RecentMentions />
-          </Flex>
-          <Flex w="30%">
-            <Notifications />
-          </Flex>
-        </Flex>
+        <SimpleGrid cols={{ base: 1, lg: 2 }} spacing={{ base: 12, sm: 16 }}>
+          <RecentMentions />
+          <Notifications />
+        </SimpleGrid>
       </Stack>
     </Box>
   );

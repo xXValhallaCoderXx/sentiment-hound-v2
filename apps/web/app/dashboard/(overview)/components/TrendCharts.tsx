@@ -1,46 +1,42 @@
-import { Box, Flex, Card, Title } from "@mantine/core";
+import { SimpleGrid, Card, Title, Flex } from "@mantine/core";
 import { LineChart, PieChart } from "@mantine/charts";
 
 const TrendCards = () => {
   return (
-    <Flex gap={16}>
-      <Box w="50%">
-        <Card withBorder>
-          <Title order={4} mb={8}>
-            Sentiment Trend
-          </Title>
-          <LineChart
+    <SimpleGrid cols={{ base: 1, md: 2 }} spacing={16}>
+      <Card withBorder p={{ base: 12, sm: 16 }}>
+        <Title order={4} mb={8}>
+          Sentiment Trend
+        </Title>
+        <LineChart
+          h={250}
+          data={Linedata}
+          withLegend
+          dataKey="date"
+          series={[
+            { name: "Positive", color: "indigo.6" },
+            { name: "Negative", color: "blue.6" },
+            { name: "Neutral", color: "teal.6" },
+          ]}
+          curveType="linear"
+        />
+      </Card>
+      <Card withBorder p={{ base: 12, sm: 16 }}>
+        <Title order={4} mb={8}>
+          Sentiment Overview
+        </Title>
+        <Flex justify="center">
+          <PieChart
+            withLabels
+            // tooltipDataSource="segment"
+            labelsType="percent"
+            withTooltip
             h={250}
-            data={Linedata}
-            withLegend
-            dataKey="date"
-            series={[
-              { name: "Positive", color: "indigo.6" },
-              { name: "Negative", color: "blue.6" },
-              { name: "Neutral", color: "teal.6" },
-            ]}
-            curveType="linear"
+            data={donutData}
           />
-        </Card>
-      </Box>
-      <Box w="50%">
-        <Card withBorder>
-          <Title order={4} mb={8}>
-            Sentiment Overview
-          </Title>
-          <Flex justify="center">
-            <PieChart
-              withLabels
-              // tooltipDataSource="segment"
-              labelsType="percent"
-              withTooltip
-              h={250}
-              data={donutData}
-            />
-          </Flex>
-        </Card>
-      </Box>
-    </Flex>
+        </Flex>
+      </Card>
+    </SimpleGrid>
   );
 };
 
