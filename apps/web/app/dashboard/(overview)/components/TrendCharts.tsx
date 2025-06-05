@@ -1,15 +1,16 @@
-import { Box, Flex, Card, Title, SimpleGrid } from "@mantine/core";
+import { SimpleGrid, Card, Title, Flex } from "@mantine/core";
 import { LineChart, PieChart } from "@mantine/charts";
 
 const TrendCards = () => {
   return (
-    <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="md">
-      {/* First Chart Card - Box w="50%" is removed, Card is now direct child or wrapped in plain Box for SimpleGrid */}
-      <Card withBorder>
-        <Title order={4} mb={8}>Sentiment Trend</Title>
+    <SimpleGrid cols={{ base: 1, md: 2 }} spacing={16}>
+      <Card withBorder p={{ base: 12, sm: 16 }}>
+        <Title order={4} mb={8}>
+          Sentiment Trend
+        </Title>
         <LineChart
           h={250}
-          data={Linedata} // Assuming Linedata is defined in the component
+          data={Linedata}
           withLegend
           dataKey="date"
           series={[
@@ -20,16 +21,18 @@ const TrendCards = () => {
           curveType="linear"
         />
       </Card>
-      {/* Second Chart Card - Box w="50%" is removed, Card is now direct child or wrapped in plain Box for SimpleGrid */}
-      <Card withBorder>
-        <Title order={4} mb={8}>Sentiment Overview</Title>
+      <Card withBorder p={{ base: 12, sm: 16 }}>
+        <Title order={4} mb={8}>
+          Sentiment Overview
+        </Title>
         <Flex justify="center">
           <PieChart
             withLabels
+            // tooltipDataSource="segment"
             labelsType="percent"
             withTooltip
             h={250}
-            data={donutData} // Assuming donutData is defined
+            data={donutData}
           />
         </Flex>
       </Card>

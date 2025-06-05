@@ -31,7 +31,7 @@ const IntegrationCards = async () => {
           );
 
           return (
-            <GridCol key={provider.id} span={4}>
+            <GridCol key={provider.id} span={{ base: 12, sm: 6, md: 4 }}>
               <form
                 action={isConnected ? revokeIntegration : integrateProvider}
               >

@@ -9,7 +9,7 @@ interface IPageLayoutProps {
 
 const PageLayout: FC<IPageLayoutProps> = ({ title, description, children }) => {
   return (
-    <Box p={8}>
+    <Box p={{ base: 8, sm: 16 }}>
       <Title order={2}>{title}</Title>
       {description && <Text fs="italic">{description}</Text>}
       <Box mt={16}>{children}</Box>

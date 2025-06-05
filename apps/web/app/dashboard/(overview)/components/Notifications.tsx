@@ -3,7 +3,7 @@ import { Paper, Stack, Title } from "@mantine/core";
 
 const Notifications = () => {
   return (
-    <Paper p={16} w="100%" withBorder>
+    <Paper p={{ base: 12, sm: 16 }} w="100%" withBorder>
       <Stack>
         <Title order={4}>Notifications</Title>
         <DashboardNotificationCard
