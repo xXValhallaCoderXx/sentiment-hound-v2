@@ -121,3 +121,20 @@ export const integrateProvider = async (formData: FormData) => {
     redirect(authUrl);
   }
 };
+
+export async function shouldShowOnboarding(): Promise<boolean> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return false;
+    }
+
+    const integrations = await integrationsService.getUserIntegrations(session.user.id);
+    
+    // Show onboarding if user has no integrations
+    return integrations.length === 0;
+  } catch (error) {
+    console.error("Error checking onboarding status:", error);
+    return false;
+  }
+}
