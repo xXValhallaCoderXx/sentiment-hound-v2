@@ -1,46 +1,39 @@
-import { Box, Flex, Card, Title } from "@mantine/core";
+import { Box, Flex, Card, Title, SimpleGrid } from "@mantine/core";
 import { LineChart, PieChart } from "@mantine/charts";
 
 const TrendCards = () => {
   return (
-    <Flex gap={16}>
-      <Box w="50%">
-        <Card withBorder>
-          <Title order={4} mb={8}>
-            Sentiment Trend
-          </Title>
-          <LineChart
+    <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="md">
+      {/* First Chart Card - Box w="50%" is removed, Card is now direct child or wrapped in plain Box for SimpleGrid */}
+      <Card withBorder>
+        <Title order={4} mb={8}>Sentiment Trend</Title>
+        <LineChart
+          h={250}
+          data={Linedata} // Assuming Linedata is defined in the component
+          withLegend
+          dataKey="date"
+          series={[
+            { name: "Positive", color: "indigo.6" },
+            { name: "Negative", color: "blue.6" },
+            { name: "Neutral", color: "teal.6" },
+          ]}
+          curveType="linear"
+        />
+      </Card>
+      {/* Second Chart Card - Box w="50%" is removed, Card is now direct child or wrapped in plain Box for SimpleGrid */}
+      <Card withBorder>
+        <Title order={4} mb={8}>Sentiment Overview</Title>
+        <Flex justify="center">
+          <PieChart
+            withLabels
+            labelsType="percent"
+            withTooltip
             h={250}
-            data={Linedata}
-            withLegend
-            dataKey="date"
-            series={[
-              { name: "Positive", color: "indigo.6" },
-              { name: "Negative", color: "blue.6" },
-              { name: "Neutral", color: "teal.6" },
-            ]}
-            curveType="linear"
+            data={donutData} // Assuming donutData is defined
           />
-        </Card>
-      </Box>
-      <Box w="50%">
-        <Card withBorder>
-          <Title order={4} mb={8}>
-            Sentiment Overview
-          </Title>
-          <Flex justify="center">
-            <PieChart
-              withLabels
-              // tooltipDataSource="segment"
-              labelsType="percent"
-              withTooltip
-              h={250}
-              data={donutData}
-            />
-          </Flex>
-        </Card>
-      </Box>
-    </Flex>
+        </Flex>
+      </Card>
+    </SimpleGrid>
   );
 };
 

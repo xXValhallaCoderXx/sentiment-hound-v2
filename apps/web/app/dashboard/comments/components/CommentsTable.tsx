@@ -48,7 +48,11 @@ const CommentsTable: React.FC<CommentsTableProps> = ({
 
   return (
     <Box>
-      <Table striped highlightOnHover>
+      <Table
+        striped
+        highlightOnHover
+        scrollAreaProps={{ type: 'auto', minWidth: 700 }} // MODIFIED HERE
+      >
         <TableThead>
           <TableTr>
             <TableTh>Content</TableTh>
@@ -60,7 +64,7 @@ const CommentsTable: React.FC<CommentsTableProps> = ({
         <TableTbody>
           {data.map((comment) => (
             <TableTr key={comment.id}>
-              <TableTd>
+              <TableTd style={{ maxWidth: '300px', whiteSpace: 'normal', wordBreak: 'break-word' }}> {/* MODIFIED HERE */}
                 <Link href={`?commentId=${comment.id}`}>
                   <Text size="sm" style={{ cursor: "pointer" }}>
                     {comment.content}

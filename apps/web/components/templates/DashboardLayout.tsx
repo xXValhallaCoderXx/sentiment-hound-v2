@@ -32,7 +32,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <AppShellNavbar p="md">
           <SideDrawerNavigation />
         </AppShellNavbar>
-        <AppShellMain>
+        <AppShellMain p={{ base: 'sm', sm: 'md' }}>
           <Notifications position="top-right" />
           {children}
         </AppShellMain>
