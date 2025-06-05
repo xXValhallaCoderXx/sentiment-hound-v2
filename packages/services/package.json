@@ -9,7 +9,7 @@
     }
   },
   "scripts": {
-    "services:build": "tsc --project tsconfig.build.json",
+    "build": "tsc --project tsconfig.build.json",
     "services:watch": "tsc --project tsconfig.build.json --watch"
   },
   "dependencies": {

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 interface ISelectedComment {
   content: string;
-  sentiment: string;
+  sentiment: string | null;
   provider: string;
   // aspects: Array<{ aspect: string; sentiment: string }>; // Assuming structure for aspects
 }
