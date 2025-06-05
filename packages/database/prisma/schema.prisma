@@ -24,6 +24,7 @@ model User {
   sessions        Session[]
   integrations    Integration[]
   trackedKeywords TrackedKeyword[]
+  competitors     Competitor[]
   posts           Post[]
   tasks           Task[]
   planId          Int?
@@ -209,6 +210,7 @@ model Plan {
   billingInterval  BillingInterval @default(MONTHLY)
   maxIntegrations  Int         @default(1)
   maxTrackedKeywords Int       @default(5)
+  maxCompetitors   Int         @default(0)  // New field for competitor limits
   features         Json        @default("{}")  // Feature flags as JSON
   isActive         Boolean     @default(true)
   displayOrder     Int         @default(0)     // For UI ordering
@@ -244,6 +246,33 @@ model TrackedKeyword {
   mention    Mention[]
 
   @@unique([userId, keyword, providerId]) // Prevents duplicate tracking
+}
+
+model Competitor {
+  id               Int                    @id @default(autoincrement())
+  name             String                 // Company/brand name to track
+  userId           String
+  user             User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isActive         Boolean                @default(true)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  sentimentData    CompetitorSentiment[]
+
+  @@unique([userId, name]) // Prevents duplicate competitor tracking per user
+}
+
+model CompetitorSentiment {
+  id           Int        @id @default(autoincrement())
+  competitorId Int
+  competitor   Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  date         DateTime   @default(now())
+  score        Float      // Sentiment score (-1 to 1)
+  sourceType   MentionSource
+  mentionCount Int        @default(0) // Number of mentions found
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([competitorId, date, sourceType]) // One sentiment record per competitor per day per source
 }
 
 enum QueueStatus {

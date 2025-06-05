@@ -102,4 +102,10 @@ export class PlanRepository {
       where: { userId, isActive: true },
     });
   }
+
+  async getUserCompetitorCount(userId: string): Promise<number> {
+    return this.prisma.competitor.count({
+      where: { userId, isActive: true },
+    });
+  }
 }

@@ -20,6 +20,8 @@ import { CorePlanService } from "./plans/plans.service";
 import { CoreExportService } from "./exports/exports.service";
 import { TrackedKeywordService } from "./tracked-keywords/tracked-keywords.service";
 import { RedditService } from "./reddit/reddit.services";
+import { CompetitorRepository } from "./competitors/competitors.repository";
+import { CoreCompetitorService } from "./competitors/competitors.service";
 
 export * from "./posts/post.interface";
 
@@ -32,6 +34,7 @@ const subtaskRepository = new SubTaskRepository(prisma);
 const mentionRepository = new MentionRepository(prisma);
 const userRepository = new UserRepository(prisma);
 const planRepository = new PlanRepository(prisma);
+const competitorRepository = new CompetitorRepository(prisma);
 
 // Create singleton instances of services
 export const providerService = new CoreProviderService(providerRepository);
@@ -50,6 +53,7 @@ export const subtaskService = new CoreSubTaskService(subtaskRepository);
 export const mentionService = new CoreMentionService(mentionRepository);
 export const userService = new CoreUserService(userRepository);
 export const planService = new CorePlanService(planRepository);
+export const competitorService = new CoreCompetitorService(competitorRepository);
 
 // Set up circular dependencies
 integrationsService.setPlanService(planService);

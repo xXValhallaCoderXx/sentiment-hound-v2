@@ -24,11 +24,14 @@ const seed = async () => {
       billingInterval: BillingInterval.MONTHLY,
       maxIntegrations: 1,
       maxTrackedKeywords: 3,
+      maxCompetitors: 0, // Trial users get demo only
       features: {
         analytics: false,
         exportData: false,
         apiAccess: false,
-        prioritySupport: false
+        prioritySupport: false,
+        competitorAnalysis: true, // Demo access
+        competitorDataLookback: "demo"
       },
       isActive: true,
       displayOrder: 1
@@ -41,11 +44,14 @@ const seed = async () => {
       billingInterval: BillingInterval.MONTHLY,
       maxIntegrations: 3,
       maxTrackedKeywords: 10,
+      maxCompetitors: 2, // Starter gets 1-2 competitors
       features: {
         analytics: true,
         exportData: true,
         apiAccess: false,
-        prioritySupport: false
+        prioritySupport: false,
+        competitorAnalysis: true,
+        competitorDataLookback: "30days"
       },
       isActive: true,
       displayOrder: 2
@@ -58,12 +64,15 @@ const seed = async () => {
       billingInterval: BillingInterval.MONTHLY,
       maxIntegrations: 10,
       maxTrackedKeywords: 50,
+      maxCompetitors: 10, // Premium gets up to 10 competitors
       features: {
         analytics: true,
         exportData: true,
         apiAccess: true,
         prioritySupport: true,
-        customIntegrations: true
+        customIntegrations: true,
+        competitorAnalysis: true,
+        competitorDataLookback: "unlimited"
       },
       isActive: true,
       displayOrder: 3
@@ -80,6 +89,7 @@ const seed = async () => {
         billingInterval: plan.billingInterval,
         maxIntegrations: plan.maxIntegrations,
         maxTrackedKeywords: plan.maxTrackedKeywords,
+        maxCompetitors: plan.maxCompetitors,
         features: plan.features,
         isActive: plan.isActive,
         displayOrder: plan.displayOrder
