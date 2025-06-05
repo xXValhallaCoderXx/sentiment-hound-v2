@@ -25,21 +25,34 @@ export async function GET(req: NextRequest) {
         throw new Error("YouTube provider not found");
       }
 
-      await integrationsService.createIntegration({
-        providerId: youtube.id,
-        accessToken: integration.accessToken,
-        refreshToken: integration.refreshToken,
-        accountId: integration.youtubeAccountId,
-        userId,
-        refreshTokenExpiresAt: integration.refreshTokenExpiresAt,
-      });
+      try {
+        await integrationsService.createIntegration({
+          providerId: youtube.id,
+          accessToken: integration.accessToken,
+          refreshToken: integration.refreshToken,
+          accountId: integration.youtubeAccountId,
+          userId,
+          refreshTokenExpiresAt: integration.refreshTokenExpiresAt,
+        });
 
-      // Construct absolute URL
-      const successUrl = new URL(
-        "/dashboard/integrations?success=true",
-        baseUrl
-      );
-      return NextResponse.redirect(successUrl);
+        // Construct absolute URL
+        const successUrl = new URL(
+          "/dashboard/integrations?success=true",
+          baseUrl
+        );
+        return NextResponse.redirect(successUrl);
+      } catch (error: any) {
+        // Handle plan limit errors gracefully
+        const errorMessage = error.message?.includes("Plan limit") 
+          ? "plan_limit_exceeded" 
+          : "integration_failed";
+        
+        const failureUrl = new URL(
+          `/dashboard/integrations?success=false&error=${errorMessage}`,
+          baseUrl
+        );
+        return NextResponse.redirect(failureUrl);
+      }
     } else {
       // Construct absolute URL
       const failureUrl = new URL(

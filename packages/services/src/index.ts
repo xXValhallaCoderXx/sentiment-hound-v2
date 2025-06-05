@@ -51,3 +51,4 @@ export const planService = new CorePlanService(planRepository);
 
 // Set up circular dependencies
 integrationsService.setPlanService(planService);
+trackedKeywordService.setPlanService(planService);
