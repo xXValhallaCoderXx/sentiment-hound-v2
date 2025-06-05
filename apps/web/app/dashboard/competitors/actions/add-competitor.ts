@@ -31,10 +31,10 @@ export async function addCompetitor(competitorName: string, userId: string) {
       success: true,
       competitor,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error adding competitor:", error);
     
-    if (error.message.includes("already exists")) {
+    if (error instanceof Error && error.message.includes("already exists")) {
       return {
         success: false,
         error: "You are already tracking this competitor",

@@ -4,12 +4,10 @@ import { useState } from "react";
 import { 
   Card, 
   Text, 
-  Title, 
   SimpleGrid, 
   Group, 
   ActionIcon,
-  Badge,
-  Stack
+  Badge
 } from "@mantine/core";
 import { IconTrash, IconTrendingUp } from "@tabler/icons-react";
 import { deleteCompetitor } from "../actions/delete-competitor";

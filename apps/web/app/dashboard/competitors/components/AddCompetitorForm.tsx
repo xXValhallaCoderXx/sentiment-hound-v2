@@ -45,7 +45,7 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
       } else {
         setError(result.error || "Failed to add competitor");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -59,7 +59,7 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
       </Title>
       
       <Text size="sm" c="dimmed" mb="lg">
-        Track any brand or company across all major platforms. We'll analyze 
+        Track any brand or company across all major platforms. We&apos;ll analyze 
         sentiment from YouTube, Reddit, Facebook, Instagram, and more.
       </Text>
 

@@ -11,7 +11,7 @@ export async function deleteCompetitor(competitorId: number, userId: string) {
     return {
       success: true,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting competitor:", error);
     
     return {

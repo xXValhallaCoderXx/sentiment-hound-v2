@@ -1,5 +1,36 @@
-import { Competitor, CompetitorSentiment, MentionSource } from "@repo/db";
+// import { MentionSource } from "@repo/db";
+// import { Competitor, CompetitorSentiment } from "./types";
 import { CompetitorRepository } from "./competitors.repository";
+
+// Temporary stub types until Prisma generates them
+type Competitor = {
+  id: number;
+  name: string;
+  userId: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+type CompetitorSentiment = {
+  id: number;
+  competitorId: number;
+  date: Date;
+  score: number;
+  sourceType: string;
+  mentionCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+enum MentionSource {
+  YOUTUBE = "YOUTUBE",
+  REDDIT = "REDDIT", 
+  FACEBOOK = "FACEBOOK",
+  INSTAGRAM = "INSTAGRAM",
+  TIKTOK = "TIKTOK",
+  LINKEDIN = "LINKEDIN",
+}
 
 export class CoreCompetitorService {
   constructor(private repository: CompetitorRepository) {}

@@ -1,11 +1,12 @@
 import { auth } from "@/lib/next-auth.lib";
-import { Box, Title, Text, Group, Flex, Stack } from "@mantine/core";
+import { Box, Text, Flex, Stack } from "@mantine/core";
 import { planService } from "@repo/services";
 import NoData from "@/components/molecules/NoData";
 import PageLayout from "@/components/templates/PageLayout";
 import CompetitorCardsWrapper from "./components/CompetitorCardsWrapper";
 import AddCompetitorForm from "./components/AddCompetitorForm";
 import CompetitorChart from "./components/CompetitorChart";
+import TrialCompetitorDemo from "./components/TrialCompetitorDemo";
 
 const CompetitorsPage = async () => {
   const session = await auth();
@@ -44,7 +45,7 @@ const CompetitorsPage = async () => {
 
     // Check if user has competitor analysis access
     const hasAccess = userPlan.features && 
-      (userPlan.features as any).competitorAnalysis;
+      (userPlan.features as Record<string, unknown>).competitorAnalysis;
 
     if (!hasAccess) {
       return (
@@ -58,6 +59,24 @@ const CompetitorsPage = async () => {
               description="Competitor analysis is available on paid plans"
             />
           </Flex>
+        </PageLayout>
+      );
+    }
+
+    // Show demo for trial users
+    const isTrialUser = userPlan.name === "trial";
+
+    if (isTrialUser) {
+      return (
+        <PageLayout
+          title="Competitors"
+          description="Track and analyze your competitors' sentiment across multiple platforms"
+        >
+          <Box className="px-4">
+            <Stack gap={24}>
+              <TrialCompetitorDemo />
+            </Stack>
+          </Box>
         </PageLayout>
       );
     }

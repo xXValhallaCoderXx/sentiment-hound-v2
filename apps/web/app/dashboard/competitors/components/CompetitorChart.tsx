@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { 
   Card, 
   Title, 
@@ -14,16 +14,31 @@ import {
 import { LineChart } from "@mantine/charts";
 import { IconInfoCircle } from "@tabler/icons-react";
 
+interface Competitor {
+  value: string;
+  label: string;
+}
+
 interface CompetitorChartProps {
   userId: string;
 }
 
 const CompetitorChart = ({ userId }: CompetitorChartProps) => {
   const [selectedCompetitor, setSelectedCompetitor] = useState<string | null>(null);
-  const [competitors, setCompetitors] = useState<any[]>([]);
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [competitors, setCompetitors] = useState<Competitor[]>([]);
+  const [chartData, setChartData] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const fetchChartData = useCallback(async () => {
+    try {
+      // Mock data for the chart - this would be real API data
+      const mockData = generateMockChartData();
+      setChartData(mockData);
+    } catch {
+      setError("Failed to load chart data");
+    }
+  }, []);
 
   useEffect(() => {
     fetchCompetitors();
@@ -31,9 +46,9 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
 
   useEffect(() => {
     if (selectedCompetitor) {
-      fetchChartData(selectedCompetitor);
+      fetchChartData();
     }
-  }, [selectedCompetitor]);
+  }, [selectedCompetitor, fetchChartData]);
 
   const fetchCompetitors = async () => {
     try {
@@ -49,20 +64,10 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
       if (mockCompetitors.length > 0) {
         setSelectedCompetitor(mockCompetitors[0].value);
       }
-    } catch (err) {
+    } catch {
       setError("Failed to load competitors");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchChartData = async (competitorId: string) => {
-    try {
-      // Mock data for the chart - this would be real API data
-      const mockData = generateMockChartData();
-      setChartData(mockData);
-    } catch (err) {
-      setError("Failed to load chart data");
     }
   };
 
@@ -138,7 +143,7 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
       )}
 
       <Text size="sm" c="dimmed" mb="lg">
-        Compare your brand's sentiment against your selected competitor over the last 30 days.
+        Compare your brand&apos;s sentiment against your selected competitor over the last 30 days.
         Data is collected from YouTube, Reddit, Facebook, Instagram, and other platforms.
       </Text>
 
