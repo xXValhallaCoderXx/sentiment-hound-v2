@@ -6,6 +6,7 @@ import {
   SentimentStatus,
   TaskType,
   TaskStatus,
+  BillingInterval,
 } from "../generated/client";
 
 // const userId = "cm990wl1j0000i03x67ed3r8s";
@@ -15,15 +16,74 @@ const prisma = new PrismaClient();
 const seed = async () => {
   // 1) Seed plans
   const plans = [
-    { name: "trial", description: "Trial plan with limited features" },
-    { name: "starter", description: "Starter plan with basic features" },
-    { name: "premium", description: "Premium plan with all features" },
+    { 
+      name: "trial", 
+      description: "Free trial with limited features",
+      price: 0,
+      yearlyPrice: 0,
+      billingInterval: BillingInterval.MONTHLY,
+      maxIntegrations: 1,
+      maxTrackedKeywords: 3,
+      features: {
+        analytics: false,
+        exportData: false,
+        apiAccess: false,
+        prioritySupport: false
+      },
+      isActive: true,
+      displayOrder: 1
+    },
+    { 
+      name: "starter", 
+      description: "Perfect for small businesses and individuals",
+      price: 999, // $9.99 per month
+      yearlyPrice: 9999, // $99.99 per year (about 2 months free)
+      billingInterval: BillingInterval.MONTHLY,
+      maxIntegrations: 3,
+      maxTrackedKeywords: 10,
+      features: {
+        analytics: true,
+        exportData: true,
+        apiAccess: false,
+        prioritySupport: false
+      },
+      isActive: true,
+      displayOrder: 2
+    },
+    { 
+      name: "premium", 
+      description: "For growing businesses with advanced needs",
+      price: 2999, // $29.99 per month
+      yearlyPrice: 29999, // $299.99 per year (about 2 months free)
+      billingInterval: BillingInterval.MONTHLY,
+      maxIntegrations: 10,
+      maxTrackedKeywords: 50,
+      features: {
+        analytics: true,
+        exportData: true,
+        apiAccess: true,
+        prioritySupport: true,
+        customIntegrations: true
+      },
+      isActive: true,
+      displayOrder: 3
+    }
   ];
 
   for (const plan of plans) {
     await prisma.plan.upsert({
       where: { name: plan.name },
-      update: {},
+      update: {
+        description: plan.description,
+        price: plan.price,
+        yearlyPrice: plan.yearlyPrice,
+        billingInterval: plan.billingInterval,
+        maxIntegrations: plan.maxIntegrations,
+        maxTrackedKeywords: plan.maxTrackedKeywords,
+        features: plan.features,
+        isActive: plan.isActive,
+        displayOrder: plan.displayOrder
+      },
       create: plan,
     });
   }

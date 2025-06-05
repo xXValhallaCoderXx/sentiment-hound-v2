@@ -83,4 +83,23 @@ export class PlanRepository {
       ...args,
     });
   }
+
+  async findUserWithPlan(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { plan: true },
+    });
+  }
+
+  async getUserIntegrationCount(userId: string): Promise<number> {
+    return this.prisma.integration.count({
+      where: { userId, isActive: true },
+    });
+  }
+
+  async getUserTrackedKeywordCount(userId: string): Promise<number> {
+    return this.prisma.trackedKeyword.count({
+      where: { userId, isActive: true },
+    });
+  }
 }
