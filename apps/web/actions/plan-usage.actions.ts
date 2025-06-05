@@ -37,13 +37,15 @@ export async function getPlanUsageStats(): Promise<ActionResponse<PlanUsageStats
   }
 }
 
-export async function checkCanCreateIntegration(): Promise<ActionResponse<{ canCreate: boolean; reason?: string }>> {
+export async function checkCanCreateIntegration(): Promise<
+  ActionResponse<{ canCreate: boolean; reason?: string }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return {
         data: { canCreate: false, reason: "User not authenticated" },
-        error: null
+        error: null,
       };
     }
 
@@ -51,27 +53,31 @@ export async function checkCanCreateIntegration(): Promise<ActionResponse<{ canC
     return { data: result, error: null };
   } catch (error: any) {
     return {
-      data: { canCreate: false, reason: "Failed to check plan limits" },
+      data: null,
       error: createErrorResponse(error),
     };
   }
 }
 
-export async function checkCanCreateTrackedKeyword(): Promise<ActionResponse<{ canCreate: boolean; reason?: string }>> {
+export async function checkCanCreateTrackedKeyword(): Promise<
+  ActionResponse<{ canCreate: boolean; reason?: string }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return {
         data: { canCreate: false, reason: "User not authenticated" },
-        error: null
+        error: null,
       };
     }
 
-    const result = await planService.canUserCreateTrackedKeyword(session.user.id);
+    const result = await planService.canUserCreateTrackedKeyword(
+      session.user.id
+    );
     return { data: result, error: null };
   } catch (error: any) {
     return {
-      data: { canCreate: false, reason: "Failed to check plan limits" },
+      data: null,
       error: createErrorResponse(error),
     };
   }
