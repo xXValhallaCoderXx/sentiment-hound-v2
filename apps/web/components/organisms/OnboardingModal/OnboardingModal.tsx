@@ -91,8 +91,8 @@ export function OnboardingModal({ opened, onClose }: OnboardingModalProps) {
               Welcome to Sentiment Hound! 🎉
             </Title>
             <Text size="lg" ta="center" c="dimmed" maw={400}>
-              Let&apos;s get you started with analyzing sentiment from your social media content.
-              Connect your accounts to unlock powerful insights! 📊
+              You&apos;re starting with our <Text component="span" fw={500} c="blue">Trial Plan</Text> - perfect for exploring sentiment analysis!
+              Connect your first social media account to get started. 📊
             </Text>
           </Stack>
 
@@ -100,10 +100,19 @@ export function OnboardingModal({ opened, onClose }: OnboardingModalProps) {
           <Card w="100%" p="lg" radius="md" className={classes.stepsCard}>
             <Stack gap="md">
               <Title order={4} c="blue">
-                Your Next Steps:
+                Your Trial Plan Includes:
               </Title>
               <Text size="sm" c="dimmed">
-                Connect your social media accounts to start analyzing sentiment from your content and audience interactions.
+                • <Text component="span" fw={500}>1 integration</Text> - Connect one social media account
+              </Text>
+              <Text size="sm" c="dimmed">
+                • <Text component="span" fw={500}>3 tracked keywords</Text> - Monitor mentions across platforms
+              </Text>
+              <Text size="sm" c="dimmed">
+                • <Text component="span" fw={500}>Basic sentiment analysis</Text> - Get started with insights
+              </Text>
+              <Text size="sm" c="dimmed" mt="xs">
+                Ready to connect your first account? Choose from any of these platforms:
               </Text>
               
               {/* Provider Grid */}

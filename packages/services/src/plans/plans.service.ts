@@ -50,7 +50,14 @@ export class CorePlanService {
 
   async getUserPlan(userId: string): Promise<Plan | null> {
     const user = await this.repository.findUserWithPlan(userId);
-    return user?.plan || null;
+    
+    // If user has no plan assigned, return the trial plan as default
+    if (!user?.plan) {
+      const trialPlan = await this.repository.findUnique({ name: 'trial' });
+      return trialPlan;
+    }
+    
+    return user.plan;
   }
 
   async canUserCreateIntegration(userId: string): Promise<{ canCreate: boolean; reason?: string }> {
