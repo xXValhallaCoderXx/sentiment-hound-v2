@@ -15,7 +15,7 @@ const DashboardPage = async () => {
 
   return (
     <Box p={{ base: 8, sm: 0 }}>
-      <Stack gap={{ base: 12, sm: 16 }}>
+      <Stack gap={16}>
         <StatsCards />
         <TrendCards />
         <AspectSection />
