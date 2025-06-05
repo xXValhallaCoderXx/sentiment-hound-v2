@@ -16,7 +16,14 @@ interface ICreateIntegration {
   refreshTokenExpiresAt: Date;
 }
 export class CoreIntegrationService {
-  constructor(private repository: IntegrationRepository) {}
+  constructor(
+    private repository: IntegrationRepository,
+    private planService?: any // We'll inject this later to avoid circular dependency
+  ) {}
+
+  setPlanService(planService: any) {
+    this.planService = planService;
+  }
 
   async getIntegration(id: number): Promise<Integration> {
     console.log("Getting integration with ID:", id);
@@ -76,6 +83,14 @@ export class CoreIntegrationService {
 
     if (!accessToken) {
       throw new IntegrationAuthenticationError("Access token is required");
+    }
+
+    // Check plan limits if plan service is available
+    if (this.planService) {
+      const planCheck = await this.planService.canUserCreateIntegration(userId);
+      if (!planCheck.canCreate) {
+        throw new IntegrationValidationError(planCheck.reason || "Plan limit exceeded");
+      }
     }
 
     try {
