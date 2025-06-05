@@ -9,6 +9,14 @@ const ProfilePage = async () => {
   const session = await auth();
   const userId = session?.user?.id;
 
+  if (!userId) {
+    return (
+      <PageLayout title="Profile" description="User profile page">
+        <Text>User not authenticated.</Text>
+      </PageLayout>
+    );
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       id: String(userId),
@@ -40,7 +48,7 @@ const ProfilePage = async () => {
           </Flex>
         </Flex>
       </Stack>
-      {user ? (
+      {user && user.planId ? (
         <Box mt={24}>
           <Title order={3}>Subscription Details</Title>
           <Plans userPlanId={String(user.planId)} />
