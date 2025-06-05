@@ -114,7 +114,7 @@ export class CoreCompetitorService {
     // 3. Return aggregated sentiment data
     
     // For MVP, return mock data
-    const sources: MentionSource[] = ['YOUTUBE', 'REDDIT', 'FACEBOOK', 'INSTAGRAM'];
+    const sources: MentionSource[] = [MentionSource.YOUTUBE, MentionSource.REDDIT, MentionSource.FACEBOOK, MentionSource.INSTAGRAM];
     
     return sources.map(source => ({
       score: Math.random() * 2 - 1, // Random score between -1 and 1
