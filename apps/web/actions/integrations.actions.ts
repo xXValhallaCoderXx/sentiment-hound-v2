@@ -121,3 +121,49 @@ export const integrateProvider = async (formData: FormData) => {
     redirect(authUrl);
   }
 };
+
+export async function shouldShowOnboarding(): Promise<boolean> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return false;
+    }
+
+    const integrations = await integrationsService.getUserIntegrations(session.user.id);
+    
+    // Show onboarding if user has no integrations
+    return integrations.length === 0;
+  } catch (error) {
+    console.error("Error checking onboarding status:", error);
+    return false;
+  }
+}
+
+// Helper function to check if user has completed basic setup
+export async function getUserOnboardingStatus() {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        isAuthenticated: false,
+        hasIntegrations: false,
+        integrationCount: 0,
+      };
+    }
+
+    const integrations = await integrationsService.getUserIntegrations(session.user.id);
+    
+    return {
+      isAuthenticated: true,
+      hasIntegrations: integrations.length > 0,
+      integrationCount: integrations.length,
+    };
+  } catch (error) {
+    console.error("Error getting onboarding status:", error);
+    return {
+      isAuthenticated: false,
+      hasIntegrations: false,
+      integrationCount: 0,
+    };
+  }
+}
