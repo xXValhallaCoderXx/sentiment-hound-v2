@@ -59,3 +59,11 @@
   width: 18px;
   height: 18px;
 }
+
+.link span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block; /* Or block, depending on flex context if needed */
+  max-width: 100%; /* Ensure it doesn't overflow its container if flex item */
+}

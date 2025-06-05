@@ -1,4 +1,4 @@
-import { Paper, Flex, Title } from "@mantine/core";
+import { Paper, Flex, Title, SimpleGrid } from "@mantine/core";
 import DashboardSentimentCard from "@/components/molecules/DashboardSentimentCard";
 
 const aspectData = [
@@ -31,7 +31,7 @@ const AspectSection = () => {
         Aspect Overview
       </Title>
 
-      <Flex w="100%" gap={16}>
+      <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
         {aspectData.map((aspect, index) => (
           <DashboardSentimentCard
             key={index}
@@ -40,7 +40,7 @@ const AspectSection = () => {
             sentimentType={aspect.sentimentType}
           />
         ))}
-      </Flex>
+      </SimpleGrid>
     </Paper>
   );
 };

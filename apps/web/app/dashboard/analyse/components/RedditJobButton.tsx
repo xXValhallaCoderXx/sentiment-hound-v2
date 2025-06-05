@@ -44,7 +44,7 @@ const RedditJobButton: FC<IRedditJobButtonProps> = ({
   return (
     <Button
       type="button"
-      w={200}
+      w={{ base: '100%', sm: 200 }} // MODIFIED HERE
       onClick={handleSubmit}
       loading={isSubmitting}
       disabled={isSubmitting}

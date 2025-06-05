@@ -47,7 +47,8 @@ const Filters: React.FC = () => {
   };
 
   return (
-    <Group mb="lg" gap="sm">
+    <Group mb="lg" gap="sm" grow // MODIFIED: Added grow
+    >
       <Select
         label="Provider"
         placeholder="Select provider"
@@ -58,6 +59,8 @@ const Filters: React.FC = () => {
         ]}
         value={providerId}
         onChange={onChangeProvider}
+        w={{ base: '100%', xs: 'auto' }} // MODIFIED
+        style={{ flexGrow: 1, minWidth: '180px' }} // MODIFIED
       />
       <Select
         label="Sentiment"
@@ -69,6 +72,8 @@ const Filters: React.FC = () => {
         ]}
         value={sentiment}
         onChange={onChangeSentiment}
+        w={{ base: '100%', xs: 'auto' }} // MODIFIED
+        style={{ flexGrow: 1, minWidth: '180px' }} // MODIFIED
       />
       <Select
         label="Aspect"
@@ -80,9 +85,11 @@ const Filters: React.FC = () => {
         ]}
         value={aspect}
         onChange={onChangeAspect}
+        w={{ base: '100%', xs: 'auto' }} // MODIFIED
+        style={{ flexGrow: 1, minWidth: '180px' }} // MODIFIED
       />
-      <Button onClick={handleApplyFilters}>Apply Filters</Button>
-      <Button variant="outline" onClick={handleClearFilters}>
+      <Button onClick={handleApplyFilters} w={{ base: '100%', xs: 'auto' }} style={{ flexGrow: 1 }}>Apply Filters</Button>
+      <Button variant="outline" onClick={handleClearFilters} w={{ base: '100%', xs: 'auto' }} style={{ flexGrow: 1 }}>
         Clear Filters
       </Button>
     </Group>
