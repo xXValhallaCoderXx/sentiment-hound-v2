@@ -17,6 +17,7 @@ import { UserRepository } from "./users/users.repository";
 import { CoreUserService } from "./users/users.service";
 import { PlanRepository } from "./plans/plans.repository";
 import { CorePlanService } from "./plans/plans.service";
+import { CoreExportService } from "./exports/exports.service";
 import { TrackedKeywordService } from "./tracked-keywords/tracked-keywords.service";
 import { RedditService } from "./reddit/reddit.services";
 
@@ -41,6 +42,7 @@ export const postService = new CorePostService(postRepository);
 export const youtubeService = new YoutubeService();
 export const trackedKeywordService = new TrackedKeywordService();
 export const redditService = new RedditService();
+export const exportService = new CoreExportService();
 
 export const queueService = new CoreQueueService(queueRepository);
 export const taskService = new CoreTaskService(prisma);

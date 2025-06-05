@@ -177,6 +177,26 @@ export class CoreTaskService {
           });
           break;
 
+        case TaskType.EXPORT_DATA:
+          console.log("Sub Task Type: EXPORT_DATA");
+          // Export workflow: fetch data -> format data -> generate file
+          await subtaskService.createSubTask({
+            taskId: task.id,
+            type: SubTaskType.EXPORT_FETCH_DATA,
+            data: { integrationId, ...extraData },
+          });
+          await subtaskService.createSubTask({
+            taskId: task.id,
+            type: SubTaskType.EXPORT_FORMAT_DATA,
+            data: { integrationId, ...extraData },
+          });
+          await subtaskService.createSubTask({
+            taskId: task.id,
+            type: SubTaskType.EXPORT_GENERATE_FILE,
+            data: { integrationId, ...extraData },
+          });
+          break;
+
         default:
           // For OTHER or unspecified types, no jobs are created
           console.log("Sub Task Type: OTHER");
