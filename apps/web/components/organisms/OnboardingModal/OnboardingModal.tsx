@@ -22,37 +22,33 @@ import {
   IconSparkles,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { OnboardingModalProps, OnboardingProvider } from "@/types/onboarding.types";
 import classes from "./OnboardingModal.module.css";
 
-interface OnboardingModalProps {
-  opened: boolean;
-  onClose: () => void;
-}
-
-const providers = [
+const providers: OnboardingProvider[] = [
   {
     name: "YouTube",
     icon: IconBrandYoutube,
     color: "#FF0000",
-    description: "Analyze comments from your YouTube videos",
+    description: "Analyze comments from your YouTube videos and track audience sentiment",
   },
   {
     name: "Reddit",
     icon: IconBrandReddit,
     color: "#FF4500",
-    description: "Track mentions and discussions across Reddit",
+    description: "Track mentions and discussions across Reddit communities",
   },
   {
     name: "Facebook",
     icon: IconBrandFacebook,
     color: "#1877F2",
-    description: "Monitor sentiment from Facebook posts",
+    description: "Monitor sentiment from Facebook posts and interactions",
   },
   {
     name: "Instagram",
     icon: IconBrandInstagram,
     color: "#E4405F",
-    description: "Analyze engagement on Instagram content",
+    description: "Analyze engagement and sentiment on Instagram content",
   },
 ];
 
@@ -96,6 +92,7 @@ export function OnboardingModal({ opened, onClose }: OnboardingModalProps) {
             </Title>
             <Text size="lg" ta="center" c="dimmed" maw={400}>
               Let&apos;s get you started with analyzing sentiment from your social media content.
+              Connect your accounts to unlock powerful insights! 📊
             </Text>
           </Stack>
 

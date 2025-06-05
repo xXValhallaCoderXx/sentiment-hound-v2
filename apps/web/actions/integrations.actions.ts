@@ -138,3 +138,32 @@ export async function shouldShowOnboarding(): Promise<boolean> {
     return false;
   }
 }
+
+// Helper function to check if user has completed basic setup
+export async function getUserOnboardingStatus() {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        isAuthenticated: false,
+        hasIntegrations: false,
+        integrationCount: 0,
+      };
+    }
+
+    const integrations = await integrationsService.getUserIntegrations(session.user.id);
+    
+    return {
+      isAuthenticated: true,
+      hasIntegrations: integrations.length > 0,
+      integrationCount: integrations.length,
+    };
+  } catch (error) {
+    console.error("Error getting onboarding status:", error);
+    return {
+      isAuthenticated: false,
+      hasIntegrations: false,
+      integrationCount: 0,
+    };
+  }
+}

@@ -6,6 +6,7 @@
   box-shadow: 
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(16px);
 }
 
 .title {
@@ -14,6 +15,7 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 800;
+  text-shadow: 0 0 30px rgba(66, 153, 225, 0.3);
 }
 
 .stepsCard {
@@ -26,6 +28,9 @@
     var(--mantine-color-dark-4)
   );
   transition: all 0.2s ease;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .providerItem {
@@ -38,5 +43,6 @@
       var(--mantine-color-dark-5)
     );
     transform: translateX(4px);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
   }
 }
