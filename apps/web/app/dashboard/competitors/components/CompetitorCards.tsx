@@ -95,5 +95,3 @@ const CompetitorCardsClient = ({ competitors: initialCompetitors, userId }: Comp
 };
 
 export default CompetitorCardsClient;
-
-export default CompetitorCards;
