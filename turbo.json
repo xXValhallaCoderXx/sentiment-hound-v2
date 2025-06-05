@@ -5,7 +5,7 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
       "dependsOn": ["^lint"],
@@ -39,13 +39,15 @@
       "cache": false
     },
     "db:build": {
-      "cache": false
+      "cache": false,
+      "outputs": ["dist/**"]
     },
     "db:seed": {
       "cache": false
     },
     "services:build": {
-      "cache": false
+      "cache": false,
+      "outputs": ["dist/**"]
     },
     "services:watch": {
       "cache": false,

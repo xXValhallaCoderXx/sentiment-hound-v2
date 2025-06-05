@@ -1,4 +1,4 @@
-import { Paper, SimpleGrid, Title } from "@mantine/core";
+import { Paper, Title, SimpleGrid } from "@mantine/core";
 import DashboardSentimentCard from "@/components/molecules/DashboardSentimentCard";
 
 const aspectData = [

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/next-auth.lib";
 import PageLayout from "@/components/templates/PageLayout";
-import { Card, Flex, Box, Title, Stack } from "@mantine/core";
+import { Card, Flex, Box, Title, Stack, Text } from "@mantine/core";
 import ProfileCard from "./components/ProfileCard";
 import Plans from "./components/Plans";
 import { prisma } from "@repo/db";
@@ -26,7 +26,11 @@ const ProfilePage = async () => {
               <Title ml={4} mb={4} order={3}>
                 Plan
               </Title>
-              <ProfileCard user={user} id={String(userId)} />
+              {user ? (
+                <ProfileCard user={user} />
+              ) : (
+                <Text>User data not available.</Text>
+              )}
             </Card>
           </Flex>
           <Flex w="33%">
@@ -36,10 +40,12 @@ const ProfilePage = async () => {
           </Flex>
         </Flex>
       </Stack>
-      <Box mt={24}>
-        <Title order={3}>Subscription Details</Title>
-        <Plans userPlanId={String(user?.planId)} />
-      </Box>
+      {user ? (
+        <Box mt={24}>
+          <Title order={3}>Subscription Details</Title>
+          <Plans userPlanId={String(user.planId)} />
+        </Box>
+      ) : null}
     </PageLayout>
   );
 };

@@ -28,6 +28,14 @@ const CommentsPage = async ({
     ? await mentionService.getMention(parseInt(String(commentId)))
     : null;
 
+  // Augment selectedComment with the provider property if it exists
+  const augmentedSelectedComment = selectedComment
+    ? {
+        ...selectedComment,
+        provider: selectedComment.sourceType || "Unknown", // Use sourceType or a default
+      }
+    : null;
+
   if (!session?.user?.id) {
     return (
       <Box p="xl" ta="center">
@@ -72,8 +80,8 @@ const CommentsPage = async ({
           }}
         />
         <CommentDrawer
-          opened={!!selectedComment}
-          selectedComment={selectedComment}
+          opened={!!augmentedSelectedComment}
+          selectedComment={augmentedSelectedComment}
         />
       </Box>
     );

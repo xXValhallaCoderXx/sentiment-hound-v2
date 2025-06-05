@@ -201,12 +201,20 @@ model SubTaskMention {
 }
 
 model Plan {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String?
-  users       User[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  id               Int         @id @default(autoincrement())
+  name             String      @unique
+  description      String?
+  price            Decimal?    // Monthly price in cents (e.g., 999 for $9.99)
+  yearlyPrice      Decimal?    // Yearly price in cents for annual billing
+  billingInterval  BillingInterval @default(MONTHLY)
+  maxIntegrations  Int         @default(1)
+  maxTrackedKeywords Int       @default(5)
+  features         Json        @default("{}")  // Feature flags as JSON
+  isActive         Boolean     @default(true)
+  displayOrder     Int         @default(0)     // For UI ordering
+  users            User[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @default(now())
 }
 
 model Queue {
@@ -296,4 +304,9 @@ enum MentionSource {
   INSTAGRAM
   TIKTOK
   LINKEDIN
+}
+
+enum BillingInterval {
+  MONTHLY
+  YEARLY
 }

@@ -1,11 +1,25 @@
 import { prisma, Prisma } from "@repo/db";
 
 export class TrackedKeywordService {
+  constructor(private planService?: any) {}
+
+  setPlanService(planService: any) {
+    this.planService = planService;
+  }
+
   async createKeyword(data: {
     userId: string;
     providerId: number;
     keyword: string;
   }) {
+    // Check plan limits if plan service is available
+    if (this.planService) {
+      const planCheck = await this.planService.canUserCreateTrackedKeyword(data.userId);
+      if (!planCheck.canCreate) {
+        throw new Error(planCheck.reason || "Plan limit exceeded for tracked keywords");
+      }
+    }
+
     return prisma.trackedKeyword.create({
       data: {
         userId: data.userId,

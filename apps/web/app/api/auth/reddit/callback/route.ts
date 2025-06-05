@@ -58,11 +58,17 @@ export async function GET(req: NextRequest) {
         baseUrl
       );
       return NextResponse.redirect(successUrl);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to create Reddit integration:", error);
+      
+      // Handle plan limit errors gracefully
+      const errorMessage = error.message?.includes("Plan limit") 
+        ? "plan_limit_exceeded" 
+        : "integration_failed";
+      
       // Construct failure URL
       const failureUrl = new URL(
-        "/dashboard/integrations?success=false&error=integration_failed",
+        `/dashboard/integrations?success=false&error=${errorMessage}`,
         baseUrl
       );
       return NextResponse.redirect(failureUrl);

@@ -48,3 +48,7 @@ export const subtaskService = new CoreSubTaskService(subtaskRepository);
 export const mentionService = new CoreMentionService(mentionRepository);
 export const userService = new CoreUserService(userRepository);
 export const planService = new CorePlanService(planRepository);
+
+// Set up circular dependencies
+integrationsService.setPlanService(planService);
+trackedKeywordService.setPlanService(planService);
