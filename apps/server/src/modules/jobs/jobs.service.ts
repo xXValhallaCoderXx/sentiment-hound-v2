@@ -38,8 +38,10 @@ export class JobsService {
     this.processors[SubTaskType.FETCH_REDDIT_KEYWORD_MENTIONS] =
       this.redditFetchProcessor;
     this.processors[SubTaskType.EXPORT_FETCH_DATA] = this.exportFetchProcessor;
-    this.processors[SubTaskType.EXPORT_FORMAT_DATA] = this.exportFormatProcessor;
-    this.processors[SubTaskType.EXPORT_GENERATE_FILE] = this.exportGenerateProcessor;
+    this.processors[SubTaskType.EXPORT_FORMAT_DATA] =
+      this.exportFormatProcessor;
+    this.processors[SubTaskType.EXPORT_GENERATE_FILE] =
+      this.exportGenerateProcessor;
   }
 
   async processJob(job: Job) {
