@@ -11,6 +11,16 @@ import {
 import { competitorService } from "@repo/services";
 import CompetitorCardsClient from "./CompetitorCards";
 
+// Matches the service's Competitor type (with createdAt as Date)
+type ServiceCompetitor = {
+  id: number;
+  name: string;
+  userId: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 interface CompetitorCardsWrapperProps {
   userId: string;
 }
@@ -32,10 +42,20 @@ const CompetitorCardsWrapper = async ({ userId }: CompetitorCardsWrapperProps) =
 const CompetitorCardsList = async ({ userId }: { userId: string }) => {
   try {
     const competitors = await competitorService.getUserCompetitors(userId);
+    // Ensure createdAt is a string for each competitor
+    const serializedCompetitors = competitors.map(
+      (competitor: ServiceCompetitor) => ({
+        ...competitor,
+        createdAt:
+          competitor.createdAt instanceof Date
+            ? competitor.createdAt.toISOString()
+            : competitor.createdAt,
+      })
+    );
 
     return (
-      <CompetitorCardsClient 
-        competitors={competitors}
+      <CompetitorCardsClient
+        competitors={serializedCompetitors}
         userId={userId}
       />
     );

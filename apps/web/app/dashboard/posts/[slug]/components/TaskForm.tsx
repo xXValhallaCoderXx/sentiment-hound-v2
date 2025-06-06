@@ -50,7 +50,7 @@ const TaskForm = ({ providerId }: TaskFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack spacing="sm">
+      <Stack gap="sm">
         <Group>
           <Select
             value={taskType}

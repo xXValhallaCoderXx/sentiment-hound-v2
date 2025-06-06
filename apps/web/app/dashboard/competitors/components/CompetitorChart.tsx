@@ -61,7 +61,7 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
       ];
       
       setCompetitors(mockCompetitors);
-      if (mockCompetitors.length > 0) {
+      if (mockCompetitors.length > 0 && mockCompetitors[0]) {
         setSelectedCompetitor(mockCompetitors[0].value);
       }
     } catch {
