@@ -2,18 +2,10 @@
 
 import { auth } from "@/lib/next-auth.lib";
 import { ActionResponse, createErrorResponse } from "@/lib/types";
-import { mentionService, planService } from "@repo/services";
+import { mentionService, planService, dashboardService, DashboardStats, TrendDataPoint } from "@repo/services";
 
-export interface DashboardStats {
-  overallSentimentScore: number;
-  totalMentions: number;
-  sentimentCounts: {
-    positive: number;
-    neutral: number;
-    negative: number;
-  };
-  changeFromPrevious?: number;
-}
+// Re-export types for components
+export type { DashboardStats, TrendDataPoint };
 
 export interface MentionItem {
   id: number;
@@ -22,14 +14,6 @@ export interface MentionItem {
   provider: string;
   timestamp: string;
   aspects: Array<{ aspect: string; sentiment: string }>;
-}
-
-export interface TrendDataPoint {
-  date: string;
-  positive: number;
-  neutral: number;
-  negative: number;
-  overall: number;
 }
 
 export async function getDashboardStats(): Promise<ActionResponse<DashboardStats>> {
@@ -42,48 +26,10 @@ export async function getDashboardStats(): Promise<ActionResponse<DashboardStats
       };
     }
 
-    // Get user mentions with pagination to calculate stats
-    const mentionsResult = await mentionService.getUserMentionsWithFilters({
-      userId: session.user.id,
-      page: 1,
-      pageSize: 1000, // Get more mentions for better stats
-    });
-
-    const mentions = mentionsResult.data;
-    const totalMentions = mentionsResult.total;
-
-    // Calculate sentiment counts
-    const sentimentCounts = {
-      positive: 0,
-      neutral: 0,
-      negative: 0,
-    };
-
-    mentions.forEach((mention) => {
-      const sentiment = mention.sentiment?.toLowerCase();
-      if (sentiment === "positive") {
-        sentimentCounts.positive++;
-      } else if (sentiment === "negative") {
-        sentimentCounts.negative++;
-      } else {
-        sentimentCounts.neutral++;
-      }
-    });
-
-    // Calculate overall sentiment score (0-100)
-    const overallSentimentScore = totalMentions > 0 
-      ? Math.round(
-          ((sentimentCounts.positive * 100 + sentimentCounts.neutral * 50) / totalMentions)
-        )
-      : 50; // Default to neutral if no data
+    const stats = await dashboardService.getDashboardStats(session.user.id);
 
     return {
-      data: {
-        overallSentimentScore,
-        totalMentions,
-        sentimentCounts,
-        // TODO: Calculate changeFromPrevious based on time period comparison
-      },
+      data: stats,
       error: null,
     };
   } catch (error: any) {
@@ -204,18 +150,10 @@ export async function getSentimentTrend(
       };
     }
 
-    // TODO: Implement actual trend calculation based on historical data
-    // For now, return mock data structure
-    const mockTrendData: TrendDataPoint[] = [
-      { date: "2024-01-01", positive: 45, neutral: 30, negative: 25, overall: 60 },
-      { date: "2024-01-02", positive: 50, neutral: 28, negative: 22, overall: 64 },
-      { date: "2024-01-03", positive: 48, neutral: 32, negative: 20, overall: 64 },
-      { date: "2024-01-04", positive: 52, neutral: 30, negative: 18, overall: 67 },
-      { date: "2024-01-05", positive: 55, neutral: 25, negative: 20, overall: 68 },
-    ];
+    const trendData = await dashboardService.getSentimentTrend(session.user.id, period);
 
     return {
-      data: mockTrendData,
+      data: trendData,
       error: null,
     };
   } catch (error: any) {

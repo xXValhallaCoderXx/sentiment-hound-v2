@@ -15,7 +15,7 @@ const OverallSentimentScore = () => {
       try {
         const result = await getDashboardStats();
         if (result.error) {
-          setError(result.error.message);
+          setError(result.error.error);
         } else {
           setStats(result.data);
         }
