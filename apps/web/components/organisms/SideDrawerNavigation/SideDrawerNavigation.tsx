@@ -11,6 +11,7 @@ import {
   IconMessageCircle,
   IconPlugConnected,
   IconUserScan,
+  IconTrophy,
 } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 import classes from "./SideDrawer.module.css";
@@ -25,6 +26,11 @@ const sidebarLinks = [
         href: "/dashboard/analyse",
         label: "Analyse",
         icon: IconChartBarPopular,
+      },
+      {
+        href: "/dashboard/competitors",
+        label: "Competitors",
+        icon: IconTrophy,
       },
     ],
   },

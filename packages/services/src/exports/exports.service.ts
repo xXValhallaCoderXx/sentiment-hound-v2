@@ -79,19 +79,13 @@ export class CoreExportService {
 
     // Add integration filter if specified
     if (options.integrationId) {
-      whereClause.post = {
-        ...whereClause.post,
-        integrationId: options.integrationId,
-      };
+      (whereClause.post as any).integrationId = options.integrationId;
     }
 
-    // Add provider filter if specified
+    // Add provider filter if specified (note: this will override integrationId if both are provided)
     if (options.providerId) {
-      whereClause.post = {
-        ...whereClause.post,
-        integration: {
-          providerId: options.providerId,
-        },
+      (whereClause.post as any).integration = {
+        providerId: options.providerId,
       };
     }
 

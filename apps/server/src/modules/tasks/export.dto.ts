@@ -5,14 +5,12 @@ import {
   IsNumber,
   IsBoolean,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class CreateExportTaskDto {
   @IsString()
   userId: string;
 
   @IsNumber()
-  @Type(() => Number)
   integrationId: number;
 
   @IsString()
@@ -24,7 +22,6 @@ export class CreateExportTaskDto {
   format: 'csv' | 'json';
 
   @IsNumber()
-  @Type(() => Number)
   @IsOptional()
   providerId?: number;
 

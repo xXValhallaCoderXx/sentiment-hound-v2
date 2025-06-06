@@ -102,4 +102,9 @@ export class PlanRepository {
       where: { userId, isActive: true },
     });
   }
+
+  async getUserCompetitorCount(userId: string): Promise<number> {
+    // Stub implementation - would use Prisma when available
+    return 0;
+  }
 }

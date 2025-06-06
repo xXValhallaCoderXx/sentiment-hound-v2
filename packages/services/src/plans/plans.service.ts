@@ -103,6 +103,28 @@ export class CorePlanService {
     return { canCreate: true };
   }
 
+  async canUserCreateCompetitor(
+    userId: string
+  ): Promise<{ canCreate: boolean; reason?: string }> {
+    const userPlan = await this.getUserPlan(userId);
+
+    if (!userPlan) {
+      return { canCreate: false, reason: "No active plan found" };
+    }
+
+    const userCompetitorCount = 
+      await this.repository.getUserCompetitorCount(userId);
+
+    if (userCompetitorCount >= userPlan.maxCompetitors) {
+      return {
+        canCreate: false,
+        reason: `Plan limit reached. Maximum ${userPlan.maxCompetitors} competitors allowed on ${userPlan.name} plan`,
+      };
+    }
+
+    return { canCreate: true };
+  }
+
   async getPlanFeatures(userId: string): Promise<Record<string, any> | null> {
     const userPlan = await this.getUserPlan(userId);
 
@@ -126,6 +148,7 @@ export class CorePlanService {
   async getPlanUsageStats(userId: string): Promise<{
     integrations: { current: number; max: number };
     trackedKeywords: { current: number; max: number };
+    competitors: { current: number; max: number };
   } | null> {
     const userPlan = await this.getUserPlan(userId);
 
@@ -133,9 +156,10 @@ export class CorePlanService {
       return null;
     }
 
-    const [integrationCount, keywordCount] = await Promise.all([
+    const [integrationCount, keywordCount, competitorCount] = await Promise.all([
       this.repository.getUserIntegrationCount(userId),
       this.repository.getUserTrackedKeywordCount(userId),
+      this.repository.getUserCompetitorCount(userId),
     ]);
 
     return {
@@ -146,6 +170,10 @@ export class CorePlanService {
       trackedKeywords: {
         current: keywordCount,
         max: userPlan.maxTrackedKeywords,
+      },
+      competitors: {
+        current: competitorCount,
+        max: userPlan.maxCompetitors,
       },
     };
   }
