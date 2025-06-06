@@ -22,12 +22,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         navbar={{
           width: 245,
           breakpoint: "sm",
-          collapsed: { mobile: !opened },
+          collapsed: { mobile: !opened, desktop: false },
         }}
         padding="md"
       >
         <AppShellHeader>
-          <AuthenticatedNavigationMenu isOpen={true} onToggle={toggle} />
+          <AuthenticatedNavigationMenu isOpen={opened} onToggle={toggle} />
         </AppShellHeader>
         <AppShellNavbar p="md">
           <SideDrawerNavigation />
