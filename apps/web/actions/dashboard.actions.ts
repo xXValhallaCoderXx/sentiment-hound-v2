@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/next-auth.lib";
 import { ActionResponse, createErrorResponse } from "@/lib/types";
-import { mentionService } from "@repo/services";
+import { mentionService, planService } from "@repo/services";
 
 export interface DashboardStats {
   overallSentimentScore: number;
@@ -122,7 +122,7 @@ export async function getRecentMentions(
       content: mention.content,
       sentiment: mention.sentiment,
       provider: mention.provider,
-      timestamp: new Date().toISOString(), // TODO: Get actual timestamp from mention
+      timestamp: mention.createdAt || new Date().toISOString(),
       aspects: mention.aspects,
     }));
 
@@ -131,6 +131,56 @@ export async function getRecentMentions(
         mentions,
         total: mentionsResult.total,
         totalPages: mentionsResult.totalPages,
+      },
+      error: null,
+    };
+  } catch (error: any) {
+    return {
+      data: null,
+      error: createErrorResponse(error),
+    };
+  }
+}
+
+export async function getUserPlanInfo(): Promise<ActionResponse<{
+  planName: string;
+  lookbackPeriod: "7days" | "30days" | "90days";
+}>> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        data: null,
+        error: createErrorResponse(new Error("User not authenticated")),
+      };
+    }
+
+    const userPlan = await planService.getUserPlan(session.user.id);
+    
+    // Determine lookback period based on plan
+    let lookbackPeriod: "7days" | "30days" | "90days" = "30days";
+    
+    if (userPlan) {
+      switch (userPlan.name.toLowerCase()) {
+        case "trial":
+          lookbackPeriod = "7days";
+          break;
+        case "starter":
+          lookbackPeriod = "30days";
+          break;
+        case "premium":
+        case "pro":
+          lookbackPeriod = "90days";
+          break;
+        default:
+          lookbackPeriod = "30days";
+      }
+    }
+
+    return {
+      data: {
+        planName: userPlan?.name || "trial",
+        lookbackPeriod,
       },
       error: null,
     };

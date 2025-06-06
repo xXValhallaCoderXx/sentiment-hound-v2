@@ -79,16 +79,16 @@ const OverallSentimentScore = () => {
   }
 
   return (
-    <Card withBorder p="xl" ta="center">
+    <Card withBorder p={{ base: "md", sm: "xl" }} ta="center">
       <Group justify="center" gap="xs" mb="md">
-        <Title order={3} c="dimmed" fw={500}>
+        <Title order={3} c="dimmed" fw={500} size={{ base: "lg", sm: "xl" }}>
           Overall Sentiment Score
         </Title>
       </Group>
       
       <Title 
         order={1} 
-        size="4rem" 
+        size={{ base: "3rem", sm: "4rem" }}
         fw={700} 
         c={getSentimentColor(stats.overallSentimentScore)}
         mb="xs"
@@ -96,7 +96,12 @@ const OverallSentimentScore = () => {
         {stats.overallSentimentScore}
       </Title>
       
-      <Text size="lg" fw={500} c={getSentimentColor(stats.overallSentimentScore)} mb="md">
+      <Text 
+        size={{ base: "md", sm: "lg" }} 
+        fw={500} 
+        c={getSentimentColor(stats.overallSentimentScore)} 
+        mb="md"
+      >
         {getSentimentLabel(stats.overallSentimentScore)}
       </Text>
       
@@ -107,9 +112,9 @@ const OverallSentimentScore = () => {
         </Text>
       </Group>
 
-      <Group justify="center" gap="xl" mt="xl">
+      <Group justify="center" gap={{ base: "md", sm: "xl" }} mt="xl" wrap="wrap">
         <div style={{ textAlign: "center" }}>
-          <Text size="xl" fw={600} c="teal">
+          <Text size={{ base: "lg", sm: "xl" }} fw={600} c="teal">
             {stats.sentimentCounts.positive}
           </Text>
           <Text size="xs" c="dimmed" tt="uppercase">
@@ -117,7 +122,7 @@ const OverallSentimentScore = () => {
           </Text>
         </div>
         <div style={{ textAlign: "center" }}>
-          <Text size="xl" fw={600} c="yellow">
+          <Text size={{ base: "lg", sm: "xl" }} fw={600} c="yellow">
             {stats.sentimentCounts.neutral}
           </Text>
           <Text size="xs" c="dimmed" tt="uppercase">
@@ -125,7 +130,7 @@ const OverallSentimentScore = () => {
           </Text>
         </div>
         <div style={{ textAlign: "center" }}>
-          <Text size="xl" fw={600} c="red">
+          <Text size={{ base: "lg", sm: "xl" }} fw={600} c="red">
             {stats.sentimentCounts.negative}
           </Text>
           <Text size="xs" c="dimmed" tt="uppercase">

@@ -62,6 +62,7 @@ export class CoreMentionService {
       content: string;
       sentiment: string | null;
       provider: string;
+      createdAt?: string;
       aspects: Array<{ aspect: string; sentiment: string }>;
     }>
   > {
@@ -123,6 +124,7 @@ export class CoreMentionService {
         content: comment.content,
         sentiment: comment.sentiment,
         provider: comment.post?.integration.provider.name,
+        createdAt: comment.createdAt?.toISOString(),
         aspects: comment.aspectAnalyses?.map((aspect: any) => ({
           aspect: aspect.aspect,
           sentiment: aspect.sentiment,

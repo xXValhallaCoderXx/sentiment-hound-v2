@@ -3,26 +3,34 @@
 import { useState, useEffect } from "react";
 import { Card, Title, Loader, Text } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
-import { getSentimentTrend, TrendDataPoint } from "@/actions/dashboard.actions";
+import { getSentimentTrend, getUserPlanInfo, TrendDataPoint } from "@/actions/dashboard.actions";
 
-interface SentimentTrendChartProps {
-  period?: "7days" | "30days" | "90days";
-}
-
-const SentimentTrendChart = ({ period = "30days" }: SentimentTrendChartProps) => {
+const SentimentTrendChart = () => {
   const [trendData, setTrendData] = useState<TrendDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [planInfo, setPlanInfo] = useState<{ planName: string; lookbackPeriod: "7days" | "30days" | "90days" } | null>(null);
 
   useEffect(() => {
-    const fetchTrendData = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const result = await getSentimentTrend(period);
-        if (result.error) {
-          setError(result.error.message);
+        
+        // Get user plan info first
+        const planResult = await getUserPlanInfo();
+        if (planResult.error) {
+          setError(planResult.error.message);
+          return;
+        }
+        
+        setPlanInfo(planResult.data);
+        
+        // Then get trend data based on user's plan
+        const trendResult = await getSentimentTrend(planResult.data?.lookbackPeriod);
+        if (trendResult.error) {
+          setError(trendResult.error.message);
         } else {
-          setTrendData(result.data || []);
+          setTrendData(trendResult.data || []);
         }
       } catch (err) {
         setError("Failed to load trend data");
@@ -31,11 +39,11 @@ const SentimentTrendChart = ({ period = "30days" }: SentimentTrendChartProps) =>
       }
     };
 
-    fetchTrendData();
-  }, [period]);
+    fetchData();
+  }, []);
 
-  const getPeriodLabel = (period: string) => {
-    switch (period) {
+  const getPeriodLabel = (lookbackPeriod: string) => {
+    switch (lookbackPeriod) {
       case "7days":
         return "7 Days";
       case "30days":
@@ -47,11 +55,16 @@ const SentimentTrendChart = ({ period = "30days" }: SentimentTrendChartProps) =>
     }
   };
 
+  const getPlanFeatureText = (planName: string, lookbackPeriod: string) => {
+    const periodLabel = getPeriodLabel(lookbackPeriod);
+    return `${periodLabel} history (${planName} plan)`;
+  };
+
   if (loading) {
     return (
       <Card withBorder p={{ base: 12, sm: 16 }}>
         <Title order={4} mb={16}>
-          Sentiment Trend - {getPeriodLabel(period)}
+          Sentiment Trend
         </Title>
         <div style={{ textAlign: "center", padding: "3rem 0" }}>
           <Loader size="md" />
@@ -65,7 +78,7 @@ const SentimentTrendChart = ({ period = "30days" }: SentimentTrendChartProps) =>
     return (
       <Card withBorder p={{ base: 12, sm: 16 }}>
         <Title order={4} mb={16}>
-          Sentiment Trend - {getPeriodLabel(period)}
+          Sentiment Trend
         </Title>
         <div style={{ textAlign: "center", padding: "3rem 0" }}>
           <Text c="red">Error: {error}</Text>
@@ -78,10 +91,15 @@ const SentimentTrendChart = ({ period = "30days" }: SentimentTrendChartProps) =>
     return (
       <Card withBorder p={{ base: 12, sm: 16 }}>
         <Title order={4} mb={16}>
-          Sentiment Trend - {getPeriodLabel(period)}
+          Sentiment Trend
         </Title>
         <div style={{ textAlign: "center", padding: "3rem 0" }}>
           <Text c="dimmed">No trend data available</Text>
+          {planInfo && (
+            <Text size="xs" c="dimmed" mt="xs">
+              {getPlanFeatureText(planInfo.planName, planInfo.lookbackPeriod)}
+            </Text>
+          )}
         </div>
       </Card>
     );
@@ -89,9 +107,14 @@ const SentimentTrendChart = ({ period = "30days" }: SentimentTrendChartProps) =>
 
   return (
     <Card withBorder p={{ base: 12, sm: 16 }}>
-      <Title order={4} mb={16}>
-        Sentiment Trend - {getPeriodLabel(period)}
+      <Title order={4} mb={8}>
+        Sentiment Trend
       </Title>
+      {planInfo && (
+        <Text size="sm" c="dimmed" mb={16}>
+          {getPlanFeatureText(planInfo.planName, planInfo.lookbackPeriod)}
+        </Text>
+      )}
       <LineChart
         h={300}
         data={trendData}
