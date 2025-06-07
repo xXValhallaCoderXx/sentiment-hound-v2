@@ -25,6 +25,7 @@ const seed = async () => {
       maxIntegrations: 1,
       maxTrackedKeywords: 3,
       maxCompetitors: 0, // Trial users get demo only
+      monthlyTokenAllowance: 10000, // 10k tokens for trial
       features: {
         analytics: false,
         exportData: false,
@@ -45,6 +46,7 @@ const seed = async () => {
       maxIntegrations: 3,
       maxTrackedKeywords: 10,
       maxCompetitors: 2, // Starter gets 1-2 competitors
+      monthlyTokenAllowance: 500000, // 500k tokens for starter
       features: {
         analytics: true,
         exportData: true,
@@ -65,6 +67,7 @@ const seed = async () => {
       maxIntegrations: 10,
       maxTrackedKeywords: 50,
       maxCompetitors: 10, // Premium gets up to 10 competitors
+      monthlyTokenAllowance: 2500000, // 2.5M tokens for premium
       features: {
         analytics: true,
         exportData: true,
@@ -90,6 +93,7 @@ const seed = async () => {
         maxIntegrations: plan.maxIntegrations,
         maxTrackedKeywords: plan.maxTrackedKeywords,
         maxCompetitors: plan.maxCompetitors,
+        monthlyTokenAllowance: plan.monthlyTokenAllowance,
         features: plan.features,
         isActive: plan.isActive,
         displayOrder: plan.displayOrder

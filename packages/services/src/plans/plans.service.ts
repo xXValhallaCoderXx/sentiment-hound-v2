@@ -149,6 +149,7 @@ export class CorePlanService {
     integrations: { current: number; max: number };
     trackedKeywords: { current: number; max: number };
     competitors: { current: number; max: number };
+    tokens: { current: number; max: number; periodEnd: Date | null };
   } | null> {
     const userPlan = await this.getUserPlan(userId);
 
@@ -156,10 +157,11 @@ export class CorePlanService {
       return null;
     }
 
-    const [integrationCount, keywordCount, competitorCount] = await Promise.all([
+    const [integrationCount, keywordCount, competitorCount, tokenUsage] = await Promise.all([
       this.repository.getUserIntegrationCount(userId),
       this.repository.getUserTrackedKeywordCount(userId),
       this.repository.getUserCompetitorCount(userId),
+      this.repository.getUserTokenUsage(userId),
     ]);
 
     return {
@@ -175,6 +177,81 @@ export class CorePlanService {
         current: competitorCount,
         max: userPlan.maxCompetitors,
       },
+      tokens: {
+        current: tokenUsage.current,
+        max: userPlan.monthlyTokenAllowance || 0,
+        periodEnd: tokenUsage.periodEnd,
+      },
+    };
+  }
+
+  async trackTokenUsage(userId: string, tokenCount: number): Promise<{ 
+    success: boolean; 
+    usage: number; 
+    limit: number; 
+    isOverage: boolean;
+  }> {
+    const userPlan = await this.getUserPlan(userId);
+    
+    if (!userPlan) {
+      throw new Error("No active plan found for user");
+    }
+
+    // Check if user has a billing cycle initialized
+    const tokenUsage = await this.repository.getUserTokenUsage(userId);
+    
+    if (!tokenUsage.periodEnd) {
+      // Initialize billing cycle if not set
+      await this.repository.initializeBillingCycle(userId);
+    } else {
+      // Check if billing period has ended and reset if needed
+      const now = new Date();
+      if (now > tokenUsage.periodEnd) {
+        const newPeriodEnd = new Date(now);
+        newPeriodEnd.setMonth(newPeriodEnd.getMonth() + 1);
+        await this.repository.resetTokenUsage(userId, newPeriodEnd);
+      }
+    }
+
+    // Increment token usage
+    await this.repository.incrementTokenUsage(userId, tokenCount);
+    
+    // Get updated usage
+    const updatedUsage = await this.repository.getUserTokenUsage(userId);
+    const newUsage = updatedUsage.current;
+    const limit = userPlan.monthlyTokenAllowance || 0;
+    
+    return {
+      success: true,
+      usage: newUsage,
+      limit: limit,
+      isOverage: newUsage > limit,
+    };
+  }
+
+  async getTokenUsageStatus(userId: string): Promise<{
+    current: number;
+    limit: number;
+    periodEnd: Date | null;
+    isOverage: boolean;
+    percentage: number;
+  } | null> {
+    const userPlan = await this.getUserPlan(userId);
+    
+    if (!userPlan) {
+      return null;
+    }
+
+    const tokenUsage = await this.repository.getUserTokenUsage(userId);
+    const limit = userPlan.monthlyTokenAllowance || 0;
+    const current = tokenUsage.current;
+    
+    return {
+      current,
+      limit,
+      periodEnd: tokenUsage.periodEnd,
+      isOverage: current > limit,
+      percentage: limit > 0 ? (current / limit) * 100 : 0,
     };
   }
 }

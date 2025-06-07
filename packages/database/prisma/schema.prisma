@@ -30,6 +30,8 @@ model User {
   tasks           Task[]
   planId          Int?
   plan            Plan?            @relation(fields: [planId], references: [id])
+  tokenUsageThisPeriod Int         @default(0)  // Current period token usage
+  currentPeriodEnd     DateTime?               // When current billing period ends
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 }
@@ -212,6 +214,7 @@ model Plan {
   maxIntegrations  Int         @default(1)
   maxTrackedKeywords Int       @default(5)
   maxCompetitors   Int         @default(0)  // New field for competitor limits
+  monthlyTokenAllowance Int    @default(100000)  // Monthly token allowance for hybrid billing
   features         Json        @default("{}")  // Feature flags as JSON
   isActive         Boolean     @default(true)
   displayOrder     Int         @default(0)     // For UI ordering
