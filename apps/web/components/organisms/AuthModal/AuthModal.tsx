@@ -13,7 +13,7 @@ import {
   Anchor,
 } from "@mantine/core";
 import { IconBrandGoogle, IconInfoCircle } from "@tabler/icons-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useActionState } from "react";
 import { useForm } from "@mantine/form";
 import { handleGoogleSignIn, handleEmailSignIn, handleEmailSignUp, handleForgotPassword } from "@/actions/auth.actions";
 import { useFormState } from "react-dom";
@@ -36,9 +36,12 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   // Form state for server actions
-  const [signInState, signInAction] = useFormState(handleEmailSignIn, null);
-  const [signUpState, signUpAction] = useFormState(handleEmailSignUp, null);
-  const [forgotPasswordState, forgotPasswordAction] = useFormState(handleForgotPassword, null);
+  const [signInState, signInAction] = useActionState(handleEmailSignIn, null);
+  const [signUpState, signUpAction] = useActionState(handleEmailSignUp, null);
+  const [forgotPasswordState, forgotPasswordAction] = useActionState(
+    handleForgotPassword,
+    null
+  );
 
   // Form handling with Mantine form
   const form = useForm<FormData>({
