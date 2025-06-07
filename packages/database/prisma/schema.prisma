@@ -219,8 +219,31 @@ model Plan {
   isActive         Boolean     @default(true)
   displayOrder     Int         @default(0)     // For UI ordering
   users            User[]
+  invitationCodes  InvitationCode[]
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @default(now())
+}
+
+model InvitationCode {
+  id            String    @id @default(cuid())
+  code          String    @unique // The code itself, e.g., "EARLY-ADOPTER"
+  isActive      Boolean   @default(true)
+
+  // MVP: For granting plan access
+  planId        Int?      
+  plan          Plan?     @relation(fields: [planId], references: [id])
+
+  // FUTURE: For discounts on paid plans
+  discountType  String?   // e.g., 'PERCENT', 'FIXED_AMOUNT'
+  discountValue Decimal?  // e.g., 20 (for 20%)
+
+  // Usage Controls
+  expiresAt     DateTime?
+  maxUses       Int?      // e.g., "First 100 users only!"
+  timesUsed     Int       @default(0)
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Queue {

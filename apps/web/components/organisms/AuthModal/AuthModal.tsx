@@ -11,12 +11,18 @@ import {
   Group,
   Alert,
   Anchor,
+  Collapse,
 } from "@mantine/core";
 import { IconBrandGoogle, IconInfoCircle } from "@tabler/icons-react";
 import { useState, useEffect, useActionState } from "react";
 import { useForm } from "@mantine/form";
 import { handleGoogleSignIn, handleEmailSignIn, handleEmailSignUp, handleForgotPassword } from "@/actions/auth.actions";
 import { useFormState } from "react-dom";
+import { 
+  getInvitationCodeFromUrl, 
+  setInvitationCodeInStorage, 
+  validateInvitationCodeFormat 
+} from "@/lib/invitation-code.utils";
 
 interface AuthModalProps {
   opened: boolean;
@@ -29,11 +35,15 @@ interface FormData {
   email: string;
   password: string;
   name?: string;
+  invitationCode?: string;
 }
 
 export function AuthModal({ opened, onClose }: AuthModalProps) {
   const [authState, setAuthState] = useState<AuthState>("signin");
   const [isLoading, setIsLoading] = useState(false);
+  const [showInvitationCode, setShowInvitationCode] = useState(false);
+  const [invitationCodeApplied, setInvitationCodeApplied] = useState(false);
+  const [pendingInvitationCode, setPendingInvitationCode] = useState<string>("");
 
   // Form state for server actions
   const [signInState, signInAction] = useActionState(handleEmailSignIn, null);
@@ -50,6 +60,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
       email: "",
       password: "",
       name: "",
+      invitationCode: "",
     },
     validate: {
       email: (value) => {
@@ -64,6 +75,12 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         }
         return null;
       },
+      invitationCode: (value) => {
+        if (value && !validateInvitationCodeFormat(value)) {
+          return "Invalid invitation code format";
+        }
+        return null;
+      },
     },
   });
 
@@ -74,14 +91,42 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
     }
   }, [signInState?.success, signUpState?.success, onClose]);
 
+  // Check for invitation code in URL on component mount
+  useEffect(() => {
+    const urlCode = getInvitationCodeFromUrl();
+    if (urlCode && validateInvitationCodeFormat(urlCode)) {
+      form.setFieldValue("invitationCode", urlCode);
+      setPendingInvitationCode(urlCode);
+      setInvitationCodeApplied(true);
+      setShowInvitationCode(true);
+    }
+  }, [form]);
+
   const handleStateChange = (newState: AuthState) => {
     setAuthState(newState);
     form.reset();
+    // Keep invitation code if already applied
+    if (invitationCodeApplied && pendingInvitationCode) {
+      form.setFieldValue("invitationCode", pendingInvitationCode);
+    }
+  };
+
+  const handleApplyInvitationCode = () => {
+    const code = form.getValues().invitationCode;
+    if (code && validateInvitationCodeFormat(code)) {
+      setPendingInvitationCode(code);
+      setInvitationCodeApplied(true);
+      setInvitationCodeInStorage(code);
+    }
   };
 
   const handleGoogleAuth = async () => {
     setIsLoading(true);
     try {
+      // Store invitation code before OAuth redirect
+      if (pendingInvitationCode) {
+        setInvitationCodeInStorage(pendingInvitationCode);
+      }
       await handleGoogleSignIn();
     } catch (error) {
       console.error("Google auth error:", error);
@@ -95,6 +140,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
     formData.append("email", data.email);
     if (data.password) formData.append("password", data.password);
     if (data.name) formData.append("name", data.name);
+    if (data.invitationCode) formData.append("invitationCode", data.invitationCode);
 
     if (authState === "signin") {
       signInAction(formData);
@@ -208,6 +254,54 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
       </Button>
 
       <Divider label="or" labelPosition="center" />
+
+      {/* Invitation Code Section */}
+      <Stack gap="xs">
+        <Group justify="space-between">
+          <Text size="sm" fw={500}>
+            Have an invitation code?
+          </Text>
+          <Button
+            variant="subtle"
+            size="xs"
+            onClick={() => setShowInvitationCode(!showInvitationCode)}
+          >
+            {showInvitationCode ? "Hide" : "Add Code"}
+          </Button>
+        </Group>
+
+        <Collapse in={showInvitationCode}>
+          <Stack gap="xs">
+            <Group gap="xs" grow>
+              <TextInput
+                placeholder="Enter invitation code"
+                key={form.key("invitationCode")}
+                {...form.getInputProps("invitationCode")}
+                disabled={invitationCodeApplied}
+              />
+              {!invitationCodeApplied && (
+                <Button
+                  variant="light"
+                  onClick={handleApplyInvitationCode}
+                  disabled={!form.getValues().invitationCode}
+                >
+                  Apply
+                </Button>
+              )}
+            </Group>
+            {invitationCodeApplied && (
+              <Alert
+                icon={<IconCheck size={16} />}
+                color="green"
+                variant="light"
+                size="sm"
+              >
+                Invitation code applied! You'll get special access.
+              </Alert>
+            )}
+          </Stack>
+        </Collapse>
+      </Stack>
 
       <form onSubmit={form.onSubmit(onSubmit)}>
         <Stack gap="sm">

@@ -11,12 +11,14 @@ import { Notifications } from "@mantine/notifications";
 import { SideDrawerNavigation } from "../organisms/SideDrawerNavigation";
 import { AuthenticatedNavigationMenu } from "../organisms/AuthenticatedNavigationMenu";
 import { OnboardingWrapper } from "./OnboardingWrapper";
+import { InvitationCodeHandler } from "../InvitationCodeHandler";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [opened, { toggle }] = useDisclosure();
 
   return (
     <OnboardingWrapper>
+      <InvitationCodeHandler />
       <AppShell
         header={{ height: 60 }}
         navbar={{
