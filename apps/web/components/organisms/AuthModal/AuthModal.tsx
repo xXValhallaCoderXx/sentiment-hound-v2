@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { IconBrandGoogle, IconInfoCircle } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "@mantine/form";
 import { handleGoogleSignIn, handleEmailSignIn, handleEmailSignUp, handleForgotPassword } from "@/actions/auth.actions";
 import { useFormState } from "react-dom";
 
@@ -40,14 +40,28 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   const [signUpState, signUpAction] = useFormState(handleEmailSignUp, null);
   const [forgotPasswordState, forgotPasswordAction] = useFormState(handleForgotPassword, null);
 
-  // Form handling with react-hook-form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    reset,
-  } = useForm<FormData>({
-    mode: "onChange",
+  // Form handling with Mantine form
+  const form = useForm<FormData>({
+    mode: "uncontrolled",
+    initialValues: {
+      email: "",
+      password: "",
+      name: "",
+    },
+    validate: {
+      email: (value) => {
+        if (!value) return "Email is required";
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        return emailRegex.test(value) ? null : "Please enter a valid email address";
+      },
+      password: (value) => {
+        if (!value) return "Password is required";
+        if (authState === "signup" && value.length < 8) {
+          return "Password must be at least 8 characters long";
+        }
+        return null;
+      },
+    },
   });
 
   // Close modal on successful auth
@@ -59,7 +73,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
 
   const handleStateChange = (newState: AuthState) => {
     setAuthState(newState);
-    reset();
+    form.reset();
   };
 
   const handleGoogleAuth = async () => {
@@ -128,30 +142,22 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
 
       <Divider label="or" labelPosition="center" />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={form.onSubmit(onSubmit)}>
         <Stack gap="sm">
           <TextInput
             label="Email address"
             placeholder="your@email.com"
             required
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Please enter a valid email address",
-              },
-            })}
-            error={errors.email?.message}
+            key={form.key("email")}
+            {...form.getInputProps("email")}
           />
 
           <PasswordInput
             label="Password"
             placeholder="Your password"
             required
-            {...register("password", {
-              required: "Password is required",
-            })}
-            error={errors.password?.message}
+            key={form.key("password")}
+            {...form.getInputProps("password")}
           />
 
           <Group justify="flex-end">
@@ -165,7 +171,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
             </Anchor>
           </Group>
 
-          <Button type="submit" fullWidth disabled={!isValid}>
+          <Button type="submit" fullWidth disabled={!form.isValid()}>
             Sign In
           </Button>
         </Stack>
@@ -200,48 +206,36 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
 
       <Divider label="or" labelPosition="center" />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={form.onSubmit(onSubmit)}>
         <Stack gap="sm">
           <TextInput
             label="Name (optional)"
             placeholder="Your name"
-            {...register("name")}
-            error={errors.name?.message}
+            key={form.key("name")}
+            {...form.getInputProps("name")}
           />
 
           <TextInput
             label="Email address"
             placeholder="your@email.com"
             required
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Please enter a valid email address",
-              },
-            })}
-            error={errors.email?.message}
+            key={form.key("email")}
+            {...form.getInputProps("email")}
           />
 
           <PasswordInput
             label="Password"
             placeholder="Create a password"
             required
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters long",
-              },
-            })}
-            error={errors.password?.message}
+            key={form.key("password")}
+            {...form.getInputProps("password")}
           />
 
           <Text size="xs" c="dimmed">
             By signing up, you agree to our Terms of Service and Privacy Policy.
           </Text>
 
-          <Button type="submit" fullWidth disabled={!isValid}>
+          <Button type="submit" fullWidth disabled={!form.isValid()}>
             Create Account
           </Button>
         </Stack>
@@ -267,23 +261,17 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         Enter the email address associated with your account, and we&apos;ll send you a link to reset your password.
       </Text>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={form.onSubmit(onSubmit)}>
         <Stack gap="sm">
           <TextInput
             label="Email address"
             placeholder="your@email.com"
             required
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Please enter a valid email address",
-              },
-            })}
-            error={errors.email?.message}
+            key={form.key("email")}
+            {...form.getInputProps("email")}
           />
 
-          <Button type="submit" fullWidth disabled={!isValid}>
+          <Button type="submit" fullWidth disabled={!form.isValid()}>
             Send Reset Link
           </Button>
         </Stack>
