@@ -81,30 +81,24 @@ const OverallSentimentScore = () => {
   return (
     <Card withBorder p={{ base: "md", sm: "xl" }} ta="center">
       <Group justify="center" gap="xs" mb="md">
-        <Title order={3} c="dimmed" fw={500} size={{ base: "lg", sm: "xl" }}>
+        <Title order={3} c="dimmed" fw={500} size="xl">
           Overall Sentiment Score
         </Title>
       </Group>
-      
-      <Title 
-        order={1} 
-        size={{ base: "3rem", sm: "4rem" }}
-        fw={700} 
+
+      <Title
+        order={1}
+        fw={700}
         c={getSentimentColor(stats.overallSentimentScore)}
         mb="xs"
       >
         {stats.overallSentimentScore}
       </Title>
-      
-      <Text 
-        size={{ base: "md", sm: "lg" }} 
-        fw={500} 
-        c={getSentimentColor(stats.overallSentimentScore)} 
-        mb="md"
-      >
+
+      <Text fw={500} c={getSentimentColor(stats.overallSentimentScore)} mb="md">
         {getSentimentLabel(stats.overallSentimentScore)}
       </Text>
-      
+
       <Group justify="center" gap="xs" mb="lg">
         {getTrendIcon(stats.changeFromPrevious)}
         <Text size="sm" c="dimmed">
@@ -112,9 +106,9 @@ const OverallSentimentScore = () => {
         </Text>
       </Group>
 
-      <Group justify="center" gap={{ base: "md", sm: "xl" }} mt="xl" wrap="wrap">
+      <Group justify="center" gap="md" mt="xl" wrap="wrap">
         <div style={{ textAlign: "center" }}>
-          <Text size={{ base: "lg", sm: "xl" }} fw={600} c="teal">
+          <Text fw={600} c="teal">
             {stats.sentimentCounts.positive}
           </Text>
           <Text size="xs" c="dimmed" tt="uppercase">
@@ -122,7 +116,7 @@ const OverallSentimentScore = () => {
           </Text>
         </div>
         <div style={{ textAlign: "center" }}>
-          <Text size={{ base: "lg", sm: "xl" }} fw={600} c="yellow">
+          <Text fw={600} c="yellow">
             {stats.sentimentCounts.neutral}
           </Text>
           <Text size="xs" c="dimmed" tt="uppercase">
@@ -130,7 +124,7 @@ const OverallSentimentScore = () => {
           </Text>
         </div>
         <div style={{ textAlign: "center" }}>
-          <Text size={{ base: "lg", sm: "xl" }} fw={600} c="red">
+          <Text fw={600} c="red">
             {stats.sentimentCounts.negative}
           </Text>
           <Text size="xs" c="dimmed" tt="uppercase">

@@ -154,9 +154,11 @@ export class CoreDashboardService {
     const currentDate = new Date(startDate);
     
     while (currentDate <= now) {
-      const dateStr = currentDate.toISOString().split('T')[0];
-      const existingData = trendData.find(d => d.date === dateStr);
-      
+      const dateStr = currentDate.toISOString().split("T")[0];
+      if (!dateStr) continue; // Skip if dateStr is undefined
+
+      const existingData = trendData.find((d) => d.date === dateStr);
+
       if (existingData) {
         result.push(existingData);
       } else {
@@ -169,7 +171,7 @@ export class CoreDashboardService {
           overall: 50, // Neutral
         });
       }
-      
+
       currentDate.setDate(currentDate.getDate() + 1);
     }
 

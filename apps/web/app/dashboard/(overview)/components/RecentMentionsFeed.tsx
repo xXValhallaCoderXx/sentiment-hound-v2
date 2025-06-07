@@ -52,7 +52,7 @@ const RecentMentionsFeed = () => {
       
       const result = await getRecentMentions(filters);
       if (result.error) {
-        setError(result.error.message);
+        setError(result.error.error);
       } else {
         setMentions(result.data?.mentions || []);
         setTotalPages(result.data?.totalPages || 1);

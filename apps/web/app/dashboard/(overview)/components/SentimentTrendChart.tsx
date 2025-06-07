@@ -19,16 +19,18 @@ const SentimentTrendChart = () => {
         // Get user plan info first
         const planResult = await getUserPlanInfo();
         if (planResult.error) {
-          setError(planResult.error.message);
+          setError(planResult.error.error);
           return;
         }
-        
+
         setPlanInfo(planResult.data);
-        
+
         // Then get trend data based on user's plan
-        const trendResult = await getSentimentTrend(planResult.data?.lookbackPeriod);
+        const trendResult = await getSentimentTrend(
+          planResult.data?.lookbackPeriod
+        );
         if (trendResult.error) {
-          setError(trendResult.error.message);
+          setError(trendResult.error.error);
         } else {
           setTrendData(trendResult.data || []);
         }
