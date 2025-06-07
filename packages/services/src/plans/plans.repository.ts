@@ -107,4 +107,51 @@ export class PlanRepository {
     // Stub implementation - would use Prisma when available
     return 0;
   }
+
+  async getUserTokenUsage(userId: string): Promise<{ current: number; periodEnd: Date | null }> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { tokenUsageThisPeriod: true, currentPeriodEnd: true },
+    });
+
+    return {
+      current: user?.tokenUsageThisPeriod || 0,
+      periodEnd: user?.currentPeriodEnd || null,
+    };
+  }
+
+  async incrementTokenUsage(userId: string, tokenCount: number): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        tokenUsageThisPeriod: {
+          increment: tokenCount,
+        },
+      },
+    });
+  }
+
+  async resetTokenUsage(userId: string, newPeriodEnd: Date): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        tokenUsageThisPeriod: 0,
+        currentPeriodEnd: newPeriodEnd,
+      },
+    });
+  }
+
+  async initializeBillingCycle(userId: string): Promise<void> {
+    const now = new Date();
+    const periodEnd = new Date(now);
+    periodEnd.setMonth(periodEnd.getMonth() + 1); // Set to one month from now
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        currentPeriodEnd: periodEnd,
+        tokenUsageThisPeriod: 0,
+      },
+    });
+  }
 }

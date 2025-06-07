@@ -3,6 +3,7 @@ import PageLayout from "@/components/templates/PageLayout";
 import { Card, Flex, Box, Title, Stack, Text } from "@mantine/core";
 import ProfileCard from "./components/ProfileCard";
 import Plans from "./components/Plans";
+import TokenUsageCard from "./components/TokenUsageCard";
 import { prisma } from "@repo/db";
 
 const ProfilePage = async () => {
@@ -40,6 +41,9 @@ const ProfilePage = async () => {
                 <Text>User data not available.</Text>
               )}
             </Card>
+          </Flex>
+          <Flex w="33%">
+            <TokenUsageCard userId={userId} />
           </Flex>
           <Flex w="33%">
             <Card withBorder w="100%">

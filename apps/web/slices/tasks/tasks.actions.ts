@@ -3,7 +3,7 @@
 import { auth } from "@/lib/next-auth.lib";
 
 import { TaskType } from "@repo/db";
-import { taskService } from "@repo/services";
+import { taskService, planService } from "@repo/services";
 import { IAddTaskDto } from "./task.dto";
 
 export async function getTask(id: string): Promise<string> {
@@ -42,6 +42,14 @@ export async function addNewTask(data: FormData): Promise<void> {
       userId,
       extraData,
     });
+
+    // Track token usage for task creation (example: 100 tokens per task)
+    try {
+      await planService.trackTokenUsage(userId, 100);
+    } catch (tokenError) {
+      // Log but don't fail the main task creation
+      console.warn("Failed to track token usage:", tokenError);
+    }
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to add task"
@@ -74,6 +82,14 @@ export async function addNewTask2(data: IAddTaskDto): Promise<void> {
       userId,
       extraData,
     });
+
+    // Track token usage for task creation (example: 100 tokens per task)
+    try {
+      await planService.trackTokenUsage(userId, 100);
+    } catch (tokenError) {
+      // Log but don't fail the main task creation
+      console.warn("Failed to track token usage:", tokenError);
+    }
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to add task"
