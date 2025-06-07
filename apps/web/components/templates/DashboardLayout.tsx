@@ -25,14 +25,15 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           collapsed: { mobile: !opened, desktop: false },
         }}
         padding="md"
+        withBorder={false}
       >
-        <AppShellHeader>
+        <AppShellHeader withBorder>
           <AuthenticatedNavigationMenu isOpen={opened} onToggle={toggle} />
         </AppShellHeader>
-        <AppShellNavbar p="md">
+        <AppShellNavbar p="md" withBorder>
           <SideDrawerNavigation />
         </AppShellNavbar>
-        <AppShellMain p={{ base: 'sm', sm: 'md' }}>
+        <AppShellMain>
           <Notifications position="top-right" />
           {children}
         </AppShellMain>
