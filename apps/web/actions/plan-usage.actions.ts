@@ -162,3 +162,27 @@ export async function trackTokenUsage(tokenCount: number): Promise<ActionRespons
     };
   }
 }
+
+export async function checkUsageNotifications(): Promise<ActionResponse<{
+  shouldNotify: boolean;
+  notificationType: 'warning_80' | 'warning_100' | 'overage' | null;
+  percentage: number;
+}>> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        data: null,
+        error: createErrorResponse(new Error("User not authenticated"))
+      };
+    }
+
+    const result = await planService.shouldNotifyForUsage(session.user.id);
+    return { data: result, error: null };
+  } catch (error: any) {
+    return {
+      data: null,
+      error: createErrorResponse(error),
+    };
+  }
+}

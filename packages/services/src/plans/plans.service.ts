@@ -197,21 +197,8 @@ export class CorePlanService {
       throw new Error("No active plan found for user");
     }
 
-    // Check if user has a billing cycle initialized
-    const tokenUsage = await this.repository.getUserTokenUsage(userId);
-    
-    if (!tokenUsage.periodEnd) {
-      // Initialize billing cycle if not set
-      await this.repository.initializeBillingCycle(userId);
-    } else {
-      // Check if billing period has ended and reset if needed
-      const now = new Date();
-      if (now > tokenUsage.periodEnd) {
-        const newPeriodEnd = new Date(now);
-        newPeriodEnd.setMonth(newPeriodEnd.getMonth() + 1);
-        await this.repository.resetTokenUsage(userId, newPeriodEnd);
-      }
-    }
+    // Check and reset billing cycle if needed
+    await this.checkAndResetBillingCycle(userId);
 
     // Increment token usage
     await this.repository.incrementTokenUsage(userId, tokenCount);
@@ -253,5 +240,69 @@ export class CorePlanService {
       isOverage: current > limit,
       percentage: limit > 0 ? (current / limit) * 100 : 0,
     };
+  }
+
+  async checkAndResetBillingCycle(userId: string): Promise<boolean> {
+    const tokenUsage = await this.repository.getUserTokenUsage(userId);
+    
+    if (!tokenUsage.periodEnd) {
+      // Initialize billing cycle if not set
+      await this.repository.initializeBillingCycle(userId);
+      return true;
+    }
+    
+    const now = new Date();
+    if (now > tokenUsage.periodEnd) {
+      // Reset billing cycle
+      const newPeriodEnd = new Date(now);
+      newPeriodEnd.setMonth(newPeriodEnd.getMonth() + 1);
+      await this.repository.resetTokenUsage(userId, newPeriodEnd);
+      return true;
+    }
+    
+    return false;
+  }
+
+  async getUserPlanWithTokenUsage(userId: string): Promise<{
+    plan: Plan | null;
+    tokenUsage: {
+      current: number;
+      limit: number;
+      periodEnd: Date | null;
+      isOverage: boolean;
+      percentage: number;
+    } | null;
+  }> {
+    const plan = await this.getUserPlan(userId);
+    const tokenStatus = await this.getTokenUsageStatus(userId);
+    
+    return {
+      plan,
+      tokenUsage: tokenStatus,
+    };
+  }
+
+  async shouldNotifyForUsage(userId: string): Promise<{
+    shouldNotify: boolean;
+    notificationType: 'warning_80' | 'warning_100' | 'overage' | null;
+    percentage: number;
+  }> {
+    const tokenStatus = await this.getTokenUsageStatus(userId);
+    
+    if (!tokenStatus) {
+      return { shouldNotify: false, notificationType: null, percentage: 0 };
+    }
+
+    const { percentage, isOverage } = tokenStatus;
+
+    if (isOverage) {
+      return { shouldNotify: true, notificationType: 'overage', percentage };
+    } else if (percentage >= 100) {
+      return { shouldNotify: true, notificationType: 'warning_100', percentage };
+    } else if (percentage >= 80) {
+      return { shouldNotify: true, notificationType: 'warning_80', percentage };
+    }
+
+    return { shouldNotify: false, notificationType: null, percentage };
   }
 }
