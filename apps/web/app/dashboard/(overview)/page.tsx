@@ -14,7 +14,7 @@ const DashboardPage = async () => {
         <StatsCards />
         <TrendCards />
         <AspectSection />
-        <SimpleGrid cols={{ base: 1, lg: 2 }} spacing={{ base: 12, sm: 16 }}>
+       <SimpleGrid cols={{ base: 1, lg: 2 }} spacing={{ base: 12, sm: 16 }}>
           <RecentMentions />
           <Notifications />
         </SimpleGrid>
