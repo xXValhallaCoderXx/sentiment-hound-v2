@@ -1,12 +1,18 @@
+"use client";
+
 import { Button } from "@mantine/core";
-import { handleGoogleSignIn } from "@/actions/auth.actions";
+import { useState } from "react";
+import { AuthModal } from "@/components/organisms/AuthModal";
 
 export function SignInButton() {
+  const [opened, setOpened] = useState(false);
+
   return (
-    <form action={handleGoogleSignIn}>
-      <Button variant="filled" type="submit">
+    <>
+      <Button variant="filled" onClick={() => setOpened(true)}>
         Sign in
       </Button>
-    </form>
+      <AuthModal opened={opened} onClose={() => setOpened(false)} />
+    </>
   );
 }
