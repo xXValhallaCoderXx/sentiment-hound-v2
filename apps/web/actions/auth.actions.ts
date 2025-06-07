@@ -60,12 +60,20 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     });
 
     // Sign in the user
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email: validatedData.email,
       password: validatedData.password,
-      redirectTo: "/dashboard",
+      redirect: false,
     });
 
+    if (result?.error) {
+      return {
+        error: "Failed to sign in after registration. Please try signing in manually.",
+      };
+    }
+
+    // Redirect on success
+    redirect("/dashboard");
     return { success: true };
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -90,12 +98,20 @@ export async function handleEmailSignIn(prevState: any, formData: FormData) {
 
     const validatedData = signInSchema.parse(rawData);
 
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email: validatedData.email,
       password: validatedData.password,
-      redirectTo: "/dashboard",
+      redirect: false,
     });
 
+    if (result?.error) {
+      return {
+        error: "Invalid email or password",
+      };
+    }
+
+    // Redirect on success
+    redirect("/dashboard");
     return { success: true };
   } catch (error) {
     if (error instanceof z.ZodError) {

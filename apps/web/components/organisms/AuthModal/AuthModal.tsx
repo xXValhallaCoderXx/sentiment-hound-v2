@@ -13,7 +13,7 @@ import {
   Anchor,
 } from "@mantine/core";
 import { IconBrandGoogle, IconInfoCircle } from "@tabler/icons-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { handleGoogleSignIn, handleEmailSignIn, handleEmailSignUp, handleForgotPassword } from "@/actions/auth.actions";
 import { useFormState } from "react-dom";
@@ -49,6 +49,13 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   } = useForm<FormData>({
     mode: "onChange",
   });
+
+  // Close modal on successful auth
+  useEffect(() => {
+    if (signInState?.success || signUpState?.success) {
+      onClose();
+    }
+  }, [signInState?.success, signUpState?.success, onClose]);
 
   const handleStateChange = (newState: AuthState) => {
     setAuthState(newState);
