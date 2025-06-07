@@ -38,6 +38,28 @@ const seed = async () => {
       displayOrder: 1
     },
     { 
+      name: "developer", 
+      description: "Special plan for early testers and developers",
+      price: 0, // Free for early testers
+      yearlyPrice: 0,
+      billingInterval: BillingInterval.MONTHLY,
+      maxIntegrations: 5,
+      maxTrackedKeywords: 25,
+      maxCompetitors: 5,
+      monthlyTokenAllowance: 1000000, // 1M tokens for developers
+      features: {
+        analytics: true,
+        exportData: true,
+        apiAccess: true,
+        prioritySupport: true,
+        competitorAnalysis: true,
+        competitorDataLookback: "unlimited",
+        betaFeatures: true
+      },
+      isActive: true,
+      displayOrder: 0 // Highest priority
+    },
+    { 
       name: "starter", 
       description: "Perfect for small businesses and individuals",
       price: 999, // $9.99 per month

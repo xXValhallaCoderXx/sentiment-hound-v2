@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@repo/db";
-// import { userService } from "services";
+import { invitationCodeService } from "@repo/services";
 
 const options: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
@@ -57,7 +57,25 @@ const options: NextAuthConfig = {
   events: {
     createUser: async (message) => {
       console.log("createUser", message.user.id);
-      // await userService.setupNewUserAccount({ id: message.user.id as string });
+      
+      // Check for pending invitation code (for OAuth flows)
+      let planId: number | undefined;
+      
+      // In a real implementation, you might store the invitation code in a session
+      // or pass it through the OAuth state parameter. For now, we'll check if 
+      // there's a way to get it from the request context or use a default plan.
+      
+      // Get default plan (trial) for OAuth users without invitation codes
+      const trialPlan = await prisma.plan.findUnique({ where: { name: "trial" } });
+      planId = trialPlan?.id;
+
+      // Update user with plan
+      if (planId) {
+        await prisma.user.update({
+          where: { id: message.user.id as string },
+          data: { planId },
+        });
+      }
     },
   },
 };

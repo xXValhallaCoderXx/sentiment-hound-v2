@@ -23,9 +23,11 @@ import { RedditService } from "./reddit/reddit.services";
 import { CompetitorRepository } from "./competitors/competitors.repository";
 import { CoreCompetitorService } from "./competitors/competitors.service";
 import { CoreDashboardService } from "./dashboard/dashboard.service";
+import { InvitationCodeService } from "./invitation-codes/invitation-codes.service";
 
 export * from "./posts/post.interface";
 export * from "./dashboard/dashboard.service";
+export * from "./invitation-codes";
 
 // Create singleton instances of repositories
 const queueRepository = new QueueRepository(prisma);
@@ -57,6 +59,7 @@ export const userService = new CoreUserService(userRepository);
 export const planService = new CorePlanService(planRepository);
 export const competitorService = new CoreCompetitorService(competitorRepository);
 export const dashboardService = new CoreDashboardService(mentionRepository);
+export const invitationCodeService = new InvitationCodeService(prisma);
 
 // Set up circular dependencies
 integrationsService.setPlanService(planService);
