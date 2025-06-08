@@ -45,6 +45,9 @@
     "db:seed": {
       "cache": false
     },
+    "deploy": {
+      "cache": false
+    },
     "services:build": {
       "cache": false,
       "outputs": ["dist/**"]
