@@ -18,6 +18,9 @@
     "db:seed": "node ./dist/seed.js",
     "db:reset": "prisma db push --force-reset --accept-data-loss"
   },
+  "prisma": {
+    "seed": "node ./dist/seed.js"
+  },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.13.2",
