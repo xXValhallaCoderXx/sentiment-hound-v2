@@ -17,87 +17,65 @@ const seed = async () => {
   // 1) Seed plans
   const plans = [
     { 
-      name: "trial", 
-      description: "Free trial with limited features",
+      name: "Public", 
+      description: "Public plan with basic access",
+      price: 0,
+      yearlyPrice: 0,
+      billingInterval: BillingInterval.MONTHLY,
+      maxIntegrations: 0,
+      maxTrackedKeywords: 0,
+      maxCompetitors: 0,
+      monthlyTokenAllowance: 0,
+      features: {
+        canExport: false
+      },
+      isActive: true,
+      displayOrder: 0
+    },
+    { 
+      name: "Developer", 
+      description: "Developer plan for testing purposes",
       price: 0,
       yearlyPrice: 0,
       billingInterval: BillingInterval.MONTHLY,
       maxIntegrations: 1,
-      maxTrackedKeywords: 3,
-      maxCompetitors: 0, // Trial users get demo only
-      monthlyTokenAllowance: 10000, // 10k tokens for trial
+      maxTrackedKeywords: 0,
+      maxCompetitors: 0,
+      monthlyTokenAllowance: 0,
       features: {
-        analytics: false,
-        exportData: false,
-        apiAccess: false,
-        prioritySupport: false,
-        competitorAnalysis: true, // Demo access
-        competitorDataLookback: "demo"
+        canExport: false
       },
       isActive: true,
       displayOrder: 1
     },
     { 
-      name: "developer", 
-      description: "Special plan for early testers and developers",
-      price: 0, // Free for early testers
-      yearlyPrice: 0,
-      billingInterval: BillingInterval.MONTHLY,
-      maxIntegrations: 5,
-      maxTrackedKeywords: 25,
-      maxCompetitors: 5,
-      monthlyTokenAllowance: 1000000, // 1M tokens for developers
-      features: {
-        analytics: true,
-        exportData: true,
-        apiAccess: true,
-        prioritySupport: true,
-        competitorAnalysis: true,
-        competitorDataLookback: "unlimited",
-        betaFeatures: true
-      },
-      isActive: true,
-      displayOrder: 0 // Highest priority
-    },
-    { 
-      name: "starter", 
-      description: "Perfect for small businesses and individuals",
-      price: 999, // $9.99 per month
-      yearlyPrice: 9999, // $99.99 per year (about 2 months free)
+      name: "Starter", 
+      description: "Starter plan for small businesses",
+      price: 2900, // $29.00 per month as specified in issue
+      yearlyPrice: 2900 * 12,
       billingInterval: BillingInterval.MONTHLY,
       maxIntegrations: 3,
-      maxTrackedKeywords: 10,
-      maxCompetitors: 2, // Starter gets 1-2 competitors
-      monthlyTokenAllowance: 500000, // 500k tokens for starter
+      maxTrackedKeywords: 3,
+      maxCompetitors: 1,
+      monthlyTokenAllowance: 300000, // 300k tokens as specified
       features: {
-        analytics: true,
-        exportData: true,
-        apiAccess: false,
-        prioritySupport: false,
-        competitorAnalysis: true,
-        competitorDataLookback: "30days"
+        canExport: false
       },
       isActive: true,
       displayOrder: 2
     },
     { 
-      name: "premium", 
-      description: "For growing businesses with advanced needs",
-      price: 2999, // $29.99 per month
-      yearlyPrice: 29999, // $299.99 per year (about 2 months free)
+      name: "Pro", 
+      description: "Pro plan with advanced features",
+      price: 9900, // $99.00 per month as specified in issue
+      yearlyPrice: 9900 * 12,
       billingInterval: BillingInterval.MONTHLY,
       maxIntegrations: 10,
-      maxTrackedKeywords: 50,
-      maxCompetitors: 10, // Premium gets up to 10 competitors
-      monthlyTokenAllowance: 2500000, // 2.5M tokens for premium
+      maxTrackedKeywords: 10,
+      maxCompetitors: 5,
+      monthlyTokenAllowance: 2500000, // 2.5M tokens as specified
       features: {
-        analytics: true,
-        exportData: true,
-        apiAccess: true,
-        prioritySupport: true,
-        customIntegrations: true,
-        competitorAnalysis: true,
-        competitorDataLookback: "unlimited"
+        canExport: true
       },
       isActive: true,
       displayOrder: 3
@@ -127,28 +105,14 @@ const seed = async () => {
   // 2) Seed providers
   const providers = [
     {
-      name: "youtube",
-      description:
-        "Fetch all the comments from your youtube videos and analyze their sentiment.",
-      image: "youtube-logo.png",
+      name: "YouTube",
+      description: "Analyze comments from YouTube videos.",
+      image: "/logos/youtube.png",
     },
     {
-      name: "instagram",
-      description:
-        "Fetch all the comments from your instagram posts and analyze their sentiment.",
-      image: "instagram-logo.png",
-    },
-    {
-      name: "facebook",
-      description:
-        "Fetch all the comments from your facebook posts and analyze their sentiment.",
-      image: "facebook-logo.png",
-    },
-    {
-      name: "reddit",
-      description:
-        "Fetch all the comments from your reddit posts and keywords to analyze their sentiment.",
-      image: "facebook-logo.png",
+      name: "Reddit",
+      description: "Analyze comments from Reddit posts.",
+      image: "/logos/reddit.png",
     },
   ];
 

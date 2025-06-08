@@ -6,7 +6,8 @@
     "dev": "turbo dev",
     "dev:watch": "turbo dev services:watch",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:deploy": "pnpm --filter @repo/db deploy"
   },
   "devDependencies": {
     "prettier": "^3.5.0",

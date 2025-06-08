@@ -95,6 +95,12 @@ The `turbo.json` file defines several scripts for database management, which are
 *   `pnpm turbo db:migrate`: Runs database migrations.
 *   `pnpm turbo db:seed`: Seeds the database with initial data.
 
+For **production deployments**, see the comprehensive [Database Deployment Guide](./packages/database/DEPLOYMENT.md) which covers:
+- Automated migration and seeding process
+- Integration with CI/CD pipelines
+- Production deployment best practices
+- Troubleshooting and recovery procedures
+
 Refer to `turbo.json` and `packages/database/package.json` (if it exists and has scripts) for more details on database-related commands.
 
 ## Shared Packages
