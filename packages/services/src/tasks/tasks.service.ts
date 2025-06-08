@@ -172,6 +172,15 @@ export class CoreTaskService {
             data: { integrationId },
           });
 
+          // Create spam detection subtask if user has the feature
+          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.DETECT_SPAM,
+              data: { integrationId },
+            });
+          }
+
           break;
 
         case TaskType.PARTIAL_SYNC:
@@ -199,6 +208,15 @@ export class CoreTaskService {
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
           });
+
+          // Create spam detection subtask if user has the feature
+          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.DETECT_SPAM,
+              data: { integrationId },
+            });
+          }
           break;
 
         case TaskType.EXPORT_DATA:
