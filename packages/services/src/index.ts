@@ -64,3 +64,4 @@ export const invitationCodeService = new InvitationCodeService(prisma);
 // Set up circular dependencies
 integrationsService.setPlanService(planService);
 trackedKeywordService.setPlanService(planService);
+taskService.setPlanService(planService);

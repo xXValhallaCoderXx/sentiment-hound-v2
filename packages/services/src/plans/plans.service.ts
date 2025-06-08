@@ -136,13 +136,26 @@ export class CorePlanService {
   }
 
   async hasFeature(userId: string, featureName: string): Promise<boolean> {
-    const features = await this.getPlanFeatures(userId);
+    const user = await this.repository.findUserWithPlan(userId);
 
-    if (!features) {
+    if (!user) {
       return false;
     }
 
-    return Boolean(features[featureName]);
+    // 1. Check for a manual override first
+    if (user.featureFlags && typeof user.featureFlags === 'object') {
+      const userOverride = (user.featureFlags as Record<string, any>)[featureName];
+      if (typeof userOverride === 'boolean') {
+        return userOverride; // Returns true if enabled, false if disabled
+      }
+    }
+
+    // 2. If no override, fall back to the user's plan
+    const planHasFeature = user.plan?.features && 
+      typeof user.plan.features === 'object' &&
+      Boolean((user.plan.features as Record<string, any>)[featureName]);
+    
+    return planHasFeature;
   }
 
   async getPlanUsageStats(userId: string): Promise<{
