@@ -7,31 +7,74 @@ const port = process.env.PORT || 3003;
 app.use(cors());
 app.use(express.json());
 
+// Request/Response types to match sentiment analysis service
+interface TextItem {
+  id: string;
+  value: string;
+}
+
+interface SpamDetectionRequest {
+  data: TextItem[];
+}
+
+interface SpamDetectionResult {
+  id: string;
+  content: string;
+  isSpam: boolean;
+  spamScore: number;
+  reasons: string[];
+  confidence: number;
+}
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', service: 'spam-detection' });
 });
 
-// Spam detection endpoint
+// Spam detection endpoint - now processes batches like sentiment analysis
 app.post('/detect', (req, res) => {
-  const { content, metadata } = req.body;
+  const request: SpamDetectionRequest = req.body;
 
-  if (!content) {
-    return res.status(400).json({ error: 'Content is required' });
+  if (!request.data || !Array.isArray(request.data)) {
+    return res.status(400).json({ error: 'Data array is required' });
   }
 
-  // Placeholder spam detection logic
-  // In the future, this will be replaced with ML model inference
-  const spamScore = detectSpamPlaceholder(content);
-  const isSpam = spamScore > 0.7;
+  if (request.data.length === 0) {
+    return res.json([]);
+  }
 
-  res.json({
-    content,
-    isSpam,
-    spamScore,
-    reasons: isSpam ? getSpamReasons(content) : [],
-    confidence: spamScore
-  });
+  const results: SpamDetectionResult[] = [];
+
+  // Process each item in the batch
+  for (const item of request.data) {
+    if (!item.value) {
+      results.push({
+        id: item.id,
+        content: item.value || '',
+        isSpam: false,
+        spamScore: 0,
+        reasons: [],
+        confidence: 0
+      });
+      continue;
+    }
+
+    // Placeholder spam detection logic
+    // In the future, this will be replaced with ML model inference
+    const spamScore = detectSpamPlaceholder(item.value);
+    const isSpam = spamScore > 0.7;
+
+    results.push({
+      id: item.id,
+      content: item.value,
+      isSpam,
+      spamScore,
+      reasons: isSpam ? getSpamReasons(item.value) : [],
+      confidence: spamScore
+    });
+  }
+
+  res.json(results);
 });
 
 // Placeholder spam detection logic
