@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import { IconTrash, IconTrendingUp } from "@tabler/icons-react";
 import { deleteCompetitor } from "../actions/delete-competitor";
+import { CompetitorsEmptyState } from "@/components/molecules/EmptyState";
 
 interface Competitor {
   id: number;
@@ -48,9 +49,15 @@ const CompetitorCardsClient = ({ competitors: initialCompetitors, userId }: Comp
 
   if (competitors.length === 0) {
     return (
-      <Text c="dimmed" ta="center" py="xl">
-        No competitors added yet. Add your first competitor to start tracking sentiment.
-      </Text>
+      <CompetitorsEmptyState 
+        onCtaClick={() => {
+          // This would typically scroll to or focus the add competitor form
+          const addForm = document.querySelector('[data-competitor-form]');
+          if (addForm) {
+            addForm.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
+      />
     );
   }
 

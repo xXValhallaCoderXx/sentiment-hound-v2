@@ -1,15 +1,23 @@
 import { Suspense } from "react";
 import { 
   Card, 
-  Text, 
   Title, 
   Group, 
-  Skeleton,
-  Stack,
-  SimpleGrid
 } from "@mantine/core";
 import { competitorService } from "@repo/services";
 import CompetitorCardsClient from "./CompetitorCards";
+import ListLoadingSkeleton from "@/components/molecules/ListLoadingSkeleton";
+import ErrorState from "@/components/molecules/ErrorState";
+
+// Matches the service's Competitor type (with createdAt as Date)
+type ServiceCompetitor = {
+  id: number;
+  name: string;
+  userId: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 // Matches the service's Competitor type (with createdAt as Date)
 type ServiceCompetitor = {
@@ -32,7 +40,7 @@ const CompetitorCardsWrapper = async ({ userId }: CompetitorCardsWrapperProps) =
         <Title order={3}>Your Competitors</Title>
       </Group>
       
-      <Suspense fallback={<CompetitorCardsSkeleton />}>
+      <Suspense fallback={<ListLoadingSkeleton itemCount={3} layout="grid" gridCols={{ base: 1, sm: 2, lg: 3 }} showTitle={false} showActionButton={false} />}>
         <CompetitorCardsList userId={userId} />
       </Suspense>
     </Card>
@@ -62,28 +70,13 @@ const CompetitorCardsList = async ({ userId }: { userId: string }) => {
   } catch (error) {
     console.error("Error loading competitors:", error);
     return (
-      <Text c="red" ta="center" py="xl">
-        Failed to load competitors. Please try again.
-      </Text>
+      <ErrorState
+        title="Failed to load competitors"
+        message="We couldn't load your competitors. Please try again."
+        onRetry={() => window.location.reload()}
+      />
     );
   }
 };
-
-const CompetitorCardsSkeleton = () => (
-  <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
-    {Array.from({ length: 3 }).map((_, index) => (
-      <Card key={index} withBorder p="sm" radius="md">
-        <Stack gap="xs">
-          <Skeleton height={20} />
-          <Skeleton height={16} width="60%" />
-          <Group justify="space-between" mt="md">
-            <Skeleton height={20} width={50} />
-            <Skeleton height={16} width={60} />
-          </Group>
-        </Stack>
-      </Card>
-    ))}
-  </SimpleGrid>
-);
 
 export default CompetitorCardsWrapper;

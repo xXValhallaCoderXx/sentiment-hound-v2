@@ -16,16 +16,50 @@ import {
   integrateProvider,
   revokeIntegration,
 } from "@/actions/integrations.actions";
+import ErrorState from "@/components/molecules/ErrorState";
+import { IntegrationsEmptyState } from "@/components/molecules/EmptyState";
 
 const IntegrationCards = async () => {
   const providers = await getAllProviders();
-
   const userIntegrations = await getUserIntegrations();
+
+  // Handle provider fetch error
+  if (providers.error) {
+    return (
+      <ErrorState 
+        title="Failed to load integrations"
+        message="We couldn't load the available integrations. Please try again."
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
+
+  // Handle user integrations fetch error (non-blocking)
+  const integrationError = userIntegrations.error;
+
+  // Handle empty providers
+  if (!providers.data || providers.data.length === 0) {
+    return (
+      <IntegrationsEmptyState 
+        onCtaClick={() => window.location.reload()}
+        showCta={false}
+        title="No integrations available"
+        message="No integration providers are currently available. Please contact support."
+      />
+    );
+  }
 
   return (
     <Stack>
+      {integrationError && (
+        <ErrorState 
+          title="Connection status unavailable"
+          message="We couldn't check your integration status, but you can still connect new integrations."
+          showRetry={false}
+        />
+      )}
       <Grid className="mt-4">
-        {providers?.data?.map((provider) => {
+        {providers.data.map((provider) => {
           const isConnected = userIntegrations?.data?.find(
             (integration) => integration.providerId === provider.id
           );
