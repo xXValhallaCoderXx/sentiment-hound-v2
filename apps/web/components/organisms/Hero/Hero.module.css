@@ -15,56 +15,62 @@
   width: 100%;
   height: 100%;
   background-image:
-    radial-gradient(
-      circle at 20% 35%,
-      rgba(76, 156, 247, 0.04) 0%,
-      transparent 40%
+    linear-gradient(
+      135deg,
+      rgba(0, 188, 212, 0.02) 0%,
+      transparent 50%
     ),
     radial-gradient(
-      circle at 80% 10%,
-      rgba(102, 204, 255, 0.05) 0%,
-      transparent 46%
+      circle at 30% 20%,
+      rgba(0, 188, 212, 0.03) 0%,
+      transparent 60%
     );
   z-index: 1;
 }
 
 .inner {
   position: relative;
-  padding-top: rem(160px);
-  padding-bottom: rem(100px);
+  padding-top: rem(120px);
+  padding-bottom: rem(80px);
   z-index: 2;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
-    padding-bottom: rem(80px);
-    padding-top: rem(80px);
+    padding-bottom: rem(60px);
+    padding-top: rem(60px);
   }
 }
 
 .title {
   font-family:
-    Greycliff CF,
-    var(--mantine-font-family);
-  font-size: rem(62px);
-  font-weight: 900;
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  font-size: rem(56px);
+  font-weight: 800;
   line-height: 1.1;
   margin: 0;
   padding: 0;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  max-width: rem(900px);
+  max-width: rem(800px);
+  letter-spacing: -0.02em;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
-    font-size: rem(42px);
+    font-size: rem(36px);
     line-height: 1.2;
   }
 }
 
 .description {
-  margin-top: var(--mantine-spacing-xl);
-  font-size: rem(24px);
-  max-width: rem(700px);
+  margin-top: calc(var(--mantine-spacing-xl) * 1.5);
+  font-size: rem(20px);
+  line-height: 1.6;
+  max-width: rem(600px);
+  font-weight: 400;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
-    font-size: rem(18px);
+    font-size: rem(16px);
   }
 }
 
