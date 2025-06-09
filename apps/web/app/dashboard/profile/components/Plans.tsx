@@ -7,6 +7,7 @@ import {
   Badge,
   Box,
   List,
+  ListItem,
   ThemeIcon,
   Stack,
   Divider,
@@ -94,10 +95,14 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
     return (
       <List spacing="xs" size="sm">
         {featureItems.map((item, index) => (
-          <List.Item
+          <ListItem
             key={index}
             icon={
-              <ThemeIcon color={item.enabled ? "teal" : "gray"} size={20} radius="xl">
+              <ThemeIcon
+                color={item.enabled ? "teal" : "gray"}
+                size={20}
+                radius="xl"
+              >
                 {item.enabled ? <IconCheck size={14} /> : <IconX size={14} />}
               </ThemeIcon>
             }
@@ -110,7 +115,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
                 {item.value}
               </Text>
             </Group>
-          </List.Item>
+          </ListItem>
         ))}
       </List>
     );
