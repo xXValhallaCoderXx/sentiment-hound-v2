@@ -2,7 +2,6 @@ import {
   Title,
   Text,
   Container,
-  rem,
   Grid,
   GridCol,
   Card,

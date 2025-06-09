@@ -28,17 +28,15 @@ const Hero = () => {
 
         <Group className={classes.controls}>
           <Button
-            size="xl"
+            size="lg"
             className={classes.control}
             color="primary"
-            // variant="gradient"
-            // gradient={{ from: "blue", to: "cyan" }}
             leftSection={<IconChartBar size={20} />}
           >
             Start Free Trial
           </Button>
           <Button
-            size="xl"
+            size="lg"
             className={classes.controlSecondary}
             variant="outline"
             rightSection={<IconArrowRight size={16} />}
