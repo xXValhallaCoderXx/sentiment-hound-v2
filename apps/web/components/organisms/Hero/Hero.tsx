@@ -14,35 +14,30 @@ const Hero = () => {
             gradient={{ from: "blue", to: "cyan" }}
             inherit
           >
-            Unlock Valuable Insights
+            Turn Noise into Narrative.
           </Text>
-          <br />
-          with Powerful Sentiment Analysis
         </h1>
         <Text className={classes.description} color="dimmed">
-          <strong>Sentiment Hound</strong> transforms raw feedback into
-          actionable intelligence. Discover what your customers truly think and
-          make data-driven decisions that drive business growth.
+          Sentiment Hound is a modern, AI-powered platform that transforms chaotic online conversations into clear, actionable insights.
         </Text>
 
         <Group className={classes.controls}>
           <Button
             size="xl"
             className={classes.control}
+            variant="filled" // Ensuring primary button is filled
             color="primary"
-            // variant="gradient"
-            // gradient={{ from: "blue", to: "cyan" }}
             leftSection={<IconChartBar size={20} />}
           >
-            Start Free Trial
+            Get Started
           </Button>
           <Button
             size="xl"
             className={classes.controlSecondary}
-            variant="outline"
+            variant="outline" // Keeping outline variant for secondary
             rightSection={<IconArrowRight size={16} />}
           >
-            See Demo
+            How it Works ↓
           </Button>
         </Group>
 

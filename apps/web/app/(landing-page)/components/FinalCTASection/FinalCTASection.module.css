@@ -1,0 +1,26 @@
+.wrapper {
+  padding-top: calc(var(--mantine-spacing-xl) * 2);
+  padding-bottom: calc(var(--mantine-spacing-xl) * 2);
+  background-color: var(--mantine-color-gray-1);
+}
+
+[data-mantine-color-scheme='dark'] .wrapper {
+  background-color: var(--mantine-color-dark-8);
+}
+
+.content {
+  text-align: center;
+}
+
+.title {
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.buttonWrapper {
+ display: flex;
+ justify-content: center;
+}
+
+.ctaButton {
+  /* Intentionally empty for now, Button props are used for styling */
+}

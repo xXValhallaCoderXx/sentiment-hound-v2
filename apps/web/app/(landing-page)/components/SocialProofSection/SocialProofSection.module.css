@@ -1,0 +1,24 @@
+.wrapper {
+  padding-top: var(--mantine-spacing-xl);
+  padding-bottom: var(--mantine-spacing-xl);
+  background-color: var(--mantine-color-gray-0);
+}
+
+[data-mantine-color-scheme='dark'] .wrapper {
+  background-color: var(--mantine-color-dark-9); /* Darker background for contrast */
+}
+
+.title {
+  margin-bottom: calc(var(--mantine-spacing-xl) * 1.5); /* More space below title */
+}
+
+.testimonialCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.blockquote {
+  flex-grow: 1;
+  padding-top: 0;
+  padding-bottom: 0;
+}
