@@ -49,7 +49,7 @@ const PlanSubmitButton: FC<IPlanSubmitButtonProps> = ({
       mt="md"
       radius="md"
     >
-      {isPending ? "Creating ..." : "Create"}
+      {isPending ? "Upgrading..." : "Upgrade"}
     </Button>
   );
 };
