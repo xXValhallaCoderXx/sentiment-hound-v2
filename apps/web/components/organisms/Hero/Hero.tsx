@@ -8,36 +8,35 @@ const Hero = () => {
       <div className={classes.backgroundPattern}></div>
       <Container size={1200} className={classes.inner}>
         <h1 className={classes.title}>
+          From{" "}
           <Text
             component="span"
             variant="gradient"
-            gradient={{ from: "blue", to: "cyan" }}
+            gradient={{ from: "primary", to: "secondary" }}
             inherit
           >
-            Unlock Valuable Insights
+            Data Chaos
           </Text>
           <br />
-          with Powerful Sentiment Analysis
+          to Actionable Clarity
         </h1>
         <Text className={classes.description} color="dimmed">
-          <strong>Sentiment Hound</strong> transforms raw feedback into
-          actionable intelligence. Discover what your customers truly think and
-          make data-driven decisions that drive business growth.
+          <strong>Sentiment Hound</strong> transforms overwhelming feedback 
+          into crystal-clear insights. Stop drowning in data and start making 
+          confident decisions that drive real business growth.
         </Text>
 
         <Group className={classes.controls}>
           <Button
-            size="xl"
+            size="lg"
             className={classes.control}
             color="primary"
-            // variant="gradient"
-            // gradient={{ from: "blue", to: "cyan" }}
             leftSection={<IconChartBar size={20} />}
           >
             Start Free Trial
           </Button>
           <Button
-            size="xl"
+            size="lg"
             className={classes.controlSecondary}
             variant="outline"
             rightSection={<IconArrowRight size={16} />}
