@@ -1,7 +1,7 @@
-import express from 'express';
-import cors from 'cors';
+import express, { Express } from "express";
+import cors from "cors";
 
-const app = express();
+const app: Express = express();
 const port = process.env.PORT || 3003;
 
 app.use(cors());
@@ -27,16 +27,16 @@ interface SpamDetectionResult {
 }
 
 // Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'healthy', service: 'spam-detection' });
+app.get("/health", (req, res) => {
+  res.json({ status: "healthy", service: "spam-detection" });
 });
 
 // Spam detection endpoint - now processes batches like sentiment analysis
-app.post('/detect', (req, res) => {
+app.post("/detect", (req, res) => {
   const request: SpamDetectionRequest = req.body;
 
   if (!request.data || !Array.isArray(request.data)) {
-    return res.status(400).json({ error: 'Data array is required' });
+    return res.status(400).json({ error: "Data array is required" });
   }
 
   if (request.data.length === 0) {
@@ -50,11 +50,11 @@ app.post('/detect', (req, res) => {
     if (!item.value) {
       results.push({
         id: item.id,
-        content: item.value || '',
+        content: item.value || "",
         isSpam: false,
         spamScore: 0,
         reasons: [],
-        confidence: 0
+        confidence: 0,
       });
       continue;
     }
@@ -70,7 +70,7 @@ app.post('/detect', (req, res) => {
       isSpam,
       spamScore,
       reasons: isSpam ? getSpamReasons(item.value) : [],
-      confidence: spamScore
+      confidence: spamScore,
     });
   }
 
@@ -97,7 +97,7 @@ function detectSpamPlaceholder(content: string): number {
   // Check for excessive links or mentions
   const linkCount = (content.match(/https?:\/\/[^\s]+/g) || []).length;
   const mentionCount = (content.match(/@\w+/g) || []).length;
-  
+
   if (linkCount > 3) score += 0.3;
   if (mentionCount > 5) score += 0.2;
 
@@ -106,21 +106,25 @@ function detectSpamPlaceholder(content: string): number {
 
 function getSpamReasons(content: string): string[] {
   const reasons: string[] = [];
-  
-  if (/\b(buy now|click here|limited time|act fast|special offer)\b/i.test(content)) {
-    reasons.push('Contains promotional language');
+
+  if (
+    /\b(buy now|click here|limited time|act fast|special offer)\b/i.test(
+      content
+    )
+  ) {
+    reasons.push("Contains promotional language");
   }
   if (/\b(free money|get rich|work from home|make \$\d+)\b/i.test(content)) {
-    reasons.push('Contains get-rich-quick schemes');
+    reasons.push("Contains get-rich-quick schemes");
   }
   if (/[A-Z]{5,}/g.test(content)) {
-    reasons.push('Excessive use of capital letters');
+    reasons.push("Excessive use of capital letters");
   }
   if ((content.match(/https?:\/\/[^\s]+/g) || []).length > 3) {
-    reasons.push('Too many links');
+    reasons.push("Too many links");
   }
   if ((content.match(/@\w+/g) || []).length > 5) {
-    reasons.push('Too many mentions');
+    reasons.push("Too many mentions");
   }
 
   return reasons;

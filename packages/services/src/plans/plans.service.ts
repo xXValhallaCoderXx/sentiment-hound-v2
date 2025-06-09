@@ -155,7 +155,7 @@ export class CorePlanService {
       typeof user.plan.features === 'object' &&
       Boolean((user.plan.features as Record<string, any>)[featureName]);
     
-    return planHasFeature;
+    return Boolean(planHasFeature);
   }
 
   async getPlanUsageStats(userId: string): Promise<{

@@ -17,7 +17,7 @@ import { IconBrandGoogle, IconInfoCircle } from "@tabler/icons-react";
 import { useState, useEffect, useActionState } from "react";
 import { useForm } from "@mantine/form";
 import { handleGoogleSignIn, handleEmailSignIn, handleEmailSignUp, handleForgotPassword } from "@/actions/auth.actions";
-import { useFormState } from "react-dom";
+import { IconCheck } from "@tabler/icons-react";
 import { 
   getInvitationCodeFromUrl, 
   setInvitationCodeInStorage, 
@@ -294,7 +294,6 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
                 icon={<IconCheck size={16} />}
                 color="green"
                 variant="light"
-                size="sm"
               >
                 Invitation code applied! You'll get special access.
               </Alert>
