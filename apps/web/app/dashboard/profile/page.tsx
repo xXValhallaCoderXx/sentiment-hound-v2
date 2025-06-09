@@ -26,6 +26,7 @@ const ProfilePage = async () => {
       plan: true,
     },
   });
+  console.log("User data:", user);
   return (
     <PageLayout title="Profile" description="User profile page">
       <Stack gap={16}>

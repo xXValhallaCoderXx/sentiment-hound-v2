@@ -16,9 +16,9 @@ const prisma = new PrismaClient();
 const seed = async () => {
   // 1) Seed plans
   const plans = [
-    { 
-      name: "Public", 
-      description: "Public plan with basic access",
+    {
+      name: "Trial",
+      description: "Trial plan with basic access",
       price: 0,
       yearlyPrice: 0,
       billingInterval: BillingInterval.MONTHLY,
@@ -27,13 +27,13 @@ const seed = async () => {
       maxCompetitors: 0,
       monthlyTokenAllowance: 0,
       features: {
-        canExport: false
+        canExport: false,
       },
       isActive: true,
-      displayOrder: 0
+      displayOrder: 0,
     },
-    { 
-      name: "Developer", 
+    {
+      name: "Developer",
       description: "Developer plan for testing purposes",
       price: 0,
       yearlyPrice: 0,
@@ -43,13 +43,13 @@ const seed = async () => {
       maxCompetitors: 0,
       monthlyTokenAllowance: 0,
       features: {
-        canExport: false
+        canExport: false,
       },
       isActive: true,
-      displayOrder: 1
+      displayOrder: 1,
     },
-    { 
-      name: "Starter", 
+    {
+      name: "Starter",
       description: "Starter plan for small businesses",
       price: 2900, // $29.00 per month as specified in issue
       yearlyPrice: 2900 * 12,
@@ -59,13 +59,13 @@ const seed = async () => {
       maxCompetitors: 1,
       monthlyTokenAllowance: 300000, // 300k tokens as specified
       features: {
-        canExport: false
+        canExport: false,
       },
       isActive: true,
-      displayOrder: 2
+      displayOrder: 2,
     },
-    { 
-      name: "Pro", 
+    {
+      name: "Pro",
       description: "Pro plan with advanced features",
       price: 9900, // $99.00 per month as specified in issue
       yearlyPrice: 9900 * 12,
@@ -75,11 +75,11 @@ const seed = async () => {
       maxCompetitors: 5,
       monthlyTokenAllowance: 2500000, // 2.5M tokens as specified
       features: {
-        canExport: true
+        canExport: true,
       },
       isActive: true,
-      displayOrder: 3
-    }
+      displayOrder: 3,
+    },
   ];
 
   for (const plan of plans) {
@@ -96,7 +96,7 @@ const seed = async () => {
         monthlyTokenAllowance: plan.monthlyTokenAllowance,
         features: plan.features,
         isActive: plan.isActive,
-        displayOrder: plan.displayOrder
+        displayOrder: plan.displayOrder,
       },
       create: plan,
     });
@@ -125,15 +125,33 @@ const seed = async () => {
   }
 
   // 3) Ensure a user with userId = "user-1" exists
-  // const existingUser = await prisma.user.findUnique({
-  //   where: { id: userId },
-  // });
+  const existingUser = await prisma.user.findFirst();
 
-  // if (!existingUser) {
-  //   throw new Error(`User with id ${userId} does not exist`);
-  // } else {
-  //   console.log(`User ${userId} already exists.`);
-  // }
+  if (!existingUser) {
+    throw new Error(`User with id  does not exist`);
+  }
+
+  const plan = await prisma.plan.findFirst({
+    where: { name: "Developer" },
+  });
+  if (!plan) {
+    throw new Error(
+      "Developer plan not found; ensure plans are seeded properly."
+    );
+  }
+  console.log("Plan found:", plan);
+  console.log("Existing user found:", existingUser);
+
+  await prisma.user.update({
+    where: { id: existingUser.id },
+    data: {
+      plan: {
+        connect: {
+          id: plan.id,
+        },
+      },
+    },
+  });
 
   // 4) Create or use an existing provider for the Integration
   // const [defaultProvider] = await prisma.provider.findMany({
@@ -323,7 +341,7 @@ const seed = async () => {
   //   });
   // }
 
-  console.log("Seed data inserted");
+  console.log("Seed dasssta inserted");
 };
 
 seed()

@@ -168,7 +168,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
                       </Group>
                     </Stack>
 
-                    {renderFeatureList(plan.features)}
+                    {/* {renderFeatureList(plan.features)} */}
 
                     <PlanSubmitButton
                       planId={String(plan.id)}
