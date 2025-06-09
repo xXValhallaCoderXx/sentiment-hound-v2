@@ -28,6 +28,7 @@ import { InvitationCodeService } from "./invitation-codes/invitation-codes.servi
 export * from "./posts/post.interface";
 export * from "./dashboard/dashboard.service";
 export * from "./invitation-codes";
+export * from "./plans/plans.types";
 
 // Create singleton instances of repositories
 const queueRepository = new QueueRepository(prisma);
