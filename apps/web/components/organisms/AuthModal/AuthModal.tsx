@@ -295,7 +295,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
                 color="green"
                 variant="light"
               >
-                Invitation code applied! You'll get special access.
+                Invitation code applied! You&apos;ll get special access.
               </Alert>
             )}
           </Stack>
