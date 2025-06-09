@@ -11,8 +11,14 @@ import { subtaskService } from "..";
 
 export class CoreTaskService {
   private model: Prisma.TaskDelegate;
+  private planService: any; // Import type later to avoid circular dependencies
+
   constructor(private prisma: PrismaClient) {
     this.model = prisma.task;
+  }
+
+  setPlanService(planService: any) {
+    this.planService = planService;
   }
 
   async getTask<T extends Prisma.TaskDefaultArgs>(
@@ -116,6 +122,15 @@ export class CoreTaskService {
               type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
               data: { integrationId },
             });
+
+            // Create spam detection subtask if user has the feature
+            if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+              await subtaskService.createSubTask({
+                taskId: task.id,
+                type: SubTaskType.DETECT_SPAM,
+                data: { integrationId },
+              });
+            }
           }
 
           if (integration?.provider.name === "youtube") {
@@ -130,6 +145,15 @@ export class CoreTaskService {
               type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
               data: { integrationId },
             });
+
+            // Create spam detection subtask if user has the feature
+            if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+              await subtaskService.createSubTask({
+                taskId: task.id,
+                type: SubTaskType.DETECT_SPAM,
+                data: { integrationId },
+              });
+            }
           }
 
           break;
@@ -147,6 +171,15 @@ export class CoreTaskService {
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
           });
+
+          // Create spam detection subtask if user has the feature
+          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.DETECT_SPAM,
+              data: { integrationId },
+            });
+          }
 
           break;
 
@@ -175,6 +208,15 @@ export class CoreTaskService {
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
           });
+
+          // Create spam detection subtask if user has the feature
+          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.DETECT_SPAM,
+              data: { integrationId },
+            });
+          }
           break;
 
         case TaskType.EXPORT_DATA:

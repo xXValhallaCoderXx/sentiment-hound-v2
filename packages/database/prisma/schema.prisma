@@ -30,6 +30,7 @@ model User {
   tasks           Task[]
   planId          Int?
   plan            Plan?            @relation(fields: [planId], references: [id])
+  featureFlags    Json?            // Manual feature overrides (e.g., {"spam_detection": true})
   tokenUsageThisPeriod Int         @default(0)  // Current period token usage
   currentPeriodEnd     DateTime?               // When current billing period ends
   createdAt       DateTime         @default(now())
@@ -345,6 +346,7 @@ enum SubTaskType {
   FETCH_INDIVIDUAL_POST_CONTNENT
   ANALYZE_CONTENT_SENTIMENT
   FETCH_REDDIT_KEYWORD_MENTIONS
+  DETECT_SPAM
   EXPORT_FETCH_DATA
   EXPORT_FORMAT_DATA
   EXPORT_GENERATE_FILE
