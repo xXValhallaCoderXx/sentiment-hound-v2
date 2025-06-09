@@ -53,7 +53,7 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
   };
 
   return (
-    <Card withBorder p="md">
+    <Card withBorder p="md" data-competitor-form>
       <Title order={3} mb="md">
         Add Competitor
       </Title>
