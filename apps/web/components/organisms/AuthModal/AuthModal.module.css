@@ -1,0 +1,217 @@
+.modalContent {
+  background: linear-gradient(135deg, 
+    light-dark(#ffffff, #1a1a1a) 0%, 
+    light-dark(#fafafa, #0d1117) 100%);
+  border: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(16px);
+}
+
+.title {
+  background: linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-5));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  text-shadow: 0 0 30px rgba(66, 153, 225, 0.3);
+}
+
+.invitationCodeCard {
+  background: linear-gradient(135deg,
+    light-dark(var(--mantine-color-blue-0), rgba(59, 130, 246, 0.05)) 0%,
+    light-dark(var(--mantine-color-cyan-0), rgba(6, 182, 212, 0.05)) 100%);
+  border: rem(1px) solid light-dark(
+    var(--mantine-color-blue-2),
+    rgba(59, 130, 246, 0.2)
+  );
+  border-radius: var(--mantine-radius-md);
+  padding: var(--mantine-spacing-md);
+  transition: all 0.2s ease;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.invitationCodeCard:hover {
+  border-color: light-dark(
+    var(--mantine-color-blue-4),
+    rgba(59, 130, 246, 0.4)
+  );
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.appliedCodeAlert {
+  background: linear-gradient(135deg,
+    light-dark(var(--mantine-color-green-0), rgba(34, 197, 94, 0.1)) 0%,
+    light-dark(var(--mantine-color-teal-0), rgba(20, 184, 166, 0.1)) 100%);
+  border: rem(1px) solid light-dark(
+    var(--mantine-color-green-3),
+    rgba(34, 197, 94, 0.3)
+  );
+}
+
+.formCard {
+  background: light-dark(
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: rem(1px) solid light-dark(
+    var(--mantine-color-gray-2),
+    var(--mantine-color-dark-4)
+  );
+  border-radius: var(--mantine-radius-md);
+  padding: var(--mantine-spacing-lg);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-5));
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.25);
+}
+
+.primaryButton:hover {
+  background: linear-gradient(135deg, var(--mantine-color-blue-7), var(--mantine-color-cyan-6));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.35);
+}
+
+.primaryButton:disabled {
+  background: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-5));
+  transform: none;
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.googleButton {
+  border: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+  transition: all 0.2s ease;
+}
+
+.googleButton:hover {
+  border-color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+  background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-5));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.invitationToggle {
+  background: linear-gradient(135deg, 
+    var(--mantine-color-blue-6), 
+    var(--mantine-color-cyan-5)
+  );
+  color: var(--mantine-color-white);
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.invitationToggle:hover {
+  background: linear-gradient(135deg, 
+    var(--mantine-color-blue-7), 
+    var(--mantine-color-cyan-6)
+  );
+  transform: scale(1.05);
+}
+
+.applyCodeButton {
+  background: linear-gradient(135deg, 
+    var(--mantine-color-green-6), 
+    var(--mantine-color-teal-5)
+  );
+  border: none;
+  color: var(--mantine-color-white);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.applyCodeButton:hover {
+  background: linear-gradient(135deg, 
+    var(--mantine-color-green-7), 
+    var(--mantine-color-teal-6)
+  );
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px 0 rgba(34, 197, 94, 0.25);
+}
+
+.subtitle {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+  font-weight: 500;
+}
+
+.dividerLabel {
+  background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+  color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-2));
+  font-weight: 500;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-sm);
+}
+
+.switchText {
+  text-align: center;
+  padding: var(--mantine-spacing-md) 0;
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+}
+
+.switchLink {
+  background: linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-5));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.switchLink:hover {
+  background: linear-gradient(135deg, var(--mantine-color-blue-7), var(--mantine-color-cyan-6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: underline;
+}
+
+.invitationHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  margin-bottom: var(--mantine-spacing-sm);
+}
+
+.invitationIcon {
+  background: linear-gradient(135deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-5));
+  color: var(--mantine-color-white);
+  border-radius: var(--mantine-radius-sm);
+  padding: rem(6px);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--mantine-spacing-xs);
+  margin-top: var(--mantine-spacing-sm);
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  padding: var(--mantine-spacing-xs);
+  border-radius: var(--mantine-radius-sm);
+  background: light-dark(
+    rgba(59, 130, 246, 0.05),
+    rgba(59, 130, 246, 0.1)
+  );
+}
+
+.featureIcon {
+  color: var(--mantine-color-green-6);
+  flex-shrink: 0;
+}

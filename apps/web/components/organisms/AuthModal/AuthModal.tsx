@@ -12,17 +12,27 @@ import {
   Alert,
   Anchor,
   Collapse,
+  Card,
+  Title,
+  ThemeIcon,
+  rem,
 } from "@mantine/core";
-import { IconBrandGoogle, IconInfoCircle } from "@tabler/icons-react";
+import { 
+  IconBrandGoogle, 
+  IconInfoCircle, 
+  IconGift,
+  IconSparkles,
+  IconCheck,
+} from "@tabler/icons-react";
 import { useState, useEffect, useActionState } from "react";
 import { useForm } from "@mantine/form";
 import { handleGoogleSignIn, handleEmailSignIn, handleEmailSignUp, handleForgotPassword } from "@/actions/auth.actions";
-import { IconCheck } from "@tabler/icons-react";
 import { 
   getInvitationCodeFromUrl, 
   setInvitationCodeInStorage, 
   validateInvitationCodeFormat 
 } from "@/lib/invitation-code.utils";
+import classes from "./AuthModal.module.css";
 
 interface AuthModalProps {
   opened: boolean;
@@ -162,6 +172,17 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
     }
   };
 
+  const getSubtitle = () => {
+    switch (authState) {
+      case "signin":
+        return "Sign in to your account to continue";
+      case "signup":
+        return "Join thousands of users tracking sentiment";
+      case "forgot-password":
+        return "We'll send you a link to reset your password";
+    }
+  };
+
   const getError = () => {
     if (authState === "signin" && signInState?.error) return signInState.error;
     if (authState === "signup" && signUpState?.error) return signUpState.error;
@@ -185,58 +206,75 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         fullWidth
         onClick={handleGoogleAuth}
         loading={isLoading}
+        className={classes.googleButton}
       >
         Sign in with Google
       </Button>
 
-      <Divider label="or" labelPosition="center" />
+      <Divider 
+        label="or" 
+        labelPosition="center"
+        classNames={{
+          label: classes.dividerLabel
+        }}
+      />
 
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <Stack gap="sm">
-          <TextInput
-            label="Email address"
-            placeholder="your@email.com"
-            required
-            key={form.key("email")}
-            {...form.getInputProps("email")}
-          />
+      <Card className={classes.formCard}>
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <Stack gap="sm">
+            <TextInput
+              label="Email address"
+              placeholder="your@email.com"
+              required
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            />
 
-          <PasswordInput
-            label="Password"
-            placeholder="Your password"
-            required
-            key={form.key("password")}
-            {...form.getInputProps("password")}
-          />
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              required
+              key={form.key("password")}
+              {...form.getInputProps("password")}
+            />
 
-          <Group justify="flex-end">
-            <Anchor
-              component="button"
-              type="button"
-              size="sm"
-              onClick={() => handleStateChange("forgot-password")}
+            <Group justify="flex-end">
+              <Anchor
+                component="button"
+                type="button"
+                size="sm"
+                onClick={() => handleStateChange("forgot-password")}
+                className={classes.switchLink}
+              >
+                Forgot Password?
+              </Anchor>
+            </Group>
+
+            <Button 
+              type="submit" 
+              fullWidth 
+              disabled={!form.isValid()}
+              className={classes.primaryButton}
             >
-              Forgot Password?
-            </Anchor>
-          </Group>
+              Sign In
+            </Button>
+          </Stack>
+        </form>
+      </Card>
 
-          <Button type="submit" fullWidth disabled={!form.isValid()}>
-            Sign In
-          </Button>
-        </Stack>
-      </form>
-
-      <Text ta="center" size="sm">
-        Don&apos;t have an account?{" "}
-        <Anchor
-          component="button"
-          type="button"
-          onClick={() => handleStateChange("signup")}
-          fw={500}
-        >
-          Sign Up
-        </Anchor>
-      </Text>
+      <div className={classes.switchText}>
+        <Text size="sm">
+          Don&apos;t have an account?{" "}
+          <Anchor
+            component="button"
+            type="button"
+            onClick={() => handleStateChange("signup")}
+            className={classes.switchLink}
+          >
+            Sign Up
+          </Anchor>
+        </Text>
+      </div>
     </>
   );
 
@@ -249,139 +287,200 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         fullWidth
         onClick={handleGoogleAuth}
         loading={isLoading}
+        className={classes.googleButton}
       >
         Sign up with Google
       </Button>
 
-      <Divider label="or" labelPosition="center" />
+      <Divider 
+        label="or" 
+        labelPosition="center"
+        classNames={{
+          label: classes.dividerLabel
+        }}
+      />
 
-      {/* Invitation Code Section */}
-      <Stack gap="xs">
-        <Group justify="space-between">
-          <Text size="sm" fw={500}>
+      {/* Enhanced Invitation Code Section */}
+      <Card className={classes.invitationCodeCard}>
+        <div className={classes.invitationHeader}>
+          <ThemeIcon 
+            className={classes.invitationIcon}
+            size="sm"
+            radius="sm"
+          >
+            <IconGift size={16} />
+          </ThemeIcon>
+          <Text fw={600} size="sm">
             Have an invitation code?
           </Text>
-          <Button
-            variant="subtle"
-            size="xs"
-            onClick={() => setShowInvitationCode(!showInvitationCode)}
-          >
-            {showInvitationCode ? "Hide" : "Add Code"}
-          </Button>
-        </Group>
+          {!showInvitationCode && !invitationCodeApplied && (
+            <Button
+              variant="subtle"
+              size="xs"
+              onClick={() => setShowInvitationCode(true)}
+              className={classes.invitationToggle}
+              ml="auto"
+            >
+              Add Code
+            </Button>
+          )}
+        </div>
 
-        <Collapse in={showInvitationCode}>
+        {invitationCodeApplied && (
+          <Alert
+            icon={<IconCheck size={16} />}
+            color="green"
+            variant="light"
+            className={classes.appliedCodeAlert}
+            mb="sm"
+          >
+            <Text size="sm" fw={500}>
+              Invitation code applied! You&apos;ll get special access.
+            </Text>
+            <div className={classes.featuresGrid}>
+              <div className={classes.featureItem}>
+                <IconSparkles size={14} className={classes.featureIcon} />
+                <Text size="xs">Enhanced features</Text>
+              </div>
+              <div className={classes.featureItem}>
+                <IconCheck size={14} className={classes.featureIcon} />
+                <Text size="xs">Premium access</Text>
+              </div>
+            </div>
+          </Alert>
+        )}
+
+        <Collapse in={showInvitationCode && !invitationCodeApplied}>
           <Stack gap="xs">
-            <Group gap="xs" grow>
+            <Text size="xs" c="dimmed">
+              Enter your invitation code to unlock special features and enhanced access.
+            </Text>
+            <Group gap="xs">
               <TextInput
-                placeholder="Enter invitation code"
+                placeholder="Enter invitation code (e.g., EARLYBIRD2025)"
                 key={form.key("invitationCode")}
                 {...form.getInputProps("invitationCode")}
-                disabled={invitationCodeApplied}
+                style={{ flex: 1 }}
               />
-              {!invitationCodeApplied && (
-                <Button
-                  variant="light"
-                  onClick={handleApplyInvitationCode}
-                  disabled={!form.getValues().invitationCode}
-                >
-                  Apply
-                </Button>
-              )}
-            </Group>
-            {invitationCodeApplied && (
-              <Alert
-                icon={<IconCheck size={16} />}
-                color="green"
-                variant="light"
+              <Button
+                onClick={handleApplyInvitationCode}
+                disabled={!form.getValues().invitationCode}
+                className={classes.applyCodeButton}
               >
-                Invitation code applied! You'll get special access.
-              </Alert>
-            )}
+                Apply
+              </Button>
+            </Group>
+            <Button
+              variant="subtle"
+              size="xs"
+              onClick={() => setShowInvitationCode(false)}
+              c="dimmed"
+            >
+              I don&apos;t have a code
+            </Button>
           </Stack>
         </Collapse>
-      </Stack>
+      </Card>
 
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <Stack gap="sm">
-          <TextInput
-            label="Name (optional)"
-            placeholder="Your name"
-            key={form.key("name")}
-            {...form.getInputProps("name")}
-          />
+      <Card className={classes.formCard}>
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <Stack gap="sm">
+            <TextInput
+              label="Name (optional)"
+              placeholder="Your name"
+              key={form.key("name")}
+              {...form.getInputProps("name")}
+            />
 
-          <TextInput
-            label="Email address"
-            placeholder="your@email.com"
-            required
-            key={form.key("email")}
-            {...form.getInputProps("email")}
-          />
+            <TextInput
+              label="Email address"
+              placeholder="your@email.com"
+              required
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            />
 
-          <PasswordInput
-            label="Password"
-            placeholder="Create a password"
-            required
-            key={form.key("password")}
-            {...form.getInputProps("password")}
-          />
+            <PasswordInput
+              label="Password"
+              placeholder="Create a password (min. 8 characters)"
+              required
+              key={form.key("password")}
+              {...form.getInputProps("password")}
+            />
 
-          <Text size="xs" c="dimmed">
-            By signing up, you agree to our Terms of Service and Privacy Policy.
-          </Text>
+            <Text size="xs" c="dimmed">
+              By signing up, you agree to our Terms of Service and Privacy Policy.
+            </Text>
 
-          <Button type="submit" fullWidth disabled={!form.isValid()}>
-            Create Account
-          </Button>
-        </Stack>
-      </form>
+            <Button 
+              type="submit" 
+              fullWidth 
+              disabled={!form.isValid()}
+              className={classes.primaryButton}
+            >
+              Create Account
+            </Button>
+          </Stack>
+        </form>
+      </Card>
 
-      <Text ta="center" size="sm">
-        Already have an account?{" "}
-        <Anchor
-          component="button"
-          type="button"
-          onClick={() => handleStateChange("signin")}
-          fw={500}
-        >
-          Sign In
-        </Anchor>
-      </Text>
+      <div className={classes.switchText}>
+        <Text size="sm">
+          Already have an account?{" "}
+          <Anchor
+            component="button"
+            type="button"
+            onClick={() => handleStateChange("signin")}
+            className={classes.switchLink}
+          >
+            Sign In
+          </Anchor>
+        </Text>
+      </div>
     </>
   );
 
   const renderForgotPasswordForm = () => (
     <>
-      <Text size="sm" c="dimmed" ta="center" mb="md">
+      <Text size="sm" className={classes.subtitle} ta="center" mb="md">
         Enter the email address associated with your account, and we&apos;ll send you a link to reset your password.
       </Text>
 
-      <form onSubmit={form.onSubmit(onSubmit)}>
-        <Stack gap="sm">
-          <TextInput
-            label="Email address"
-            placeholder="your@email.com"
-            required
-            key={form.key("email")}
-            {...form.getInputProps("email")}
-          />
+      <Card className={classes.formCard}>
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <Stack gap="sm">
+            <TextInput
+              label="Email address"
+              placeholder="your@email.com"
+              required
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            />
 
-          <Button type="submit" fullWidth disabled={!form.isValid()}>
-            Send Reset Link
-          </Button>
-        </Stack>
-      </form>
+            <Button 
+              type="submit" 
+              fullWidth 
+              disabled={!form.isValid()}
+              className={classes.primaryButton}
+            >
+              Send Reset Link
+            </Button>
+          </Stack>
+        </form>
+      </Card>
 
-      <Text ta="center" size="sm">
-        <Anchor
-          component="button"
-          type="button"
-          onClick={() => handleStateChange("signin")}
-        >
-          Back to Sign In
-        </Anchor>
-      </Text>
+      <div className={classes.switchText}>
+        <Text size="sm">
+          <Anchor
+            component="button"
+            type="button"
+            onClick={() => handleStateChange("signin")}
+            className={classes.switchLink}
+          >
+            Back to Sign In
+          </Anchor>
+        </Text>
+      </div>
     </>
   );
 
@@ -400,28 +499,53 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
     <Modal
       opened={opened}
       onClose={onClose}
-      title={getTitle()}
       centered
-      size="sm"
+      size="md"
+      withCloseButton={false}
       overlayProps={{
-        backgroundOpacity: 0.55,
-        blur: 3,
+        backgroundOpacity: 0.6,
+        blur: 8,
+      }}
+      classNames={{
+        content: classes.modalContent,
       }}
     >
-      <Stack gap="md">
+      <Stack gap="lg" align="center" p="md">
+        {/* Header */}
+        <Stack gap="xs" align="center">
+          <ThemeIcon
+            size={rem(60)}
+            radius="xl"
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan" }}
+          >
+            <IconSparkles size={rem(30)} />
+          </ThemeIcon>
+          <Title className={classes.title} ta="center" size="h2">
+            {getTitle()}
+          </Title>
+          <Text size="sm" className={classes.subtitle} ta="center">
+            {getSubtitle()}
+          </Text>
+        </Stack>
+
+        {/* Alerts */}
         {getError() && (
-          <Alert icon={<IconInfoCircle size={16} />} color="red" variant="light">
+          <Alert icon={<IconInfoCircle size={16} />} color="red" variant="light" w="100%">
             {getError()}
           </Alert>
         )}
 
         {getSuccess() && (
-          <Alert icon={<IconInfoCircle size={16} />} color="green" variant="light">
+          <Alert icon={<IconInfoCircle size={16} />} color="green" variant="light" w="100%">
             {getSuccess()}
           </Alert>
         )}
 
-        {renderForm()}
+        {/* Form Content */}
+        <Stack gap="lg" w="100%">
+          {renderForm()}
+        </Stack>
       </Stack>
     </Modal>
   );
