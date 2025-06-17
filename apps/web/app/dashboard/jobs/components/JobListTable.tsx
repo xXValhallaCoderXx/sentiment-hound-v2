@@ -1,4 +1,4 @@
-import { Text, Card, Stack, SimpleGrid } from "@mantine/core";
+import { Text, Card, Stack, SimpleGrid, Flex } from "@mantine/core";
 // import { IconAlertCircle } from "@tabler/icons-react"; // Unused
 // import dayjs from "dayjs"; // Unused
 import JobListItem from "@/components/molecules/JobListItem";
@@ -74,14 +74,16 @@ export default async function JobListTable({
 
   if (!tasks || tasks.length === 0) {
     return (
-      <Card withBorder p="xl" ta="center">
-        <Text fw={500} mb="md">
-          No Jobs Found
-        </Text>
-        <Text size="sm" color="dimmed">
-          Jobs will appear here when you fetch content or run analysis tasks
-        </Text>
-      </Card>
+      <Flex justify="center" align="center" flex={1} h="100%">
+        <Card withBorder p="xl" ta="center">
+          <Text fw={500} mb="md">
+            No Jobs Found
+          </Text>
+          <Text size="sm" color="dimmed">
+            Jobs will appear here when you fetch content or run analysis tasks
+          </Text>
+        </Card>
+      </Flex>
     );
   }
 

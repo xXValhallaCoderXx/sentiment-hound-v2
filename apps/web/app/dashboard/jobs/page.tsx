@@ -35,7 +35,7 @@ const JobsPage = async ({
       </Box>
     );
   }
-  console.log("JOB ID", jobId);
+
   return (
     <PageLayout
       title="Job List"
