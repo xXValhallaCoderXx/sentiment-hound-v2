@@ -71,7 +71,10 @@ const TaskFilter: React.FC = () => {
           clearable
         />
         <Flex align="flex-end">
-          <Button onClick={() => handleApplyFilters(undefined, undefined)}>
+          <Button
+            size="sm"
+            onClick={() => handleApplyFilters(undefined, undefined)}
+          >
             Clear Filters
           </Button>
         </Flex>
