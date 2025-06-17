@@ -9,12 +9,12 @@ import {
 
 const DashboardPage = async () => {
   return (
-    <Box p={{ base: 8, sm: 0 }}>
-      <Stack gap={16}>
+    <Box p={{ base: 12, sm: 16, md: 24 }}>
+      <Stack gap={24}>
         <StatsCards />
         <TrendCards />
         <AspectSection />
-       <SimpleGrid cols={{ base: 1, lg: 2 }} spacing={{ base: 12, sm: 16 }}>
+        <SimpleGrid cols={{ base: 1, lg: 2 }} spacing={20}>
           <RecentMentions />
           <Notifications />
         </SimpleGrid>

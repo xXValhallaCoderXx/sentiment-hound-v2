@@ -9,26 +9,36 @@ interface IDashboardCommentCardProps {
 
 const DashboardCommentCard: FC<IDashboardCommentCardProps> = () => {
   return (
-    <Flex gap={8} direction="column" p={8}>
+    <Flex gap={12} direction="column" p={{ base: 12, sm: 16 }} 
+          style={{ 
+            border: "1px solid #e9ecef",
+            borderRadius: "8px", 
+            backgroundColor: "#f8f9fa",
+            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+          }}>
       <Group gap="xs" align="center" wrap="wrap">
-        <Avatar />
-        <Title order={4} fz={{ base: 'sm', sm: 'md' }}>Sara Jonson</Title> {/* Responsive font size */}
+        <Avatar size="sm" />
+        <Title order={5} fz={{ base: 'sm', sm: 'md' }} fw={600}>
+          Sara Jonson
+        </Title>
         <Text c="dimmed" size="sm">@sarajon</Text>
-        <Text c="dimmed" size="xs" ml="auto"> {/* Push time to the right if space allows, will wrap otherwise */}
+        <Text c="dimmed" size="xs" ml="auto">
           2 Hrs ago
         </Text>
       </Group>
-      <Text>
+      <Text size="sm" lineClamp={3}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel
         ligula id nunc facilisis fringilla. Aenean nec dui ac velit fringilla
         efficitur. Sed ut enim euismod, aliquet felis id, vehicula risus. In hac
         habitasse platea dictumst.
       </Text>
       <Flex gap={16} align="center">
-        <Badge color="gray" variant="light">
+        <Badge color="gray" variant="light" size="sm" radius="md">
           2 hours ago
         </Badge>
-        <Text>Reply</Text>
+        <Text size="sm" c="primary" style={{ cursor: "pointer" }}>
+          Reply
+        </Text>
       </Flex>
     </Flex>
   );

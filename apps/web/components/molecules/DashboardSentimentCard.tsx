@@ -1,10 +1,11 @@
+"use client";
 import { FC } from "react";
 import {
   IconArrowNarrowUp,
   IconArrowNarrowDown,
   IconLine,
 } from "@tabler/icons-react";
-import { Card, Title, Flex } from "@mantine/core";
+import { Card, Title, Flex, Text, useMantineTheme } from "@mantine/core";
 
 export interface IDashboardSentimentCardProps {
   title?: string;
@@ -27,13 +28,31 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
   showIcon = true,
   icon,
 }) => {
+  const theme = useMantineTheme();
+
+  // Get sentiment color from theme
+  const getSentimentColor = () => {
+    switch (sentimentType.toLowerCase()) {
+      case "positive":
+        return theme.colors.success?.[6] || theme.colors.teal[6];
+      case "negative":
+        return theme.colors.error?.[6] || theme.colors.red[6];
+      case "neutral":
+        return theme.colors.warning?.[6] || theme.colors.yellow[6];
+      default:
+        return theme.colors.gray[6];
+    }
+  };
   // Determine which icon to display based on sentiment type
   const getSentimentIcon = () => {
+    const sentimentColor = getSentimentColor();
+
     if (icon) {
       const CustomIcon = icon;
       return (
         <CustomIcon
           size={ICON_SIZE}
+          color={sentimentColor}
           style={{ marginLeft: "auto", marginTop: 4 }}
         />
       );
@@ -43,13 +62,13 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
       return null;
     }
 
-    // Choose icon based on sentiment type using semantic theme colors
+    // Choose icon based on sentiment type using theme colors
     switch (sentimentType.toLowerCase()) {
       case "positive":
         return (
           <IconArrowNarrowUp
             size={ICON_SIZE}
-            color="success"
+            color={sentimentColor}
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
@@ -57,7 +76,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         return (
           <IconArrowNarrowDown
             size={ICON_SIZE}
-            color="error"
+            color={sentimentColor}
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
@@ -66,7 +85,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
         return (
           <IconLine
             size={ICON_SIZE}
-            color="dimmed"
+            color={sentimentColor}
             style={{ marginLeft: "auto", marginTop: 4 }}
           />
         );
@@ -74,14 +93,14 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
   };
 
   return (
-    <Card w="100%" withBorder>
-      <Flex>
-        <Title order={5} mb={8}>
+    <Card w="100%" withBorder p="lg" radius="md" shadow="sm">
+      <Flex justify="space-between" align="flex-start" mb="xs">
+        <Text size="sm" c="dimmed" fw={500} tt="uppercase">
           {title}
-        </Title>
+        </Text>
         {getSentimentIcon()}
       </Flex>
-      <Title order={2} fw={700}>
+      <Title order={2} fw={700} c="dark">
         {description}
       </Title>
     </Card>

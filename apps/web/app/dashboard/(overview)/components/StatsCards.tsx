@@ -20,7 +20,7 @@ const data: IDashboardSentimentCardProps[] = [
 
 const StatsCards = () => {
   return (
-    <SimpleGrid cols={{ base: 1, sm: 4 }}>
+    <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing={{ base: 12, sm: 16 }}>
       {data?.map((item, index) => (
         <DashboardSentimentCard key={index} {...item} />
       ))}

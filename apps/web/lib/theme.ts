@@ -109,5 +109,9 @@ export const theme: MantineThemeOverride = {
       duration: "200ms",
       easing: "ease",
     },
+    // Sentiment visualization colors
+    sentimentPositive: "#009688", // Teal/success color
+    sentimentNegative: "#F44336", // Red/error color
+    sentimentNeutral: "#FFEB3B", // Yellow/warning color
   },
 };
