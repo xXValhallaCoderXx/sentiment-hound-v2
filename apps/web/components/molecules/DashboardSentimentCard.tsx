@@ -1,3 +1,4 @@
+"use client";
 import { FC } from "react";
 import {
   IconArrowNarrowUp,
@@ -28,7 +29,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
   icon,
 }) => {
   const theme = useMantineTheme();
-  
+
   // Get sentiment color from theme
   const getSentimentColor = () => {
     switch (sentimentType.toLowerCase()) {
@@ -45,7 +46,7 @@ const DashboardSentimentCard: FC<IDashboardSentimentCardProps> = ({
   // Determine which icon to display based on sentiment type
   const getSentimentIcon = () => {
     const sentimentColor = getSentimentColor();
-    
+
     if (icon) {
       const CustomIcon = icon;
       return (
