@@ -13,7 +13,8 @@ const DashboardCommentCard: FC<IDashboardCommentCardProps> = () => {
           style={{ 
             border: "1px solid #e9ecef",
             borderRadius: "8px", 
-            backgroundColor: "#f8f9fa" 
+            backgroundColor: "#f8f9fa",
+            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
           }}>
       <Group gap="xs" align="center" wrap="wrap">
         <Avatar size="sm" />
@@ -32,7 +33,7 @@ const DashboardCommentCard: FC<IDashboardCommentCardProps> = () => {
         habitasse platea dictumst.
       </Text>
       <Flex gap={16} align="center">
-        <Badge color="gray" variant="light" size="sm">
+        <Badge color="gray" variant="light" size="sm" radius="md">
           2 hours ago
         </Badge>
         <Text size="sm" c="primary" style={{ cursor: "pointer" }}>
