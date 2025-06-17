@@ -1,8 +1,16 @@
-"use client";
-
-import { Box, Card, Group, Progress, Stack, Text, ThemeIcon, Badge, Button } from "@mantine/core";
+import {
+  Box,
+  Card,
+  Group,
+  Progress,
+  Stack,
+  Text,
+  ThemeIcon,
+  Badge,
+  Button,
+} from "@mantine/core";
 import { IconCoins, IconExternalLink } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { getTokenUsageStatus } from "@/actions/plan-usage.actions";
 
 interface TokenUsageCardProps {
@@ -17,32 +25,17 @@ interface TokenUsageData {
   percentage: number;
 }
 
-const TokenUsageCard: FC<TokenUsageCardProps> = ({ userId }) => {
-  const [tokenData, setTokenData] = useState<TokenUsageData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTokenUsage = async () => {
-      try {
-        setLoading(true);
-        const response = await getTokenUsageStatus();
-        
-        if (response.error) {
-          console.error("Error fetching token usage:", response.error);
-          setTokenData(null);
-        } else {
-          setTokenData(response.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch token usage:", error);
-        setTokenData(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTokenUsage();
-  }, []);
+const TokenUsageCard: FC<TokenUsageCardProps> = async ({ userId }) => {
+  const response = await getTokenUsageStatus();
+  const tokenData: TokenUsageData = {
+    current: response.data?.current || 0,
+    limit: response.data?.limit || 0,
+    periodEnd: response.data?.periodEnd
+      ? new Date(response.data.periodEnd)
+      : null,
+    isOverage: response.data?.isOverage || false,
+    percentage: response.data?.percentage || 0,
+  };
 
   const getProgressColor = (percentage: number, isOverage: boolean) => {
     if (isOverage) return "red";
@@ -57,22 +50,6 @@ const TokenUsageCard: FC<TokenUsageCardProps> = ({ userId }) => {
     return tokens.toLocaleString();
   };
 
-  if (loading) {
-    return (
-      <Card withBorder>
-        <Text size="sm" c="dimmed">Loading token usage...</Text>
-      </Card>
-    );
-  }
-
-  if (!tokenData) {
-    return (
-      <Card withBorder>
-        <Text size="sm" c="dimmed">Unable to load token usage</Text>
-      </Card>
-    );
-  }
-
   return (
     <Card withBorder>
       <Stack gap="md">
@@ -81,16 +58,14 @@ const TokenUsageCard: FC<TokenUsageCardProps> = ({ userId }) => {
             <ThemeIcon size="sm" variant="light" color="purple">
               <IconCoins size={16} />
             </ThemeIcon>
-            <Text size="sm" fw={500}>Plan & Usage</Text>
+            <Text size="sm" fw={500}>
+              Plan & Usage
+            </Text>
           </Group>
           <Button
             size="xs"
             variant="light"
             rightSection={<IconExternalLink size={12} />}
-            onClick={() => {
-              // This would link to payment provider's customer portal
-              console.log("Navigate to billing portal");
-            }}
           >
             Manage Billing
           </Button>
@@ -98,29 +73,33 @@ const TokenUsageCard: FC<TokenUsageCardProps> = ({ userId }) => {
 
         <Box>
           <Group justify="space-between" mb="xs">
-            <Text size="sm" fw={500}>Monthly Token Allowance</Text>
-            <Badge 
-              size="sm" 
-              variant="light" 
+            <Text size="sm" fw={500}>
+              Monthly Token Allowance
+            </Text>
+            <Badge
+              size="sm"
+              variant="light"
               color={tokenData.isOverage ? "red" : "blue"}
             >
-              {formatTokens(tokenData.current)} / {formatTokens(tokenData.limit)}
+              {formatTokens(tokenData.current)} /{" "}
+              {formatTokens(tokenData.limit)}
             </Badge>
           </Group>
-          
+
           <Progress
             value={Math.min(tokenData.percentage, 100)}
             color={getProgressColor(tokenData.percentage, tokenData.isOverage)}
             size="md"
             mb="xs"
           />
-          
+
           {tokenData.isOverage && (
             <Text size="xs" c="red" mb="xs">
-              ⚠️ You have exceeded your monthly allowance. Overage charges may apply.
+              ⚠️ You have exceeded your monthly allowance. Overage charges may
+              apply.
             </Text>
           )}
-          
+
           <Group justify="space-between">
             <Text size="xs" c="dimmed">
               {tokenData.percentage.toFixed(1)}% used this month
