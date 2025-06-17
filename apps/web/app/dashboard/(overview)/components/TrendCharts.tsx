@@ -4,9 +4,9 @@ import { SimpleGrid, Card, Title, Flex } from "@mantine/core";
 
 const TrendCards = () => {
   return (
-    <SimpleGrid cols={{ base: 1, md: 2 }} spacing={16}>
-      <Card withBorder p={{ base: 12, sm: 16 }}>
-        <Title order={4} mb={8}>
+    <SimpleGrid cols={{ base: 1, md: 2 }} spacing={{ base: 16, sm: 20 }}>
+      <Card withBorder p={{ base: 16, sm: 20 }} radius="md" shadow="sm">
+        <Title order={3} mb={16} fw={600}>
           Sentiment Trend
         </Title>
         {/* <LineChart
@@ -22,8 +22,8 @@ const TrendCards = () => {
           curveType="linear"
         /> */}
       </Card>
-      <Card withBorder p={{ base: 12, sm: 16 }}>
-        <Title order={4} mb={8}>
+      <Card withBorder p={{ base: 16, sm: 20 }} radius="md" shadow="sm">
+        <Title order={3} mb={16} fw={600}>
           Sentiment Overview
         </Title>
         <Flex justify="center">
