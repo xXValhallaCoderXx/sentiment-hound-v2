@@ -2,7 +2,7 @@
 
 import { signIn } from "@/lib/next-auth.lib";
 import { prisma } from "@repo/db";
-import { invitationCodeService } from "@repo/services";
+import { invitationCodeService, PlanName } from "@repo/services";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -11,8 +11,8 @@ import { z } from "zod";
 const signUpSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
-  name: z.string().min(1, "Name is required").optional(),
-  invitationCode: z.string().optional(),
+  name: z.string().nullable().optional(),
+  invitationCode: z.string().nullable().optional(),
 });
 
 const signInSchema = z.object({
@@ -44,14 +44,15 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       name: formData.get("name") as string,
       invitationCode: formData.get("invitationCode") as string,
     };
-
+    console.log("Raw sign up data:", rawData);
     const validatedData = signUpSchema.parse(rawData);
+    console.log("Validated sign up data:", validatedData);
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email: validatedData.email },
     });
-
+    console.log("Existing user:", existingUser);
     if (existingUser) {
       return {
         error: "An account with this email already exists. Please sign in.",
@@ -60,8 +61,13 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
 
     // Validate invitation code if provided
     let planId: number | undefined;
-    if (validatedData.invitationCode && validatedData.invitationCode.trim() !== "") {
-      const codeValidation = await invitationCodeService.validateCode(validatedData.invitationCode);
+    if (
+      validatedData.invitationCode &&
+      validatedData.invitationCode.trim() !== ""
+    ) {
+      const codeValidation = await invitationCodeService.validateCode(
+        validatedData.invitationCode
+      );
       if (!codeValidation.isValid) {
         return {
           error: codeValidation.error || "Invalid invitation code",
@@ -72,10 +78,12 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
 
     // Hash password
     const hashedPassword = await bcrypt.hash(validatedData.password, 12);
-
+    console.log("Hashed password:", hashedPassword);
     // Get default plan (trial) if no invitation code provided
     if (!planId) {
-      const trialPlan = await prisma.plan.findUnique({ where: { name: "trial" } });
+      const trialPlan = await prisma.plan.findUnique({
+        where: { name: PlanName.TRIAL },
+      });
       planId = trialPlan?.id;
     }
 
@@ -90,7 +98,10 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     });
 
     // Redeem invitation code if provided
-    if (validatedData.invitationCode && validatedData.invitationCode.trim() !== "") {
+    if (
+      validatedData.invitationCode &&
+      validatedData.invitationCode.trim() !== ""
+    ) {
       await invitationCodeService.redeemCode(validatedData.invitationCode);
     }
 
@@ -100,10 +111,11 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       password: validatedData.password,
       redirect: false,
     });
-
+    console.log("Sign in result:", result);
     if (result?.error) {
       return {
-        error: "Failed to sign in after registration. Please try signing in manually.",
+        error:
+          "Failed to sign in after registration. Please try signing in manually.",
       };
     }
 
@@ -111,6 +123,7 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     redirect("/dashboard");
     return { success: true };
   } catch (error) {
+    console.error("Sign up error:", error);
     if (error instanceof z.ZodError) {
       return {
         error: error.errors[0]?.message || "Validation failed",

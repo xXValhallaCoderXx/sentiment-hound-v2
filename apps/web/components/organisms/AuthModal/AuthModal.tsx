@@ -24,13 +24,18 @@ import {
   IconSparkles,
   IconCheck,
 } from "@tabler/icons-react";
-import { useState, useEffect, useActionState } from "react";
+import { useState, useEffect, useActionState, useTransition } from "react";
 import { useForm } from "@mantine/form";
-import { handleGoogleSignIn, handleEmailSignIn, handleEmailSignUp, handleForgotPassword } from "@/actions/auth.actions";
-import { 
-  getInvitationCodeFromUrl, 
-  setInvitationCodeInStorage, 
-  validateInvitationCodeFormat 
+import {
+  handleGoogleSignIn,
+  handleEmailSignIn,
+  handleEmailSignUp,
+  handleForgotPassword,
+} from "@/actions/auth.actions";
+import {
+  getInvitationCodeFromUrl,
+  setInvitationCodeInStorage,
+  validateInvitationCodeFormat,
 } from "@/lib/invitation-code.utils";
 import classes from "./AuthModal.module.css";
 
@@ -41,7 +46,7 @@ interface AuthModalProps {
 
 type AuthState = "signin" | "signup" | "forgot-password";
 
-interface FormData {
+interface AuthFormData {
   email: string;
   password: string;
   name?: string;
@@ -53,7 +58,9 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showInvitationCode, setShowInvitationCode] = useState(false);
   const [invitationCodeApplied, setInvitationCodeApplied] = useState(false);
-  const [pendingInvitationCode, setPendingInvitationCode] = useState<string>("");
+  const [pendingInvitationCode, setPendingInvitationCode] =
+    useState<string>("");
+  const [isPending, startTransition] = useTransition();
 
   // Form state for server actions
   const [signInState, signInAction] = useActionState(handleEmailSignIn, null);
@@ -64,7 +71,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   );
 
   // Form handling with Mantine form
-  const form = useForm<FormData>({
+  const form = useForm<AuthFormData>({
     mode: "uncontrolled",
     initialValues: {
       email: "",
@@ -76,7 +83,9 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
       email: (value) => {
         if (!value) return "Email is required";
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-        return emailRegex.test(value) ? null : "Please enter a valid email address";
+        return emailRegex.test(value)
+          ? null
+          : "Please enter a valid email address";
       },
       password: (value) => {
         if (!value) return "Password is required";
@@ -145,20 +154,23 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
     }
   };
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: AuthFormData) => {
     const formData = new FormData();
     formData.append("email", data.email);
     if (data.password) formData.append("password", data.password);
     if (data.name) formData.append("name", data.name);
-    if (data.invitationCode) formData.append("invitationCode", data.invitationCode);
-
-    if (authState === "signin") {
-      signInAction(formData);
-    } else if (authState === "signup") {
-      signUpAction(formData);
-    } else if (authState === "forgot-password") {
-      forgotPasswordAction(formData);
-    }
+    if (data.invitationCode)
+      formData.append("invitationCode", data.invitationCode);
+    console.log("AUTH STATE: ", authState);
+    startTransition(() => {
+      if (authState === "signin") {
+        signInAction(formData);
+      } else if (authState === "signup") {
+        signUpAction(formData);
+      } else if (authState === "forgot-password") {
+        forgotPasswordAction(formData);
+      }
+    });
   };
 
   const getTitle = () => {
@@ -186,7 +198,8 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   const getError = () => {
     if (authState === "signin" && signInState?.error) return signInState.error;
     if (authState === "signup" && signUpState?.error) return signUpState.error;
-    if (authState === "forgot-password" && forgotPasswordState?.error) return forgotPasswordState.error;
+    if (authState === "forgot-password" && forgotPasswordState?.error)
+      return forgotPasswordState.error;
     return null;
   };
 
@@ -211,11 +224,11 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         Sign in with Google
       </Button>
 
-      <Divider 
-        label="or" 
+      <Divider
+        label="or"
         labelPosition="center"
         classNames={{
-          label: classes.dividerLabel
+          label: classes.dividerLabel,
         }}
       />
 
@@ -250,10 +263,11 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
               </Anchor>
             </Group>
 
-            <Button 
-              type="submit" 
-              fullWidth 
+            <Button
+              type="submit"
+              fullWidth
               disabled={!form.isValid()}
+              loading={isPending}
               className={classes.primaryButton}
             >
               Sign In
@@ -292,22 +306,18 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         Sign up with Google
       </Button>
 
-      <Divider 
-        label="or" 
+      <Divider
+        label="or"
         labelPosition="center"
         classNames={{
-          label: classes.dividerLabel
+          label: classes.dividerLabel,
         }}
       />
 
       {/* Enhanced Invitation Code Section */}
       <Card className={classes.invitationCodeCard}>
         <div className={classes.invitationHeader}>
-          <ThemeIcon 
-            className={classes.invitationIcon}
-            size="sm"
-            radius="sm"
-          >
+          <ThemeIcon className={classes.invitationIcon} size="sm" radius="sm">
             <IconGift size={16} />
           </ThemeIcon>
           <Text fw={600} size="sm">
@@ -353,7 +363,8 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         <Collapse in={showInvitationCode && !invitationCodeApplied}>
           <Stack gap="xs">
             <Text size="xs" c="dimmed">
-              Enter your invitation code to unlock special features and enhanced access.
+              Enter your invitation code to unlock special features and enhanced
+              access.
             </Text>
             <Group gap="xs">
               <TextInput
@@ -409,13 +420,15 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
             />
 
             <Text size="xs" c="dimmed">
-              By signing up, you agree to our Terms of Service and Privacy Policy.
+              By signing up, you agree to our Terms of Service and Privacy
+              Policy.
             </Text>
 
-            <Button 
-              type="submit" 
-              fullWidth 
-              disabled={!form.isValid()}
+            <Button
+              type="submit"
+              fullWidth
+              disabled={!form.isValid() || isPending}
+              loading={isPending}
               className={classes.primaryButton}
             >
               Create Account
@@ -443,7 +456,8 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   const renderForgotPasswordForm = () => (
     <>
       <Text size="sm" className={classes.subtitle} ta="center" mb="md">
-        Enter the email address associated with your account, and we&apos;ll send you a link to reset your password.
+        Enter the email address associated with your account, and we&apos;ll
+        send you a link to reset your password.
       </Text>
 
       <Card className={classes.formCard}>
@@ -457,10 +471,11 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
               {...form.getInputProps("email")}
             />
 
-            <Button 
-              type="submit" 
-              fullWidth 
+            <Button
+              type="submit"
+              fullWidth
               disabled={!form.isValid()}
+              loading={isPending}
               className={classes.primaryButton}
             >
               Send Reset Link
@@ -531,13 +546,23 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
 
         {/* Alerts */}
         {getError() && (
-          <Alert icon={<IconInfoCircle size={16} />} color="red" variant="light" w="100%">
+          <Alert
+            icon={<IconInfoCircle size={16} />}
+            color="red"
+            variant="light"
+            w="100%"
+          >
             {getError()}
           </Alert>
         )}
 
         {getSuccess() && (
-          <Alert icon={<IconInfoCircle size={16} />} color="green" variant="light" w="100%">
+          <Alert
+            icon={<IconInfoCircle size={16} />}
+            color="green"
+            variant="light"
+            w="100%"
+          >
             {getSuccess()}
           </Alert>
         )}
