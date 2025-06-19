@@ -1,20 +1,13 @@
 import { MantineThemeOverride, MantineColorsTuple } from "@mantine/core";
 
-// Simplified color palette - use semantic names
+const newBlue: MantineColorsTuple = ['#E6E9EC', '#C0C9D2', '#99A8B8', '#73889E', '#4D6784', '#26476A', '#0A2540', '#081F36', '#06192B', '#041321'];
+const newOrange: MantineColorsTuple = ['#FFF0E0', '#FFDABF', '#FFC49E', '#FFAD7D', '#FF975C', '#FF813B', '#FF6B00', '#E65A00', '#CC4F00', '#B34400'];
+
+// Updated color palette
 const colors: Record<string, MantineColorsTuple> = {
-  primary: [
-    "#E0F7FA",
-    "#B2EBF2",
-    "#80DEEA",
-    "#4DD0E1",
-    "#26C6DA",
-    "#00BCD4",
-    "#00ACC1",
-    "#0097A7",
-    "#00838F",
-    "#006064",
-  ],
-  secondary: [
+  primary: newBlue, // Overwritten with newBlue
+  accent: newOrange, // Overwritten with newOrange
+  secondary: [ // Retained from original
     "#F3E5F5",
     "#E1BEE7",
     "#CE93D8",
@@ -26,19 +19,7 @@ const colors: Record<string, MantineColorsTuple> = {
     "#6A1B9A",
     "#4A148C",
   ],
-  accent: [
-    "#FFF3E0",
-    "#FFE0B2",
-    "#FFCC80",
-    "#FFB74D",
-    "#FFA726",
-    "#FF9800",
-    "#FB8C00",
-    "#F57C00",
-    "#EF6C00",
-    "#E65100",
-  ],
-  success: [
+  success: [ // Retained from original
     "#E0F2F1",
     "#B2DFDB",
     "#80CBC4",
@@ -50,7 +31,7 @@ const colors: Record<string, MantineColorsTuple> = {
     "#00695C",
     "#004D40",
   ],
-  warning: [
+  warning: [ // Retained from original
     "#FFFDE7",
     "#FFF9C4",
     "#FFF59D",
@@ -62,7 +43,7 @@ const colors: Record<string, MantineColorsTuple> = {
     "#F9A825",
     "#F57F17",
   ],
-  error: [
+  error: [ // Retained from original
     "#FFEBEE",
     "#FFCDD2",
     "#EF9A9A",
@@ -79,7 +60,7 @@ const colors: Record<string, MantineColorsTuple> = {
 export const theme: MantineThemeOverride = {
   // Typography
   fontFamily:
-    "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", // Inter is already primary
   headings: {
     fontFamily:
       "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
@@ -88,13 +69,11 @@ export const theme: MantineThemeOverride = {
 
   // Colors
   colors,
-  primaryColor: "primary",
-  primaryShade: { light: 5, dark: 7 }, // Lighter shade for light mode, darker for dark mode
+  primaryColor: "primary", // This will now correctly refer to newBlue
+  primaryShade: { light: 6, dark: 6 }, // Adjusted to use the main shade #0A2540 (index 6) for both modes
 
   // Component defaults that adapt to theme
   components: {
-    // Example: Cards have different backgrounds in light/dark
-
     Button: {
       defaultProps: {
         size: "md",
@@ -104,14 +83,12 @@ export const theme: MantineThemeOverride = {
 
   // Simplified other properties
   other: {
-    // Theme-specific variables
     transitions: {
       duration: "200ms",
       easing: "ease",
     },
-    // Sentiment visualization colors
-    sentimentPositive: "#009688", // Teal/success color
-    sentimentNegative: "#F44336", // Red/error color
-    sentimentNeutral: "#FFEB3B", // Yellow/warning color
+    sentimentPositive: colors.success[5], // Using index 5 for #009688
+    sentimentNegative: colors.error[5],   // Using index 5 for #F44336
+    sentimentNeutral: colors.warning[5],  // Using index 5 for #FFEB3B
   },
 };

@@ -1,30 +1,35 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FFFFFF; /* White background */
+  --foreground: #111827; /* Dark Gray for text */
+  --mantine-font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #111827; /* Dark Gray background */
+    --foreground: #F3F4F6; /* Light Gray for text */
   }
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  /* max-width and overflow-x removed, Mantine/app layout should handle this */
+  padding: 0; /* Kept from original prompt example, though Tailwind base might cover */
+  margin: 0; /* Kept from original prompt example, though Tailwind base might cover */
+  -webkit-font-smoothing: antialiased; /* From prompt example */
+  -moz-osx-font-smoothing: grayscale; /* From prompt example */
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  font-family: var(--mantine-font-family);
+  line-height: 1.5;
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  /* padding: 0; margin: 0; removed as Tailwind base typically handles this */
 }
 
 a {
@@ -32,6 +37,9 @@ a {
   text-decoration: none;
 }
 
+/* Styles for .imgDark and .imgLight can be kept if they are used elsewhere,
+   or removed if they are specific to an old design being replaced.
+   For now, assuming they might be used by other parts of the app not in scope. */
 .imgDark {
   display: none;
 }
@@ -53,3 +61,7 @@ a {
 .capitalize {
   text-transform: capitalize;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
