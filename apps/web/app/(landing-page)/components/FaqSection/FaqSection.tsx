@@ -10,7 +10,7 @@ const FaqSection = () => {
           Frequently Asked Questions
         </Title>
 
-        <Text c="dimmed" ta="center" size="lg" mb="xl">
+        <Text c="#a0a0a0" ta="center" size="lg" mb="xl">
           Get answers to the most commonly asked questions about Sentiment Hound
         </Text>
 
