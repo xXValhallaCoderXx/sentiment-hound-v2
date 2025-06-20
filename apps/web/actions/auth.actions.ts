@@ -149,26 +149,20 @@ export async function handleEmailSignIn(prevState: any, formData: FormData) {
     const result = await signIn("credentials", {
       email: validatedData.email,
       password: validatedData.password,
-      redirect: false,
     });
 
-    if (result?.error) {
-      return {
-        error: "Invalid email or password",
-      };
-    }
+    console.log("Sign in result:", result);
 
     // Redirect on success
     redirect("/dashboard");
-    return { success: true };
   } catch (error) {
+    console.log("Sign in error:", error);
     if (error instanceof z.ZodError) {
       return {
         error: error.errors[0]?.message || "Validation failed",
       };
     }
 
-    console.error("Sign in error:", error);
     return {
       error: "Invalid email or password",
     };

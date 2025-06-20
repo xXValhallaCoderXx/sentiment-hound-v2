@@ -17,15 +17,16 @@ import {
   ThemeIcon,
   rem,
 } from "@mantine/core";
-import { 
-  IconBrandGoogle, 
-  IconInfoCircle, 
+import {
+  IconBrandGoogle,
+  IconInfoCircle,
   IconGift,
   IconSparkles,
   IconCheck,
 } from "@tabler/icons-react";
 import { useState, useEffect, useActionState, useTransition } from "react";
 import { useForm } from "@mantine/form";
+import { useRouter } from "next/navigation";
 import {
   handleGoogleSignIn,
   handleEmailSignIn,
@@ -54,6 +55,7 @@ interface AuthFormData {
 }
 
 export function AuthModal({ opened, onClose }: AuthModalProps) {
+  const router = useRouter();
   const [authState, setAuthState] = useState<AuthState>("signin");
   const [isLoading, setIsLoading] = useState(false);
   const [showInvitationCode, setShowInvitationCode] = useState(false);
@@ -103,12 +105,13 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
     },
   });
 
-  // Close modal on successful auth
-  useEffect(() => {
-    if (signInState?.success || signUpState?.success) {
-      onClose();
-    }
-  }, [signInState?.success, signUpState?.success, onClose]);
+  // // Close modal on successful auth and redirect
+  // useEffect(() => {
+  //   if (signInState?.success || signUpState?.success) {
+  //     onClose();
+  //     router.push("/dashboard");
+  //   }
+  // }, [signInState?.success, signUpState?.success, onClose, router]);
 
   // Check for invitation code in URL on component mount
   useEffect(() => {

@@ -41,6 +41,8 @@ const options: NextAuthConfig = {
           user.password
         );
 
+        console.log("IS VALID: ", isPasswordValid);
+
         if (!isPasswordValid) {
           return null;
         }
