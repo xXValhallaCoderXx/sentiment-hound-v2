@@ -25,16 +25,16 @@ const NavigationMenu = () => {
       <Group gap="lg">
         <ThemeToggle />
         <SignInButton />
-        <Anchor href="#" c="gray.8" fw={500}>
+        <Anchor href="#" c="text-primary" fw={500}>
           Home
         </Anchor>
-        <Anchor href="#" c="gray.8" fw={500}>
+        <Anchor href="#" c="text-primary" fw={500}>
           About
         </Anchor>
-        <Anchor href="#" c="gray.8" fw={500}>
+        <Anchor href="#" c="text-primary" fw={500}>
           Services
         </Anchor>
-        <Anchor href="#" c="gray.8" fw={500}>
+        <Anchor href="#" c="text-primary" fw={500}>
           Contact
         </Anchor>
       </Group>

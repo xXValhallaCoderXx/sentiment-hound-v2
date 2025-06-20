@@ -1,21 +1,54 @@
 "use client";
-
-import { ActionIcon, useMantineColorScheme } from "@mantine/core";
-import { IconSun, IconMoon } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import {
+  ActionIcon,
+  useMantineColorScheme,
+  useComputedColorScheme,
+} from "@mantine/core";
+import { IconSun, IconMoon, IconCircleDotted } from "@tabler/icons-react";
 
 export function ThemeToggle() {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  // Hook to control color scheme changes
+  const { setColorScheme } = useMantineColorScheme();
 
-  const isDark = colorScheme === "dark";
+  // Hook to get the currently computed color scheme,
+  // 'get: true' makes it read from localStorage first, then system preference.
+  // This value will be 'light' on server (since no localStorage), then 'dark' (if saved) on client.
+  const computedColorScheme = useComputedColorScheme("light");
+
+  // State to track if the component has mounted on the client
+  const [mounted, setMounted] = useState(false);
+
+  // useEffect runs only on the client after initial render
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <ActionIcon variant="default" size="lg" aria-label="Loading theme toggle">
+        <IconCircleDotted
+          style={{ width: "70%", height: "70%" }}
+          stroke={1.5}
+        />
+      </ActionIcon>
+    );
+  }
 
   return (
     <ActionIcon
-      onClick={() => toggleColorScheme()}
+      onClick={() =>
+        setColorScheme(computedColorScheme === "light" ? "dark" : "light")
+      }
       variant="default"
       size="lg"
       aria-label="Toggle color scheme"
     >
-      {isDark ? <IconSun size={16} /> : <IconMoon size={16} />}
+      {computedColorScheme === "light" ? (
+        <IconSun style={{ width: "70%", height: "70%" }} stroke={1.5} />
+      ) : (
+        <IconMoon style={{ width: "70%", height: "70%" }} stroke={1.5} />
+      )}
     </ActionIcon>
   );
 }

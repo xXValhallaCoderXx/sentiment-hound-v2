@@ -21,8 +21,8 @@ const Hero = () => {
           to Actionable Clarity
         </h1>
         <Text className={classes.description} color="dimmed">
-          <strong>Sentiment Hound</strong> transforms overwhelming feedback 
-          into crystal-clear insights. Stop drowning in data and start making 
+          <strong>Sentiment Hound</strong> transforms overwhelming feedback into
+          crystal-clear insights. Stop drowning in data and start making
           confident decisions that drive real business growth.
         </Text>
 
@@ -30,7 +30,7 @@ const Hero = () => {
           <Button
             size="lg"
             className={classes.control}
-            color="primary"
+            color="success"
             leftSection={<IconChartBar size={20} />}
           >
             Start Free Trial
