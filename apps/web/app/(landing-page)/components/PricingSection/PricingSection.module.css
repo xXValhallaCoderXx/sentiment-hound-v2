@@ -1,0 +1,131 @@
+.wrapper {
+  background: #0f0f1e;
+  padding: rem(120px) 0;
+}
+
+.inner {
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: rem(60px);
+}
+
+.title {
+  font-size: rem(48px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(36px);
+  }
+}
+
+.planCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: rem(12px);
+  padding: rem(32px) rem(24px);
+  height: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.popularCard {
+  background: rgba(255, 71, 87, 0.05);
+  border-color: rgba(255, 71, 87, 0.3);
+  transform: scale(1.05);
+
+  &:hover {
+    background: rgba(255, 71, 87, 0.08);
+    border-color: rgba(255, 71, 87, 0.4);
+    transform: scale(1.05) translateY(-2px);
+  }
+}
+
+.popularBadge {
+  position: absolute;
+  top: rem(-12px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: rem(11px);
+  font-weight: 700;
+  padding: rem(6px) rem(12px);
+  background: #ff4757;
+}
+
+.planHeader {
+  text-align: center;
+  margin-bottom: rem(24px);
+}
+
+.planName {
+  font-size: rem(20px);
+  color: #ffffff;
+  margin-bottom: rem(8px);
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: rem(4px);
+  margin-bottom: rem(8px);
+}
+
+.price {
+  font-size: rem(48px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.period {
+  font-size: rem(16px);
+  color: #a0a0a0;
+}
+
+.planDescription {
+  font-size: rem(14px);
+  color: #a0a0a0;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.featureContent {
+  display: flex;
+  align-items: center;
+  gap: rem(8px);
+  color: #ffffff;
+}
+
+.checkIcon {
+  color: #00d4aa;
+  flex-shrink: 0;
+}
+
+.planButton {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}

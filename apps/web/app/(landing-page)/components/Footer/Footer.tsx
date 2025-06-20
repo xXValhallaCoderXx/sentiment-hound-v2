@@ -67,10 +67,10 @@ const Footer = () => {
             width={50}
             className="mx-auto"
           />
-          <Text size="md" fw={500} className={classes.description}>
+          <Text size="md" fw={500} className={classes.description} c="white">
             Sentiment Hound
           </Text>
-          <Text size="xs" c="dimmed" className={classes.description}>
+          <Text size="xs" c="#a0a0a0" className={classes.description}>
             Advanced sentiment analysis made simple and accessible for
             businesses of all sizes
           </Text>
@@ -78,7 +78,7 @@ const Footer = () => {
         <div className={classes.groups}>{groups}</div>
       </Container>
       <Container className={classes.afterFooter}>
-        <Text c="dimmed" size="sm">
+        <Text c="#a0a0a0" size="sm">
           © {currentYear} Sentiment Hound. All rights reserved.
         </Text>
 

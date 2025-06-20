@@ -1,85 +1,133 @@
-import { Container, Text, Button, Group, Box } from "@mantine/core";
-import { IconChartBar, IconArrowRight } from "@tabler/icons-react";
+import {
+  Container,
+  Text,
+  Button,
+  Group,
+  Box,
+  Grid,
+  GridCol,
+} from "@mantine/core";
 import classes from "./Hero.module.css";
 
 const Hero = () => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.backgroundPattern}></div>
-      <Container size={1200} className={classes.inner}>
-        <h1 className={classes.title}>
-          From{" "}
-          <Text
-            component="span"
-            variant="gradient"
-            gradient={{ from: "primary", to: "secondary" }}
-            inherit
-          >
-            Data Chaos
-          </Text>
-          <br />
-          to Actionable Clarity
-        </h1>
-        <Text className={classes.description} color="dimmed">
-          <strong>Sentiment Hound</strong> transforms overwhelming feedback 
-          into crystal-clear insights. Stop drowning in data and start making 
-          confident decisions that drive real business growth.
-        </Text>
+      <Container size={1400} className={classes.inner}>
+        <Grid align="center" gutter="xl">
+          <GridCol span={{ base: 12, lg: 6 }}>
+            <div className={classes.content}>
+              <h1 className={classes.title}>
+                Cut through the noise.{" "}
+                <Text
+                  component="span"
+                  variant="gradient"
+                  gradient={{ from: "#ff4757", to: "#ff6b7a" }}
+                  inherit
+                >
+                  Hear what your audience truly feels.
+                </Text>
+              </h1>
+              <Text className={classes.description} c="dimmed">
+                Sentiment Hound helps you instantly understand brand perception
+                across platforms like Twitter, Reddit, and more — all powered by
+                intelligent sentiment analysis and noise filtering.
+              </Text>
 
-        <Group className={classes.controls}>
-          <Button
-            size="lg"
-            className={classes.control}
-            color="primary"
-            leftSection={<IconChartBar size={20} />}
-          >
-            Start Free Trial
-          </Button>
-          <Button
-            size="lg"
-            className={classes.controlSecondary}
-            variant="outline"
-            rightSection={<IconArrowRight size={16} />}
-          >
-            See Demo
-          </Button>
-        </Group>
+              <Group className={classes.controls} mt="xl">
+                <Button
+                  size="lg"
+                  className={classes.control}
+                  color="red"
+                  style={{ backgroundColor: "#ff4757" }}
+                >
+                  Get Started Free
+                </Button>
+                <Button
+                  size="lg"
+                  className={classes.controlSecondary}
+                  variant="subtle"
+                  c="white"
+                >
+                  See a Live Demo
+                </Button>
+              </Group>
 
-        <Box className={classes.statsBadges}>
-          <div className={classes.statItem}>
-            <Text c="dimmed" size="sm">
-              Trusted by
-            </Text>
-            <Text fw={700} size="xl">
-              500+
-            </Text>
-            <Text c="dimmed" size="xs">
-              Companies
-            </Text>
-          </div>
-          <div className={classes.statItem}>
-            <Text c="dimmed" size="sm">
-              Processing
-            </Text>
-            <Text fw={700} size="xl">
-              10M+
-            </Text>
-            <Text c="dimmed" size="xs">
-              Statements Daily
-            </Text>
-          </div>
-          <div className={classes.statItem}>
-            <Text c="dimmed" size="sm">
-              Accuracy
-            </Text>
-            <Text fw={700} size="xl">
-              98%
-            </Text>
-            <Text c="dimmed" size="xs">
-              Sentiment Score
-            </Text>
-          </div>
-        </Box>
+              <Box className={classes.trustedBy} mt="xl">
+                <Text c="dimmed" size="sm" mb="md">
+                  Trusted by modern brands and agile teams
+                </Text>
+                <Group gap="xl" className={classes.brandLogos}>
+                  <Text c="dimmed" fw={600} size="sm">
+                    ACME
+                  </Text>
+                  <Text c="dimmed" fw={600} size="sm">
+                    BRAND
+                  </Text>
+                  <Text c="dimmed" fw={600} size="sm">
+                    TECHCO
+                  </Text>
+                  <Text c="dimmed" fw={600} size="sm">
+                    STARTUP
+                  </Text>
+                  <Text c="dimmed" fw={600} size="sm">
+                    COMPANY
+                  </Text>
+                </Group>
+              </Box>
+            </div>
+          </GridCol>
+          <GridCol span={{ base: 12, lg: 6 }}>
+            <div className={classes.dashboardPreview}>
+              <Box className={classes.mockupContainer}>
+                <div className={classes.mockupWindow}>
+                  <div className={classes.windowBar}>
+                    <div className={classes.windowControls}>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                  <div className={classes.dashboardContent}>
+                    <div className={classes.chartContainer}>
+                      <div className={classes.chartHeader}>
+                        <Text size="sm" c="white">
+                          Sentiment Overview
+                        </Text>
+                      </div>
+                      <div className={classes.barChart}>
+                        <div
+                          className={classes.bar}
+                          style={{ height: "60%", backgroundColor: "#00d4aa" }}
+                        ></div>
+                        <div
+                          className={classes.bar}
+                          style={{ height: "80%", backgroundColor: "#5f27cd" }}
+                        ></div>
+                        <div
+                          className={classes.bar}
+                          style={{ height: "45%", backgroundColor: "#ff9ff3" }}
+                        ></div>
+                        <div
+                          className={classes.bar}
+                          style={{ height: "90%", backgroundColor: "#54a0ff" }}
+                        ></div>
+                        <div
+                          className={classes.bar}
+                          style={{ height: "70%", backgroundColor: "#ff6b7a" }}
+                        ></div>
+                        <div
+                          className={classes.bar}
+                          style={{ height: "85%", backgroundColor: "#feca57" }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Box>
+            </div>
+          </GridCol>
+        </Grid>
       </Container>
     </div>
   );

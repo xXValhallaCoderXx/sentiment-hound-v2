@@ -1,10 +1,16 @@
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
+import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 import { Hero } from "@/components/organisms/Hero";
+import { CommandCenterSection } from "./components/CommandCenterSection";
+import { SpamDetectionSection } from "./components/SpamDetectionSection";
+import { CompetitiveSection } from "./components/CompetitiveSection";
+import { TestimonialsSection } from "./components/TestimonialsSection";
+import { MentionToInsightSection } from "./components/MentionToInsightSection";
+import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
-import { MainFeaturesSection } from "./components/MainFeaturesSection";
-import { SubFeaturesSection } from "./components/SubFeaturesSection";
 import { Footer } from "./components/Footer";
+import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
 
 const LandingPage = async () => {
   const session = await auth();
@@ -13,13 +19,23 @@ const LandingPage = async () => {
   }
 
   return (
-    <div>
-      <Hero />
-
-      <MainFeaturesSection />
-      <SubFeaturesSection />
-      <FaqSection />
-      <Footer />
+    <div style={{ background: "#0f0f1e", minHeight: "100vh" }}>
+      <AppShell header={{ height: 70 }}>
+        <AppShellHeader style={{ background: "#0f0f1e", border: "none" }}>
+          <NavigationMenu />
+        </AppShellHeader>
+        <AppShellMain style={{ padding: 0 }}>
+          <Hero />
+          <CommandCenterSection />
+          <SpamDetectionSection />
+          <CompetitiveSection />
+          <TestimonialsSection />
+          <MentionToInsightSection />
+          <PricingSection />
+          <FaqSection />
+          <Footer />
+        </AppShellMain>
+      </AppShell>
     </div>
   );
 };

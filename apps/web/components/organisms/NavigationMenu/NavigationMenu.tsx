@@ -1,42 +1,48 @@
-import Image from "next/image";
-import { Group, Anchor, Text } from "@mantine/core";
-import { SignInButton } from "@/components/molecules/SignInButton";
-import { ThemeToggle } from "@/components/molecules/ThemeToggle";
+import { Group, Anchor, Text, Button } from "@mantine/core";
 
 const NavigationMenu = () => {
   return (
     <Group justify="space-between" px={24} h="100%">
       <Group gap="sm">
-        <Image
-          src="/images/logos/main-logo.png"
-          alt=""
-          height={50}
-          width={50}
-          className="mx-auto"
-        />
-        <Text>
-          <Text span fw={700} c="primary.5" component="span">
-            Sentiment
-          </Text>{" "}
-          Hound
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #ff4757, #ff6b7a)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text size="sm" fw={700} c="white">
+            S
+          </Text>
+        </div>
+        <Text c="white" fw={600}>
+          Sentiment Hound
         </Text>
       </Group>
 
       <Group gap="lg">
-        <ThemeToggle />
-        <SignInButton />
-        <Anchor href="#" c="gray.8" fw={500}>
-          Home
+        <Anchor href="#" c="white" fw={500} size="sm">
+          Features
         </Anchor>
-        <Anchor href="#" c="gray.8" fw={500}>
-          About
+        <Anchor href="#" c="white" fw={500} size="sm">
+          Pricing
         </Anchor>
-        <Anchor href="#" c="gray.8" fw={500}>
-          Services
+        <Anchor href="#" c="white" fw={500} size="sm">
+          Docs
         </Anchor>
-        <Anchor href="#" c="gray.8" fw={500}>
-          Contact
+        <Anchor href="#" c="white" fw={500} size="sm">
+          Blog
         </Anchor>
+        <Button variant="outline" color="white" size="sm">
+          Sign In
+        </Button>
+        <Button color="red" size="sm" style={{ backgroundColor: "#ff4757" }}>
+          Get Started Free
+        </Button>
       </Group>
     </Group>
   );
