@@ -19,9 +19,9 @@ const LandingPage = async () => {
   }
 
   return (
-    <div style={{ background: "#0f0f1e", minHeight: "100vh" }}>
+    <div style={{ minHeight: "100vh" }}>
       <AppShell header={{ height: 70 }}>
-        <AppShellHeader style={{ background: "#0f0f1e", border: "none" }}>
+        <AppShellHeader>
           <NavigationMenu />
         </AppShellHeader>
         <AppShellMain style={{ padding: 0 }}>
