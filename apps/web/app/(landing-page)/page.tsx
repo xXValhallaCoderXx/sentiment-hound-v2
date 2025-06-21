@@ -2,11 +2,12 @@ import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 import { Hero } from "@/components/organisms/Hero";
+import { HowItWorksSection } from "./components/HowItWorksSection";
 import { CommandCenterSection } from "./components/CommandCenterSection";
 import { SpamDetectionSection } from "./components/SpamDetectionSection";
 import { CompetitiveSection } from "./components/CompetitiveSection";
-import { TestimonialsSection } from "./components/TestimonialsSection";
-import { MentionToInsightSection } from "./components/MentionToInsightSection";
+import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
+import { SignUpToInsightSection } from "./components/SignUpToInsightSection";
 import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
 import { Footer } from "./components/Footer";
@@ -26,11 +27,12 @@ const LandingPage = async () => {
         </AppShellHeader>
         <AppShellMain style={{ padding: 0 }}>
           <Hero />
+          <HowItWorksSection />
           <CommandCenterSection />
           <SpamDetectionSection />
           <CompetitiveSection />
-          <TestimonialsSection />
-          <MentionToInsightSection />
+          <WhyTeamsLoveSection />
+          <SignUpToInsightSection />
           <PricingSection />
           <FaqSection />
           <Footer />

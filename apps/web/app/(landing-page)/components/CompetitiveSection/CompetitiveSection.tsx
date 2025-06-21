@@ -7,6 +7,8 @@ import {
   Box,
   ThemeIcon,
   Button,
+  TextInput,
+  Group,
 } from "@mantine/core";
 import {
   IconTrendingUp,
@@ -21,12 +23,12 @@ const CompetitiveSection = () => {
     <div className={classes.wrapper}>
       <Container size="xl" className={classes.inner}>
         <div className={classes.header}>
-          <Title order={2} className={classes.title} ta="center">
-            See how you stack up
+          <Title order={2} className={classes.title} ta="center" c="text-primary">
+            Competitor Comparison
           </Title>
-          <Text className={classes.description} ta="center" mt="md">
-            Benchmark your brand against competitors and real-time sentiment
-            comparisons. Spot trends, track performance clearly.
+          <Text className={classes.description} ta="center" mt="md" c="text-secondary">
+            Side-by-side sentiment scores, shared keyword trends, and market mood analysis 
+            to understand how your brand compares to competitors.
           </Text>
         </div>
 
@@ -42,12 +44,11 @@ const CompetitiveSection = () => {
               >
                 <IconChartBar size={24} />
               </ThemeIcon>
-              <Text fw={600} size="lg" c="white" mb="sm">
-                Side-by-side sentiment trends
+              <Text fw={600} size="lg" c="text-primary" mb="sm">
+                Side-by-side sentiment scores
               </Text>
-              <Text size="sm" c="dimmed">
-                Track brand vs competitor sentiment over time, clearly see
-                impact
+              <Text size="sm" c="text-secondary">
+                Compare your brand sentiment directly with competitors
               </Text>
             </Box>
           </GridCol>
@@ -63,11 +64,11 @@ const CompetitiveSection = () => {
               >
                 <IconTrendingUp size={24} />
               </ThemeIcon>
-              <Text fw={600} size="lg" c="white" mb="sm">
-                Speed beyond benchmarks
+              <Text fw={600} size="lg" c="text-primary" mb="sm">
+                Shared keyword trends
               </Text>
-              <Text size="sm" c="dimmed">
-                Identify trending keywords and sentiment shifts in real-time
+              <Text size="sm" c="text-secondary">
+                Track performance on keywords you both target
               </Text>
             </Box>
           </GridCol>
@@ -83,11 +84,11 @@ const CompetitiveSection = () => {
               >
                 <IconUsers size={24} />
               </ThemeIcon>
-              <Text fw={600} size="lg" c="white" mb="sm">
-                Market trend analysis
+              <Text fw={600} size="lg" c="text-primary" mb="sm">
+                Market mood analysis
               </Text>
-              <Text size="sm" c="dimmed">
-                Spot industry trends, track performance alongside major events
+              <Text size="sm" c="text-secondary">
+                Understand overall industry sentiment trends
               </Text>
             </Box>
           </GridCol>
@@ -196,9 +197,21 @@ const CompetitiveSection = () => {
         </Box>
 
         <Box ta="center" mt="xl">
-          <Button size="lg" color="red" style={{ backgroundColor: "#ff4757" }}>
-            Take a competitive ranking first look
-          </Button>
+          <Group justify="center" gap="md">
+            <TextInput
+              placeholder="Track 3 competitors"
+              size="md"
+              w={250}
+              styles={{
+                input: {
+                  borderColor: 'light-dark(var(--mantine-color-ui-border-0), var(--mantine-color-ui-border-5))',
+                }
+              }}
+            />
+            <Button size="md" color="primary.5" c="white">
+              Start Tracking
+            </Button>
+          </Group>
         </Box>
       </Container>
     </div>

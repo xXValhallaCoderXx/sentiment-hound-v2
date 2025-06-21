@@ -22,15 +22,15 @@ const Hero = () => {
                 <Text
                   component="span"
                   variant="gradient"
-                  gradient={{ from: "#ff4757", to: "#ff6b7a" }}
+                  gradient={{ from: "primary.5", to: "primary.4" }}
                   inherit
                 >
                   Hear what your audience truly feels.
                 </Text>
               </h1>
-              <Text className={classes.description} c="dimmed">
+              <Text className={classes.description} c="text-secondary">
                 Sentiment Hound helps you instantly understand brand perception
-                across platforms like Twitter, Reddit, and more — all powered by
+                across platforms like YouTube and Reddit — powered by
                 intelligent sentiment analysis and noise filtering.
               </Text>
 
@@ -38,16 +38,17 @@ const Hero = () => {
                 <Button
                   size="lg"
                   className={classes.control}
-                  color="red"
-                  style={{ backgroundColor: "#ff4757" }}
+                  color="primary.5"
+                  c="white"
                 >
                   Get Started Free
                 </Button>
                 <Button
                   size="lg"
                   className={classes.controlSecondary}
-                  variant="subtle"
-                  c="white"
+                  variant="outline"
+                  color="text-primary"
+                  c="text-primary"
                 >
                   See a Live Demo
                 </Button>

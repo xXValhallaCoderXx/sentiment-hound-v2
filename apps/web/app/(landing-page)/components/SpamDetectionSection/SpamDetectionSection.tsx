@@ -7,6 +7,8 @@ import {
   Box,
   ThemeIcon,
   Badge,
+  Group,
+  Button,
 } from "@mantine/core";
 import { IconShield, IconAlertTriangle, IconCheck } from "@tabler/icons-react";
 import classes from "./SpamDetectionSection.module.css";
@@ -32,13 +34,13 @@ const SpamDetectionSection = () => {
                 <div className={classes.detectionContent}>
                   <div className={classes.detectionItem}>
                     <div className={classes.detectionHeader}>
-                      <ThemeIcon size="sm" color="red" variant="light">
+                      <ThemeIcon size="sm" color="error" variant="light">
                         <IconAlertTriangle size={14} />
                       </ThemeIcon>
-                      <Text size="sm" c="white">
+                      <Text size="sm" c="text-primary">
                         @fake_user_123
                       </Text>
-                      <Badge size="xs" color="red" variant="light">
+                      <Badge size="xs" color="error" variant="light">
                         SPAM
                       </Badge>
                     </div>
@@ -49,13 +51,13 @@ const SpamDetectionSection = () => {
 
                   <div className={classes.detectionItem}>
                     <div className={classes.detectionHeader}>
-                      <ThemeIcon size="sm" color="green" variant="light">
+                      <ThemeIcon size="sm" color="success" variant="light">
                         <IconCheck size={14} />
                       </ThemeIcon>
-                      <Text size="sm" c="white">
+                      <Text size="sm" c="text-primary">
                         @real_customer
                       </Text>
-                      <Badge size="xs" color="green" variant="light">
+                      <Badge size="xs" color="success" variant="light">
                         VERIFIED
                       </Badge>
                     </div>
@@ -67,13 +69,13 @@ const SpamDetectionSection = () => {
 
                   <div className={classes.detectionItem}>
                     <div className={classes.detectionHeader}>
-                      <ThemeIcon size="sm" color="yellow" variant="light">
+                      <ThemeIcon size="sm" color="warning" variant="light">
                         <IconAlertTriangle size={14} />
                       </ThemeIcon>
-                      <Text size="sm" c="white">
+                      <Text size="sm" c="text-primary">
                         @suspicious_acc
                       </Text>
-                      <Badge size="xs" color="yellow" variant="light">
+                      <Badge size="xs" color="warning" variant="light">
                         FLAGGED
                       </Badge>
                     </div>
@@ -97,68 +99,77 @@ const SpamDetectionSection = () => {
             <div className={classes.content}>
               <Badge
                 size="lg"
-                color="red"
+                color="primary.5"
                 variant="light"
                 className={classes.badge}
               >
-                SPAM DETECTION
+                Advanced Filtering
               </Badge>
-              <Title order={2} className={classes.title} mt="md">
-                Your team stays{" "}
-                <Text
-                  component="span"
-                  variant="gradient"
-                  gradient={{ from: "#ff4757", to: "#ff6b7a" }}
-                  inherit
-                >
-                  in the loop
-                </Text>
+              <Title order={2} className={classes.title} mt="md" c="text-primary">
+                Spam Detection & Team Controls
               </Title>
-              <Text className={classes.description} mt="md">
-                With advanced spam detection, your team can confidently analyze
-                real sentiment. So you can put AI to work, knowing you&apos;re
-                always in control.
+              <Text className={classes.description} mt="md" c="text-secondary">
+                Automatically prioritize with AI, assign team roles, 
+                approve/decline comments with manual prompt fallback.
               </Text>
 
               <Box className={classes.features} mt="xl">
                 <div className={classes.feature}>
-                  <ThemeIcon size="sm" radius="md" color="teal" variant="light">
+                  <ThemeIcon size="sm" radius="md" color="success" variant="light">
                     <IconShield size={16} />
                   </ThemeIcon>
-                  <Text size="sm" ml="sm">
-                    Automatically prioritize
+                  <Text size="sm" ml="sm" c="text-primary">
+                    Automatically prioritize with AI
                   </Text>
                 </div>
                 <div className={classes.feature}>
-                  <ThemeIcon size="sm" radius="md" color="blue" variant="light">
+                  <ThemeIcon size="sm" radius="md" color="info" variant="light">
                     <IconCheck size={16} />
                   </ThemeIcon>
-                  <Text size="sm" ml="sm">
-                    Assign team members
+                  <Text size="sm" ml="sm" c="text-primary">
+                    Assign team roles
                   </Text>
                 </div>
                 <div className={classes.feature}>
                   <ThemeIcon
                     size="sm"
                     radius="md"
-                    color="yellow"
+                    color="warning"
                     variant="light"
                   >
                     <IconAlertTriangle size={16} />
                   </ThemeIcon>
-                  <Text size="sm" ml="sm">
-                    Instantly in-line and insight
+                  <Text size="sm" ml="sm" c="text-primary">
+                    Approve/decline comments
                   </Text>
                 </div>
                 <div className={classes.feature}>
-                  <ThemeIcon size="sm" radius="md" color="red" variant="light">
+                  <ThemeIcon size="sm" radius="md" color="primary" variant="light">
                     <IconShield size={16} />
                   </ThemeIcon>
-                  <Text size="sm" ml="sm">
-                    Manually control
+                  <Text size="sm" ml="sm" c="text-primary">
+                    Manual prompt fallback
                   </Text>
                 </div>
               </Box>
+
+              <Group mt="xl" gap="md">
+                <Button
+                  size="md"
+                  color="primary.5"
+                  c="white"
+                >
+                  Try for Free
+                </Button>
+                <Button
+                  size="md"
+                  variant="outline"
+                  color="text-primary"
+                  c="text-primary"
+                >
+                  Watch Demo
+                </Button>
+              </Group>
             </div>
           </GridCol>
         </Grid>

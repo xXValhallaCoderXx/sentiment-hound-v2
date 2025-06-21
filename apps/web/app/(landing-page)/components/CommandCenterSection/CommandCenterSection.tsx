@@ -21,21 +21,20 @@ const CommandCenterSection = () => {
         <Grid align="center" gutter="xl">
           <GridCol span={{ base: 12, lg: 6 }}>
             <div>
-              <Title order={2} className={classes.title}>
-                Your sentiment command center
+              <Title order={2} className={classes.title} c="text-primary">
+                Sentiment Command Center
               </Title>
-              <Text className={classes.description} mt="md">
-                See the full story behind your mentions in a single dashboard
-                where you live sentiment scores, trends, and filtered mentions —
-                all in one place.
+              <Text className={classes.description} mt="md" c="text-secondary">
+                Real-time sentiment updates, keyword filtering, and historical 
+                trend visualization all in one powerful dashboard.
               </Text>
 
               <Box className={classes.features} mt="xl">
                 <div className={classes.feature}>
-                  <ThemeIcon size="sm" radius="md" color="teal" variant="light">
+                  <ThemeIcon size="sm" radius="md" color="success" variant="light">
                     <IconTrendingUp size={16} />
                   </ThemeIcon>
-                  <Text size="sm" ml="sm">
+                  <Text size="sm" ml="sm" c="text-primary">
                     Real-time sentiment updates
                   </Text>
                 </div>
@@ -43,21 +42,21 @@ const CommandCenterSection = () => {
                   <ThemeIcon
                     size="sm"
                     radius="md"
-                    color="yellow"
+                    color="warning"
                     variant="light"
                   >
                     <IconAlertCircle size={16} />
                   </ThemeIcon>
-                  <Text size="sm" ml="sm">
-                    Advanced filtering and flagging
+                  <Text size="sm" ml="sm" c="text-primary">
+                    Keyword filtering
                   </Text>
                 </div>
                 <div className={classes.feature}>
-                  <ThemeIcon size="sm" radius="md" color="blue" variant="light">
+                  <ThemeIcon size="sm" radius="md" color="info" variant="light">
                     <IconUsers size={16} />
                   </ThemeIcon>
-                  <Text size="sm" ml="sm">
-                    Historical trend visualizations
+                  <Text size="sm" ml="sm" c="text-primary">
+                    Historical trend visualization
                   </Text>
                 </div>
               </Box>
