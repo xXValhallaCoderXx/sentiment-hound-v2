@@ -8,6 +8,7 @@ import { SpamDetectionSection } from "./components/SpamDetectionSection";
 import { CompetitiveSection } from "./components/CompetitiveSection";
 import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
 import { SignUpToInsightSection } from "./components/SignUpToInsightSection";
+import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
 import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
 import { Footer } from "./components/Footer";
@@ -38,6 +39,7 @@ const LandingPage = async () => {
             <SpamDetectionSection />
             <CompetitiveSection />
             <SignUpToInsightSection />
+            <BeFirstToKnowSection />
             <PricingSection />
           </section>
           <section id="contact">

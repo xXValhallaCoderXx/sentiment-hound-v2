@@ -10,7 +10,7 @@
 .title {
   font-size: rem(48px);
   font-weight: 800;
-  color: #ffffff;
+  color: var(--mantine-color-white);
   line-height: 1.2;
   margin-bottom: rem(16px);
 
@@ -21,7 +21,10 @@
 
 .description {
   font-size: rem(18px);
-  color: #a0a0a0;
+  color: light-dark(
+    var(--mantine-color-gray-6),
+    var(--mantine-color-text-secondary-5)
+  );
   line-height: 1.6;
   max-width: rem(500px);
 }
