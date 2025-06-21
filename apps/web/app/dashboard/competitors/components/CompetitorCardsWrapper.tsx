@@ -19,16 +19,6 @@ type ServiceCompetitor = {
   updatedAt: Date;
 };
 
-// Matches the service's Competitor type (with createdAt as Date)
-type ServiceCompetitor = {
-  id: number;
-  name: string;
-  userId: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 interface CompetitorCardsWrapperProps {
   userId: string;
 }

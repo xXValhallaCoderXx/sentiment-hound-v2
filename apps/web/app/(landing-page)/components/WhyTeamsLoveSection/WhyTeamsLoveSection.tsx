@@ -1,17 +1,9 @@
-import {
-  Container,
-  Title,
-  Text,
-  Grid,
-  GridCol,
-  Card,
-  ThemeIcon,
-  Group,
-} from "@mantine/core";
+import { Container, Title, Text, Grid, GridCol, Badge } from "@mantine/core";
 import {
   IconShieldCheck,
   IconEye,
   IconBrain,
+  IconHeart,
 } from "@tabler/icons-react";
 import classes from "./WhyTeamsLoveSection.module.css";
 
@@ -20,55 +12,79 @@ const WhyTeamsLoveSection = () => {
     {
       icon: IconShieldCheck,
       title: "Noise-free insights",
-      description: "Spam & bots filtered with precision",
-      color: "success",
+      description:
+        "Advanced AI filters eliminate spam, bots, and irrelevant content to deliver pure, actionable intelligence.",
+      color: "#10B981",
+      stats: "99.2% accuracy",
     },
     {
       icon: IconEye,
       title: "Built for clarity",
-      description: "Dashboards made for action, not just observation",
-      color: "info",
+      description:
+        "Intuitive dashboards designed for decision-makers, not data analysts. See what matters most at a glance.",
+      color: "#3B82F6",
+      stats: "< 30 seconds to insights",
     },
     {
       icon: IconBrain,
       title: "AI-powered decisions",
-      description: "Understand what your audience truly thinks",
-      color: "primary",
+      description:
+        "Machine learning models trained on millions of data points understand context, sentiment, and trends.",
+      color: "#8B5CF6",
+      stats: "24/7 real-time analysis",
     },
   ];
 
   return (
     <div className={classes.wrapper}>
-      <Container size="xl" py="xl">
-        <Title order={2} className={classes.title} ta="center" c="text-primary">
-          Why Teams Love Using Sentiment Hound
-        </Title>
+      <Container size="xl" className={classes.container}>
+        <div className={classes.header}>
+          <Badge className={classes.badge} size="lg" variant="light">
+            <IconHeart size={16} />
+            Why Teams Choose Us
+          </Badge>
 
-        <Grid mt="xl" gutter="xl">
+          <Title order={2} className={classes.title}>
+            Why teams love using Sentiment Hound
+          </Title>
+
+          <Text className={classes.subtitle}>
+            Trusted by marketing teams, product managers, and executives who
+            need reliable sentiment intelligence to make confident decisions.
+          </Text>
+        </div>
+
+        <Grid gutter="xl" className={classes.featuresGrid}>
           {features.map((feature, index) => (
             <GridCol key={index} span={{ base: 12, md: 4 }}>
-              <Card 
-                className={classes.featureCard}
-                padding="xl"
-                radius="md"
-              >
-                <Group gap="md" mb="md">
-                  <ThemeIcon
-                    size={50}
-                    radius="md"
-                    variant="light"
-                    color={feature.color}
+              <div className={classes.featureCard}>
+                <div className={classes.cardContent}>
+                  <div
+                    className={classes.featureIcon}
+                    style={{ backgroundColor: feature.color }}
                   >
-                    <feature.icon size={24} stroke={1.5} />
-                  </ThemeIcon>
-                </Group>
-                <Text fw={700} size="lg" mb="sm" c="text-primary">
-                  {feature.title}
-                </Text>
-                <Text c="text-secondary" size="sm" lh={1.6}>
-                  {feature.description}
-                </Text>
-              </Card>
+                    <feature.icon size={28} color="white" stroke={1.5} />
+                  </div>
+
+                  <div className={classes.featureHeader}>
+                    <Text className={classes.featureTitle}>
+                      {feature.title}
+                    </Text>
+                    <Text className={classes.featureStats}>
+                      {feature.stats}
+                    </Text>
+                  </div>
+
+                  <Text className={classes.featureDescription}>
+                    {feature.description}
+                  </Text>
+                </div>
+
+                <div
+                  className={classes.cardGlow}
+                  style={{ backgroundColor: feature.color }}
+                ></div>
+              </div>
             </GridCol>
           ))}
         </Grid>

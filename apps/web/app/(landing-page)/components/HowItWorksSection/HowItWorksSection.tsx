@@ -1,20 +1,11 @@
-import {
-  Container,
-  Title,
-  Text,
-  Grid,
-  GridCol,
-  ThemeIcon,
-  Group,
-  Button,
-  Box,
-} from "@mantine/core";
+import { Container, Title, Text, Group, Button, Badge } from "@mantine/core";
 import {
   IconPlug,
   IconTarget,
   IconBrain,
   IconChartLine,
-  IconPlayerPlay,
+  IconRocket,
+  IconArrowRight,
 } from "@tabler/icons-react";
 import classes from "./HowItWorksSection.module.css";
 
@@ -23,75 +14,91 @@ const HowItWorksSection = () => {
     {
       icon: IconPlug,
       title: "Connect your channels",
-      description: "YouTube, Reddit (no login needed)",
-      color: "primary",
+      description:
+        "Integrate with YouTube, Reddit, and more platforms instantly",
+      color: "#3B82F6",
+      number: "01",
     },
     {
       icon: IconTarget,
       title: "Track what matters",
-      description: "Add keywords, competitors",
-      color: "info",
+      description: "Set keywords, competitors, and custom tracking parameters",
+      color: "#10B981",
+      number: "02",
     },
     {
       icon: IconBrain,
-      title: "Let the AI do the heavy lifting",
-      description: "Real-time filters, spam removal",
-      color: "success",
+      title: "AI analysis",
+      description: "Advanced ML models process sentiment in real-time",
+      color: "#8B5CF6",
+      number: "03",
     },
     {
       icon: IconChartLine,
-      title: "Get instant clarity",
-      description: "Visual dashboards & trend analysis",
-      color: "warning",
-    },
-    {
-      icon: IconPlayerPlay,
-      title: "Start Free Trial",
-      description: "Begin your journey today",
-      color: "text-primary",
+      title: "Get insights",
+      description: "Visual dashboards with actionable intelligence",
+      color: "#F59E0B",
+      number: "04",
     },
   ];
 
   return (
     <div className={classes.wrapper}>
-      <Container size="xl" py="xl">
-        <Title order={2} className={classes.title} ta="center" c="text-primary">
-          How Sentiment Hound Works
-        </Title>
+      <Container size="xl" className={classes.container}>
+        <div className={classes.header}>
+          <Badge className={classes.badge} size="lg" variant="light">
+            How It Works
+          </Badge>
+          <Title order={2} className={classes.title}>
+            Get real-time insights in minutes
+          </Title>
+          <Text className={classes.subtitle}>
+            Our AI-powered platform transforms raw social data into actionable
+            business intelligence
+          </Text>
+        </div>
 
-        <Grid mt="xl" gutter="md" justify="center">
+        <div className={classes.stepsContainer}>
           {steps.map((step, index) => (
-            <GridCol key={index} span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
-              <Box className={classes.stepCard} ta="center">
-                <ThemeIcon
-                  size={60}
-                  radius="xl"
-                  variant="light"
-                  color={step.color}
-                  mb="md"
+            <div key={index} className={classes.stepWrapper}>
+              <div className={classes.stepCard}>
+                <div className={classes.stepNumber}>{step.number}</div>
+                <div
                   className={classes.stepIcon}
+                  style={{ backgroundColor: step.color }}
                 >
-                  <step.icon size={28} stroke={1.5} />
-                </ThemeIcon>
-                <Text fw={600} size="sm" mb="xs" c="text-primary">
-                  {step.title}
-                </Text>
-                <Text size="xs" c="text-secondary" lh={1.4}>
-                  {step.description}
-                </Text>
-              </Box>
-            </GridCol>
+                  <step.icon size={24} stroke={1.5} color="white" />
+                </div>
+                <div className={classes.stepContent}>
+                  <Text className={classes.stepTitle}>{step.title}</Text>
+                  <Text className={classes.stepDescription}>
+                    {step.description}
+                  </Text>
+                </div>
+              </div>
+              {index < steps.length - 1 && (
+                <div className={classes.stepConnector}>
+                  <IconArrowRight size={20} stroke={1.5} />
+                </div>
+              )}
+            </div>
           ))}
-        </Grid>
+        </div>
 
-        <Group justify="center" mt="xl">
+        <Group justify="center" className={classes.ctaGroup}>
           <Button
-            size="md"
-            color="primary.5"
-            c="white"
+            size="lg"
             className={classes.ctaButton}
+            leftSection={<IconRocket size={20} />}
           >
             Start Free Trial
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className={classes.secondaryButton}
+          >
+            View Demo
           </Button>
         </Group>
       </Container>
