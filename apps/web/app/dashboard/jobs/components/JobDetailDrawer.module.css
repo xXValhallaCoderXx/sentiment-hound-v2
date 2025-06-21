@@ -4,7 +4,10 @@
   left: 0;
   width: 400px;
   height: 100vh;
-  background-color: white;
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-ui-surface-5)
+  );
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   transform: translateX(-100%);
@@ -25,11 +28,17 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #666;
+  color: light-dark(
+    var(--mantine-color-gray-6),
+    var(--mantine-color-text-secondary-5)
+  );
 }
 
 .closeButton:hover {
-  color: #333;
+  color: light-dark(
+    var(--mantine-color-gray-9),
+    var(--mantine-color-text-primary-7)
+  );
 }
 
 .backdrop {
