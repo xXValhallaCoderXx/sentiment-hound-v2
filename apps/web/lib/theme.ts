@@ -97,93 +97,93 @@ const colors: Record<string, MantineColorsTuple> = {
     "#C62828",
     "#B71C1C",
   ],
-  "text-primary": [
-    "#F8F9FA", // 0 - very light
-    "#E9ECEF", // 1
-    "#DEE2E6", // 2
-    "#CED4DA", // 3
-    "#ADB5BD", // 4
-    "#495057", // 5 <- use for light mode (deep charcoal)
-    "#343A40", // 6
-    "#F8F9FA", // 7 <- use for dark mode (off-white)
-    "#DDE1E3", // 8
-    "#CED1D4", // 9
-  ],
+
   "ui-background": [
-    "#101113",
-    "#101113",
-    "#101113",
-    "#101113",
-    "#101113",
-    "#101113",
-    "#101113",
-    "#101113",
-    "#101113",
-    "#101113",
+    "#1A1B1E", // 0 - lightest background for elevated light-mode (rare)
+    "#18191C", // 1
+    "#161718", // 2
+    "#151617", // 3
+    "#141516", // 4
+    "#131415", // 5
+    "#121314", // 6
+    "#111213", // 7
+    "#101113", // 8 - base (main dark mode body bg)
+    "#0F1011", // 9 - deepest background (e.g. behind modals)
   ],
-
   "ui-surface": [
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
-    "#1A1B1E",
+    "#2A2B2E", // 0 - lightest elevated surface
+    "#262729", // 1
+    "#232425", // 2
+    "#202122", // 3
+    "#1D1E1F", // 4
+    "#1A1B1E", // 5 - base
+    "#18191B", // 6
+    "#161718", // 7
+    "#141516", // 8
+    "#121314", // 9 - deepest container background
   ],
-
   "ui-border": [
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
-    "#2C2E33",
+    "#4F5255", // 0 - visible border for light mode
+    "#484B4F", // 1
+    "#424447", // 2
+    "#3C3E41", // 3
+    "#37393C", // 4
+    "#2C2E33", // 5 - base (dark mode outline)
+    "#282A2D", // 6
+    "#242628", // 7
+    "#202223", // 8
+    "#1C1D1E", // 9 - very low contrast
   ],
 
   "ui-border-hover": [
-    "#495057",
-    "#495057",
-    "#495057",
-    "#495057",
-    "#495057",
-    "#495057",
-    "#495057",
-    "#495057",
-    "#495057",
-    "#495057",
+    "#6C7278", // 0 - brighter hover ring
+    "#656B70", // 1
+    "#5E6469", // 2
+    "#575D62", // 3
+    "#50575B", // 4
+    "#495057", // 5 - base
+    "#42494F", // 6
+    "#3B4247", // 7
+    "#343A40", // 8
+    "#2E3338", // 9
   ],
+  "text-primary": [
+    "#DEE0E2", // 0 - lowest contrast (light hint text)
+    "#D3D6D8", // 1
+    "#C8CCCF", // 2
+    "#BDC2C5", // 3
+    "#B2B7BB", // 4
+    "#F8F9FA", // 5 - light mode fallback
+    "#E5E6E7", // 6
+    "#D1D3D5", // 7 - dark mode default
+    "#BDBFC2", // 8
+    "#A6A7AB", // 9
+  ],
+
   "text-secondary": [
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
-    "#A6A7AB",
+    "#9EA2A8",
+    "#969A9F",
+    "#8E9297",
+    "#868A8F",
+    "#7E8286",
+    "#767A7E",
+    "#6E7275",
+    "#666A6D",
+    "#5E6265",
+    "#565A5D",
   ],
 
   "text-disabled": [
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
-    "#5C5F66",
+    "#6C7075",
+    "#65696E",
+    "#5E6267",
+    "#575B60",
+    "#505459",
+    "#5C5F66", // your original
+    "#46494F",
+    "#404348",
+    "#3A3C41",
+    "#33363A",
   ],
 };
 
