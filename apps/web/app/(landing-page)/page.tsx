@@ -11,6 +11,7 @@ import { SignUpToInsightSection } from "./components/SignUpToInsightSection";
 import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
 import { Footer } from "./components/Footer";
+import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
 import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
 
 const LandingPage = async () => {
@@ -28,6 +29,9 @@ const LandingPage = async () => {
         <AppShellMain style={{ padding: 0 }}>
           <section id="home">
             <Hero />
+          </section>
+          <section id="be-first-to-know">
+            <BeFirstToKnowSection />
           </section>
           <section id="about">
             <HowItWorksSection />
