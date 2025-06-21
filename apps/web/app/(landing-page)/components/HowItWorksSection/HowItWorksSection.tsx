@@ -14,7 +14,7 @@ import {
   IconTarget,
   IconBrain,
   IconChartLine,
-  IconPlayCircle,
+  IconPlayerPlay,
 } from "@tabler/icons-react";
 import classes from "./HowItWorksSection.module.css";
 
@@ -45,7 +45,7 @@ const HowItWorksSection = () => {
       color: "warning",
     },
     {
-      icon: IconPlayCircle,
+      icon: IconPlayerPlay,
       title: "Start Free Trial",
       description: "Begin your journey today",
       color: "text-primary",

@@ -26,16 +26,24 @@ const LandingPage = async () => {
           <NavigationMenu />
         </AppShellHeader>
         <AppShellMain style={{ padding: 0 }}>
-          <Hero />
-          <HowItWorksSection />
-          <CommandCenterSection />
-          <SpamDetectionSection />
-          <CompetitiveSection />
-          <WhyTeamsLoveSection />
-          <SignUpToInsightSection />
-          <PricingSection />
-          <FaqSection />
-          <Footer />
+          <section id="home">
+            <Hero />
+          </section>
+          <section id="about">
+            <HowItWorksSection />
+            <CommandCenterSection />
+            <WhyTeamsLoveSection />
+          </section>
+          <section id="services">
+            <SpamDetectionSection />
+            <CompetitiveSection />
+            <SignUpToInsightSection />
+            <PricingSection />
+          </section>
+          <section id="contact">
+            <FaqSection />
+            <Footer />
+          </section>
         </AppShellMain>
       </AppShell>
     </div>
