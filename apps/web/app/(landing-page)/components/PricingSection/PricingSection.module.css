@@ -55,13 +55,17 @@
 }
 
 .popularCard {
-  background: rgba(255, 71, 87, 0.05);
-  border-color: rgba(255, 71, 87, 0.3);
+  border-color: light-dark(
+    var(--mantine-color-primary-5),
+    var(--mantine-color-primary-7)
+  );
   transform: scale(1.05);
 
   &:hover {
-    background: rgba(255, 71, 87, 0.08);
-    border-color: rgba(255, 71, 87, 0.4);
+    border-color: light-dark(
+      var(--mantine-color-primary-4),
+      var(--mantine-color-primary-6)
+    );
     transform: scale(1.05) translateY(-2px);
   }
 }
@@ -129,11 +133,17 @@
   display: flex;
   align-items: center;
   gap: rem(8px);
-  color: #ffffff;
+  color: light-dark(
+    var(--mantine-color-text-primary-5),
+    var(--mantine-color-text-primary-7)
+  );
 }
 
 .checkIcon {
-  color: #00d4aa;
+  color: light-dark(
+    var(--mantine-color-success-5),
+    var(--mantine-color-success-5)
+  );
   flex-shrink: 0;
 }
 

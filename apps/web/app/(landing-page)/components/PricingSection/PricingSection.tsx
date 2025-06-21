@@ -82,7 +82,7 @@ const PricingSection = () => {
                 className={`${classes.planCard} ${plan.popular ? classes.popularCard : ""}`}
               >
                 {plan.popular && (
-                  <Badge className={classes.popularBadge} color="red">
+                  <Badge className={classes.popularBadge} color="primary.5">
                     MOST POPULAR
                   </Badge>
                 )}
@@ -120,13 +120,11 @@ const PricingSection = () => {
                 <Button
                   className={classes.planButton}
                   variant={plan.buttonVariant}
-                  color={plan.popular ? "red" : "gray"}
+                  color={plan.popular ? "primary.5" : "text-primary"}
+                  c={plan.popular ? "white" : "text-primary"}
                   size="md"
                   fullWidth
                   mt="xl"
-                  style={
-                    plan.popular ? { backgroundColor: "#ff4757" } : undefined
-                  }
                 >
                   {plan.buttonText}
                 </Button>
