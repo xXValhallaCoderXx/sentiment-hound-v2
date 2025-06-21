@@ -1,0 +1,44 @@
+.wrapper {
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-ui-background-8)
+  );
+  padding: rem(80px) 0;
+}
+
+.title {
+  font-size: rem(36px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: rem(48px);
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(28px);
+    margin-bottom: rem(32px);
+  }
+}
+
+.stepCard {
+  padding: rem(20px);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    padding: rem(16px);
+  }
+}
+
+.stepIcon {
+  margin: 0 auto;
+}
+
+.ctaButton {
+  height: rem(44px);
+  padding-left: rem(32px);
+  padding-right: rem(32px);
+  font-weight: 600;
+  border-radius: rem(8px);
+}

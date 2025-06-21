@@ -19,14 +19,14 @@ const PricingSection = () => {
       name: "Starter",
       price: "$0",
       period: "/mo",
-      description: "Great for testing the waters",
+      description: "For testers",
       features: [
-        "Up to 100 mentions",
-        "2,500 scans per month",
         "Basic sentiment analysis",
-        "7 days historical data",
+        "Limited mentions tracking",
+        "7-day data history",
+        "Email support",
       ],
-      buttonText: "Choose Plan",
+      buttonText: "Get Started",
       buttonVariant: "outline" as const,
       popular: false,
     },
@@ -36,12 +36,14 @@ const PricingSection = () => {
       period: "/mo",
       description: "For growing brands",
       features: [
-        "Up to 10,000 mentions",
-        "Unlimited scans per month",
-        "Advanced filtering and flagging",
-        "30 days historical data",
+        "Advanced sentiment analysis",
+        "Unlimited mentions",
+        "Competitor tracking",
+        "Real-time alerts",
+        "30-day data history",
+        "Priority support",
       ],
-      buttonText: "Choose Plan",
+      buttonText: "Choose Pro",
       buttonVariant: "filled" as const,
       popular: true,
     },
@@ -49,14 +51,16 @@ const PricingSection = () => {
       name: "Premium",
       price: "Custom",
       period: "",
-      description: "For enterprise brands",
+      description: "For enterprise needs",
       features: [
-        "Unlimited brands",
-        "Priority support and training",
         "Custom integrations",
-        "Full historical access",
+        "Dedicated account manager",
+        "Advanced analytics",
+        "Custom reporting",
+        "Unlimited data history",
+        "24/7 phone support",
       ],
-      buttonText: "Choose Plan",
+      buttonText: "Contact Sales",
       buttonVariant: "outline" as const,
       popular: false,
     },
@@ -66,8 +70,8 @@ const PricingSection = () => {
     <div className={classes.wrapper}>
       <Container size="xl" className={classes.inner}>
         <div className={classes.header}>
-          <Title order={2} className={classes.title} ta="center">
-            Plans for every stage
+          <Title order={2} className={classes.title} ta="center" c="text-primary">
+            Pricing Plans
           </Title>
         </div>
 
@@ -78,7 +82,7 @@ const PricingSection = () => {
                 className={`${classes.planCard} ${plan.popular ? classes.popularCard : ""}`}
               >
                 {plan.popular && (
-                  <Badge className={classes.popularBadge} color="red">
+                  <Badge className={classes.popularBadge} color="primary.5">
                     MOST POPULAR
                   </Badge>
                 )}
@@ -116,13 +120,11 @@ const PricingSection = () => {
                 <Button
                   className={classes.planButton}
                   variant={plan.buttonVariant}
-                  color={plan.popular ? "red" : "gray"}
+                  color={plan.popular ? "primary.5" : "text-primary"}
+                  c={plan.popular ? "white" : "text-primary"}
                   size="md"
                   fullWidth
                   mt="xl"
-                  style={
-                    plan.popular ? { backgroundColor: "#ff4757" } : undefined
-                  }
                 >
                   {plan.buttonText}
                 </Button>

@@ -45,7 +45,7 @@
   line-height: 1.1;
   margin: 0;
   padding: 0;
-  color: #ffffff;
+  color: light-dark(var(--mantine-color-text-primary-5), var(--mantine-color-text-primary-7));
   letter-spacing: -0.02em;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
