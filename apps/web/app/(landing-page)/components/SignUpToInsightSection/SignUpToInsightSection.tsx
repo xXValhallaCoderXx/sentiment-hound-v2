@@ -45,8 +45,8 @@ const SignUpToInsightSection = () => {
 
   return (
     <div className={classes.wrapper}>
-      <Container size="xl" py="xl">
-        <Title order={2} className={classes.title} ta="center" c="text-primary">
+      <Container size="xl" py="xl" className={classes.container}>
+        <Title order={2} className={classes.title} ta="center" c="white">
           From sign-up to clarity — in seconds
         </Title>
 
@@ -54,11 +54,6 @@ const SignUpToInsightSection = () => {
           {steps.map((step, index) => (
             <GridCol key={index} span={{ base: 12, xs: 6, md: 3 }}>
               <Box className={classes.stepCard} ta="center">
-                <div className={classes.emojiContainer}>
-                  <Text size="3rem" className={classes.emoji}>
-                    {step.emoji}
-                  </Text>
-                </div>
                 <ThemeIcon
                   size={50}
                   radius="xl"
@@ -69,10 +64,10 @@ const SignUpToInsightSection = () => {
                 >
                   <step.icon size={24} stroke={1.5} />
                 </ThemeIcon>
-                <Text fw={600} size="md" mb="xs" c="text-primary">
+                <Text fw={600} size="md" mb="xs" c="white">
                   {step.title}
                 </Text>
-                <Text size="sm" c="text-secondary" lh={1.5}>
+                <Text size="sm" c="gray.4" lh={1.5}>
                   {step.description}
                 </Text>
               </Box>
