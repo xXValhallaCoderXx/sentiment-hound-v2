@@ -2,17 +2,20 @@ import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 import { Hero } from "@/components/organisms/Hero";
-import { HowItWorksSection } from "./components/HowItWorksSection";
-import { CommandCenterSection } from "./components/CommandCenterSection";
-import { SpamDetectionSection } from "./components/SpamDetectionSection";
+import { FeaturesSection } from "./components/FeaturesSection";
 import { CompetitiveSection } from "./components/CompetitiveSection";
+import { HowItWorksSection } from "./components/HowItWorksSection";
 import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
-import { SignUpToInsightSection } from "./components/SignUpToInsightSection";
 import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
 import { Footer } from "./components/Footer";
+import { IconEye } from "@tabler/icons-react";
+import { Stack, Group, Button } from "@mantine/core";
+import { SpamDetectionSection } from "./components/SpamDetectionSection";
+import { CommandCenterSection } from "./components/CommandCenterSection";
 import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
 import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
+import classes from "./LandingPage.module.css";
 
 const LandingPage = async () => {
   const session = await auth();
@@ -30,24 +33,27 @@ const LandingPage = async () => {
           <section id="home">
             <Hero />
           </section>
-          <section id="be-first-to-know">
+          <section id="early-access">
             <BeFirstToKnowSection />
           </section>
-          <section id="about">
-            <HowItWorksSection />
+          <Stack gap={96} id="features" className={classes.wrapper}>
             <CommandCenterSection />
+            <SpamDetectionSection />
+          </Stack>
+          <section id="how-it-works">
+            <HowItWorksSection />
+          </section>
+          <section id="why-you-love">
             <WhyTeamsLoveSection />
           </section>
-          <section id="services">
-            <SpamDetectionSection />
-            <CompetitiveSection />
-            <SignUpToInsightSection />
+          <section id="pricing">
             <PricingSection />
           </section>
-          <section id="contact">
+          <section id="faq">
             <FaqSection />
-            <Footer />
           </section>
+
+          <Footer />
         </AppShellMain>
       </AppShell>
     </div>

@@ -76,8 +76,8 @@ const SpamDetectionSection = () => {
   ];
 
   return (
-    <div className={classes.wrapper}>
-      <Container size="xl" className={classes.container}>
+    <div>
+      <Container size="xl">
         <Grid align="center" gutter="xl">
           <GridCol span={{ base: 12, lg: 6 }}>
             <div className={classes.detectionInterface}>
@@ -130,8 +130,12 @@ const SpamDetectionSection = () => {
 
           <GridCol span={{ base: 12, lg: 6 }}>
             <div className={classes.content}>
-              <Badge className={classes.badge} size="lg" variant="light">
-                <IconShield size={16} />
+              <Badge
+                leftSection={<IconShield size={16} />}
+                size="lg"
+                variant="light"
+                mb={16}
+              >
                 Spam Detection
               </Badge>
 
@@ -166,16 +170,6 @@ const SpamDetectionSection = () => {
                   </div>
                 ))}
               </div>
-
-              <Group className={classes.ctaGroup}>
-                <Button
-                  size="lg"
-                  className={classes.ctaButton}
-                  leftSection={<IconEye size={20} />}
-                >
-                  See It In Action
-                </Button>
-              </Group>
             </div>
           </GridCol>
         </Grid>
