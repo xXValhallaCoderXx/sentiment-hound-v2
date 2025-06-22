@@ -10,16 +10,16 @@ const NavigationMenu = () => {
 
   const navigationLinks = (
     <>
-      <Anchor href="#home" c="text-primary" fw={500} onClick={close}>
+      <Anchor href="#home" c="dimmed" fw={500} onClick={close}>
         Home
       </Anchor>
-      <Anchor href="#about" c="text-primary" fw={500} onClick={close}>
+      <Anchor href="#about" c="dimmed" fw={500} onClick={close}>
         About
       </Anchor>
-      <Anchor href="#services" c="text-primary" fw={500} onClick={close}>
+      <Anchor href="#services" c="dimmed" fw={500} onClick={close}>
         Services
       </Anchor>
-      <Anchor href="#contact" c="text-primary" fw={500} onClick={close}>
+      <Anchor href="#contact" c="dimmed" fw={500} onClick={close}>
         Contact
       </Anchor>
     </>
@@ -36,7 +36,7 @@ const NavigationMenu = () => {
             width={50}
             className="mx-auto"
           />
-          <Text>
+          <Text c="dimmed">
             <Text span fw={700} c="primary.5" component="span">
               Sentiment
             </Text>{" "}
@@ -63,7 +63,7 @@ const NavigationMenu = () => {
         opened={opened}
         onClose={close}
         title={
-          <Text fw={700}>
+          <Text fw={700} c="dimmed">
             <Text span fw={700} c="primary.5" component="span">
               Sentiment
             </Text>{" "}
