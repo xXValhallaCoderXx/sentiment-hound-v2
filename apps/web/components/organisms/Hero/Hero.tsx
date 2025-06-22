@@ -18,20 +18,10 @@ const Hero = () => {
           <GridCol span={{ base: 12, lg: 6 }}>
             <div className={classes.content}>
               <h1 className={classes.title}>
-                Cut through the noise.{" "}
-                <Text
-                  component="span"
-                  variant="gradient"
-                  gradient={{ from: "primary.5", to: "primary.4" }}
-                  inherit
-                >
-                  Hear what your audience truly feels.
-                </Text>
+                Unleash True Sentiment.
               </h1>
               <Text className={classes.description} c="text-secondary">
-                Sentiment Hound helps you instantly understand brand perception
-                across platforms like YouTube and Reddit — powered by
-                intelligent sentiment analysis and noise filtering.
+                The enterprise-grade analysis tool that's finally off its leash. Powerful, affordable insights for creators, founders, and businesses who are ready to stop guessing.
               </Text>
 
               <Group className={classes.controls} mt="xl">

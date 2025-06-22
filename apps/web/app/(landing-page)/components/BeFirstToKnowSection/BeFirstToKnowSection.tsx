@@ -85,11 +85,11 @@ const BeFirstToKnowSection = () => {
             </Badge>
 
             <Title order={2} className={classes.title}>
-              Be the first to know.
+              Be the First to Lead.
             </Title>
 
             <Text className={classes.subtitle}>
-              Join the early access list and get exclusive early-bird perks.
+              Our early access spots are limited. Use an invitation code to unlock the powerful Developer Plan and start digging for real insights today.
             </Text>
 
             <Text className={classes.description}>
@@ -157,7 +157,7 @@ const BeFirstToKnowSection = () => {
                       className={classes.submitButton}
                       rightSection={<IconArrowRight size={16} />}
                     >
-                      Join Early Access List
+                      Claim Your Spot
                     </Button>
 
                     {state?.error && (

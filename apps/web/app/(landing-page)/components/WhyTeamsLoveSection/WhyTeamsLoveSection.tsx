@@ -11,27 +11,27 @@ const WhyTeamsLoveSection = () => {
   const features = [
     {
       icon: IconShieldCheck,
-      title: "Noise-free insights",
+      title: "Power That's Unleashed, Not Locked Up.",
       description:
-        "Advanced AI filters eliminate spam, bots, and irrelevant content to deliver pure, actionable intelligence.",
+        "We believe the best tools should be for everyone. We packed enterprise-level features into a simple, affordable platform for the new generation of builders.",
       color: "#10B981",
-      stats: "99.2% accuracy",
+      stats: "Enterprise-grade",
     },
     {
       icon: IconEye,
-      title: "Built for clarity",
+      title: "Clarity You Can Act On.",
       description:
-        "Intuitive dashboards designed for decision-makers, not data analysts. See what matters most at a glance.",
+        "We don't just show you data; we help you understand it. Our goal is to give you the confidence to make your next move the right one.",
       color: "#3B82F6",
-      stats: "< 30 seconds to insights",
+      stats: "Actionable insights",
     },
     {
       icon: IconBrain,
-      title: "AI-powered decisions",
+      title: "Professional, Not Boring.",
       description:
-        "Machine learning models trained on millions of data points understand context, sentiment, and trends.",
+        "We're serious about the quality of our data, but we don't think software has to be dull. We're building the tool we've always wanted to use.",
       color: "#8B5CF6",
-      stats: "24/7 real-time analysis",
+      stats: "Enjoyable experience",
     },
   ];
 
@@ -41,11 +41,11 @@ const WhyTeamsLoveSection = () => {
         <div className={classes.header}>
           <Badge className={classes.badge} size="lg" variant="light">
             <IconHeart size={16} />
-            Why Teams Choose Us
+            Why You'll Love Us
           </Badge>
 
           <Title order={2} className={classes.title}>
-            Why teams love using Sentiment Hound
+            Built for the Underdog, With a Bigger Bite.
           </Title>
 
           <Text className={classes.subtitle}>
