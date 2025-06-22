@@ -7,7 +7,7 @@ const FaqSection = () => {
     <div className={classes.faqBackground}>
       <Container size="sm" className={classes.wrapper}>
         <Title ta="center" className={classes.title} c="white">
-          Frequently Asked Questions
+          Have Questions? We've Got Answers.
         </Title>
 
         <Text c="gray.4" ta="center" size="lg" mb="xl">

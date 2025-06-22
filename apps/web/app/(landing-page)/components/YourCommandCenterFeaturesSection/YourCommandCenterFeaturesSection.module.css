@@ -1,7 +1,7 @@
 /* Your Command Center Features Section */
 .wrapper {
   background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
-  padding: 6rem 0;
+  padding: rem(120px) 0;
   position: relative;
   overflow: hidden;
 }
@@ -26,26 +26,26 @@
 
 .header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: rem(80px);
 }
 
 .badge {
   background: rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.2);
   color: #60A5FA;
-  margin-bottom: 1.5rem;
+  margin-bottom: rem(24px);
   backdrop-filter: blur(10px);
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: rem(8px);
 }
 
 .title {
   color: #ffffff;
-  font-size: 3rem;
+  font-size: rem(48px);
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 1.5rem;
+  margin-bottom: rem(24px);
 }
 
 .featuresGrid {
@@ -56,7 +56,7 @@
 .featureCard {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+  border-radius: rem(16px);
   backdrop-filter: blur(20px);
   transition: all 0.3s ease;
   height: 100%;
@@ -67,8 +67,8 @@
 .featureCard:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(rem(-4px));
+  box-shadow: 0 rem(20px) rem(40px) rgba(0, 0, 0, 0.3);
 }
 
 .featureIcon {
@@ -78,7 +78,7 @@
 .featureTitle {
   color: #ffffff;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: rem(8px);
 }
 
 .featureDescription {
@@ -89,14 +89,14 @@
 /* Responsive */
 @media (max-width: 768px) {
   .wrapper {
-    padding: 4rem 0;
+    padding: rem(80px) 0;
   }
   
   .title {
-    font-size: 2rem;
+    font-size: rem(32px);
   }
   
   .header {
-    margin-bottom: 3rem;
+    margin-bottom: rem(60px);
   }
 }

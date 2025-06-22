@@ -71,7 +71,7 @@ const PricingSection = () => {
       <Container size="xl" className={classes.inner}>
         <div className={classes.header}>
           <Title order={2} className={classes.title} ta="center" c="white">
-            Pricing Plans
+            Simple Plans for Every Pack Size.
           </Title>
         </div>
 

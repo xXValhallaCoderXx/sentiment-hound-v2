@@ -49,8 +49,7 @@ const WhyTeamsLoveSection = () => {
           </Title>
 
           <Text className={classes.subtitle}>
-            Trusted by marketing teams, product managers, and executives who
-            need reliable sentiment intelligence to make confident decisions.
+            We're building the sentiment analysis tool that puts powerful insights in everyone's hands - not just enterprise teams with massive budgets.
           </Text>
         </div>
 

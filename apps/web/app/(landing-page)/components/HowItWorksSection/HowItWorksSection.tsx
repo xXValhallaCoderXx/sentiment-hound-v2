@@ -2,7 +2,6 @@ import { Container, Title, Text, Group, Button, Badge } from "@mantine/core";
 import {
   IconPlug,
   IconTarget,
-  IconBrain,
   IconChartLine,
   IconRocket,
   IconArrowRight,
