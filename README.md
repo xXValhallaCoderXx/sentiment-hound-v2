@@ -119,3 +119,18 @@ For more detailed information on each specific application or service, including
 *   [apps/web/README.md](./apps/web/README.md)
 *   [apps/server/README.md](./apps/server/README.md)
 *   [apps/sentiment-analysis-service/README.md](./apps/sentiment-analysis-service/README.md)
+
+
+
+# Railway Environment Variables Required
+
+# Database
+
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+
+# NextAuth (if using authentication)
+
+NEXTAUTH_SECRET=your-nextauth-secret-here
+NEXTAUTH_URL=${{RAILWAY_PUBLIC_DOMAIN}}
+
+# Add any other environment variables your app needs
