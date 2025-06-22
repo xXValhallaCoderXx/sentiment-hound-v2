@@ -9,14 +9,14 @@ echo "🚀 Starting Railway build..."
 echo "📦 Installing dependencies..."
 pnpm install
 
-# Generate Prisma client
-echo "🗄️ Generating Prisma client..."
-pnpm --filter @repo/db run db:generate
-
 # Build all packages in correct order
 echo "🏗️ Building packages..."
 pnpm --filter @repo/db run build
 pnpm --filter @repo/services run build
+
+# Generate Prisma client
+echo "🗄️ Generating Prisma client..."
+pnpm --filter @repo/db run db:generate
 
 # Build the web application
 echo "🌐 Building web application..."
