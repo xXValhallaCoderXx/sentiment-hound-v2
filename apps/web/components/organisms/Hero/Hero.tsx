@@ -6,6 +6,7 @@ import {
   Box,
   Grid,
   GridCol,
+  Title,
 } from "@mantine/core";
 import classes from "./Hero.module.css";
 
@@ -17,20 +18,23 @@ const Hero = () => {
         <Grid align="center" gutter="xl">
           <GridCol span={{ base: 12, lg: 6 }}>
             <div className={classes.content}>
-              <h1 className={classes.title}>
-                <Text
-                  component="span"
-                  variant="gradient"
-                  gradient={{ from: "primary.5", to: "primary.4" }}
-                  inherit
-                >
-                  Unleash True Sentiment.
-                </Text>
-              </h1>
-              <Text className={classes.description} c="text-secondary">
-                The enterprise-grade analysis tool that&apos;s finally off its
-                leash. Powerful, affordable insights for creators, founders, and
-                businesses who are ready to stop guessing.
+              <Title
+                component="span"
+                variant="gradient"
+                c="primary"
+                size={55}
+                order={1}
+                ml={-8}
+              >
+                Cut through the noise.
+              </Title>
+              <Title order={3} component="span" c="white">
+                Fetch the insights your audience is hiding
+              </Title>
+              <Text className={classes.description} c="gray">
+                Sentiment Hound turns comments, reviews, and social chatter into
+                clear, ready-to-act insights—priced for creators, solo founders,
+                and growing brands.
               </Text>
 
               <Group className={classes.controls} mt="xl">
@@ -40,7 +44,7 @@ const Hero = () => {
                   color="primary.5"
                   c="white"
                 >
-                  Get Started Free
+                  Early Access
                 </Button>
                 <Button
                   size="lg"

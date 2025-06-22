@@ -53,19 +53,19 @@ const BeFirstToKnowSection = () => {
     {
       icon: IconDiscount,
       title: "Exclusive lifetime discount",
-      description: "Lock in special pricing before public launch",
+      description: "Lock in special 'Good Dog' pricing before public launch",
       color: "red",
     },
     {
       icon: IconRocket,
       title: "Priority onboarding",
-      description: "Skip the waitlist and get immediate access",
+      description: "Priority onboarding when we unleash the alpha",
       color: "blue",
     },
     {
       icon: IconFlask,
-      title: "Access to beta-only features",
-      description: "Try cutting-edge tools before anyone else",
+      title: "Access to the latest features",
+      description: "A direct line to influence new features",
       color: "green",
     },
   ];
@@ -81,17 +81,16 @@ const BeFirstToKnowSection = () => {
               size="lg"
               className={classes.badge}
             >
-              ⭐ Early Access
+              ⭐ Early Pup Access
             </Badge>
 
             <Title order={2} className={classes.title}>
-              Be the First to Lead.
+              Be the first to know.
             </Title>
 
             <Text className={classes.subtitle}>
-              Our early access spots are limited. Use an invitation code to
-              unlock the powerful Developer Plan and start digging for real
-              insights today.
+              Join the wait-list and lock in. Show your interest and start
+              digging as soon as our pups are ready.
             </Text>
           </div>
 
@@ -191,21 +190,6 @@ const BeFirstToKnowSection = () => {
               </Paper>
             </GridCol>
           </Grid>
-
-          <div className={classes.stats}>
-            <Group justify="center" gap="xl">
-              <div className={classes.stat}>
-                <Text c="green" fw={600} size="sm">
-                  ● 847 early supporters
-                </Text>
-              </div>
-              <div className={classes.stat}>
-                <Text c="blue" fw={600} size="sm">
-                  ● Launching Q2 2024
-                </Text>
-              </div>
-            </Group>
-          </div>
         </div>
       </Container>
     </div>

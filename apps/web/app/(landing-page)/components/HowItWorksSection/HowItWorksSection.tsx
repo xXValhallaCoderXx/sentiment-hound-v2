@@ -78,23 +78,6 @@ const HowItWorksSection = () => {
             </div>
           ))}
         </div>
-
-        <Group justify="center" className={classes.ctaGroup}>
-          <Button
-            size="lg"
-            className={classes.ctaButton}
-            leftSection={<IconRocket size={20} />}
-          >
-            Start Free Trial
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className={classes.secondaryButton}
-          >
-            View Demo
-          </Button>
-        </Group>
       </Container>
     </div>
   );

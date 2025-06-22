@@ -3,13 +3,19 @@ import { redirect } from "next/navigation";
 import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 import { Hero } from "@/components/organisms/Hero";
 import { FeaturesSection } from "./components/FeaturesSection";
+import { CompetitiveSection } from "./components/CompetitiveSection";
 import { HowItWorksSection } from "./components/HowItWorksSection";
 import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
 import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
 import { Footer } from "./components/Footer";
+import { IconEye } from "@tabler/icons-react";
+import { Stack, Group, Button } from "@mantine/core";
+import { SpamDetectionSection } from "./components/SpamDetectionSection";
+import { CommandCenterSection } from "./components/CommandCenterSection";
 import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
 import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
+import classes from "./LandingPage.module.css";
 
 const LandingPage = async () => {
   const session = await auth();
@@ -27,9 +33,13 @@ const LandingPage = async () => {
           <section id="home">
             <Hero />
           </section>
-          <section id="features">
-            <FeaturesSection />
+          <section id="early-access">
+            <BeFirstToKnowSection />
           </section>
+          <Stack gap={96} id="features" className={classes.wrapper}>
+            <CommandCenterSection />
+            <SpamDetectionSection />
+          </Stack>
           <section id="how-it-works">
             <HowItWorksSection />
           </section>
@@ -42,9 +52,7 @@ const LandingPage = async () => {
           <section id="faq">
             <FaqSection />
           </section>
-          <section id="early-access">
-            <BeFirstToKnowSection />
-          </section>
+
           <Footer />
         </AppShellMain>
       </AppShell>
