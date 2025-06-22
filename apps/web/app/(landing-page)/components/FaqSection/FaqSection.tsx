@@ -6,11 +6,11 @@ const FaqSection = () => {
   return (
     <div className={classes.faqBackground}>
       <Container size="sm" className={classes.wrapper}>
-        <Title ta="center" className={classes.title}>
+        <Title ta="center" className={classes.title} c="white">
           Frequently Asked Questions
         </Title>
 
-        <Text c="#a0a0a0" ta="center" size="lg" mb="xl">
+        <Text c="gray.4" ta="center" size="lg" mb="xl">
           Get answers to the most commonly asked questions about Sentiment Hound
         </Text>
 

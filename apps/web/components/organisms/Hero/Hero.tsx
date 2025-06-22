@@ -53,29 +53,6 @@ const Hero = () => {
                   See a Live Demo
                 </Button>
               </Group>
-
-              <Box className={classes.trustedBy} mt="xl">
-                <Text c="dimmed" size="sm" mb="md">
-                  Trusted by modern brands and agile teams
-                </Text>
-                <Group gap="xl" className={classes.brandLogos}>
-                  <Text c="dimmed" fw={600} size="sm">
-                    ACME
-                  </Text>
-                  <Text c="dimmed" fw={600} size="sm">
-                    BRAND
-                  </Text>
-                  <Text c="dimmed" fw={600} size="sm">
-                    TECHCO
-                  </Text>
-                  <Text c="dimmed" fw={600} size="sm">
-                    STARTUP
-                  </Text>
-                  <Text c="dimmed" fw={600} size="sm">
-                    COMPANY
-                  </Text>
-                </Group>
-              </Box>
             </div>
           </GridCol>
           <GridCol span={{ base: 12, lg: 6 }}>
