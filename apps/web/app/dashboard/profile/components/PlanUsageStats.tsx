@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from "react";
 import { getPlanUsageStats } from "@/actions/plan-usage.actions";
 
 interface PlanUsageStatsProps {
-  userId: string;
+  userId?: string;
 }
 
 interface UsageStats {
@@ -15,7 +15,7 @@ interface UsageStats {
   tokens: { current: number; max: number; periodEnd: Date | null };
 }
 
-const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
+const PlanUsageStats: FC<PlanUsageStatsProps> = () => {
   const [stats, setStats] = useState<UsageStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +24,7 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
       try {
         setLoading(true);
         const response = await getPlanUsageStats();
-        
+
         if (response.error) {
           console.error("Error fetching plan usage stats:", response.error);
           setStats(null);
@@ -45,7 +45,9 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
   if (loading) {
     return (
       <Card withBorder>
-        <Text size="sm" c="dimmed">Loading usage statistics...</Text>
+        <Text size="sm" c="dimmed">
+          Loading usage statistics...
+        </Text>
       </Card>
     );
   }
@@ -53,7 +55,9 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
   if (!stats) {
     return (
       <Card withBorder>
-        <Text size="sm" c="dimmed">Unable to load usage statistics</Text>
+        <Text size="sm" c="dimmed">
+          Unable to load usage statistics
+        </Text>
       </Card>
     );
   }
@@ -79,7 +83,9 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
           <ThemeIcon size="sm" variant="light" color="blue">
             <IconTrendingUp size={14} />
           </ThemeIcon>
-          <Text size="sm" fw={500}>Plan Usage</Text>
+          <Text size="sm" fw={500}>
+            Plan Usage
+          </Text>
         </Group>
 
         <Stack gap="sm">
@@ -93,13 +99,19 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
                 <Text size="sm">Integrations</Text>
               </Group>
               <Badge size="sm" variant="light">
-                {stats.integrations.current} / {formatLimit(stats.integrations.max)}
+                {stats.integrations.current} /{" "}
+                {formatLimit(stats.integrations.max)}
               </Badge>
             </Group>
             {stats.integrations.max > 0 && (
               <Progress
-                value={(stats.integrations.current / stats.integrations.max) * 100}
-                color={getProgressColor(stats.integrations.current, stats.integrations.max)}
+                value={
+                  (stats.integrations.current / stats.integrations.max) * 100
+                }
+                color={getProgressColor(
+                  stats.integrations.current,
+                  stats.integrations.max
+                )}
                 size="sm"
               />
             )}
@@ -115,13 +127,20 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
                 <Text size="sm">Tracked Keywords</Text>
               </Group>
               <Badge size="sm" variant="light">
-                {stats.trackedKeywords.current} / {formatLimit(stats.trackedKeywords.max)}
+                {stats.trackedKeywords.current} /{" "}
+                {formatLimit(stats.trackedKeywords.max)}
               </Badge>
             </Group>
             {stats.trackedKeywords.max > 0 && (
               <Progress
-                value={(stats.trackedKeywords.current / stats.trackedKeywords.max) * 100}
-                color={getProgressColor(stats.trackedKeywords.current, stats.trackedKeywords.max)}
+                value={
+                  (stats.trackedKeywords.current / stats.trackedKeywords.max) *
+                  100
+                }
+                color={getProgressColor(
+                  stats.trackedKeywords.current,
+                  stats.trackedKeywords.max
+                )}
                 size="sm"
               />
             )}
@@ -137,7 +156,8 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
                 <Text size="sm">Monthly Tokens</Text>
               </Group>
               <Badge size="sm" variant="light">
-                {stats.tokens.current.toLocaleString()} / {formatLimit(stats.tokens.max)}
+                {stats.tokens.current.toLocaleString()} /{" "}
+                {formatLimit(stats.tokens.max)}
               </Badge>
             </Group>
             {stats.tokens.max > 0 && (
@@ -149,7 +169,8 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = ({ userId }) => {
             )}
             {stats.tokens.periodEnd && (
               <Text size="xs" c="dimmed" mt="xs">
-                Resets on {new Date(stats.tokens.periodEnd).toLocaleDateString()}
+                Resets on{" "}
+                {new Date(stats.tokens.periodEnd).toLocaleDateString()}
               </Text>
             )}
           </Box>

@@ -1,8 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, Title, Text, Flex, Group, Loader } from "@mantine/core";
-import { IconArrowNarrowUp, IconArrowNarrowDown, IconLine } from "@tabler/icons-react";
+import { Card, Title, Text, Group, Loader } from "@mantine/core";
+import {
+  IconArrowNarrowUp,
+  IconArrowNarrowDown,
+  IconLine,
+} from "@tabler/icons-react";
 import { getDashboardStats, DashboardStats } from "@/actions/dashboard.actions";
 
 const OverallSentimentScore = () => {
@@ -19,7 +23,7 @@ const OverallSentimentScore = () => {
         } else {
           setStats(result.data);
         }
-      } catch (err) {
+      } catch {
         setError("Failed to load dashboard stats");
       } finally {
         setLoading(false);
@@ -31,7 +35,7 @@ const OverallSentimentScore = () => {
 
   const getSentimentColor = (score: number) => {
     if (score >= 70) return "teal";
-    if (score >= 50) return "yellow"; 
+    if (score >= 50) return "yellow";
     return "red";
   };
 

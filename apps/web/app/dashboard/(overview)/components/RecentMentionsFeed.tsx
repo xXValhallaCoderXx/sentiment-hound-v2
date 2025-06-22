@@ -1,19 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  Card, 
-  Title, 
-  Stack, 
-  Group, 
-  Button, 
-  Text, 
-  Badge, 
-  Flex, 
-  Avatar,
+import {
+  Card,
+  Title,
+  Stack,
+  Group,
+  Button,
+  Text,
+  Badge,
   Loader,
   Pagination,
-  Box
+  Box,
 } from "@mantine/core";
 import { 
   IconBrandYoutube, 
@@ -39,17 +37,19 @@ const RecentMentionsFeed = () => {
 
   useEffect(() => {
     fetchMentions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeFilter, currentPage]);
 
   const fetchMentions = async () => {
     try {
       setLoading(true);
       const filters = {
-        sentiment: activeFilter === "all" ? undefined : activeFilter.toUpperCase(),
+        sentiment:
+          activeFilter === "all" ? undefined : activeFilter.toUpperCase(),
         page: currentPage,
         pageSize,
       };
-      
+
       const result = await getRecentMentions(filters);
       if (result.error) {
         setError(result.error.error);
@@ -58,7 +58,7 @@ const RecentMentionsFeed = () => {
         setTotalPages(result.data?.totalPages || 1);
         setTotal(result.data?.total || 0);
       }
-    } catch (err) {
+    } catch {
       setError("Failed to load mentions");
     } finally {
       setLoading(false);

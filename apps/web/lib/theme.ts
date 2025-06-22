@@ -2,7 +2,6 @@ import {
   MantineThemeOverride,
   MantineColorsTuple,
   DEFAULT_THEME,
-  Anchor,
 } from "@mantine/core";
 
 // Simplified color palette - use semantic names

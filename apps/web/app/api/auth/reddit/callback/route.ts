@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/next-auth.lib";
 import {
@@ -49,7 +50,9 @@ export async function GET(req: NextRequest) {
         refreshToken: integration.refreshToken || "",
         accountId: integration.accountId,
         userId,
-        refreshTokenExpiresAt: new Date(Date.now() + integration.expiresIn * 1000),
+        refreshTokenExpiresAt: new Date(
+          Date.now() + integration.expiresIn * 1000
+        ),
       });
 
       // Construct success URL
@@ -60,12 +63,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(successUrl);
     } catch (error: any) {
       console.error("Failed to create Reddit integration:", error);
-      
+
       // Handle plan limit errors gracefully
-      const errorMessage = error.message?.includes("Plan limit") 
-        ? "plan_limit_exceeded" 
+      const errorMessage = error.message?.includes("Plan limit")
+        ? "plan_limit_exceeded"
         : "integration_failed";
-      
+
       // Construct failure URL
       const failureUrl = new URL(
         `/dashboard/integrations?success=false&error=${errorMessage}`,
