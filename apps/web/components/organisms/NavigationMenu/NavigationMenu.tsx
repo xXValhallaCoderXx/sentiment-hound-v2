@@ -54,7 +54,11 @@ const NavigationMenu = () => {
         {/* Mobile Navigation */}
         <Group gap="sm" hiddenFrom="md">
           <ThemeToggle />
-          <Burger opened={opened} onClick={open} aria-label="Toggle navigation" />
+          <Burger
+            opened={opened}
+            onClick={open}
+            aria-label="Toggle navigation"
+          />
         </Group>
       </Group>
 
@@ -78,9 +82,7 @@ const NavigationMenu = () => {
           <Box>
             <SignInButton />
           </Box>
-          <Stack gap="md">
-            {navigationLinks}
-          </Stack>
+          <Stack gap="md">{navigationLinks}</Stack>
         </Stack>
       </Drawer>
     </>
