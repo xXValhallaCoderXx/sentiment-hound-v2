@@ -194,35 +194,7 @@
   }
 }
 
-.submitButton {
-  background: linear-gradient(
-    135deg,
-    var(--mantine-color-red-6) 0%,
-    var(--mantine-color-red-7) 100%
-  );
-  border: none;
-  font-weight: 600;
-  font-size: rem(16px);
-  transition: all 0.3s ease;
 
-  &:hover {
-    background: linear-gradient(
-      135deg,
-      var(--mantine-color-red-7) 0%,
-      var(--mantine-color-red-8) 100%
-    );
-    transform: translateY(-1px);
-  }
-
-  &:disabled {
-    background: var(--mantine-color-green-6);
-    opacity: 0.8;
-  }
-
-  @media (max-width: var(--mantine-breakpoint-sm)) {
-    font-size: rem(14px);
-  }
-}
 
 .disclaimer {
   color: rgba(255, 255, 255, 0.5);

@@ -154,7 +154,6 @@ const BeFirstToKnowSection = () => {
                     <Button
                       type="submit"
                       size="lg"
-                      className={classes.submitButton}
                       rightSection={<IconArrowRight size={16} />}
                       disabled={isDisabled}
                     >
