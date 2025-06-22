@@ -49,6 +49,9 @@ const BeFirstToKnowSection = () => {
     },
   });
 
+  // Disable form if already successfully submitted or if email already exists
+  const isDisabled = state?.success || state?.alreadyExists;
+
   const benefits = [
     {
       icon: IconDiscount,
@@ -136,6 +139,7 @@ const BeFirstToKnowSection = () => {
                       placeholder="Enter your name (optional)"
                       {...form.getInputProps("name")}
                       className={classes.input}
+                      disabled={isDisabled}
                     />
 
                     <TextInput
@@ -144,6 +148,7 @@ const BeFirstToKnowSection = () => {
                       required
                       {...form.getInputProps("email")}
                       className={classes.input}
+                      disabled={isDisabled}
                     />
 
                     <Button
@@ -151,11 +156,16 @@ const BeFirstToKnowSection = () => {
                       size="lg"
                       className={classes.submitButton}
                       rightSection={<IconArrowRight size={16} />}
+                      disabled={isDisabled}
                     >
-                      Claim Your Spot
+                      {state?.success
+                        ? "You're In! 🎉"
+                        : state?.alreadyExists
+                          ? "Already Signed Up ✓"
+                          : "Claim Your Spot"}
                     </Button>
 
-                    {state?.error && (
+                    {state?.error && !state?.alreadyExists && (
                       <Alert
                         variant="light"
                         color="red"
@@ -165,7 +175,17 @@ const BeFirstToKnowSection = () => {
                       </Alert>
                     )}
 
-                    {state?.success && (
+                    {state?.error && state?.alreadyExists && (
+                      <Alert
+                        variant="light"
+                        color="blue"
+                        icon={<IconCheck size={16} />}
+                      >
+                        {state.error}
+                      </Alert>
+                    )}
+
+                    {state?.success && !state?.alreadyExists && (
                       <Alert
                         variant="light"
                         color="green"
