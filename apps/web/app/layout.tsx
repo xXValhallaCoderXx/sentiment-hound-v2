@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-
+import { Inter } from "next/font/google";
 import "./globals.css";
-import "@mantine/core/styles.css";
-import "@mantine/charts/styles.css";
-import "@mantine/notifications/styles.css";
-
 import {
-  ColorSchemeScript,
   MantineProvider,
+  ColorSchemeScript,
   mantineHtmlProps,
 } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import { theme } from "../lib/theme";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sentiment Hound",
-  description: "Sentiment Hound is a tool for analyzing sentiment in text.",
+  title: "Sentiment Hound - Energetic Insight, Approachable Power",
+  description:
+    "Analyze sentiment with a fresh, modern interface. Sentiment Hound provides powerful insights with an accessible and energetic user experience.",
 };
 
 export default function RootLayout({
@@ -27,10 +29,11 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body>
-        <body>
-          <MantineProvider>{children}</MantineProvider>
-        </body>
+      <body className={inter.className}>
+        <MantineProvider theme={theme}>
+          <Notifications />
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );

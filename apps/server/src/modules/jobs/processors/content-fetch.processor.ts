@@ -5,13 +5,14 @@ import {
   integrationsService,
   providerService,
   youtubeService,
-  commentsService,
+  mentionService,
   postService,
 } from '@repo/services';
 
 @Injectable()
 export class ContentFetchProcessor {
   private readonly logger = new Logger(ContentFetchProcessor.name);
+
   async process(job: Job): Promise<void> {
     this.logger.log(`Processing FETCH_CONTENT job id=${job.id}`);
 
@@ -22,52 +23,66 @@ export class ContentFetchProcessor {
       String(integration.providerId),
     );
 
-    // TODO - Make this constant
-    if (provider.name === 'youtube') {
-      console.log('Fetching content from Youtube');
-      const user = await subtaskService.getUserForSubTask(job.id);
-      const results = await youtubeService.fetchAllYoutubePosts(user?.id);
-
-      // Prepare posts and comments data
-      const posts = results.map((result) => ({
-        userId: user.id,
-        title: result.title,
-        commentCount: Number(result.statistics?.commentCount),
-        description: result.description,
-        publishedAt: new Date(result.publishedAt),
-        imageUrl: result.thumbnail,
-        postUrl: result.id,
-        remoteId: result.id,
-        integrationId: integration.id,
-      }));
-      // TODO - CLEAN THIS MESS WITH THE RELATIONS
-      const comments = results.flatMap((result) =>
-        result.comments.map((comment) => ({
-          commentId: comment.id,
-          content: comment.textOriginal,
-          postId: result.id,
-        })),
-      );
-
-      const videoIds = results.map((result) => result.id);
-      await postService.createUserPosts(posts);
-      const createdPosts = await postService.findPostsBasedOnRemoteIds(
-        videoIds,
-      );
-
-      comments.forEach(async (comment) => {
-        const post = createdPosts.find((p) => p.remoteId === comment.postId);
-        if (post) {
-          await commentsService.createComment({
-            data: { ...comment, postId: post.id },
-          });
-        }
-      });
-    } else {
-      console.log('Provider not supported');
+    if (provider.name !== 'youtube') {
+      this.logger.warn(`Provider '${provider.name}' is not supported`);
+      return;
     }
 
-    // ...existing code to fetch content based on job.data...
+    const user = await subtaskService.getUserForSubTask(job.id);
+    if (!user) {
+      this.logger.warn(`No user found for subtask ${job.id}`);
+      return;
+    }
+
+    const youtubePosts = await youtubeService.fetchAllYoutubePosts(user.id);
+
+    const posts = youtubePosts.map((video) => ({
+      userId: user.id,
+      title: video.title,
+      commentCount: Number(video.statistics?.commentCount),
+      description: video.description,
+      publishedAt: new Date(video.publishedAt),
+      imageUrl: video.thumbnail,
+      postUrl: video.id,
+      remoteId: video.id,
+      integrationId: integration.id,
+    }));
+
+    // Create posts and keep a map of remoteId => postId
+    await postService.createUserPosts(posts);
+    const createdPosts = await postService.findPostsBasedOnRemoteIds(
+      posts.map((p) => p.remoteId),
+    );
+    const postMap = new Map(createdPosts.map((p) => [p.remoteId, p.id]));
+
+    // Flatten comments and attach correct postId
+    const mentions = youtubePosts.flatMap((video) => {
+      const postId = postMap.get(video.id);
+      if (!postId) return [];
+
+      return video.comments.map((comment) => ({
+        commentId: comment.id,
+
+        content: comment.textOriginal,
+        post: { connect: { id: postId } }, // <== THIS is the key fix
+      }));
+    });
+
+    await Promise.all(
+      mentions.map((mention) =>
+        mentionService.createMention({
+          data: {
+            content: mention.content,
+            remoteId: mention.commentId,
+            mentionId: Number(mention.commentId),
+            sourceType: 'YOUTUBE',
+            post: mention.post,
+          },
+        }),
+      ),
+    );
+
     await subtaskService.markSubTaskAsCompleted(job.id);
+    this.logger.log(`Finished FETCH_CONTENT job id=${job.id}`);
   }
 }

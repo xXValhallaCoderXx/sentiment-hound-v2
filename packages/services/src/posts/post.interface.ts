@@ -1,4 +1,4 @@
-import { Post, Comment } from "@repo/db";
+import { Post, Mention } from "@repo/db";
 export interface ICreatePost {
   id: number;
   title: string;
@@ -14,11 +14,11 @@ export interface ICreatePost {
 }
 
 export interface PostWithComments extends Post {
-  comments: Comment[];
+  comments: Mention[];
 }
 
 export type ProcessedPost = Post & {
-  comments: Comment[];
+  comments: Mention[];
   sentimentCounts: {
     positive: number;
     neutral: number;

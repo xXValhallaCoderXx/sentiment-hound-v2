@@ -1,7 +1,5 @@
 "use server";
 // import { auth } from "@/lib/next-auth.lib";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 // import { TaskType } from "database";
 // import {
 //   integrationsService,
@@ -29,19 +27,18 @@ export const integrationMenuAction = async (
   try {
     // Authenticate user
     // const session = await auth();
-    const session: any = {};
-    if (!session?.user?.id) {
-      return {
-        status: "error",
-        message: "Unauthorized access",
-      };
-    }
+    // const session: unknown = {};
+    // if (!session?.user?.id) {
+    //   return {
+    //     status: "error",
+    //     message: "Unauthorized access",
+    //   };
+    // }
 
-    const userId = session?.user?.id as string;
+    // const userId = session?.user?.id as string;
 
     // Extract and validate form data
     const integrationType = formData.get("integrationName");
-    const syncType = formData.get("syncType");
 
     if (!integrationType) {
       return {
@@ -108,19 +105,18 @@ export const fetchIntegerationContent = async (
   try {
     // Authenticate user
     // const session = await auth();
-    const session: any = {};
-    if (!session?.user?.id) {
-      return {
-        status: "error",
-        message: "Unauthorized access",
-      };
-    }
+    // const session: unknown = {};
+    // if (!session?.user?.id) {
+    //   return {
+    //     status: "error",
+    //     message: "Unauthorized access",
+    //   };
+    // }
 
-    const userId = session?.user?.id as string;
+    // const userId = session?.user?.id as string;
 
     // Extract and validate form data
     const integrationType = formData.get("integrationName");
-    const syncType = formData.get("syncType");
 
     if (!integrationType) {
       return {
@@ -167,13 +163,14 @@ export const fetchIntegerationContent = async (
         integrationId: "1",
       },
     };
-  } catch (error) {
+  } catch (error: unknown) {
+    // Handle specific errors
+    console.error("Integration menu action error:", error);
+
     return {
       status: "error",
-      // message: isCustomError(error)
-      //   ? error.friendlyMessage
-      //   : "An unexpected error occurred",
-      message: "ss",
+      message:
+        error instanceof Error ? error.message : "An unexpected error occurred",
     };
   }
 };

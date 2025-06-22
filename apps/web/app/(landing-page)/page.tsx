@@ -1,10 +1,18 @@
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
+import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 import { Hero } from "@/components/organisms/Hero";
+import { HowItWorksSection } from "./components/HowItWorksSection";
+import { CommandCenterSection } from "./components/CommandCenterSection";
+import { SpamDetectionSection } from "./components/SpamDetectionSection";
+import { CompetitiveSection } from "./components/CompetitiveSection";
+import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
+import { SignUpToInsightSection } from "./components/SignUpToInsightSection";
+import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
-import { MainFeaturesSection } from "./components/MainFeaturesSection";
-import { SubFeaturesSection } from "./components/SubFeaturesSection";
 import { Footer } from "./components/Footer";
+import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
+import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
 
 const LandingPage = async () => {
   const session = await auth();
@@ -13,13 +21,35 @@ const LandingPage = async () => {
   }
 
   return (
-    <div>
-      <Hero />
-
-      <MainFeaturesSection />
-      <SubFeaturesSection />
-      <FaqSection />
-      <Footer />
+    <div style={{ minHeight: "100vh" }}>
+      <AppShell header={{ height: 70 }}>
+        <AppShellHeader>
+          <NavigationMenu />
+        </AppShellHeader>
+        <AppShellMain style={{ padding: 0 }}>
+          <section id="home">
+            <Hero />
+          </section>
+          <section id="be-first-to-know">
+            <BeFirstToKnowSection />
+          </section>
+          <section id="about">
+            <HowItWorksSection />
+            <CommandCenterSection />
+            <WhyTeamsLoveSection />
+          </section>
+          <section id="services">
+            <SpamDetectionSection />
+            <CompetitiveSection />
+            <SignUpToInsightSection />
+            <PricingSection />
+          </section>
+          <section id="contact">
+            <FaqSection />
+            <Footer />
+          </section>
+        </AppShellMain>
+      </AppShell>
     </div>
   );
 };

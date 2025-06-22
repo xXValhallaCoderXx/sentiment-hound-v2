@@ -1,11 +1,11 @@
 import React from "react";
-import { Box, Text, SimpleGrid, Center, Stack, Group } from "@mantine/core";
+import { Box, Text, SimpleGrid, Center, Stack } from "@mantine/core";
 import { ProcessedPost } from "@repo/services";
 import PostListItem from "@/components/molecules/PostListItem";
 import PaginationControl from "./PaginationControl";
 
 interface PostsTableProps {
-  data: any;
+  data: ProcessedPost[];
   pagination?: {
     page: number;
     totalPages: number;
@@ -60,10 +60,10 @@ const PostListTable = ({ data, pagination }: PostsTableProps) => {
   return (
     <Stack gap="md">
       <SimpleGrid cols={{ base: 1 }} spacing="md" verticalSpacing="md">
-        {formattedPosts.map((post: any) => (
+        {formattedPosts.map((post) => (
           <PostListItem
             key={post.id}
-            provider={post.provider as any}
+            provider={post.provider}
             postDate={post.postDate}
             commentsCount={post.commentsCount}
             sentimentDistribution={post.sentimentDistribution}

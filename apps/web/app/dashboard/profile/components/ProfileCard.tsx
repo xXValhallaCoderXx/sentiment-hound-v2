@@ -1,30 +1,21 @@
 import { Box, Avatar, Text, Badge, Stack, Group, Flex } from "@mantine/core";
-import { userService } from "@repo/services";
-import Image from "next/image";
 import dayjs from "dayjs";
 
 interface IProfileCardProps {
-  id: string;
+  user: {
+    image: string | null;
+    name: string | null;
+    email: string;
+    createdAt: Date;
+    plan: { name: string } | null;
+  };
 }
 
-const ProfileCard = async ({ id }: IProfileCardProps) => {
-  const user = await userService.findUserById({
-    id,
-    args: {
-      include: {
-        plan: true,
-      },
-    },
-  });
-
-  if (!user) {
-    return <Text>User not found</Text>;
-  }
-
+const ProfileCard = async ({ user }: IProfileCardProps) => {
   return (
     <Box>
       <Group>
-        <Avatar src={user.image} radius="xl" size="lg" />
+        <Avatar src={user?.image} radius="xl" size="lg" />
 
         <Stack gap={0}>
           <Text fw={500} size="md">
@@ -44,7 +35,6 @@ const ProfileCard = async ({ id }: IProfileCardProps) => {
           Current Plan:
         </Text>
         <Badge color="dark" radius="sm" size="md">
-          {/* @ts-ignore */}
           {user?.plan?.name || "Free"}
         </Badge>
       </Flex>

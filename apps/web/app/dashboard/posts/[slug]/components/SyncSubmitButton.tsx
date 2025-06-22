@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect } from "react";
 import { Button } from "@mantine/core";
 import { useFormStatus, useFormState } from "react-dom";
 import { integrationMenuAction, IFormState } from "../actions";

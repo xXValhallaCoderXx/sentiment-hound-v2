@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { postService } from "@repo/services";
+import { postService, ProcessedPost } from "@repo/services";
 import { Suspense } from "react";
 import { auth } from "@/lib/next-auth.lib";
 import { Box, Flex } from "@mantine/core";
@@ -11,17 +10,7 @@ import PostFilter from "./components/PostFilter";
 export default async function PostsDefaultPage({
   searchParams,
 }: {
-  searchParams: {
-    page?: string;
-    pageSize?: string;
-    providerId?: string;
-    sentiment?: string;
-    startDate?: string;
-    endDate?: string;
-    searchTerm?: string;
-    sortBy?: string;
-    sortOrder?: "asc" | "desc";
-  };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
   // Get the current authenticated user
   const session = await auth();
@@ -45,7 +34,6 @@ export default async function PostsDefaultPage({
 
   // Get filter parameters
   const providerIdFilter = providerId ? parseInt(providerId) : undefined;
-  const sentimentFilter = sentiment || undefined;
   const startDateFilter = startDate ? new Date(startDate) : undefined;
   const endDateFilter = endDate ? new Date(endDate) : undefined;
   const searchTermFilter = searchTerm || undefined;
@@ -88,13 +76,13 @@ export default async function PostsDefaultPage({
               }}
             />
           </Box>
-          {postsData.data.length > 0 ? (
+          {postsData?.data?.length > 0 ? (
             <PostListTable
-              data={postsData.data}
+              data={postsData?.data as ProcessedPost[]}
               pagination={{
                 page: pageFilter,
-                totalPages: postsData.totalPages,
-                onPageChange: (newPage) => {
+                totalPages: postsData.totalPages || 0,
+                onPageChange: () => {
                   // This will be handled by a client component
                 },
               }}

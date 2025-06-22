@@ -2,7 +2,7 @@
 import { Alert } from "@mantine/core";
 
 import { useRouter, useSearchParams } from "next/navigation";
-const IntegrationAlert = (params: any) => {
+const IntegrationAlert = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const handleOnCloseAlert = () => {
@@ -13,7 +13,7 @@ const IntegrationAlert = (params: any) => {
     searchParams?.get("success") === "true" && (
       <Alert
         variant="light"
-        color="green"
+        color="success"
         title="Integration Success"
         withCloseButton
         className="mt-4"

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Box, Select, Button, Group, Flex } from "@mantine/core";
+import { Select, Button, Flex } from "@mantine/core"; // Removed Box, Group
 import { TaskStatus, TaskType } from "@repo/db";
 
 const TaskFilter: React.FC = () => {
@@ -71,7 +71,10 @@ const TaskFilter: React.FC = () => {
           clearable
         />
         <Flex align="flex-end">
-          <Button onClick={() => handleApplyFilters(undefined, undefined)}>
+          <Button
+            size="sm"
+            onClick={() => handleApplyFilters(undefined, undefined)}
+          >
             Clear Filters
           </Button>
         </Flex>

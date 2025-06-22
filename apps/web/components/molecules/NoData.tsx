@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ComponentType, SVGProps } from "react";
 import Link from "next/link";
 import { IconMoodEmpty } from "@tabler/icons-react";
 import { Flex, Title, Text, Button } from "@mantine/core";
@@ -6,7 +6,7 @@ import { Flex, Title, Text, Button } from "@mantine/core";
 interface INoDataProps {
   title?: string;
   description?: string;
-  icon?: any;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
   redirectCta?: {
     label: string;
     href: string;
@@ -16,7 +16,8 @@ interface INoDataProps {
 const NoData: FC<INoDataProps> = ({
   title = "No Data Found",
   description,
-  icon = IconMoodEmpty,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  icon = IconMoodEmpty, // Keep default icon if not provided
   redirectCta,
 }) => {
   return (

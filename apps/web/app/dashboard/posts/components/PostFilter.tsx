@@ -3,12 +3,7 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Group, Select, TextInput, Button } from "@mantine/core";
-import {
-  IconSearch,
-  IconFilter,
-  IconSortAscending,
-  IconSortDescending,
-} from "@tabler/icons-react";
+import { IconSearch, IconFilter } from "@tabler/icons-react";
 
 interface FilterParams {
   providerId?: string;
@@ -31,12 +26,6 @@ const PostFilter: React.FC<PostFilterProps> = ({ currentFilters }) => {
   // Set up state for filters
   const [providerId, setProviderId] = useState(currentFilters.providerId || "");
   const [sentiment, setSentiment] = useState(currentFilters.sentiment || "");
-  const [startDate, setStartDate] = useState<Date | null>(
-    currentFilters.startDate ? new Date(currentFilters.startDate) : null
-  );
-  const [endDate, setEndDate] = useState<Date | null>(
-    currentFilters.endDate ? new Date(currentFilters.endDate) : null
-  );
   const [searchTerm, setSearchTerm] = useState(currentFilters.searchTerm || "");
   const [sortBy, setSortBy] = useState(currentFilters.sortBy || "createdAt");
   const [sortOrder, setSortOrder] = useState(
@@ -80,8 +69,6 @@ const PostFilter: React.FC<PostFilterProps> = ({ currentFilters }) => {
   const handleClearFilters = () => {
     setProviderId("");
     setSentiment("");
-    setStartDate(null);
-    setEndDate(null);
     setSearchTerm("");
     setSortBy("createdAt");
     setSortOrder("desc");

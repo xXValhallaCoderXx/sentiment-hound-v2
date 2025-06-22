@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
 export async function GET() {
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
   const redirectUri = `${baseUrl}/api/auth/youtube/callback`;

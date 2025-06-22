@@ -1,0 +1,57 @@
+.wrapper {
+  background: #0f0f1e;
+  padding: rem(120px) 0;
+}
+
+.inner {
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: rem(60px);
+}
+
+.title {
+  font-size: rem(48px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(36px);
+  }
+}
+
+.testimonialCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: rem(12px);
+  padding: rem(24px);
+  height: 100%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.quote {
+  font-size: rem(16px);
+  color: #ffffff;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.avatarPlaceholder {
+  width: rem(40px);
+  height: rem(40px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff4757, #ff6b7a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

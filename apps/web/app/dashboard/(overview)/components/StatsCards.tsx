@@ -2,7 +2,6 @@ import { SimpleGrid } from "@mantine/core";
 import DashboardSentimentCard, {
   IDashboardSentimentCardProps,
 } from "@/components/molecules/DashboardSentimentCard";
-import { IconMessage } from "@tabler/icons-react";
 
 const data: IDashboardSentimentCardProps[] = [
   {
@@ -21,7 +20,7 @@ const data: IDashboardSentimentCardProps[] = [
 
 const StatsCards = () => {
   return (
-    <SimpleGrid cols={{ base: 1, sm: 4 }}>
+    <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing={{ base: 12, sm: 16 }}>
       {data?.map((item, index) => (
         <DashboardSentimentCard key={index} {...item} />
       ))}

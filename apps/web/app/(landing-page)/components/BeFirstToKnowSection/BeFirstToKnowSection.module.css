@@ -1,0 +1,248 @@
+.wrapper {
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+  position: relative;
+  overflow: hidden;
+  padding: rem(100px) 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      radial-gradient(
+        circle at 20% 30%,
+        rgba(255, 71, 87, 0.08) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 70%,
+        rgba(84, 160, 255, 0.08) 0%,
+        transparent 50%
+      );
+    z-index: 1;
+  }
+
+  @media (max-width: var(--mantine-breakpoint-md)) {
+    padding: rem(60px) 0;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: rem(60px);
+
+  @media (max-width: var(--mantine-breakpoint-md)) {
+    margin-bottom: rem(40px);
+  }
+}
+
+.badge {
+  margin-bottom: rem(24px);
+  font-size: rem(14px);
+  font-weight: 600;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(12px);
+  }
+}
+
+.title {
+  color: white;
+  font-size: rem(48px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: rem(16px);
+  letter-spacing: -0.02em;
+
+  @media (max-width: var(--mantine-breakpoint-md)) {
+    font-size: rem(36px);
+  }
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(28px);
+  }
+}
+
+.subtitle {
+  color: var(--mantine-color-red-4);
+  font-size: rem(20px);
+  font-weight: 600;
+  margin-bottom: rem(16px);
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(18px);
+  }
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: rem(16px);
+  line-height: 1.6;
+  max-width: rem(600px);
+  margin: 0 auto;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(14px);
+  }
+}
+
+.mainContent {
+  margin-bottom: rem(48px);
+
+  @media (max-width: var(--mantine-breakpoint-md)) {
+    margin-bottom: rem(32px);
+  }
+}
+
+.benefitsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: rem(16px);
+  height: 100%;
+
+  @media (max-width: var(--mantine-breakpoint-md)) {
+    gap: rem(12px);
+  }
+}
+
+.benefitCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 87, 0.3);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    padding: rem(12px) !important;
+  }
+}
+
+.benefitIcon {
+  flex-shrink: 0;
+}
+
+.benefitTitle {
+  color: white;
+  font-size: rem(16px);
+  margin-bottom: rem(4px);
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(14px);
+  }
+}
+
+.benefitDescription {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: rem(14px);
+  line-height: 1.4;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(12px);
+  }
+}
+
+.formCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  height: fit-content;
+  position: sticky;
+  top: rem(24px);
+
+  @media (max-width: var(--mantine-breakpoint-md)) {
+    position: static;
+    margin-top: rem(24px);
+  }
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    padding: rem(20px) !important;
+  }
+}
+
+.input {
+  input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: rem(16px);
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus {
+      border-color: var(--mantine-color-red-4);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: var(--mantine-breakpoint-sm)) {
+      font-size: rem(14px);
+    }
+  }
+}
+
+.submitButton {
+  background: linear-gradient(
+    135deg,
+    var(--mantine-color-red-6) 0%,
+    var(--mantine-color-red-7) 100%
+  );
+  border: none;
+  font-weight: 600;
+  font-size: rem(16px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      var(--mantine-color-red-7) 0%,
+      var(--mantine-color-red-8) 100%
+    );
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    background: var(--mantine-color-green-6);
+    opacity: 0.8;
+  }
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(14px);
+  }
+}
+
+.disclaimer {
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(11px);
+  }
+}
+
+.stats {
+  opacity: 0.8;
+}
+
+.stat {
+  text-align: center;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    text {
+      font-size: rem(12px);
+    }
+  }
+}

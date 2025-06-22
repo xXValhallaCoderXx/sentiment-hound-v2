@@ -10,33 +10,38 @@ import { useDisclosure } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import { SideDrawerNavigation } from "../organisms/SideDrawerNavigation";
 import { AuthenticatedNavigationMenu } from "../organisms/AuthenticatedNavigationMenu";
+import { OnboardingWrapper } from "./OnboardingWrapper";
+import { InvitationCodeHandler } from "../InvitationCodeHandler";
 
-const DashboardLayout = ({ children }: any) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [opened, { toggle }] = useDisclosure();
 
   return (
-    <AppShell
-      header={{ height: 60 }}
-      navbar={{
-        width: 245,
-        breakpoint: "sm",
-        collapsed: { mobile: !opened },
-      }}
-      padding="md"
-    >
-      <AppShellHeader>
-        <AuthenticatedNavigationMenu isOpen={true} onToggle={toggle} />
-      </AppShellHeader>
-      <AppShellNavbar p="md">
-        <SideDrawerNavigation />
-      </AppShellNavbar>
-      <AppShellMain bg="#F9FAFB">
-        <Notifications position="top-right" />
-        {children}
-      </AppShellMain>
-    </AppShell>
+    <OnboardingWrapper>
+      <InvitationCodeHandler />
+      <AppShell
+        header={{ height: 60 }}
+        navbar={{
+          width: 245,
+          breakpoint: "sm",
+          collapsed: { mobile: !opened, desktop: false },
+        }}
+        padding="md"
+        withBorder={false}
+      >
+        <AppShellHeader withBorder>
+          <AuthenticatedNavigationMenu isOpen={opened} onToggle={toggle} />
+        </AppShellHeader>
+        <AppShellNavbar p="md" withBorder>
+          <SideDrawerNavigation />
+        </AppShellNavbar>
+        <AppShellMain>
+          <Notifications position="top-right" />
+          {children}
+        </AppShellMain>
+      </AppShell>
+    </OnboardingWrapper>
   );
 };
 
 export default DashboardLayout;
-

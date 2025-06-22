@@ -1,36 +1,26 @@
 "use server";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/next-auth.lib";
+import { ActionResponse, createErrorResponse } from "@/lib/types";
 
 import { Integration } from "@repo/db";
 import {
   integrationsService,
   providerService,
   youtubeService,
+  redditService,
 } from "@repo/services";
 
-interface ErrorResponse {
-  error: string;
-  code: string;
-  status: number;
-}
-
-type ActionResponse<T> =
-  | { data: T; error: null }
-  | { data: null; error: ErrorResponse };
-
-export async function getUserIntegrations(): Promise<ActionResponse<Integration[]>> {
+export async function getUserIntegrations(): Promise<
+  ActionResponse<Integration[]>
+> {
   try {
     const data = await integrationsService.getAllIntegrations();
     return { data, error: null };
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }
@@ -44,27 +34,21 @@ export async function getIntegration(
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }
 
-export async function getAllIntegrations(): Promise<ActionResponse<Integration[]>> {
+export async function getAllIntegrations(): Promise<
+  ActionResponse<Integration[]>
+> {
   try {
     const data = await integrationsService.getAllIntegrations();
     return { data, error: null };
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }
@@ -95,6 +79,11 @@ export async function revokeIntegration(formData: FormData) {
     await youtubeService.revokeRefreshToken(integration.refreshToken);
   }
 
+  // Handle Reddit token revocation
+  if (provider && provider.name === "reddit") {
+    await redditService.revokeIntegration(integration.accessToken);
+  }
+
   // // Delete the integration from our database
   await integrationsService.deleteIntegration(integration.id);
   redirect("/dashboard/integrations");
@@ -120,5 +109,61 @@ export const integrateProvider = async (formData: FormData) => {
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.AUTH_GOOGLE_ID}&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&access_type=offline&prompt=consent`;
     redirect(authUrl);
   }
+
+  if (provider && provider.name === "reddit") {
+    // Generate a random state parameter for security
+    const state = Math.random().toString(36).substring(2, 15);
+    
+    // Store state in session or another secure way if needed
+    // For now, we'll use a simple random string
+    
+    const authUrl = redditService.generateAuthUrl(state);
+    redirect(authUrl);
+  }
 };
 
+export async function shouldShowOnboarding(): Promise<boolean> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return false;
+    }
+
+    const integrations = await integrationsService.getUserIntegrations(session.user.id);
+    
+    // Show onboarding if user has no integrations
+    return integrations.length === 0;
+  } catch (error) {
+    console.error("Error checking onboarding status:", error);
+    return false;
+  }
+}
+
+// Helper function to check if user has completed basic setup
+export async function getUserOnboardingStatus() {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        isAuthenticated: false,
+        hasIntegrations: false,
+        integrationCount: 0,
+      };
+    }
+
+    const integrations = await integrationsService.getUserIntegrations(session.user.id);
+    
+    return {
+      isAuthenticated: true,
+      hasIntegrations: integrations.length > 0,
+      integrationCount: integrations.length,
+    };
+  } catch (error) {
+    console.error("Error getting onboarding status:", error);
+    return {
+      isAuthenticated: false,
+      hasIntegrations: false,
+      integrationCount: 0,
+    };
+  }
+}

@@ -1,18 +1,18 @@
 "use client";
 
-import { FC, useEffect, useRef } from "react";
+import { FC } from "react"; // Removed useEffect, useRef
 import { Button } from "@mantine/core";
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormStatus } from "react-dom"; // Removed useFormState
 // import { restartJobAction } from "@/slice/jobs/actions";
-import { notifications } from "@mantine/notifications";
+// import { notifications } from "@mantine/notifications"; // Unused
 interface ISyncSubmitButtonProps {
   jobId: number;
 }
 
-const initialState = {
-  message: "",
-  error: false,
-};
+// const initialState = { // Unused
+//   message: "",
+//   error: false,
+// };
 
 const RestartSyncButton: FC<ISyncSubmitButtonProps> = ({ jobId }) => {
   // const [state, formAction] = useFormState(restartJobAction, initialState);

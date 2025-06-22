@@ -1,18 +1,13 @@
 "use client";
 
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Button } from "@mantine/core";
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormStatus } from "react-dom";
 // import { deleteJobAction } from "@/slice/jobs/actions";
-import { notifications } from "@mantine/notifications";
+
 interface IDeleteJobButton {
   jobId: number;
 }
-
-const initialState = {
-  message: "",
-  error: false,
-};
 
 const DeleteJobButton: FC<IDeleteJobButton> = ({ jobId }) => {
   // const [state, formAction] = useFormState(deleteJobAction, initialState);

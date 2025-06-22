@@ -1,46 +1,71 @@
 .wrapper {
-    padding-top: calc(var(--mantine-spacing-xl) * 4);
-    padding-bottom: calc(var(--mantine-spacing-xl) * 4);
-    background-image: linear-gradient(to bottom, rgba(240, 240, 250, 0.2), rgba(230, 240, 250, 0.3));
+  padding-top: calc(var(--mantine-spacing-xl) * 3);
+  padding-bottom: calc(var(--mantine-spacing-xl) * 3);
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-8)
+  );
 }
 
 .title {
-    font-family:
-        Greycliff CF,
-        var(--mantine-font-family);
-    font-weight: 900;
-    margin-bottom: var(--mantine-spacing-md);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  font-weight: 700;
+  margin-bottom: calc(var(--mantine-spacing-md) * 1.5);
+  text-align: center;
+  font-size: rem(32px);
+  letter-spacing: -0.02em;
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(24px);
     text-align: center;
-    font-size: rem(36px);
-    
-    @media (max-width: var(--mantine-breakpoint-sm)) {
-        font-size: rem(28px);
-        text-align: left;
-    }
+  }
 }
 
 .description {
+  text-align: center;
+  font-size: rem(18px);
+  line-height: 1.6;
+  margin-bottom: rem(40px);
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
     text-align: center;
-    font-size: rem(18px);
-    margin-bottom: rem(30px);
-    
-    @media (max-width: var(--mantine-breakpoint-sm)) {
-        text-align: left;
-    }
+    font-size: rem(16px);
+  }
 }
 
 .featureCard {
-    transition: transform 0.3s, box-shadow 0.3s;
-    height: 100%;
-    
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--mantine-shadow-lg);
-    }
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  height: 100%;
+  border: rem(1px) solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: light-dark(
+      0 8px 30px rgba(0, 0, 0, 0.08),
+      0 8px 30px rgba(0, 0, 0, 0.3)
+    );
+  }
 }
 
 .featureIcon {
-    background: linear-gradient(45deg, var(--mantine-color-blue-6), var(--mantine-color-cyan-6));
-    color: white;
-    margin-bottom: rem(10);
+  background: light-dark(
+    var(--mantine-color-primary-0),
+    var(--mantine-color-primary-9)
+  );
+  color: var(--mantine-color-primary-6);
+  border: rem(1px) solid
+    light-dark(var(--mantine-color-primary-2), var(--mantine-color-primary-7));
 }

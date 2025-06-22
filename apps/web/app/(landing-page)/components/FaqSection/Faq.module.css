@@ -1,30 +1,35 @@
 .faqBackground {
-    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
+  background: #0f0f1e;
 }
 
 .wrapper {
-    padding-top: calc(var(--mantine-spacing-xl) * 2);
-    padding-bottom: calc(var(--mantine-spacing-xl) * 2);
-    min-height: rem(650px);
+  padding-top: calc(var(--mantine-spacing-xl) * 2);
+  padding-bottom: calc(var(--mantine-spacing-xl) * 2);
+  min-height: rem(650px);
 }
 
 .title {
-    margin-bottom: calc(var(--mantine-spacing-xl) * 0.5);
-    font-size: rem(34px);
-    font-weight: 900;
-    background: linear-gradient(to right, var(--mantine-color-blue-6), var(--mantine-color-cyan-6));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  margin-bottom: calc(var(--mantine-spacing-xl) * 0.5);
+  font-size: rem(48px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(36px);
+  }
 }
 
 .item {
-    border-radius: var(--mantine-radius-md);
-    margin-bottom: var(--mantine-spacing-lg);
-    border: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-    box-shadow: var(--mantine-shadow-xs);
-    transition: all 0.2s ease;
-    
-    &:hover {
-        box-shadow: var(--mantine-shadow-sm);
-    }
+  border-radius: var(--mantine-radius-md);
+  margin-bottom: var(--mantine-spacing-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
 }

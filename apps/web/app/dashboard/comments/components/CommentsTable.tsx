@@ -11,6 +11,7 @@ import {
   Badge,
   Tooltip,
   Text,
+  ScrollArea,
 } from "@mantine/core";
 import { Pagination } from "@/components/molecules/Pagination";
 
@@ -45,85 +46,95 @@ const CommentsTable: React.FC<CommentsTableProps> = ({
       </Box>
     );
   }
-
   return (
     <Box>
-      <Table striped highlightOnHover>
-        <TableThead>
-          <TableTr>
-            <TableTh>Content</TableTh>
-            <TableTh>Sentiment</TableTh>
-            <TableTh>Provider</TableTh>
-            <TableTh>Aspects</TableTh>
-          </TableTr>
-        </TableThead>
-        <TableTbody>
-          {data.map((comment) => (
-            <TableTr key={comment.id}>
-              <TableTd>
-                <Link href={`?commentId=${comment.id}`}>
-                  <Text size="sm" style={{ cursor: "pointer" }}>
-                    {comment.content}
-                  </Text>
-                </Link>
-              </TableTd>
-              <TableTd>
-                {comment.sentiment ? (
-                  <Badge
-                    color={
-                      comment.sentiment === "POSITIVE"
-                        ? "green"
-                        : comment.sentiment === "NEGATIVE"
-                          ? "red"
-                          : "gray"
-                    }
-                  >
-                    {comment.sentiment}
-                  </Badge>
-                ) : (
-                  <Text size="sm" color="dimmed">
-                    N/A
-                  </Text>
-                )}
-              </TableTd>
-              <TableTd>
-                <Text size="sm">{comment.provider}</Text>
-              </TableTd>
-              <TableTd>
-                {comment.aspects.length > 0 ? (
-                  comment.aspects.map((aspect, index) => (
-                    <Tooltip
-                      key={index}
-                      label={`Sentiment: ${aspect.sentiment}`}
-                      withArrow
-                    >
-                      <Badge
-                        color={
-                          aspect.sentiment === "positive"
-                            ? "green"
-                            : aspect.sentiment === "negative"
-                              ? "red"
-                              : "gray"
-                        }
-                        variant="light"
-                        size="sm"
-                        mr="xs"
-                      >
-                        {aspect.aspect}
-                      </Badge>
-                    </Tooltip>
-                  ))
-                ) : (
-                  <Text size="sm" color="dimmed">
-                    No aspects
-                  </Text>
-                )}
-              </TableTd>
+      <ScrollArea type="auto" style={{ minWidth: 700 }}>
+        <Table striped highlightOnHover>
+          <TableThead>
+            <TableTr>
+              <TableTh>Content</TableTh>
+              <TableTh>Sentiment</TableTh>
+              <TableTh>Provider</TableTh>
+              <TableTh>Aspects</TableTh>
             </TableTr>
-          ))}
-        </TableTbody>
-      </Table>
+          </TableThead>
+          <TableTbody>
+            {data.map((comment) => (
+              <TableTr key={comment.id}>
+                <TableTd
+                  style={{
+                    maxWidth: "300px",
+                    whiteSpace: "normal",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {" "}
+                  {/* MODIFIED HERE */}
+                  <Link href={`?commentId=${comment.id}`}>
+                    <Text size="sm" style={{ cursor: "pointer" }}>
+                      {comment.content}
+                    </Text>
+                  </Link>
+                </TableTd>
+                <TableTd>
+                  {comment.sentiment ? (
+                    <Badge
+                      color={
+                        comment.sentiment === "POSITIVE"
+                          ? "green"
+                          : comment.sentiment === "NEGATIVE"
+                            ? "red"
+                            : "gray"
+                      }
+                    >
+                      {comment.sentiment}
+                    </Badge>
+                  ) : (
+                    <Text size="sm" color="dimmed">
+                      N/A
+                    </Text>
+                  )}
+                </TableTd>
+                <TableTd>
+                  <Text size="sm">{comment.provider}</Text>
+                </TableTd>
+                <TableTd>
+                  {comment.aspects.length > 0 ? (
+                    comment.aspects.map((aspect, index) => (
+                      <Tooltip
+                        key={index}
+                        label={`Sentiment: ${aspect.sentiment}`}
+                        withArrow
+                      >
+                        <Badge
+                          color={
+                            aspect.sentiment === "positive"
+                              ? "green"
+                              : aspect.sentiment === "negative"
+                                ? "red"
+                                : "gray"
+                          }
+                          variant="light"
+                          size="sm"
+                          mr="xs"
+                        >
+                          {aspect.aspect}
+                        </Badge>
+                      </Tooltip>
+                    ))
+                  ) : (
+                    <Text size="sm" color="dimmed">
+                      No aspects
+                    </Text>
+                  )}
+                </TableTd>
+              </TableTr>
+            ))}
+          </TableTbody>
+        </Table>
+      </ScrollArea>
 
+      {/* Pagination component */}
       {/* Pagination component */}
       <Pagination
         currentPage={pagination.page}

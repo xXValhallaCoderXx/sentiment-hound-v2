@@ -1,4 +1,4 @@
-import { Stack, Flex, Box } from "@mantine/core";
+import { Stack, Box, SimpleGrid } from "@mantine/core";
 import {
   StatsCards,
   RecentMentions,
@@ -6,34 +6,18 @@ import {
   Notifications,
   AspectSection,
 } from "./components";
-// import { postService } from "services";
 
-const DashboardPage = async ({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}) => {
-  // const query = searchParams?.query || "";
-  // const currentPage = Number(searchParams?.page) || 1;
-  // const posts = await postService.getPosts({ page: 1, limit: 10 });
-
+const DashboardPage = async () => {
   return (
-    <Box>
-      <Stack gap={16}>
+    <Box p={{ base: 12, sm: 16, md: 24 }}>
+      <Stack gap={24}>
         <StatsCards />
         <TrendCards />
         <AspectSection />
-        <Flex gap={16}>
-          <Flex w="70%">
-            <RecentMentions />
-          </Flex>
-          <Flex w="30%">
-            <Notifications />
-          </Flex>
-        </Flex>
+        <SimpleGrid cols={{ base: 1, lg: 2 }} spacing={20}>
+          <RecentMentions />
+          <Notifications />
+        </SimpleGrid>
       </Stack>
     </Box>
   );

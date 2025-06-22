@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
+// import type { Metadata } from "next"; // Unused
 import React from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/next-auth.lib";
 import DashboardLayout from "@/components/templates/DashboardLayout";
-
-
 
 const AuthenticatedLayout = async ({
   children,

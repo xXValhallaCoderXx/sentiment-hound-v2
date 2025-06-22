@@ -5,11 +5,10 @@ import FullSyncButton from "./FullSyncButton";
 import { addNewTask } from "@/slices/tasks/tasks.actions";
 
 interface ActionPanelProps {
-  name: string;
   providerId: number;
 }
 
-const ActionPanel = ({ name, providerId }: ActionPanelProps) => {
+const ActionPanel = ({ providerId }: ActionPanelProps) => {
   return (
     <Flex justify="space-between" align="center" mt={8} mb={16}>
       <Group>

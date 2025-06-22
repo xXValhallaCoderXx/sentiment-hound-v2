@@ -4,9 +4,7 @@ import { redirect } from "next/navigation";
 // import { auth } from "@/lib/next-auth.lib";
 // import { providersService, integrationsService } from "services";
 
-
-
-export const revokeOauthAction = async (formData: FormData) => {
+export const revokeOauthAction = async () => {
   // const session = await auth();
   // const userId = session?.user?.id;
   // if (!userId) {
@@ -49,16 +47,3 @@ export const revokeOauthAction = async (formData: FormData) => {
   revalidatePath("/dashboard/jobs");
   redirect("/dashboard/integrations");
 };
-
-async function revokeToken(token: string) {
-  try {
-    await fetch(`https://oauth2.googleapis.com/revoke?token=${token}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
-  } catch (error) {
-    console.error("Error revoking token:", error);
-  }
-}

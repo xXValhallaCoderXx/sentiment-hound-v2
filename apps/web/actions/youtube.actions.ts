@@ -4,16 +4,7 @@ import { postService, ICreatePost, integrationsService } from "@repo/services";
 import { auth } from "@/lib/next-auth.lib";
 import { youtubeService } from "@repo/services";
 import { revalidatePath } from "next/cache";
-
-interface ErrorResponse {
-  error: string;
-  code: string;
-  status: number;
-}
-
-type ActionResponse<T> =
-  | { data: T; error: null }
-  | { data: null; error: ErrorResponse };
+import { ActionResponse, createErrorResponse } from "@/lib/types";
 
 export async function fetchAllUserPosts(): Promise<ActionResponse<boolean>> {
   try {
@@ -23,11 +14,11 @@ export async function fetchAllUserPosts(): Promise<ActionResponse<boolean>> {
     if (!userId) {
       return {
         data: null,
-        error: {
-          error: "User not authenticated",
+        error: createErrorResponse({
+          message: "User not authenticated",
           code: "UNAUTHORIZED",
-          status: 401,
-        },
+          statusCode: 401,
+        }),
       };
     }
 
@@ -60,11 +51,7 @@ export async function fetchAllUserPosts(): Promise<ActionResponse<boolean>> {
     console.error("Error refreshing YouTube posts:", error);
     return {
       data: null,
-      error: {
-        error: error.message || "Failed to refresh YouTube posts",
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error, "Failed to refresh YouTube posts"),
     };
   }
 }
@@ -77,11 +64,7 @@ export async function analyzeYoutubePosts(): Promise<ActionResponse<boolean>> {
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }
@@ -105,16 +88,11 @@ export async function refreshAccessToken(): Promise<ActionResponse<boolean>> {
 
     const result = await youtubeService.refreshAccessToken(x?.refreshToken);
 
-
     return { data: true, error: null };
   } catch (error: any) {
     return {
       data: null,
-      error: {
-        error: error.message,
-        code: error.code || "UNKNOWN_ERROR",
-        status: error.statusCode || 500,
-      },
+      error: createErrorResponse(error),
     };
   }
 }

@@ -1,0 +1,156 @@
+.wrapper {
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-ui-background-8)
+  );
+  padding: rem(120px) 0;
+}
+
+.inner {
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: rem(60px);
+}
+
+.title {
+  font-size: rem(48px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(36px);
+  }
+}
+
+.planCard {
+  background: light-dark(
+    var(--mantine-color-ui-surface-0),
+    var(--mantine-color-ui-surface-5)
+  );
+  border: 1px solid light-dark(
+    var(--mantine-color-ui-border-0),
+    var(--mantine-color-ui-border-5)
+  );
+  border-radius: rem(12px);
+  padding: rem(32px) rem(24px);
+  height: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: light-dark(
+      var(--mantine-color-ui-surface-1),
+      var(--mantine-color-ui-surface-4)
+    );
+    border-color: light-dark(
+      var(--mantine-color-ui-border-1),
+      var(--mantine-color-ui-border-4)
+    );
+    transform: translateY(-2px);
+  }
+}
+
+.popularCard {
+  border-color: light-dark(
+    var(--mantine-color-primary-5),
+    var(--mantine-color-primary-7)
+  );
+  transform: scale(1.05);
+
+  &:hover {
+    border-color: light-dark(
+      var(--mantine-color-primary-4),
+      var(--mantine-color-primary-6)
+    );
+    transform: scale(1.05) translateY(-2px);
+  }
+}
+
+.popularBadge {
+  position: absolute;
+  top: rem(-12px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: rem(11px);
+  font-weight: 700;
+  padding: rem(6px) rem(12px);
+  background: #ff4757;
+}
+
+.planHeader {
+  text-align: center;
+  margin-bottom: rem(24px);
+}
+
+.planName {
+  font-size: rem(20px);
+  color: #ffffff;
+  margin-bottom: rem(8px);
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: rem(4px);
+  margin-bottom: rem(8px);
+}
+
+.price {
+  font-size: rem(48px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.period {
+  font-size: rem(16px);
+  color: #a0a0a0;
+}
+
+.planDescription {
+  font-size: rem(14px);
+  color: #a0a0a0;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.featureContent {
+  display: flex;
+  align-items: center;
+  gap: rem(8px);
+  color: light-dark(
+    var(--mantine-color-text-primary-5),
+    var(--mantine-color-text-primary-7)
+  );
+}
+
+.checkIcon {
+  color: light-dark(
+    var(--mantine-color-success-5),
+    var(--mantine-color-success-5)
+  );
+  flex-shrink: 0;
+}
+
+.planButton {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}

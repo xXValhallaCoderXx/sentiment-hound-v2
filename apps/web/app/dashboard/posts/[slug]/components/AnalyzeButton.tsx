@@ -33,10 +33,14 @@ const AnalyzeButton: React.FC<AnalyzeButtonProps> = ({ name }) => {
           color: "green",
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      let errorMessage = "Failed to analyze posts";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
       notifications.show({
         title: "Error",
-        message: error.message || "Failed to analyze posts",
+        message: errorMessage,
         color: "red",
       });
     } finally {

@@ -11,8 +11,14 @@ import { subtaskService } from "..";
 
 export class CoreTaskService {
   private model: Prisma.TaskDelegate;
+  private planService: any; // Import type later to avoid circular dependencies
+
   constructor(private prisma: PrismaClient) {
     this.model = prisma.task;
+  }
+
+  setPlanService(planService: any) {
+    this.planService = planService;
   }
 
   async getTask<T extends Prisma.TaskDefaultArgs>(
@@ -62,7 +68,7 @@ export class CoreTaskService {
     // Validate task exists before toggling
     return await this.getTask({
       where: { id },
-      include: { subTasks: { include: { subTaskComments: true } } },
+      include: { subTasks: { include: { subTaskMentions: true } } },
     });
 
     // return this.repository.toggleComplete(id);
@@ -80,6 +86,10 @@ export class CoreTaskService {
     extraData?: any;
   }): Promise<Task> {
     // Create the task first
+    console.log("Sub Task Type: ", taskType);
+    console.log("Sub Task integrationId: ", integrationId);
+    console.log("Sub Task userId: ", userId);
+    console.log("Sub Task extraData: ", extraData);
     const task = await this.model.create({
       data: {
         type: taskType || TaskType.OTHER,
@@ -89,23 +99,62 @@ export class CoreTaskService {
         status: TaskStatus.PENDING,
       },
     });
+    const integration = await prisma.integration.findUnique({
+      where: { id: integrationId },
+      include: { provider: true },
+    });
     console.log("Sub Task CREATED: ", task);
     // Create appropriate jobs based on task type
     if (task.id) {
       switch (taskType) {
         case TaskType.ANALYZE_POST:
           console.log("Sub Task Type: ANALYZE_POST");
-          // Full sync needs both fetching and analyzing
-          await subtaskService.createSubTask({
-            taskId: task.id,
-            type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
-            data: { integrationId, ...extraData },
-          });
-          await subtaskService.createSubTask({
-            taskId: task.id,
-            type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
-            data: { integrationId },
-          });
+
+          if (integration?.provider.name === "reddit") {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.FETCH_REDDIT_KEYWORD_MENTIONS,
+              data: { integrationId, ...extraData },
+            });
+
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
+              data: { integrationId },
+            });
+
+            // Create spam detection subtask if user has the feature
+            if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+              await subtaskService.createSubTask({
+                taskId: task.id,
+                type: SubTaskType.DETECT_SPAM,
+                data: { integrationId },
+              });
+            }
+          }
+
+          if (integration?.provider.name === "youtube") {
+            // Full sync needs both fetching and analyzing
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
+              data: { integrationId, ...extraData },
+            });
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
+              data: { integrationId },
+            });
+
+            // Create spam detection subtask if user has the feature
+            if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+              await subtaskService.createSubTask({
+                taskId: task.id,
+                type: SubTaskType.DETECT_SPAM,
+                data: { integrationId },
+              });
+            }
+          }
 
           break;
 
@@ -122,6 +171,15 @@ export class CoreTaskService {
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
           });
+
+          // Create spam detection subtask if user has the feature
+          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.DETECT_SPAM,
+              data: { integrationId },
+            });
+          }
 
           break;
 
@@ -149,6 +207,35 @@ export class CoreTaskService {
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
             data: { integrationId },
+          });
+
+          // Create spam detection subtask if user has the feature
+          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            await subtaskService.createSubTask({
+              taskId: task.id,
+              type: SubTaskType.DETECT_SPAM,
+              data: { integrationId },
+            });
+          }
+          break;
+
+        case TaskType.EXPORT_DATA:
+          console.log("Sub Task Type: EXPORT_DATA");
+          // Export workflow: fetch data -> format data -> generate file
+          await subtaskService.createSubTask({
+            taskId: task.id,
+            type: SubTaskType.EXPORT_FETCH_DATA,
+            data: { integrationId, ...extraData },
+          });
+          await subtaskService.createSubTask({
+            taskId: task.id,
+            type: SubTaskType.EXPORT_FORMAT_DATA,
+            data: { integrationId, ...extraData },
+          });
+          await subtaskService.createSubTask({
+            taskId: task.id,
+            type: SubTaskType.EXPORT_GENERATE_FILE,
+            data: { integrationId, ...extraData },
           });
           break;
 

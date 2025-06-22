@@ -17,7 +17,7 @@ export function ErrorNotification({ error }: ErrorNotificationProps) {
     notifications.show({
       title: `Error ${error.status}`,
       message: error.error,
-      color: "red",
+      color: "error",
       icon: <IconX />,
       autoClose: 5000,
     });

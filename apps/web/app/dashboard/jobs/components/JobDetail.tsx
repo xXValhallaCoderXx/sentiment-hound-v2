@@ -1,8 +1,6 @@
 import { FC } from "react";
 import {
-  Flex,
   Box,
-  Title,
   Badge,
   Stack,
   Group,
@@ -11,25 +9,35 @@ import {
   Progress,
 } from "@mantine/core";
 import dayjs from "dayjs";
-import { prisma } from "@repo/db";
+import { prisma, TaskStatus, SubTaskMentionStatus } from "@repo/db";
+
 interface JobDetailProps {
   jobId: string;
 }
 
-function getSubTaskStatusSummary(subTask: any) {
-  const counts = {
+// Removed MentionStatus type alias, will use SubTaskMentionStatus from prisma
+
+interface SubTaskMention {
+  status: SubTaskMentionStatus;
+}
+
+interface SubTaskWithMentions {
+  subTaskMentions: SubTaskMention[];
+}
+
+function getSubTaskStatusSummary(subTask: SubTaskWithMentions) {
+  const counts: Record<SubTaskMentionStatus, number> = {
     COMPLETED: 0,
     PENDING: 0,
     FAILED: 0,
     IN_PROGRESS: 0,
   };
 
-  subTask.subTaskComments.forEach((c: any) => {
-    // @ts-ignore
+  subTask.subTaskMentions.forEach((c: SubTaskMention) => {
     counts[c.status] = (counts[c.status] || 0) + 1;
   });
 
-  const total = subTask.subTaskComments.length;
+  const total = subTask.subTaskMentions.length;
   const completed = counts.COMPLETED;
 
   return {
@@ -52,7 +60,7 @@ const JobDetail: FC<JobDetailProps> = async ({ jobId }) => {
       },
       subTasks: {
         include: {
-          subTaskComments: {
+          subTaskMentions: {
             select: {
               status: true,
             },
@@ -68,7 +76,9 @@ const JobDetail: FC<JobDetailProps> = async ({ jobId }) => {
     <Stack>
       <Group justify="space-between">
         <Text fw={600}>{formatEnumValue(task.type)}</Text>
-        <Badge color={getStatusColor(task.status)}>{task.status}</Badge>
+        <Badge color={getStatusColor(task.status as TaskStatus)}>
+          {task.status}
+        </Badge>
       </Group>
 
       <Text size="sm" c="dimmed">
@@ -102,7 +112,7 @@ function formatEnumValue(value: string) {
     .replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
-function getStatusColor(status: any) {
+function getStatusColor(status: TaskStatus) {
   switch (status) {
     case "COMPLETED":
       return "green";

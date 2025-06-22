@@ -6,7 +6,7 @@ import {
   IconInfoCircle,
 } from "@tabler/icons-react";
 
-type StatusType = "success" | "warning";
+type StatusType = "success" | "warning" | "info"; // Added "info" for completeness
 
 interface IStatusAlertProps {
   type?: StatusType;
@@ -17,7 +17,7 @@ interface IStatusAlertProps {
 }
 
 const DashboardNotificationCard: FC<IStatusAlertProps> = ({
-  type,
+  type = "info", // Default to info if type is not provided
   title,
   message,
   buttonLabel,
@@ -29,23 +29,29 @@ const DashboardNotificationCard: FC<IStatusAlertProps> = ({
     ) : type === "warning" ? (
       <IconAlertTriangle size={20} />
     ) : (
-      <IconInfoCircle size={20} />
+      <IconInfoCircle size={20} /> // Default to info icon
     );
 
-  const color = type === "success" ? "green" : "yellow";
+  // Use semantic theme colors
+  const color =
+    type === "success"
+      ? "success"
+      : type === "warning"
+        ? "warning"
+        : "primary"; // Use primary for info
 
   return (
     <Alert
       icon={icon}
       title={<Text fw={600}>{title}</Text>}
-      color={color}
+      color={color} // Apply semantic theme color
       radius="md"
-      withCloseButton={false}
+      withCloseButton={false} // Assuming this is intentional, otherwise could be true
     >
       <Text mb="sm">{message}</Text>
       {buttonLabel && onClick && (
         <Group justify="start">
-          <Button variant="filled" color="dark" size="xs" onClick={onClick}>
+          <Button variant="filled" color="secondary" size="xs" onClick={onClick}>
             {buttonLabel}
           </Button>
         </Group>

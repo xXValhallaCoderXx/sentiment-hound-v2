@@ -1,8 +1,7 @@
-import { Comment, SentimentStatus, Prisma, prisma } from "@repo/db";
-import { CommentRepository } from "./comments.repository";
+import { Mention, SentimentStatus, Prisma, prisma } from "@repo/db";
+import { MentionRepository } from "./mentions.repository";
 
-
-type CommentWithRelations = Comment & {
+type CommentWithRelations = Mention & {
   post: {
     integration: {
       provider: {
@@ -24,26 +23,26 @@ export interface PaginatedResult<T> {
   totalPages: number;
 }
 
-export class CoreCommentService {
-  constructor(private repository: CommentRepository) {}
+export class CoreMentionService {
+  constructor(private repository: MentionRepository) {}
 
-  async createComment(comment: Prisma.CommentCreateArgs) {
+  async createMention(comment: Prisma.MentionCreateArgs) {
     return this.repository.create(comment);
   }
 
-  async createManyComments(comments: Prisma.CommentCreateManyArgs) {
+  async createManyMentions(comments: Prisma.MentionCreateManyArgs) {
     return this.repository.createMany(comments);
   }
 
-  async getComment(id: number): Promise<Comment> {
+  async getMention(id: number): Promise<Mention> {
     const comment = await this.repository.findById(id);
     if (!comment) {
-      throw new Error("Comment not found");
+      throw new Error("Mention not found");
     }
     return comment;
   }
 
-  async getUserCommentsWithFilters({
+  async getUserMentionsWithFilters({
     userId,
     providerId,
     sentiment,
@@ -63,6 +62,7 @@ export class CoreCommentService {
       content: string;
       sentiment: string | null;
       provider: string;
+      createdAt?: string;
       aspects: Array<{ aspect: string; sentiment: string }>;
     }>
   > {
@@ -124,6 +124,7 @@ export class CoreCommentService {
         content: comment.content,
         sentiment: comment.sentiment,
         provider: comment.post?.integration.provider.name,
+        createdAt: comment.createdAt?.toISOString(),
         aspects: comment.aspectAnalyses?.map((aspect: any) => ({
           aspect: aspect.aspect,
           sentiment: aspect.sentiment,
@@ -140,11 +141,11 @@ export class CoreCommentService {
     };
   }
 
-  async updateCommentSentiment(
+  async updateMentionSentiment(
     commentId: number,
     sentiment: string,
     aspects: { aspect: string; sentiment: string }[]
-  ): Promise<Comment> {
+  ): Promise<Mention> {
     console.log("ASPESCTS: ", aspects);
     // Update the sentiment of the comment
     const updatedComment = await this.repository.update(commentId, {
@@ -156,7 +157,7 @@ export class CoreCommentService {
     const aspectAnalyses = aspects.map((aspect) => ({
       aspect: aspect.aspect,
       sentiment: aspect.sentiment,
-      commentId: updatedComment.id,
+      mentionId: updatedComment.id,
     }));
 
     await prisma.aspectAnalysis.createMany({

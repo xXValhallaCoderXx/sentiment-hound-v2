@@ -1,4 +1,4 @@
-import { AppShell } from "@mantine/core";
+import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
 import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 
 export default function RootLayout({
@@ -7,15 +7,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppShell
-      header={{ height: 60 }}
-      padding="md"
-    >
-      <AppShell.Header>
+    <AppShell header={{ height: 60 }} padding="md">
+      <AppShellHeader>
         <NavigationMenu />
-      </AppShell.Header>
+      </AppShellHeader>
 
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShellMain>{children}</AppShellMain>
     </AppShell>
   );
 }

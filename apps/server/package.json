@@ -28,7 +28,7 @@
     "@nestjs/schedule": "^5.0.1",
     "@repo/db": "workspace:*",
     "@repo/services": "workspace:*",
-    "class-validator": "^0.14.1",
+    "class-validator": "^0.14.2",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

@@ -3,8 +3,16 @@ const nextConfig = {
     experimental: {
         optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
     },
+    transpilePackages: ['@repo/db', '@repo/services'],
     images: {
-        domains: ['lh3.googleusercontent.com']
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'lh3.googleusercontent.com',
+                port: '',
+                pathname: '/**',
+            },
+        ],
     }
 };
 
