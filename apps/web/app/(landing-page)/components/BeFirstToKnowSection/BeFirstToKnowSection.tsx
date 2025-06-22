@@ -156,6 +156,12 @@ const BeFirstToKnowSection = () => {
                       size="lg"
                       rightSection={<IconArrowRight size={16} />}
                       disabled={isDisabled}
+                      c="white"
+                      variant={
+                        state?.success || state?.alreadyExists
+                          ? "success"
+                          : "primary"
+                      }
                     >
                       {state?.success
                         ? "You're In! 🎉"

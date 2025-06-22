@@ -79,7 +79,60 @@ const SpamDetectionSection = () => {
     <div>
       <Container size="xl">
         <Grid align="center" gutter="xl">
-          <GridCol span={{ base: 12, lg: 6 }}>
+          <GridCol
+            id="features"
+            span={{ base: 12, lg: 6 }}
+            order={{ base: 1, lg: 2 }}
+          >
+            <div className={classes.content}>
+              <Badge
+                leftSection={<IconShield size={16} />}
+                size="lg"
+                variant="light"
+                mb={16}
+              >
+                Spam Detection
+              </Badge>
+
+              <Title order={2} className={classes.title}>
+                Your team stays in the loop
+              </Title>
+
+              <Text className={classes.subtitle}>
+                Advanced spam detection technology keeps your sentiment analysis
+                clean and accurate. Our AI identifies fake accounts, bot
+                activity, and irrelevant content with industry-leading
+                precision.
+              </Text>
+
+              <div className={classes.featureList}>
+                {features.map((feature, index) => (
+                  <div key={index} className={classes.featureItem}>
+                    <div
+                      className={classes.featureIcon}
+                      style={{ backgroundColor: feature.color }}
+                    >
+                      <feature.icon size={20} stroke={1.5} color="white" />
+                    </div>
+                    <div className={classes.featureContent}>
+                      <Text className={classes.featureTitle}>
+                        {feature.title}
+                      </Text>
+                      <Text className={classes.featureDescription}>
+                        {feature.description}
+                      </Text>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </GridCol>
+
+          <GridCol
+            id="spam-img"
+            span={{ base: 12, lg: 6 }}
+            order={{ base: 2, lg: 1 }}
+          >
             <div className={classes.detectionInterface}>
               <div className={classes.interfaceHeader}>
                 <Group justify="space-between">
@@ -122,51 +175,6 @@ const SpamDetectionSection = () => {
                   <div key={index} className={classes.statItem}>
                     <Text className={classes.statLabel}>{stat.label}</Text>
                     <Text className={classes.statValue}>{stat.value}</Text>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </GridCol>
-
-          <GridCol span={{ base: 12, lg: 6 }}>
-            <div className={classes.content}>
-              <Badge
-                leftSection={<IconShield size={16} />}
-                size="lg"
-                variant="light"
-                mb={16}
-              >
-                Spam Detection
-              </Badge>
-
-              <Title order={2} className={classes.title}>
-                Your team stays in the loop
-              </Title>
-
-              <Text className={classes.subtitle}>
-                Advanced spam detection technology keeps your sentiment analysis
-                clean and accurate. Our AI identifies fake accounts, bot
-                activity, and irrelevant content with industry-leading
-                precision.
-              </Text>
-
-              <div className={classes.featureList}>
-                {features.map((feature, index) => (
-                  <div key={index} className={classes.featureItem}>
-                    <div
-                      className={classes.featureIcon}
-                      style={{ backgroundColor: feature.color }}
-                    >
-                      <feature.icon size={20} stroke={1.5} color="white" />
-                    </div>
-                    <div className={classes.featureContent}>
-                      <Text className={classes.featureTitle}>
-                        {feature.title}
-                      </Text>
-                      <Text className={classes.featureDescription}>
-                        {feature.description}
-                      </Text>
-                    </div>
                   </div>
                 ))}
               </div>
