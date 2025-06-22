@@ -52,13 +52,18 @@ const CommandCenterSection = () => {
   ];
 
   return (
-    <div className={classes.wrapper}>
-      <Container size="xl" className={classes.container}>
+    <div>
+      <Container size="xl">
         <Grid align="center" gutter="xl">
           <GridCol span={{ base: 12, lg: 6 }}>
-            <div className={classes.content}>
-              <Badge className={classes.badge} size="lg" variant="light">
-                <IconBolt size={16} />
+            <div>
+              <Badge
+                leftSection={<IconBolt size={16} />}
+                size="lg"
+                color="gray"
+                variant="light"
+                mb={16}
+              >
                 Command Center
               </Badge>
 

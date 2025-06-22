@@ -49,23 +49,26 @@ const BeFirstToKnowSection = () => {
     },
   });
 
+  // Disable form if already successfully submitted or if email already exists
+  const isDisabled = state?.success || state?.alreadyExists;
+
   const benefits = [
     {
       icon: IconDiscount,
       title: "Exclusive lifetime discount",
-      description: "Lock in special pricing before public launch",
+      description: "Lock in special 'Good Dog' pricing before public launch",
       color: "red",
     },
     {
       icon: IconRocket,
       title: "Priority onboarding",
-      description: "Skip the waitlist and get immediate access",
+      description: "Priority onboarding when we unleash the alpha",
       color: "blue",
     },
     {
       icon: IconFlask,
-      title: "Access to beta-only features",
-      description: "Try cutting-edge tools before anyone else",
+      title: "Access to the latest features",
+      description: "A direct line to influence new features",
       color: "green",
     },
   ];
@@ -81,7 +84,7 @@ const BeFirstToKnowSection = () => {
               size="lg"
               className={classes.badge}
             >
-              ⭐ Early Access
+              ⭐ Early Pup Access
             </Badge>
 
             <Title order={2} className={classes.title}>
@@ -89,13 +92,8 @@ const BeFirstToKnowSection = () => {
             </Title>
 
             <Text className={classes.subtitle}>
-              Join the early access list and get exclusive early-bird perks.
-            </Text>
-
-            <Text className={classes.description}>
-              We&apos;re putting the finishing touches on Sentiment Hound — a
-              powerful sentiment intelligence platform built for clarity and
-              speed. Sign up now and be part of the first wave to try it.
+              Join the wait-list and lock in. Show your interest and start
+              digging as soon as our pups are ready.
             </Text>
           </div>
 
@@ -141,6 +139,7 @@ const BeFirstToKnowSection = () => {
                       placeholder="Enter your name (optional)"
                       {...form.getInputProps("name")}
                       className={classes.input}
+                      disabled={isDisabled}
                     />
 
                     <TextInput
@@ -149,6 +148,7 @@ const BeFirstToKnowSection = () => {
                       required
                       {...form.getInputProps("email")}
                       className={classes.input}
+                      disabled={isDisabled}
                     />
 
                     <Button
@@ -156,11 +156,16 @@ const BeFirstToKnowSection = () => {
                       size="lg"
                       className={classes.submitButton}
                       rightSection={<IconArrowRight size={16} />}
+                      disabled={isDisabled}
                     >
-                      Join Early Access List
+                      {state?.success
+                        ? "You're In! 🎉"
+                        : state?.alreadyExists
+                          ? "Already Signed Up ✓"
+                          : "Claim Your Spot"}
                     </Button>
 
-                    {state?.error && (
+                    {state?.error && !state?.alreadyExists && (
                       <Alert
                         variant="light"
                         color="red"
@@ -170,7 +175,17 @@ const BeFirstToKnowSection = () => {
                       </Alert>
                     )}
 
-                    {state?.success && (
+                    {state?.error && state?.alreadyExists && (
+                      <Alert
+                        variant="light"
+                        color="blue"
+                        icon={<IconCheck size={16} />}
+                      >
+                        {state.error}
+                      </Alert>
+                    )}
+
+                    {state?.success && !state?.alreadyExists && (
                       <Alert
                         variant="light"
                         color="green"
@@ -195,21 +210,6 @@ const BeFirstToKnowSection = () => {
               </Paper>
             </GridCol>
           </Grid>
-
-          <div className={classes.stats}>
-            <Group justify="center" gap="xl">
-              <div className={classes.stat}>
-                <Text c="green" fw={600} size="sm">
-                  ● 847 early supporters
-                </Text>
-              </div>
-              <div className={classes.stat}>
-                <Text c="blue" fw={600} size="sm">
-                  ● Launching Q2 2024
-                </Text>
-              </div>
-            </Group>
-          </div>
         </div>
       </Container>
     </div>

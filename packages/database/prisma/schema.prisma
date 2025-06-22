@@ -303,6 +303,17 @@ model CompetitorSentiment {
   @@unique([competitorId, date, sourceType]) // One sentiment record per competitor per day per source
 }
 
+model EarlyAccessSignup {
+  id           Int      @id @default(autoincrement())
+  name         String?  // Optional name
+  email        String   @unique // Unique email to prevent duplicates
+  ipAddress    String?  // Optional IP tracking for analytics
+  userAgent    String?  // Optional user agent for analytics
+  referrer     String?  // Optional referrer tracking
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 enum QueueStatus {
   NEW
   PROCESSING

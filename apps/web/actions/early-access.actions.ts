@@ -1,4 +1,7 @@
+"use server";
+
 import { z } from "zod";
+import { earlyAccessService } from "@repo/services";
 
 const earlyAccessSchema = z.object({
   name: z.string().optional(),
@@ -17,22 +20,24 @@ export async function handleEarlyAccessSignup(
 
     const validatedData = earlyAccessSchema.parse(rawData);
 
-    // TODO: Replace with actual database integration
-    // For now, we'll just log the data
-    console.log("Early access signup:", validatedData);
+    // Save to database (without headers for now - can be added later if needed)
+    const result = await earlyAccessService.createSignup({
+      name: validatedData.name,
+      email: validatedData.email,
+      // Note: IP address, user agent, and referrer tracking can be added
+      // via middleware or other means if needed for analytics
+    });
 
-    // In a real implementation, you would:
-    // 1. Save to database (e.g., earlyAccessSignups table)
-    // 2. Send welcome email
-    // 3. Add to email marketing list
-    // 4. Track analytics event
-
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (!result.success) {
+      return {
+        error: result.error,
+        alreadyExists: result.alreadyExists || false,
+      };
+    }
 
     return {
       success: true,
-      message: "Thank you! You've been added to our early access list.",
+      message: result.message,
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
