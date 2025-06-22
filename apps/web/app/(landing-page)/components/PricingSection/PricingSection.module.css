@@ -1,13 +1,25 @@
 .wrapper {
-  background: light-dark(
-    var(--mantine-color-white),
-    var(--mantine-color-ui-background-8)
-  );
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
   padding: rem(120px) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .inner {
   position: relative;
+  z-index: 1;
 }
 
 .header {
@@ -20,6 +32,10 @@
   font-weight: 800;
   color: #ffffff;
   line-height: 1.2;
+  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
     font-size: rem(36px);
@@ -27,45 +43,28 @@
 }
 
 .planCard {
-  background: light-dark(
-    var(--mantine-color-ui-surface-0),
-    var(--mantine-color-ui-surface-5)
-  );
-  border: 1px solid light-dark(
-    var(--mantine-color-ui-border-0),
-    var(--mantine-color-ui-border-5)
-  );
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: rem(12px);
   padding: rem(32px) rem(24px);
   height: 100%;
   position: relative;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 
   &:hover {
-    background: light-dark(
-      var(--mantine-color-ui-surface-1),
-      var(--mantine-color-ui-surface-4)
-    );
-    border-color: light-dark(
-      var(--mantine-color-ui-border-1),
-      var(--mantine-color-ui-border-4)
-    );
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
   }
 }
 
 .popularCard {
-  border-color: light-dark(
-    var(--mantine-color-primary-5),
-    var(--mantine-color-primary-7)
-  );
+  border-color: var(--mantine-color-primary-5);
   transform: scale(1.05);
 
   &:hover {
-    border-color: light-dark(
-      var(--mantine-color-primary-4),
-      var(--mantine-color-primary-6)
-    );
+    border-color: var(--mantine-color-primary-4);
     transform: scale(1.05) translateY(-2px);
   }
 }
@@ -133,17 +132,11 @@
   display: flex;
   align-items: center;
   gap: rem(8px);
-  color: light-dark(
-    var(--mantine-color-text-primary-5),
-    var(--mantine-color-text-primary-7)
-  );
+  color: #ffffff;
 }
 
 .checkIcon {
-  color: light-dark(
-    var(--mantine-color-success-5),
-    var(--mantine-color-success-5)
-  );
+  color: var(--mantine-color-success-5);
   flex-shrink: 0;
 }
 

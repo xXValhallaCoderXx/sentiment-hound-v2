@@ -1,11 +1,27 @@
 .faqBackground {
-  background: #0f0f1e;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.faqBackground::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .wrapper {
   padding-top: calc(var(--mantine-spacing-xl) * 2);
   padding-bottom: calc(var(--mantine-spacing-xl) * 2);
   min-height: rem(650px);
+  position: relative;
+  z-index: 1;
 }
 
 .title {
@@ -14,6 +30,10 @@
   font-weight: 800;
   color: #ffffff;
   line-height: 1.2;
+  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
     font-size: rem(36px);
@@ -27,9 +47,62 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   transition: all 0.2s ease;
+  color: var(--mantine-color-gray-0);
 
   &:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
   }
+}
+
+/* Accordion Control (Question titles) */
+.item [data-accordion-control] {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.item [data-accordion-control]:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Accordion Panel (Answer content) */
+.item [data-accordion-panel] {
+  color: rgba(255, 255, 255, 0.9) !important;
+  line-height: 1.6;
+}
+
+.item [data-accordion-panel] div {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Accordion chevron icon */
+.item [data-accordion-control] svg {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Additional fallback selectors */
+.item button {
+  color: #ffffff !important;
+}
+
+.item [role="button"] {
+  color: #ffffff !important;
+}
+
+/* Mantine-specific overrides */
+.item .mantine-Accordion-control {
+  color: #ffffff !important;
+}
+
+.item .mantine-Accordion-panel {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.item .mantine-Accordion-content {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.item .mantine-Accordion-chevron {
+  color: rgba(255, 255, 255, 0.7) !important;
 }

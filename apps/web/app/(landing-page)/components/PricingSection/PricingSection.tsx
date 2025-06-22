@@ -70,7 +70,7 @@ const PricingSection = () => {
     <div className={classes.wrapper}>
       <Container size="xl" className={classes.inner}>
         <div className={classes.header}>
-          <Title order={2} className={classes.title} ta="center" c="text-primary">
+          <Title order={2} className={classes.title} ta="center" c="white">
             Pricing Plans
           </Title>
         </div>
@@ -93,13 +93,13 @@ const PricingSection = () => {
                   </Text>
                   <div className={classes.priceWrapper}>
                     <Text className={classes.price}>{plan.price}</Text>
-                    <Text className={classes.period} c="dimmed">
+                    <Text className={classes.period} c="gray.4">
                       {plan.period}
                     </Text>
                   </div>
                   <Text
                     className={classes.planDescription}
-                    c="dimmed"
+                    c="gray.4"
                     size="sm"
                   >
                     {plan.description}
@@ -111,7 +111,9 @@ const PricingSection = () => {
                     <ListItem key={featureIndex} className={classes.feature}>
                       <div className={classes.featureContent}>
                         <IconCheck size={16} className={classes.checkIcon} />
-                        <Text size="sm">{feature}</Text>
+                        <Text size="sm" c="white">
+                          {feature}
+                        </Text>
                       </div>
                     </ListItem>
                   ))}
@@ -120,8 +122,8 @@ const PricingSection = () => {
                 <Button
                   className={classes.planButton}
                   variant={plan.buttonVariant}
-                  color={plan.popular ? "primary.5" : "text-primary"}
-                  c={plan.popular ? "white" : "text-primary"}
+                  color={plan.popular ? "primary.5" : "gray"}
+                  c={plan.popular ? "white" : "white"}
                   size="md"
                   fullWidth
                   mt="xl"
