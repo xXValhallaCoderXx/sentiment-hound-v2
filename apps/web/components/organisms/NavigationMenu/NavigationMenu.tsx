@@ -13,14 +13,14 @@ const NavigationMenu = () => {
       <Anchor href="#home" c="dimmed" fw={500} onClick={close}>
         Home
       </Anchor>
-      <Anchor href="#about" c="dimmed" fw={500} onClick={close}>
-        About
+      <Anchor href="#features" c="dimmed" fw={500} onClick={close}>
+        Features
       </Anchor>
-      <Anchor href="#services" c="dimmed" fw={500} onClick={close}>
-        Services
+      <Anchor href="#how-it-works" c="dimmed" fw={500} onClick={close}>
+        How It Works
       </Anchor>
-      <Anchor href="#contact" c="dimmed" fw={500} onClick={close}>
-        Contact
+      <Anchor href="#pricing" c="dimmed" fw={500} onClick={close}>
+        Pricing
       </Anchor>
     </>
   );

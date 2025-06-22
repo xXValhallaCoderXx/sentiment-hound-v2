@@ -2,12 +2,9 @@ import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import { NavigationMenu } from "@/components/organisms/NavigationMenu";
 import { Hero } from "@/components/organisms/Hero";
+import { FeaturesSection } from "./components/FeaturesSection";
 import { HowItWorksSection } from "./components/HowItWorksSection";
-import { CommandCenterSection } from "./components/CommandCenterSection";
-import { SpamDetectionSection } from "./components/SpamDetectionSection";
-import { CompetitiveSection } from "./components/CompetitiveSection";
 import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
-import { SignUpToInsightSection } from "./components/SignUpToInsightSection";
 import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
 import { Footer } from "./components/Footer";
@@ -30,24 +27,25 @@ const LandingPage = async () => {
           <section id="home">
             <Hero />
           </section>
-          <section id="be-first-to-know">
-            <BeFirstToKnowSection />
+          <section id="features">
+            <FeaturesSection />
           </section>
-          <section id="about">
+          <section id="how-it-works">
             <HowItWorksSection />
-            <CommandCenterSection />
+          </section>
+          <section id="why-you-love">
             <WhyTeamsLoveSection />
           </section>
-          <section id="services">
-            <SpamDetectionSection />
-            <CompetitiveSection />
-            <SignUpToInsightSection />
+          <section id="pricing">
             <PricingSection />
           </section>
-          <section id="contact">
+          <section id="faq">
             <FaqSection />
-            <Footer />
           </section>
+          <section id="early-access">
+            <BeFirstToKnowSection />
+          </section>
+          <Footer />
         </AppShellMain>
       </AppShell>
     </div>

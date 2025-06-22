@@ -2,7 +2,6 @@ import { Container, Title, Text, Group, Button, Badge } from "@mantine/core";
 import {
   IconPlug,
   IconTarget,
-  IconBrain,
   IconChartLine,
   IconRocket,
   IconArrowRight,
@@ -13,32 +12,27 @@ const HowItWorksSection = () => {
   const steps = [
     {
       icon: IconPlug,
-      title: "Connect your channels",
+      title: "Connect Your Content.",
       description:
-        "Integrate with YouTube, Reddit, and more platforms instantly",
+        "Securely link your YouTube, Reddit, or other platforms in just a few clicks.",
       color: "#3B82F6",
       number: "01",
     },
     {
       icon: IconTarget,
-      title: "Track what matters",
-      description: "Set keywords, competitors, and custom tracking parameters",
+      title: "Unleash the Hounds.",
+      description:
+        "Our AI gets to work, sniffing out every mention and analyzing the true sentiment behind the words.",
       color: "#10B981",
       number: "02",
     },
     {
-      icon: IconBrain,
-      title: "AI analysis",
-      description: "Advanced ML models process sentiment in real-time",
+      icon: IconChartLine,
+      title: "Act with Confidence.",
+      description:
+        "View everything on a single, beautiful dashboard and make smarter decisions with data you can trust.",
       color: "#8B5CF6",
       number: "03",
-    },
-    {
-      icon: IconChartLine,
-      title: "Get insights",
-      description: "Visual dashboards with actionable intelligence",
-      color: "#F59E0B",
-      number: "04",
     },
   ];
 
@@ -50,7 +44,7 @@ const HowItWorksSection = () => {
             How It Works
           </Badge>
           <Title order={2} className={classes.title}>
-            Get real-time insights in minutes
+            Get Real Insights in Minutes.
           </Title>
           <Text className={classes.subtitle}>
             Our AI-powered platform transforms raw social data into actionable
