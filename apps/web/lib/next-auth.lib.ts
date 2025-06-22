@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@repo/db";
-import { invitationCodeService } from "@repo/services";
+// import { invitationCodeService } from "@repo/services";
 
 const options: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
@@ -59,7 +59,7 @@ const options: NextAuthConfig = {
       console.log("createUser", message);
 
       // Check for pending invitation code (for OAuth flows)
-      let planId: number | undefined;
+      // let planId: number | undefined;
 
       // In a real implementation, you might store the invitation code in a session
       // or pass it through the OAuth state parameter. For now, we'll check if
@@ -69,7 +69,7 @@ const options: NextAuthConfig = {
       const trialPlan = await prisma.plan.findUnique({
         where: { name: "Trial" },
       });
-      planId = trialPlan?.id;
+      const planId = trialPlan?.id;
 
       // Update user with plan
       if (planId) {

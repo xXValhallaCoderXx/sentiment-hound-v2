@@ -40,11 +40,9 @@ const IntegrationCards = async () => {
   // Handle empty providers
   if (!providers.data || providers.data.length === 0) {
     return (
-      <IntegrationsEmptyState 
+      <IntegrationsEmptyState
         onCtaClick={() => window.location.reload()}
         showCta={false}
-        title="No integrations available"
-        message="No integration providers are currently available. Please contact support."
       />
     );
   }

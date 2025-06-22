@@ -34,7 +34,7 @@ const SentimentTrendChart = () => {
         } else {
           setTrendData(trendResult.data || []);
         }
-      } catch (err) {
+      } catch  {
         setError("Failed to load trend data");
       } finally {
         setLoading(false);

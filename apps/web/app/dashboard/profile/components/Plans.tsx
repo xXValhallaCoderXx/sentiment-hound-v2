@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   SimpleGrid,
   Card,
@@ -14,10 +15,14 @@ import {
   Button,
 } from "@mantine/core";
 import { FC } from "react";
-import { planService, PlanName, PLAN_FEATURES, PLAN_HIERARCHY } from "@repo/services";
+import {
+  planService,
+  PlanName,
+  PLAN_FEATURES,
+  PLAN_HIERARCHY,
+} from "@repo/services";
 import PlanSubmitButton from "./PlanSubmitButton";
 import { IconCheck, IconX } from "@tabler/icons-react";
-
 
 interface IPlansProps {
   userPlanId: string;
@@ -25,12 +30,15 @@ interface IPlansProps {
 
 const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
   const allPlans = await planService.getPlans();
-  
+
   // Filter to only show Trial, Starter, and Pro plans (exclude Developer)
-  const publicPlans = allPlans?.filter(plan => 
-    [PlanName.TRIAL, PlanName.STARTER, PlanName.PRO].includes(plan.name as PlanName)
-  ) || [];
-  
+  const publicPlans =
+    allPlans?.filter((plan) =>
+      [PlanName.TRIAL, PlanName.STARTER, PlanName.PRO].includes(
+        plan.name as PlanName
+      )
+    ) || [];
+
   const formatPrice = (price?: number) => {
     if (!price || price === 0) return "Free";
     return `$${(price / 100).toFixed(2)}`;
@@ -46,9 +54,10 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
   };
 
   // Get user's current plan for hierarchy comparison
-  const userPlan = allPlans?.find(plan => Number(userPlanId) === plan.id);
+  const userPlan = allPlans?.find((plan) => Number(userPlanId) === plan.id);
   const userPlanName = userPlan?.name as PlanName;
-  const userPlanHierarchy = PLAN_HIERARCHY[userPlanName as keyof typeof PLAN_HIERARCHY] ?? -1;
+  const userPlanHierarchy =
+    PLAN_HIERARCHY[userPlanName as keyof typeof PLAN_HIERARCHY] ?? -1;
 
   const renderFeatureMatrix = (planName: PlanName) => {
     const features = PLAN_FEATURES[planName as keyof typeof PLAN_FEATURES];
@@ -57,39 +66,45 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
     const featureItems = [
       {
         label: "Monthly Token Allowance",
-        value: features.monthlyTokenAllowance === 0 ? "0" : features.monthlyTokenAllowance.toLocaleString(),
-        enabled: features.monthlyTokenAllowance > 0
+        value:
+          features.monthlyTokenAllowance === 0
+            ? "0"
+            : features.monthlyTokenAllowance.toLocaleString(),
+        enabled: features.monthlyTokenAllowance > 0,
       },
       {
         label: "Data Integrations",
         value: features.dataIntegrations.toString(),
-        enabled: features.dataIntegrations > 0
+        enabled: features.dataIntegrations > 0,
       },
       {
         label: "Competitor Tracking",
-        value: features.competitorTracking === false ? "0" : features.competitorTracking.toString(),
-        enabled: features.competitorTracking !== false
+        value:
+          features.competitorTracking === false
+            ? "0"
+            : features.competitorTracking.toString(),
+        enabled: features.competitorTracking !== false,
       },
       {
         label: "Spam & Bot Filtering",
         value: features.spamBotFiltering ? "✅" : "❌",
-        enabled: features.spamBotFiltering
+        enabled: features.spamBotFiltering,
       },
       {
         label: "Actionable Insights",
         value: features.actionableInsights ? "✅" : "❌",
-        enabled: features.actionableInsights
+        enabled: features.actionableInsights,
       },
       {
         label: "Data Export",
         value: features.dataExport ? "✅" : "❌",
-        enabled: features.dataExport
+        enabled: features.dataExport,
       },
       {
         label: "Email/Chat Support",
         value: features.emailChatSupport ? "✅" : "❌",
-        enabled: features.emailChatSupport
-      }
+        enabled: features.emailChatSupport,
+      },
     ];
 
     return (
@@ -123,26 +138,27 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
 
   const getPlanButtonLogic = (plan: any) => {
     const isUsersPlan = Number(userPlanId) === plan.id;
-    const planHierarchy = PLAN_HIERARCHY[plan.name as keyof typeof PLAN_HIERARCHY];
-    
+    const planHierarchy =
+      PLAN_HIERARCHY[plan.name as keyof typeof PLAN_HIERARCHY];
+
     if (isUsersPlan) {
-      return { 
-        text: "Current Plan", 
-        disabled: true, 
+      return {
+        text: "Current Plan",
+        disabled: true,
         color: "green",
-        variant: "filled" as const
+        variant: "filled" as const,
       };
     }
-    
+
     if (planHierarchy > userPlanHierarchy) {
-      return { 
-        text: "Upgrade", 
-        disabled: false, 
+      return {
+        text: "Upgrade",
+        disabled: false,
         color: "blue",
-        variant: "filled" as const
+        variant: "filled" as const,
       };
     }
-    
+
     // For plans lower than current plan, hide the button
     return null;
   };
@@ -157,7 +173,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
             plan.yearlyPrice ? Number(plan.yearlyPrice) : undefined
           );
           const buttonLogic = getPlanButtonLogic(plan);
-          
+
           return (
             <Card
               key={index}
@@ -206,9 +222,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
                 <Group justify="space-between" align="flex-start">
                   <Box>
                     <Text size="lg" fw={600}>
-                      {formatPrice(
-                        plan.price ? Number(plan.price) : undefined
-                      )}
+                      {formatPrice(plan.price ? Number(plan.price) : undefined)}
                       {plan.price && Number(plan.price) > 0 && (
                         <Text component="span" size="sm" c="dimmed">
                           /month
