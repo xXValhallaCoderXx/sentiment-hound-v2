@@ -24,6 +24,7 @@ import { CompetitorRepository } from "./competitors/competitors.repository";
 import { CoreCompetitorService } from "./competitors/competitors.service";
 import { CoreDashboardService } from "./dashboard/dashboard.service";
 import { InvitationCodeService } from "./invitation-codes/invitation-codes.service";
+import { EarlyAccessService } from "./early-access/early-access.service";
 
 export * from "./posts/post.interface";
 export * from "./dashboard/dashboard.service";
@@ -58,9 +59,12 @@ export const subtaskService = new CoreSubTaskService(subtaskRepository);
 export const mentionService = new CoreMentionService(mentionRepository);
 export const userService = new CoreUserService(userRepository);
 export const planService = new CorePlanService(planRepository);
-export const competitorService = new CoreCompetitorService(competitorRepository);
+export const competitorService = new CoreCompetitorService(
+  competitorRepository
+);
 export const dashboardService = new CoreDashboardService(mentionRepository);
 export const invitationCodeService = new InvitationCodeService(prisma);
+export const earlyAccessService = new EarlyAccessService();
 
 // Set up circular dependencies
 integrationsService.setPlanService(planService);
