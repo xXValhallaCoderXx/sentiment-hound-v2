@@ -5,7 +5,6 @@ import {
   Container, 
   Title, 
   Text, 
-  Stack,
   Button,
   Grid,
   GridCol,
@@ -146,7 +145,7 @@ const PricingPage = () => {
             <Container size="xl">
               <Grid mt="xl" gutter="xl" justify="center">
                 {plans.map((plan, index) => (
-                  <GridCol key={index} span={{ base: 12, md: 4 }}>
+                  <GridCol key={index} span={{ base: 12, sm: 6, md: 4 }}>
                     <Box className={`${classes.planCard} ${plan.popular ? classes.popularCard : ""}`}>
                       {plan.popular && (
                         <Badge className={classes.popularBadge} color="primary.5">
@@ -212,46 +211,48 @@ const PricingPage = () => {
                 Feature Comparison
               </Title>
               
-              <Card className={classes.comparisonTable}>
-                <Table striped highlightOnHover>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Feature</Table.Th>
-                      <Table.Th ta="center">Starter</Table.Th>
-                      <Table.Th ta="center">Pro</Table.Th>
-                      <Table.Th ta="center">Enterprise</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {comparisonFeatures.map((feature, index) => (
-                      <Table.Tr key={index}>
-                        <Table.Td fw={500}>{feature.name}</Table.Td>
-                        <Table.Td ta="center">
-                          {typeof feature.starter === 'boolean' ? (
-                            feature.starter ? <IconCheck size={16} color="var(--mantine-color-success-5)" /> : <IconX size={16} color="var(--mantine-color-error-5)" />
-                          ) : (
-                            feature.starter
-                          )}
-                        </Table.Td>
-                        <Table.Td ta="center">
-                          {typeof feature.pro === 'boolean' ? (
-                            feature.pro ? <IconCheck size={16} color="var(--mantine-color-success-5)" /> : <IconX size={16} color="var(--mantine-color-error-5)" />
-                          ) : (
-                            feature.pro
-                          )}
-                        </Table.Td>
-                        <Table.Td ta="center">
-                          {typeof feature.enterprise === 'boolean' ? (
-                            feature.enterprise ? <IconCheck size={16} color="var(--mantine-color-success-5)" /> : <IconX size={16} color="var(--mantine-color-error-5)" />
-                          ) : (
-                            feature.enterprise
-                          )}
-                        </Table.Td>
+              <Box style={{ overflowX: 'auto' }}>
+                <Card className={classes.comparisonTable}>
+                  <Table striped highlightOnHover>
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th>Feature</Table.Th>
+                        <Table.Th ta="center">Starter</Table.Th>
+                        <Table.Th ta="center">Pro</Table.Th>
+                        <Table.Th ta="center">Enterprise</Table.Th>
                       </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              </Card>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      {comparisonFeatures.map((feature, index) => (
+                        <Table.Tr key={index}>
+                          <Table.Td fw={500}>{feature.name}</Table.Td>
+                          <Table.Td ta="center">
+                            {typeof feature.starter === 'boolean' ? (
+                              feature.starter ? <IconCheck size={16} color="var(--mantine-color-success-5)" /> : <IconX size={16} color="var(--mantine-color-error-5)" />
+                            ) : (
+                              feature.starter
+                            )}
+                          </Table.Td>
+                          <Table.Td ta="center">
+                            {typeof feature.pro === 'boolean' ? (
+                              feature.pro ? <IconCheck size={16} color="var(--mantine-color-success-5)" /> : <IconX size={16} color="var(--mantine-color-error-5)" />
+                            ) : (
+                              feature.pro
+                            )}
+                          </Table.Td>
+                          <Table.Td ta="center">
+                            {typeof feature.enterprise === 'boolean' ? (
+                              feature.enterprise ? <IconCheck size={16} color="var(--mantine-color-success-5)" /> : <IconX size={16} color="var(--mantine-color-error-5)" />
+                            ) : (
+                              feature.enterprise
+                            )}
+                          </Table.Td>
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                  </Table>
+                </Card>
+              </Box>
             </Container>
           </section>
 

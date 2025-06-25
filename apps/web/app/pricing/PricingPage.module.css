@@ -309,5 +309,14 @@
   
   .comparisonTable {
     font-size: rem(14px);
+    overflow-x: auto;
+  }
+  
+  .comparisonTable :global(.mantine-Table-table) {
+    min-width: rem(500px);
+  }
+  
+  .faqContainer {
+    padding: 0 rem(16px);
   }
 }

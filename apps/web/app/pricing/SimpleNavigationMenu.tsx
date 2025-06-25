@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { Group, Anchor, Text, Burger, Drawer, Stack, Box, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
