@@ -19,7 +19,7 @@ const NavigationMenu = () => {
       <Anchor href="#how-it-works" c="dimmed" fw={500} onClick={close}>
         How It Works
       </Anchor>
-      <Anchor href="#pricing" c="dimmed" fw={500} onClick={close}>
+      <Anchor href="/pricing" c="dimmed" fw={500} onClick={close}>
         Pricing
       </Anchor>
     </>
