@@ -10,16 +10,7 @@ const NavigationMenu = () => {
 
   const navigationLinks = (
     <>
-      <Anchor href="#home" c="dimmed" fw={500} onClick={close}>
-        Home
-      </Anchor>
-      <Anchor href="#features" c="dimmed" fw={500} onClick={close}>
-        Features
-      </Anchor>
-      <Anchor href="#how-it-works" c="dimmed" fw={500} onClick={close}>
-        How It Works
-      </Anchor>
-      <Anchor href="#pricing" c="dimmed" fw={500} onClick={close}>
+      <Anchor href="/pricing" c="dimmed" fw={500} onClick={close}>
         Pricing
       </Anchor>
     </>

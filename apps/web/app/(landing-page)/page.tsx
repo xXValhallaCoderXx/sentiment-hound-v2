@@ -6,7 +6,7 @@ import { FeaturesSection } from "./components/FeaturesSection";
 import { CompetitiveSection } from "./components/CompetitiveSection";
 import { HowItWorksSection } from "./components/HowItWorksSection";
 import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
-import { PricingSection } from "./components/PricingSection";
+// import { PricingSection } from "./components/PricingSection"; // Removed
 import { FaqSection } from "./components/FaqSection";
 import { Footer } from "./components/Footer";
 import { IconEye } from "@tabler/icons-react";
@@ -46,9 +46,9 @@ const LandingPage = async () => {
           <section id="why-you-love">
             <WhyTeamsLoveSection />
           </section>
-          <section id="pricing">
+          {/* <section id="pricing">
             <PricingSection />
-          </section>
+          </section> */} {/* Removed */}
           <section id="faq">
             <FaqSection />
           </section>
