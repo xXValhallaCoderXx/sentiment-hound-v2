@@ -1,6 +1,10 @@
 :root {
   --background: #0f0f1e;
   --foreground: #ffffff;
+  --section-bg-primary-light: #ffffff;
+  --section-bg-alt-light: #f8f9fa;
+  --section-bg-primary-dark: #101113;
+  --section-bg-alt-dark: #1a1b1e;
 }
 
 @media (prefers-color-scheme: dark) {

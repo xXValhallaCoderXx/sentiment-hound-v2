@@ -16,6 +16,7 @@ import { CommandCenterSection } from "./components/CommandCenterSection";
 import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
 import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
 import classes from "./LandingPage.module.css";
+import sectionStyles from "./components/SectionBackgrounds.module.css";
 
 const LandingPage = async () => {
   const session = await auth();
@@ -30,26 +31,30 @@ const LandingPage = async () => {
           <NavigationMenu />
         </AppShellHeader>
         <AppShellMain style={{ padding: 0 }}>
-          <section id="home">
+          <section id="home" className={sectionStyles.sectionPrimary}>
             <Hero />
           </section>
-          <section id="early-access">
+          <section id="early-access" className={sectionStyles.sectionAlt}>
             <BeFirstToKnowSection />
           </section>
           <Stack gap={96} id="features" className={classes.wrapper}>
-            <CommandCenterSection />
-            <SpamDetectionSection />
+            <div className={sectionStyles.sectionPrimary}>
+              <CommandCenterSection />
+            </div>
+            <div className={sectionStyles.sectionAlt}>
+              <SpamDetectionSection />
+            </div>
           </Stack>
-          <section id="how-it-works">
+          <section id="how-it-works" className={sectionStyles.sectionPrimary}>
             <HowItWorksSection />
           </section>
-          <section id="why-you-love">
+          <section id="why-you-love" className={sectionStyles.sectionAlt}>
             <WhyTeamsLoveSection />
           </section>
-          <section id="pricing">
+          <section id="pricing" className={sectionStyles.sectionPrimary}>
             <PricingSection />
           </section>
-          <section id="faq">
+          <section id="faq" className={sectionStyles.sectionAlt}>
             <FaqSection />
           </section>
 

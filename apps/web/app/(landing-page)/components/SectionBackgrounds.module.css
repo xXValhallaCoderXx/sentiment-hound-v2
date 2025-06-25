@@ -1,0 +1,15 @@
+.sectionPrimary {
+  background-color: var(--section-bg-primary-light);
+}
+
+.sectionAlt {
+  background-color: var(--section-bg-alt-light);
+}
+
+[data-mantine-color-scheme='dark'] .sectionPrimary {
+  background-color: var(--section-bg-primary-dark);
+}
+
+[data-mantine-color-scheme='dark'] .sectionAlt {
+  background-color: var(--section-bg-alt-dark);
+}
