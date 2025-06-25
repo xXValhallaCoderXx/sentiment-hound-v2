@@ -1,5 +1,8 @@
 .wrapper {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
+  background: light-dark(
+    var(--section-bg-alt),
+    var(--mantine-color-dark-7)
+  );
   padding: rem(120px) 0;
   position: relative;
   overflow: hidden;

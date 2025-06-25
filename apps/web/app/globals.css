@@ -1,6 +1,10 @@
 :root {
   --background: #0f0f1e;
   --foreground: #ffffff;
+  
+  /* Light mode section backgrounds for alternating landing page sections */
+  --section-bg-primary: #ffffff;
+  --section-bg-alt: #f8f9fa;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -8,6 +12,12 @@
     --background: #0f0f1e;
     --foreground: #ffffff;
   }
+}
+
+/* Dark mode section backgrounds */
+[data-mantine-color-scheme='dark'] {
+  --section-bg-primary: #101113;
+  --section-bg-alt: #1a1b1e;
 }
 
 html,
