@@ -16,6 +16,23 @@
   overflow: hidden;
 }
 
+/* Light mode detection interface */
+[data-mantine-color-scheme="light"] .detectionInterface {
+  background: #F4F4F4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  backdrop-filter: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .detectionInterface {
+    background: #F4F4F4;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    backdrop-filter: none;
+  }
+}
+
 .detectionInterface::before {
   content: '';
   position: absolute;
@@ -39,10 +56,32 @@
   font-weight: 600;
 }
 
+/* Light mode interface title */
+[data-mantine-color-scheme="light"] .interfaceTitle {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: light) {
+  .interfaceTitle {
+    color: #1A1B1E;
+  }
+}
+
 .interfaceSubtitle {
   color: #94A3B8;
   font-size: 0.9rem;
   margin-top: 0.25rem;
+}
+
+/* Light mode interface subtitle */
+[data-mantine-color-scheme="light"] .interfaceSubtitle {
+  color: #6B7280;
+}
+
+@media (prefers-color-scheme: light) {
+  .interfaceSubtitle {
+    color: #6B7280;
+  }
 }
 
 .liveBadge {
@@ -205,10 +244,44 @@
   transition: all 0.3s ease;
 }
 
+/* Light mode feature item */
+[data-mantine-color-scheme="light"] .featureItem {
+  background: #F4F4F4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  backdrop-filter: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .featureItem {
+    background: #F4F4F4;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    backdrop-filter: none;
+  }
+}
+
 .featureItem:hover {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
+}
+
+/* Light mode feature item hover */
+[data-mantine-color-scheme="light"] .featureItem:hover {
+  background: #ECECEC;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+@media (prefers-color-scheme: light) {
+  .featureItem:hover {
+    background: #ECECEC;
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
 }
 
 .featureIcon {
@@ -231,9 +304,31 @@
   margin-bottom: 0.25rem;
 }
 
+/* Light mode feature title */
+[data-mantine-color-scheme="light"] .featureTitle {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: light) {
+  .featureTitle {
+    color: #1A1B1E;
+  }
+}
+
 .featureDescription {
   color: #94A3B8;
   font-size: 0.9rem;
+}
+
+/* Light mode feature description */
+[data-mantine-color-scheme="light"] .featureDescription {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: light) {
+  .featureDescription {
+    color: #2C2E33;
+  }
 }
 
 .ctaGroup {

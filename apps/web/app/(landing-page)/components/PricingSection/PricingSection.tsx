@@ -70,7 +70,7 @@ const PricingSection = () => {
     <div className={classes.wrapper}>
       <Container size="xl" className={classes.inner}>
         <div className={classes.header}>
-          <Title order={2} className={classes.title} ta="center" c="white">
+          <Title order={2} className={classes.title} ta="center">
             Simple Plans for Every Pack Size.
           </Title>
         </div>
@@ -93,13 +93,12 @@ const PricingSection = () => {
                   </Text>
                   <div className={classes.priceWrapper}>
                     <Text className={classes.price}>{plan.price}</Text>
-                    <Text className={classes.period} c="gray.4">
+                    <Text className={classes.period}>
                       {plan.period}
                     </Text>
                   </div>
                   <Text
                     className={classes.planDescription}
-                    c="gray.4"
                     size="sm"
                   >
                     {plan.description}
@@ -111,7 +110,7 @@ const PricingSection = () => {
                     <ListItem key={featureIndex} className={classes.feature}>
                       <div className={classes.featureContent}>
                         <IconCheck size={16} className={classes.checkIcon} />
-                        <Text size="sm" c="white">
+                        <Text size="sm" className={classes.featureText}>
                           {feature}
                         </Text>
                       </div>
@@ -123,7 +122,7 @@ const PricingSection = () => {
                   className={classes.planButton}
                   variant={plan.buttonVariant}
                   color={plan.popular ? "primary.5" : "gray"}
-                  c={plan.popular ? "white" : "white"}
+                  className={classes.buttonText}
                   size="md"
                   fullWidth
                   mt="xl"

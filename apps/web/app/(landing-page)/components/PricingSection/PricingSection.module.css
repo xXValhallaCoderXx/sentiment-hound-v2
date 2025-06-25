@@ -4,6 +4,17 @@
   /* Background now handled by parent section */
 }
 
+/* Light mode background tint for better separation */
+[data-mantine-color-scheme="light"] .wrapper {
+  background: radial-gradient(circle at 50% 20%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+}
+
+@media (prefers-color-scheme: light) {
+  .wrapper {
+    background: radial-gradient(circle at 50% 20%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+  }
+}
+
 .inner {
   position: relative;
   z-index: 1;
@@ -17,15 +28,48 @@
 .title {
   font-size: rem(48px);
   font-weight: 800;
-  color: #ffffff;
   line-height: 1.2;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(36px);
+  }
+}
+
+/* Dark mode title */
+[data-mantine-color-scheme="dark"] .title {
+  color: #ffffff;
   background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
 
-  @media (max-width: var(--mantine-breakpoint-sm)) {
-    font-size: rem(36px);
+/* Light mode title - strong contrast */
+[data-mantine-color-scheme="light"] .title {
+  color: #1A1B1E;
+  background: none;
+  background-clip: unset;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: #ffffff;
+    background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #1A1B1E;
+    background: none;
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
   }
 }
 
@@ -43,6 +87,37 @@
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
+  }
+}
+
+/* Light mode plan card styles */
+[data-mantine-color-scheme="light"] .planCard {
+  background: #F4F4F4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  backdrop-filter: none;
+
+  &:hover {
+    background: #ECECEC;
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .planCard {
+    background: #F4F4F4;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    backdrop-filter: none;
+
+    &:hover {
+      background: #ECECEC;
+      border-color: rgba(0, 0, 0, 0.12);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
   }
 }
 
@@ -74,8 +149,29 @@
 
 .planName {
   font-size: rem(20px);
-  color: #ffffff;
   margin-bottom: rem(8px);
+}
+
+/* Dark mode plan name */
+[data-mantine-color-scheme="dark"] .planName {
+  color: #ffffff;
+}
+
+/* Light mode plan name - strong contrast */
+[data-mantine-color-scheme="light"] .planName {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  .planName {
+    color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .planName {
+    color: #1A1B1E;
+  }
 }
 
 .priceWrapper {
@@ -89,18 +185,81 @@
 .price {
   font-size: rem(48px);
   font-weight: 800;
-  color: #ffffff;
   line-height: 1;
+}
+
+/* Dark mode price */
+[data-mantine-color-scheme="dark"] .price {
+  color: #ffffff;
+}
+
+/* Light mode price - strong contrast */
+[data-mantine-color-scheme="light"] .price {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  .price {
+    color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .price {
+    color: #1A1B1E;
+  }
 }
 
 .period {
   font-size: rem(16px);
+}
+
+/* Dark mode period */
+[data-mantine-color-scheme="dark"] .period {
   color: #a0a0a0;
+}
+
+/* Light mode period - improved contrast */
+[data-mantine-color-scheme="light"] .period {
+  color: #6B7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  .period {
+    color: #a0a0a0;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .period {
+    color: #6B7280;
+  }
 }
 
 .planDescription {
   font-size: rem(14px);
+}
+
+/* Dark mode plan description */
+[data-mantine-color-scheme="dark"] .planDescription {
   color: #a0a0a0;
+}
+
+/* Light mode plan description - improved contrast */
+[data-mantine-color-scheme="light"] .planDescription {
+  color: #6B7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  .planDescription {
+    color: #a0a0a0;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .planDescription {
+    color: #6B7280;
+  }
 }
 
 .featureList {
@@ -119,7 +278,48 @@
   display: flex;
   align-items: center;
   gap: rem(8px);
+}
+
+.featureText {
+  /* Feature text styling handled by theme */
+}
+
+/* Dark mode feature content */
+[data-mantine-color-scheme="dark"] .featureContent {
   color: #ffffff;
+}
+
+[data-mantine-color-scheme="dark"] .featureText {
+  color: #ffffff;
+}
+
+/* Light mode feature content - improved contrast */
+[data-mantine-color-scheme="light"] .featureContent {
+  color: #1A1B1E;
+}
+
+[data-mantine-color-scheme="light"] .featureText {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  .featureContent {
+    color: #ffffff;
+  }
+
+  .featureText {
+    color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .featureContent {
+    color: #1A1B1E;
+  }
+
+  .featureText {
+    color: #1A1B1E;
+  }
 }
 
 .checkIcon {
@@ -132,5 +332,31 @@
 
   &:hover {
     transform: translateY(-1px);
+  }
+}
+
+.buttonText {
+  /* Button text styling handled by theme */
+}
+
+/* Dark mode button text */
+[data-mantine-color-scheme="dark"] .buttonText {
+  color: #ffffff;
+}
+
+/* Light mode button text - ensure contrast */
+[data-mantine-color-scheme="light"] .buttonText {
+  color: #ffffff; /* Keep white for buttons as they have colored backgrounds */
+}
+
+@media (prefers-color-scheme: dark) {
+  .buttonText {
+    color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .buttonText {
+    color: #ffffff; /* Keep white for buttons as they have colored backgrounds */
   }
 }

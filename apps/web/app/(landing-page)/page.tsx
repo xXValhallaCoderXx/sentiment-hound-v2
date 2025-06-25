@@ -15,7 +15,7 @@ import { SpamDetectionSection } from "./components/SpamDetectionSection";
 import { CommandCenterSection } from "./components/CommandCenterSection";
 import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
 import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
-import classes from "./LandingPage.module.css";
+
 import sectionClasses from "./SectionBackgrounds.module.css";
 
 const LandingPage = async () => {
@@ -37,7 +37,11 @@ const LandingPage = async () => {
           <section id="early-access" className={sectionClasses.sectionAlt}>
             <BeFirstToKnowSection />
           </section>
-          <Stack gap={96} id="features" className={`${classes.wrapper} ${sectionClasses.sectionPrimary}`}>
+          <Stack
+            gap={96}
+            id="features"
+            className={`${sectionClasses.wrapper} ${sectionClasses.sectionPrimary}`}
+          >
             <CommandCenterSection />
             <SpamDetectionSection />
           </Stack>
