@@ -1,22 +1,8 @@
 /* Command Center Section */
 .wrapper {
-  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
   padding: 6rem 0;
   position: relative;
-  overflow: hidden;
-}
-
-.wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
-  pointer-events: none;
+  /* Background now handled by parent section */
 }
 
 .container {
@@ -39,23 +25,94 @@
   gap: 0.5rem;
 }
 
+/* Light mode badge styles */
+[data-mantine-color-scheme="light"] .badge {
+  background: rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  color: #2980B9;
+  backdrop-filter: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .badge {
+    background: rgba(52, 152, 219, 0.1);
+    border: 1px solid rgba(52, 152, 219, 0.2);
+    color: #2980B9;
+    backdrop-filter: none;
+  }
+}
+
 .title {
-  color: #ffffff;
   font-size: 2.5rem;
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 1.5rem;
+}
+
+/* Dark mode title */
+[data-mantine-color-scheme="dark"] .title {
+  color: #ffffff;
   background: linear-gradient(135deg, #ffffff 0%, #94A3B8 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+/* Light mode title - strong contrast */
+[data-mantine-color-scheme="light"] .title {
+  color: #1A1B1E;
+  background: none;
+  background-clip: unset;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: #ffffff;
+    background: linear-gradient(135deg, #ffffff 0%, #94A3B8 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #1A1B1E;
+    background: none;
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+  }
+}
+
 .subtitle {
-  color: #94A3B8;
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 2rem;
+}
+
+/* Dark mode subtitle */
+[data-mantine-color-scheme="dark"] .subtitle {
+  color: #94A3B8;
+}
+
+/* Light mode subtitle - improved contrast */
+[data-mantine-color-scheme="light"] .subtitle {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: dark) {
+  .subtitle {
+    color: #94A3B8;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .subtitle {
+    color: #2C2E33;
+  }
 }
 
 .featureList {
@@ -82,6 +139,37 @@
   transform: translateY(-2px);
 }
 
+/* Light mode feature item styles */
+[data-mantine-color-scheme="light"] .featureItem {
+  background: #F4F4F4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  backdrop-filter: none;
+}
+
+[data-mantine-color-scheme="light"] .featureItem:hover {
+  background: #ECECEC;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+@media (prefers-color-scheme: light) {
+  .featureItem {
+    background: #F4F4F4;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    backdrop-filter: none;
+  }
+
+  .featureItem:hover {
+    background: #ECECEC;
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
 .featureIcon {
   width: 2.5rem;
   height: 2.5rem;
@@ -97,15 +185,51 @@
 }
 
 .featureTitle {
-  color: #ffffff;
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
 
 .featureDescription {
-  color: #94A3B8;
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
+}
+
+/* Dark mode feature text */
+[data-mantine-color-scheme="dark"] .featureTitle {
+  color: #ffffff;
+}
+
+[data-mantine-color-scheme="dark"] .featureDescription {
+  color: #94A3B8;
+}
+
+/* Light mode feature text - improved contrast */
+[data-mantine-color-scheme="light"] .featureTitle {
+  color: #1A1B1E;
+}
+
+[data-mantine-color-scheme="light"] .featureDescription {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: dark) {
+  .featureTitle {
+    color: #ffffff;
+  }
+
+  .featureDescription {
+    color: #94A3B8;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .featureTitle {
+    color: #1A1B1E;
+  }
+
+  .featureDescription {
+    color: #2C2E33;
+  }
 }
 
 .featureProgress {

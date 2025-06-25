@@ -14,7 +14,6 @@ import classes from "./Hero.module.css";
 const Hero = () => {
   return (
     <div className={classes.wrapper}>
-      <div className={classes.backgroundPattern}></div>
       <Container size={1400} className={classes.inner}>
         <Grid align="center" gutter="xl">
           <GridCol span={{ base: 12, lg: 6 }}>
@@ -22,17 +21,17 @@ const Hero = () => {
               <Title
                 component="span"
                 variant="gradient"
-                c="primary"
+                className={classes.mainTitle}
                 size={55}
                 order={1}
                 ml={-8}
               >
                 Cut through the noise.
               </Title>
-              <Title order={3} component="span" c="white">
+              <Title order={3} component="span" className={classes.subtitle}>
                 Fetch the insights your audience is hiding
               </Title>
-              <Text className={classes.description} c="gray">
+              <Text className={classes.description}>
                 Sentiment Hound turns comments, reviews, and social chatter into
                 clear, ready-to-act insights—priced for creators, solo founders,
                 and growing brands.

@@ -28,21 +28,21 @@ const CommandCenterSection = () => {
       title: "Real-time sentiment updates",
       description: "Live sentiment tracking across all channels",
       progress: 85,
-      color: "#10B981",
+      color: "#2ECC71", // Improved green for better contrast
     },
     {
       icon: IconEye,
       title: "Advanced keyword filtering",
       description: "Smart filters to focus on what matters most",
       progress: 92,
-      color: "#3B82F6",
+      color: "#3498DB", // Improved blue for better contrast
     },
     {
       icon: IconChartDots3,
       title: "Historical trend visualization",
       description: "Interactive charts showing sentiment patterns",
       progress: 78,
-      color: "#8B5CF6",
+      color: "#9B59B6", // Improved purple for better contrast
     },
   ];
 

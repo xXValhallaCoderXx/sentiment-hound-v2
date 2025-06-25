@@ -15,7 +15,7 @@ const HowItWorksSection = () => {
       title: "Connect Your Content.",
       description:
         "Securely link your YouTube, Reddit, or other platforms in just a few clicks.",
-      color: "#3B82F6",
+      color: "#3498DB", // Improved blue for better contrast
       number: "01",
     },
     {
@@ -23,7 +23,7 @@ const HowItWorksSection = () => {
       title: "Unleash the Hounds.",
       description:
         "Our AI gets to work, sniffing out every mention and analyzing the true sentiment behind the words.",
-      color: "#10B981",
+      color: "#2ECC71", // Improved green for better contrast
       number: "02",
     },
     {
@@ -31,7 +31,7 @@ const HowItWorksSection = () => {
       title: "Act with Confidence.",
       description:
         "View everything on a single, beautiful dashboard and make smarter decisions with data you can trust.",
-      color: "#8B5CF6",
+      color: "#9B59B6", // Improved purple for better contrast
       number: "03",
     },
   ];
