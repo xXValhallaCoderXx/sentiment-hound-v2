@@ -1,7 +1,7 @@
 /* Spam Detection Section
 .wrapper {
   background: light-dark(
-    var(--section-bg-alt),
+    var(--mantine-color-gray-0),
     var(--mantine-color-dark-7)
   );
   padding: 6rem 0;

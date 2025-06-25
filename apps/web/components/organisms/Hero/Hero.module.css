@@ -2,7 +2,7 @@
   position: relative;
   box-sizing: border-box;
   background: light-dark(
-    var(--section-bg-primary),
+    var(--mantine-color-white),
     var(--mantine-color-dark-8)
   );
   overflow: hidden;

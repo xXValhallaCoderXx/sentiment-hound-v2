@@ -1,6 +1,6 @@
 .wrapper {
   background: light-dark(
-    var(--section-bg-primary),
+    var(--mantine-color-white),
     var(--mantine-color-dark-8)
   );
   padding: rem(120px) 0;
