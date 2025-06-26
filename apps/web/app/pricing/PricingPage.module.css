@@ -1,9 +1,4 @@
 /* Hero Section */
-.heroSection {
-  padding: rem(80px) 0;
-  position: relative;
-  overflow: hidden;
-}
 
 .heroContainer {
   position: relative;
@@ -40,10 +35,6 @@
 }
 
 /* Pricing Section */
-.pricingSection {
-  padding: rem(60px) 0;
-  position: relative;
-}
 
 .planCard {
   border: 1px solid var(--mantine-color-default-border);
@@ -155,9 +146,6 @@
 }
 
 /* Comparison Section */
-.comparisonSection {
-  padding: rem(80px) 0;
-}
 
 .sectionTitle {
   font-size: rem(36px);
@@ -194,68 +182,16 @@
   }
 }
 
-/* FAQ Section */
-.faqSection {
-  padding: rem(80px) 0;
-}
-
-.faqContainer {
-  max-width: rem(800px);
-  margin: 0 auto;
-}
-
-.faqContainer :global(.mantine-Accordion-root) {
-  background: transparent;
-}
-
-.faqContainer :global(.mantine-Accordion-item) {
-  background-color: var(--mantine-color-body);
-  border: 1px solid var(--mantine-color-default-border);
-  margin-bottom: rem(8px);
-  border-radius: var(--mantine-radius-md);
-}
-
-.faqContainer :global(.mantine-Accordion-control) {
-  background: transparent;
-  color: var(--mantine-color-text);
-  font-weight: 500;
-
-  &:hover {
-    background-color: var(--mantine-color-gray-0);
-  }
-}
-
-.faqContainer :global(.mantine-Accordion-panel) {
-  background: transparent;
-  color: var(--mantine-color-dimmed);
-}
-
-.faqContainer :global(.mantine-Accordion-chevron) {
-  color: var(--mantine-color-dimmed);
-}
+/* FAQ Section - Now handled by unified FaqSection component */
 
 /* Responsive Design */
 @media (max-width: var(--mantine-breakpoint-md)) {
-  .heroSection,
-  .pricingSection,
-  .comparisonSection,
-  .faqSection {
-    padding: rem(60px) 0;
-  }
-  
   .planCard {
     padding: rem(24px) rem(20px);
   }
 }
 
 @media (max-width: var(--mantine-breakpoint-sm)) {
-  .heroSection,
-  .pricingSection,
-  .comparisonSection,
-  .faqSection {
-    padding: rem(40px) 0;
-  }
-  
   .planCard {
     padding: rem(20px) rem(16px);
   }
@@ -271,9 +207,5 @@
   
   .comparisonTable :global(.mantine-Table-table) {
     min-width: rem(500px);
-  }
-  
-  .faqContainer {
-    padding: 0 rem(16px);
   }
 }

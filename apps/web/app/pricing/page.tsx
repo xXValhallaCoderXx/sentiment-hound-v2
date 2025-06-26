@@ -9,12 +9,12 @@ import {
   Switch,
   Group,
   Table,
-  Accordion,
   Card,
   Badge
 } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { Footer } from "@/app/(landing-page)/components/Footer";
+import PublicPageLayout from "@/components/templates/PublicPageLayout";
+import { FaqSection } from "@/components/organisms/FaqSection";
 import { PageTitle, SectionTitle, BodyText, DimmedText } from "@/components/atoms/Typography";
 import { PricingCard } from "@/components/molecules/PricingCard";
 import sectionClasses from "../(landing-page)/SectionBackgrounds.module.css";
@@ -103,7 +103,7 @@ const PricingPage = () => {
   ];
 
   return (
-    <>
+    <PublicPageLayout>
       <section className={`${sectionClasses.sectionPrimary} ${sectionClasses.wrapper}`}>
         <Container size="xl" className={classes.heroContainer}>
           <div className={classes.heroContent}>
@@ -197,30 +197,12 @@ const PricingPage = () => {
 
       {/* FAQ Section */}
       <section className={`${sectionClasses.sectionAlt} ${sectionClasses.wrapper}`}>
-        <Container size="xl">
-          <SectionTitle ta="center" mb="xl">
-            Frequently Asked Questions
-          </SectionTitle>
-          
-          <Box className={classes.faqContainer}>
-            <Accordion variant="contained" radius="md">
-              {faqData.map((item) => (
-                <Accordion.Item key={item.value} value={item.value}>
-                  <Accordion.Control>
-                    <BodyText fw={500}>{item.title}</BodyText>
-                  </Accordion.Control>
-                  <Accordion.Panel>
-                    <DimmedText>{item.content}</DimmedText>
-                  </Accordion.Panel>
-                </Accordion.Item>
-              ))}
-            </Accordion>
-          </Box>
-        </Container>
+        <FaqSection 
+          faqData={faqData}
+          title="Frequently Asked Questions"
+        />
       </section>
-
-      <Footer />
-    </>
+    </PublicPageLayout>
   );
 };
 
