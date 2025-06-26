@@ -1,7 +1,7 @@
 import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import PublicPageLayout from "@/components/templates/PublicPageLayout";
-import { Hero } from "@/components/organisms/Hero";
+import ModernHero from "@/components/organisms/ModernHero/ModernHero";
 import { FeaturesSection } from "./components/FeaturesSection";
 import { CompetitiveSection } from "./components/CompetitiveSection";
 import { HowItWorksSection } from "./components/HowItWorksSection";
@@ -26,7 +26,7 @@ const LandingPage = async () => {
   return (
     <PublicPageLayout>
       <section id="home" className={sectionClasses.sectionPrimary}>
-        <Hero />
+        <ModernHero />
       </section>
       <AnimatedSection>
         <section id="early-access" className={sectionClasses.sectionAlt}>
