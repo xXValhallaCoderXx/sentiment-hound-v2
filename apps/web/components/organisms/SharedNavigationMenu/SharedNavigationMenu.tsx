@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Group, Anchor, Text, Burger, Drawer, Stack, Box } from "@mantine/core";
 import { ThemeToggle } from "@/components/molecules/ThemeToggle";
 import { useDisclosure } from "@mantine/hooks";
+import { usePathname } from "next/navigation";
 
 interface SharedNavigationMenuProps {
   links: { href: string; label: string }[];
@@ -11,8 +12,15 @@ interface SharedNavigationMenuProps {
 
 const SharedNavigationMenu = ({ links, ctaButton }: SharedNavigationMenuProps) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const pathname = usePathname();
 
-  const navigationLinks = links.map(link => (
+  const isPricingPage = pathname === '/pricing';
+
+  const filteredLinks = isPricingPage
+    ? [{ href: '/', label: 'Home' }]
+    : links;
+
+  const navigationLinks = filteredLinks.map(link => (
       <Anchor href={link.href} c="dimmed" fw={500} onClick={close} key={link.href}>
         {link.label}
       </Anchor>
