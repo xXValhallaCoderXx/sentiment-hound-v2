@@ -8,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppShell header={{ height: 60 }} padding="md">
+    <AppShell header={{ height: 70 }} padding="md">
       <AppShellHeader>
         <SharedNavigationMenu 
           links={[{ href: "/", label: "Home" }, { href: "/pricing", label: "Pricing" }]}

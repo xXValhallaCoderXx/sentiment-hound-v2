@@ -1,21 +1,8 @@
 /* Hero Section */
 .heroSection {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
   padding: rem(80px) 0;
   position: relative;
   overflow: hidden;
-}
-
-.heroSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
-  pointer-events: none;
 }
 
 .heroContainer {
@@ -32,12 +19,8 @@
 .heroTitle {
   font-size: rem(48px);
   font-weight: 800;
-  color: #ffffff;
+  color: var(--mantine-color-text);
   line-height: 1.2;
-  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
     font-size: rem(36px);
@@ -46,7 +29,7 @@
 
 .heroSubtitle {
   font-size: rem(18px);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--mantine-color-dimmed);
   line-height: 1.6;
   max-width: rem(600px);
   margin: 0 auto;
@@ -58,24 +41,21 @@
 
 /* Pricing Section */
 .pricingSection {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
   padding: rem(60px) 0;
   position: relative;
 }
 
 .planCard {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: rem(12px);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-lg);
   padding: rem(32px) rem(24px);
   height: 100%;
   position: relative;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  background-color: var(--mantine-color-body);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--mantine-color-primary-5);
     transform: translateY(-2px);
   }
 }
@@ -98,7 +78,8 @@
   font-size: rem(11px);
   font-weight: 700;
   padding: rem(6px) rem(12px);
-  background: #ff4757;
+  background: var(--mantine-color-primary-5);
+  color: var(--mantine-color-white);
 }
 
 .planHeader {
@@ -108,7 +89,7 @@
 
 .planName {
   font-size: rem(20px);
-  color: #ffffff;
+  color: var(--mantine-color-text);
   margin-bottom: rem(8px);
 }
 
@@ -123,13 +104,13 @@
 .price {
   font-size: rem(48px);
   font-weight: 800;
-  color: #ffffff;
+  color: var(--mantine-color-text);
   line-height: 1;
 }
 
 .period {
   font-size: rem(16px);
-  color: #a0a0a0;
+  color: var(--mantine-color-dimmed);
 }
 
 .trialText {
@@ -138,7 +119,7 @@
 
 .planDescription {
   font-size: rem(14px);
-  color: #a0a0a0;
+  color: var(--mantine-color-dimmed);
 }
 
 .featureList {
@@ -157,11 +138,11 @@
   display: flex;
   align-items: center;
   gap: rem(8px);
-  color: #ffffff;
+  color: var(--mantine-color-text);
 }
 
 .checkIcon {
-  color: var(--mantine-color-success-5);
+  color: var(--mantine-color-green-5);
   flex-shrink: 0;
 }
 
@@ -175,14 +156,13 @@
 
 /* Comparison Section */
 .comparisonSection {
-  background: var(--mantine-color-dark-8);
   padding: rem(80px) 0;
 }
 
 .sectionTitle {
   font-size: rem(36px);
   font-weight: 700;
-  color: #ffffff;
+  color: var(--mantine-color-text);
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
     font-size: rem(28px);
@@ -190,36 +170,32 @@
 }
 
 .comparisonTable {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  max-width: rem(800px);
-  margin: 0 auto;
+  background-color: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-default-border);
 
   :global(.mantine-Table-table) {
-    color: white;
+    color: var(--mantine-color-text);
   }
 
   :global(.mantine-Table-th) {
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
+    background-color: var(--mantine-color-gray-1);
+    color: var(--mantine-color-text);
     font-weight: 600;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--mantine-color-default-border);
   }
 
   :global(.mantine-Table-td) {
-    color: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--mantine-color-text);
+    border-bottom: 1px solid var(--mantine-color-default-border);
   }
 
   :global(.mantine-Table-tr:hover) {
-    background: rgba(255, 255, 255, 0.05);
+    background-color: var(--mantine-color-gray-0);
   }
 }
 
 /* FAQ Section */
 .faqSection {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
   padding: rem(80px) 0;
 }
 
@@ -233,46 +209,36 @@
 }
 
 .faqContainer :global(.mantine-Accordion-item) {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background-color: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-default-border);
   margin-bottom: rem(8px);
-  border-radius: rem(8px);
+  border-radius: var(--mantine-radius-md);
 }
 
 .faqContainer :global(.mantine-Accordion-control) {
   background: transparent;
-  color: white;
+  color: var(--mantine-color-text);
   font-weight: 500;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background-color: var(--mantine-color-gray-0);
   }
 }
 
 .faqContainer :global(.mantine-Accordion-panel) {
   background: transparent;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--mantine-color-dimmed);
 }
 
 .faqContainer :global(.mantine-Accordion-chevron) {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--mantine-color-dimmed);
 }
 
 /* Responsive Design */
 @media (max-width: var(--mantine-breakpoint-md)) {
-  .heroSection {
-    padding: rem(60px) 0;
-  }
-  
-  .pricingSection {
-    padding: rem(40px) 0;
-  }
-  
-  .comparisonSection {
-    padding: rem(60px) 0;
-  }
-  
+  .heroSection,
+  .pricingSection,
+  .comparisonSection,
   .faqSection {
     padding: rem(60px) 0;
   }
@@ -283,18 +249,9 @@
 }
 
 @media (max-width: var(--mantine-breakpoint-sm)) {
-  .heroSection {
-    padding: rem(40px) 0;
-  }
-  
-  .pricingSection {
-    padding: rem(32px) 0;
-  }
-  
-  .comparisonSection {
-    padding: rem(40px) 0;
-  }
-  
+  .heroSection,
+  .pricingSection,
+  .comparisonSection,
   .faqSection {
     padding: rem(40px) 0;
   }

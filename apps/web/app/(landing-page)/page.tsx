@@ -51,9 +51,7 @@ const LandingPage = async () => {
           <section id="why-you-love" className={sectionClasses.sectionPrimary}>
             <WhyTeamsLoveSection />
           </section>
-          <section id="pricing" className={sectionClasses.sectionAlt}>
-            <PricingSection />
-          </section>
+          
           <section id="faq" className={sectionClasses.sectionPrimary}>
             <FaqSection />
           </section>
