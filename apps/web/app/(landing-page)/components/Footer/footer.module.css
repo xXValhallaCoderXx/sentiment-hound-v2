@@ -1,7 +1,7 @@
 .footer {
     margin-top: 0;
-    padding-top: calc(var(--mantine-spacing-xl) * 2);
-    padding-bottom: calc(var(--mantine-spacing-sm));
+    padding-top: calc(var(--mantine-spacing-lg));
+    padding-bottom: calc(var(--mantine-spacing-xs));
     /* Background now handled by parent section */
 }
 
@@ -27,27 +27,37 @@
     }
 }
 
-.logo {
-    max-width: rem(200px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: calc(var(--mantine-spacing-md));
 
-    @media (max-width: var(--mantine-breakpoint-sm)) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    flex-direction: column;
+    gap: rem(20px);
+  }
 }
 
-.description {
-    margin-top: rem(5px);
-    text-align: center;
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
-    @media (max-width: var(--mantine-breakpoint-sm)) {
-        margin-top: var(--mantine-spacing-xs);
-        text-align: center;
-    }
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.brandName {
+  color: inherit;
+}
+
+.brandDescription {
+  margin-top: rem(8px);
+  max-width: rem(280px);
+  line-height: 1.5;
 }
 
 .brandName {
@@ -223,12 +233,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: var(--mantine-spacing-xl);
-    padding-top: var(--mantine-spacing-xl);
-    padding-bottom: var(--mantine-spacing-sm);
+    margin-top: var(--mantine-spacing-md);
+    padding-top: var(--mantine-spacing-md);
+    padding-bottom: var(--mantine-spacing-xs);
 
     @media (max-width: var(--mantine-breakpoint-sm)) {
         flex-direction: column;
+        gap: rem(12px);
     }
 }
 
@@ -255,7 +266,7 @@
 }
 
 .copyright {
-    /* Copyright text styling */
+  font-size: rem(14px);
 }
 
 /* Dark mode copyright */
@@ -282,6 +293,6 @@
 
 .social {
     @media (max-width: var(--mantine-breakpoint-sm)) {
-        margin-top: var(--mantine-spacing-xs);
+        margin-top: 0;
     }
 }
