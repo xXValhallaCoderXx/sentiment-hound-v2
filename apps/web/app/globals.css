@@ -1,13 +1,44 @@
 :root {
   --background: #0f0f1e;
   --foreground: #ffffff;
+  
+  /* Section background variables for light mode */
+  --section-bg-primary: #ffffff;
+  --section-bg-alt: #f8f9fa;
+  
+  /* Section background variables for dark mode (default) */
+  --section-bg-primary-dark: #101113;
+  --section-bg-alt-dark: #1a1b1e;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0f0f1e;
     --foreground: #ffffff;
+    
+    /* Use dark mode section backgrounds */
+    --section-bg-primary: var(--section-bg-primary-dark);
+    --section-bg-alt: var(--section-bg-alt-dark);
   }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Use light mode section backgrounds */
+    --section-bg-primary: #ffffff;
+    --section-bg-alt: #f8f9fa;
+  }
+}
+
+/* Mantine theme-specific overrides */
+[data-mantine-color-scheme="light"] {
+  --section-bg-primary: #ffffff;
+  --section-bg-alt: #f8f9fa;
+}
+
+[data-mantine-color-scheme="dark"] {
+  --section-bg-primary: var(--section-bg-primary-dark);
+  --section-bg-alt: var(--section-bg-alt-dark);
 }
 
 html,

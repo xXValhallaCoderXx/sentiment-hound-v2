@@ -1,32 +1,21 @@
 .wrapper {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
   position: relative;
-  overflow: hidden;
   padding: rem(100px) 0;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-      radial-gradient(
-        circle at 20% 30%,
-        rgba(255, 71, 87, 0.08) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 80% 70%,
-        rgba(84, 160, 255, 0.08) 0%,
-        transparent 50%
-      );
-    z-index: 1;
-  }
+  /* Background now handled by parent section */
 
   @media (max-width: var(--mantine-breakpoint-md)) {
     padding: rem(60px) 0;
+  }
+}
+
+/* Light mode background tint for better separation */
+[data-mantine-color-scheme="light"] .wrapper {
+  background: radial-gradient(circle at 70% 30%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+}
+
+@media (prefers-color-scheme: light) {
+  .wrapper {
+    background: radial-gradient(circle at 70% 30%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
   }
 }
 
@@ -55,7 +44,6 @@
 }
 
 .title {
-  color: white;
   font-size: rem(48px);
   font-weight: 800;
   line-height: 1.1;
@@ -71,14 +59,57 @@
   }
 }
 
+/* Dark mode title */
+[data-mantine-color-scheme="dark"] .title {
+  color: white;
+}
+
+/* Light mode title - strong contrast */
+[data-mantine-color-scheme="light"] .title {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #1A1B1E;
+  }
+}
+
 .subtitle {
-  color: var(--mantine-color-red-4);
   font-size: rem(20px);
   font-weight: 600;
   margin-bottom: rem(16px);
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
     font-size: rem(18px);
+  }
+}
+
+/* Dark mode subtitle */
+[data-mantine-color-scheme="dark"] .subtitle {
+  color: var(--mantine-color-red-4);
+}
+
+/* Light mode subtitle - improved contrast */
+[data-mantine-color-scheme="light"] .subtitle {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: dark) {
+  .subtitle {
+    color: var(--mantine-color-red-4);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .subtitle {
+    color: #2C2E33;
   }
 }
 
@@ -130,12 +161,42 @@
   }
 }
 
+/* Light mode benefit card styles */
+[data-mantine-color-scheme="light"] .benefitCard {
+  background: #F4F4F4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  backdrop-filter: none;
+
+  &:hover {
+    background: #ECECEC;
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .benefitCard {
+    background: #F4F4F4;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    backdrop-filter: none;
+
+    &:hover {
+      background: #ECECEC;
+      border-color: rgba(0, 0, 0, 0.12);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+  }
+}
+
 .benefitIcon {
   flex-shrink: 0;
 }
 
 .benefitTitle {
-  color: white;
   font-size: rem(16px);
   margin-bottom: rem(4px);
 
@@ -144,13 +205,56 @@
   }
 }
 
+/* Dark mode benefit title */
+[data-mantine-color-scheme="dark"] .benefitTitle {
+  color: white;
+}
+
+/* Light mode benefit title - strong contrast */
+[data-mantine-color-scheme="light"] .benefitTitle {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  .benefitTitle {
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .benefitTitle {
+    color: #1A1B1E;
+  }
+}
+
 .benefitDescription {
-  color: rgba(255, 255, 255, 0.6);
   font-size: rem(14px);
   line-height: 1.4;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
     font-size: rem(12px);
+  }
+}
+
+/* Dark mode benefit description */
+[data-mantine-color-scheme="dark"] .benefitDescription {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Light mode benefit description - improved contrast */
+[data-mantine-color-scheme="light"] .benefitDescription {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: dark) {
+  .benefitDescription {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .benefitDescription {
+    color: #2C2E33;
   }
 }
 
@@ -172,6 +276,23 @@
   }
 }
 
+/* Light mode form card styles */
+[data-mantine-color-scheme="light"] .formCard {
+  background: #F4F4F4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  backdrop-filter: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .formCard {
+    background: #F4F4F4;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    backdrop-filter: none;
+  }
+}
+
 .input {
   input {
     background: rgba(255, 255, 255, 0.08);
@@ -190,6 +311,45 @@
 
     @media (max-width: var(--mantine-breakpoint-sm)) {
       font-size: rem(14px);
+    }
+  }
+}
+
+/* Light mode input styles */
+[data-mantine-color-scheme="light"] .input {
+  input {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: #1A1B1E;
+
+    &::placeholder {
+      color: #6B7280;
+    }
+
+    &:focus {
+      border-color: #3498DB;
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+    }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .input {
+    input {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      color: #1A1B1E;
+
+      &::placeholder {
+        color: #6B7280;
+      }
+
+      &:focus {
+        border-color: #3498DB;
+        background: #ffffff;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+      }
     }
   }
 }

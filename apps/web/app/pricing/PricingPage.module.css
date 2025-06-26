@@ -1,0 +1,211 @@
+/* Hero Section */
+
+.heroContainer {
+  position: relative;
+  z-index: 1;
+}
+
+.heroContent {
+  text-align: center;
+  max-width: rem(800px);
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: rem(48px);
+  font-weight: 800;
+  color: var(--mantine-color-text);
+  line-height: 1.2;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(36px);
+  }
+}
+
+.heroSubtitle {
+  font-size: rem(18px);
+  color: var(--mantine-color-dimmed);
+  line-height: 1.6;
+  max-width: rem(600px);
+  margin: 0 auto;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(16px);
+  }
+}
+
+/* Pricing Section */
+
+.planCard {
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-lg);
+  padding: rem(32px) rem(24px);
+  height: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+  background-color: var(--mantine-color-body);
+
+  &:hover {
+    border-color: var(--mantine-color-primary-5);
+    transform: translateY(-2px);
+  }
+}
+
+.popularCard {
+  border-color: var(--mantine-color-primary-5);
+  transform: scale(1.02);
+
+  &:hover {
+    border-color: var(--mantine-color-primary-4);
+    transform: scale(1.02) translateY(-2px);
+  }
+}
+
+.popularBadge {
+  position: absolute;
+  top: rem(-12px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: rem(11px);
+  font-weight: 700;
+  padding: rem(6px) rem(12px);
+  background: var(--mantine-color-primary-5);
+  color: var(--mantine-color-white);
+}
+
+.planHeader {
+  text-align: center;
+  margin-bottom: rem(24px);
+}
+
+.planName {
+  font-size: rem(20px);
+  color: var(--mantine-color-text);
+  margin-bottom: rem(8px);
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: rem(4px);
+  margin-bottom: rem(8px);
+}
+
+.price {
+  font-size: rem(48px);
+  font-weight: 800;
+  color: var(--mantine-color-text);
+  line-height: 1;
+}
+
+.period {
+  font-size: rem(16px);
+  color: var(--mantine-color-dimmed);
+}
+
+.trialText {
+  margin-bottom: rem(8px);
+}
+
+.planDescription {
+  font-size: rem(14px);
+  color: var(--mantine-color-dimmed);
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.featureContent {
+  display: flex;
+  align-items: center;
+  gap: rem(8px);
+  color: var(--mantine-color-text);
+}
+
+.checkIcon {
+  color: var(--mantine-color-green-5);
+  flex-shrink: 0;
+}
+
+.planButton {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Comparison Section */
+
+.sectionTitle {
+  font-size: rem(36px);
+  font-weight: 700;
+  color: var(--mantine-color-text);
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(28px);
+  }
+}
+
+.comparisonTable {
+  background-color: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-default-border);
+
+  :global(.mantine-Table-table) {
+    color: var(--mantine-color-text);
+  }
+
+  :global(.mantine-Table-th) {
+    background-color: var(--mantine-color-gray-1);
+    color: var(--mantine-color-text);
+    font-weight: 600;
+    border-bottom: 1px solid var(--mantine-color-default-border);
+  }
+
+  :global(.mantine-Table-td) {
+    color: var(--mantine-color-text);
+    border-bottom: 1px solid var(--mantine-color-default-border);
+  }
+
+  :global(.mantine-Table-tr:hover) {
+    background-color: var(--mantine-color-gray-0);
+  }
+}
+
+/* FAQ Section - Now handled by unified FaqSection component */
+
+/* Responsive Design */
+@media (max-width: var(--mantine-breakpoint-md)) {
+  .planCard {
+    padding: rem(24px) rem(20px);
+  }
+}
+
+@media (max-width: var(--mantine-breakpoint-sm)) {
+  .planCard {
+    padding: rem(20px) rem(16px);
+  }
+  
+  .price {
+    font-size: rem(36px);
+  }
+  
+  .comparisonTable {
+    font-size: rem(14px);
+    overflow-x: auto;
+  }
+  
+  .comparisonTable :global(.mantine-Table-table) {
+    min-width: rem(500px);
+  }
+}

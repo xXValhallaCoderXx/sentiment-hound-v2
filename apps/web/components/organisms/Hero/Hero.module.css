@@ -1,22 +1,19 @@
 .wrapper {
   position: relative;
   box-sizing: border-box;
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
-  overflow: hidden;
   min-height: 100vh;
+  /* Background now handled by parent section */
 }
 
-.backgroundPattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 71, 87, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(84, 160, 255, 0.1) 0%, transparent 50%),
-    linear-gradient(135deg, transparent 0%, rgba(255, 71, 87, 0.05) 100%);
-  z-index: 1;
+/* Light mode background tint for better separation */
+[data-mantine-color-scheme="light"] .wrapper {
+  background: radial-gradient(circle at 30% 40%, rgba(240, 240, 240, 0.3), rgba(255, 255, 255, 1));
+}
+
+@media (prefers-color-scheme: light) {
+  .wrapper {
+    background: radial-gradient(circle at 30% 40%, rgba(240, 240, 240, 0.3), rgba(255, 255, 255, 1));
+  }
 }
 
 .inner {
@@ -36,6 +33,83 @@
   flex-direction: column;
   height: 100%;
   justify-content: center;
+}
+
+/* Main title styles */
+.mainTitle {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0;
+  padding: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Dark mode main title - gradient effect */
+[data-mantine-color-scheme="dark"] .mainTitle {
+  background: linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Light mode main title - strong contrast */
+[data-mantine-color-scheme="light"] .mainTitle {
+  color: #1A1B1E;
+  background: none;
+  background-clip: unset;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+@media (prefers-color-scheme: dark) {
+  .mainTitle {
+    background: linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .mainTitle {
+    color: #1A1B1E;
+    background: none;
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+  }
+}
+
+/* Subtitle styles */
+.subtitle {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: rem(16px);
+  margin-bottom: 0;
+}
+
+/* Dark mode subtitle */
+[data-mantine-color-scheme="dark"] .subtitle {
+  color: #ffffff;
+}
+
+/* Light mode subtitle - strong contrast */
+[data-mantine-color-scheme="light"] .subtitle {
+  color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  .subtitle {
+    color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .subtitle {
+    color: #1A1B1E;
+  }
 }
 
 .title {
@@ -59,10 +133,31 @@
   font-size: rem(18px);
   line-height: 1.6;
   font-weight: 400;
-  color: #a0a0a0;
 
   @media (max-width: var(--mantine-breakpoint-sm)) {
     font-size: rem(16px);
+  }
+}
+
+/* Dark mode description */
+[data-mantine-color-scheme="dark"] .description {
+  color: #a0a0a0;
+}
+
+/* Light mode description - improved contrast */
+[data-mantine-color-scheme="light"] .description {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: dark) {
+  .description {
+    color: #a0a0a0;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .description {
+    color: #2C2E33;
   }
 }
 
@@ -109,6 +204,31 @@
   &:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Light mode secondary button */
+[data-mantine-color-scheme="light"] .controlSecondary {
+  background: transparent;
+  border: 1px solid #1A1B1E;
+  color: #1A1B1E;
+
+  &:hover {
+    background: rgba(26, 27, 30, 0.05);
+    border-color: #1A1B1E;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .controlSecondary {
+    background: transparent;
+    border: 1px solid #1A1B1E;
+    color: #1A1B1E;
+
+    &:hover {
+      background: rgba(26, 27, 30, 0.05);
+      border-color: #1A1B1E;
+    }
   }
 }
 
