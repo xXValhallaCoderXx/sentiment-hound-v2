@@ -275,6 +275,11 @@
     transform: rotate(90deg);
     margin: rem(8px) 0;
   }
+
+  /* Hide arrows on mobile and small tablets */
+  @media (max-width: 992px) {
+    display: none !important;
+  }
 }
 
 /* Light mode step connector styles - improved visibility */
