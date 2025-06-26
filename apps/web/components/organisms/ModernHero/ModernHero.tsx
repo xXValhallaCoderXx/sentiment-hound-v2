@@ -8,7 +8,7 @@ import { Container, Title, Text, Button, Group, useMantineTheme } from '@mantine
 import classes from './ModernHero.module.css';
 
 const Starfield = ({ particleColor, ...props }: any) => {
-  const ref = useRef<any>();
+  const ref = useRef<any>(null);
   const [sphere] = useState(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }));
 
   useFrame((state, delta) => {
@@ -37,28 +37,37 @@ const ModernHero = () => {
 
   return (
     <div className={classes.heroContainer}>
-      <Canvas camera={{ position: [0, 0, 1] }} style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
+      <Canvas
+        camera={{ position: [0, 0, 1] }}
+        style={{ position: "absolute", top: 0, left: 0, zIndex: 1 }}
+      >
         <Starfield particleColor={particleColor} />
       </Canvas>
-      <Container size={1400} className={classes.inner}>
+      <Container size={1600} className={classes.inner}>
         <div className={classes.content}>
           <Title
-            component="span"
-            variant="gradient"
             className={classes.mainTitle}
-            size={55}
+            size={72}
             order={1}
-            ml={-8}
+            fw={700}
+            lh={1.1}
+            mb="md"
           >
             Cut through the noise.
           </Title>
-          <Title order={3} component="span" className={classes.subtitle}>
+          <Title
+            order={2}
+            className={classes.subtitle}
+            fw={400}
+            lh={1.3}
+            mb="xl"
+          >
             Fetch the insights your audience is hiding
           </Title>
-          <Text className={classes.description}>
+          <Text className={classes.description} size="lg" lh={1.6}>
             Sentiment Hound turns comments, reviews, and social chatter into
-            clear, ready-to-act insights—priced for creators, solo founders,
-            and growing brands.
+            clear, ready-to-act insights—priced for creators, solo founders, and
+            growing brands.
           </Text>
 
           <Group className={classes.controls} mt="xl">

@@ -14,33 +14,30 @@
 }
 
 .content {
-  max-width: 600px;
+  max-width: 800px;
 }
 
 .mainTitle {
-  font-size: 55px;
+  font-size: 72px;
   font-weight: 700;
-  margin-left: -8px;
+  color: #ff6b5a;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 32px;
+  font-weight: 400;
+  color: #ffffff;
+  opacity: 0.9;
 }
 
 .description {
   margin-top: 20px;
   font-size: 18px;
+  color: #ffffff;
+  opacity: 0.8;
 }
 
 .controls {
   margin-top: 40px;
-}
-
-.control {
-  /* Add your button styles here */
-}
-
-.controlSecondary {
-  /* Add your secondary button styles here */
 }
