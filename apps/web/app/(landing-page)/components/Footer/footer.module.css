@@ -1,31 +1,126 @@
 .footer {
     margin-top: 0;
-    padding-top: calc(var(--mantine-spacing-xl) * 2);
-    padding-bottom: calc(var(--mantine-spacing-sm));
-    background: #0f0f1e;
+    padding-top: calc(var(--mantine-spacing-lg));
+    padding-bottom: calc(var(--mantine-spacing-xs));
+    /* Background now handled by parent section */
+}
+
+/* Dark mode footer border */
+[data-mantine-color-scheme="dark"] .footer {
     border-top: rem(1px) solid rgba(255, 255, 255, 0.1);
 }
 
-.logo {
-    max-width: rem(200px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Light mode footer border */
+[data-mantine-color-scheme="light"] .footer {
+    border-top: rem(1px) solid rgba(0, 0, 0, 0.1);
+}
 
-    @media (max-width: var(--mantine-breakpoint-sm)) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+@media (prefers-color-scheme: dark) {
+    .footer {
+        border-top: rem(1px) solid rgba(255, 255, 255, 0.1);
     }
 }
 
-.description {
+@media (prefers-color-scheme: light) {
+    .footer {
+        border-top: rem(1px) solid rgba(0, 0, 0, 0.1);
+    }
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: calc(var(--mantine-spacing-md));
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    flex-direction: column;
+    gap: rem(20px);
+  }
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.brandName {
+  color: inherit;
+}
+
+.brandDescription {
+  margin-top: rem(8px);
+  max-width: rem(280px);
+  line-height: 1.5;
+}
+
+.brandName {
     margin-top: rem(5px);
     text-align: center;
 
     @media (max-width: var(--mantine-breakpoint-sm)) {
         margin-top: var(--mantine-spacing-xs);
         text-align: center;
+    }
+}
+
+/* Dark mode brand name */
+[data-mantine-color-scheme="dark"] .brandName {
+    color: #ffffff;
+}
+
+/* Light mode brand name - strong contrast */
+[data-mantine-color-scheme="light"] .brandName {
+    color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+    .brandName {
+        color: #ffffff;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .brandName {
+        color: #1A1B1E;
+    }
+}
+
+.brandDescription {
+    margin-top: rem(5px);
+    text-align: center;
+
+    @media (max-width: var(--mantine-breakpoint-sm)) {
+        margin-top: var(--mantine-spacing-xs);
+        text-align: center;
+    }
+}
+
+/* Dark mode brand description */
+[data-mantine-color-scheme="dark"] .brandDescription {
+    color: #a0a0a0;
+}
+
+/* Light mode brand description - improved contrast */
+[data-mantine-color-scheme="light"] .brandDescription {
+    color: #6B7280;
+}
+
+@media (prefers-color-scheme: dark) {
+    .brandDescription {
+        color: #a0a0a0;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .brandDescription {
+        color: #6B7280;
     }
 }
 
@@ -57,15 +152,51 @@
 
 .link {
     display: block;
-    color: #a0a0a0;
     font-size: var(--mantine-font-size-sm);
     padding-top: rem(3px);
     padding-bottom: rem(3px);
     text-decoration: none;
+}
+
+/* Dark mode links */
+[data-mantine-color-scheme="dark"] .link {
+    color: #a0a0a0;
 
     &:hover {
         color: #ffffff;
         text-decoration: underline;
+    }
+}
+
+/* Light mode links - improved contrast */
+[data-mantine-color-scheme="light"] .link {
+    color: #6B7280;
+
+    &:hover {
+        color: #1A1B1E;
+        text-decoration: underline;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .link {
+        color: #a0a0a0;
+
+        &:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .link {
+        color: #6B7280;
+
+        &:hover {
+            color: #1A1B1E;
+            text-decoration: underline;
+        }
     }
 }
 
@@ -74,25 +205,94 @@
     font-weight: 700;
     font-family: Inter, var(--mantine-font-family);
     margin-bottom: calc(var(--mantine-spacing-xs) / 2);
+}
+
+/* Dark mode title */
+[data-mantine-color-scheme="dark"] .title {
     color: #ffffff;
+}
+
+/* Light mode title - strong contrast */
+[data-mantine-color-scheme="light"] .title {
+    color: #1A1B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+    .title {
+        color: #ffffff;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .title {
+        color: #1A1B1E;
+    }
 }
 
 .afterFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: var(--mantine-spacing-xl);
-    padding-top: var(--mantine-spacing-xl);
-    padding-bottom: var(--mantine-spacing-sm);
-    border-top: rem(1px) solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--mantine-spacing-md);
+    padding-top: var(--mantine-spacing-md);
+    padding-bottom: var(--mantine-spacing-xs);
 
     @media (max-width: var(--mantine-breakpoint-sm)) {
         flex-direction: column;
+        gap: rem(12px);
+    }
+}
+
+/* Dark mode after footer border */
+[data-mantine-color-scheme="dark"] .afterFooter {
+    border-top: rem(1px) solid rgba(255, 255, 255, 0.1);
+}
+
+/* Light mode after footer border */
+[data-mantine-color-scheme="light"] .afterFooter {
+    border-top: rem(1px) solid rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    .afterFooter {
+        border-top: rem(1px) solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .afterFooter {
+        border-top: rem(1px) solid rgba(0, 0, 0, 0.1);
+    }
+}
+
+.copyright {
+  font-size: rem(14px);
+}
+
+/* Dark mode copyright */
+[data-mantine-color-scheme="dark"] .copyright {
+    color: #a0a0a0;
+}
+
+/* Light mode copyright - improved contrast */
+[data-mantine-color-scheme="light"] .copyright {
+    color: #6B7280;
+}
+
+@media (prefers-color-scheme: dark) {
+    .copyright {
+        color: #a0a0a0;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .copyright {
+        color: #6B7280;
     }
 }
 
 .social {
     @media (max-width: var(--mantine-breakpoint-sm)) {
-        margin-top: var(--mantine-spacing-xs);
+        margin-top: 0;
     }
 }

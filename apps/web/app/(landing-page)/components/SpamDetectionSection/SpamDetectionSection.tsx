@@ -33,9 +33,9 @@ const SpamDetectionSection = () => {
       message: "Just tried this service, really impressed with the results!",
       status: "verified",
       icon: IconCheck,
-      color: "#10B981",
+      color: "#2ECC71", // Improved green for better contrast
       badge: "VERIFIED",
-      badgeColor: "#10B981",
+      badgeColor: "#2ECC71", // Improved green for better contrast
     },
     {
       username: "@suspicious_acc",
@@ -53,19 +53,19 @@ const SpamDetectionSection = () => {
       icon: IconShield,
       title: "Automated spam filtering",
       description: "Real-time detection of spam, bots, and fake accounts",
-      color: "#10B981",
+      color: "#2ECC71", // Improved green for better contrast
     },
     {
       icon: IconEye,
       title: "Manual review dashboard",
       description: "Review and customize filtering rules for your needs",
-      color: "#3B82F6",
+      color: "#3498DB", // Improved blue for better contrast
     },
     {
       icon: IconShield,
       title: "Continuous learning",
       description: "AI models improve accuracy over time with new data",
-      color: "#8B5CF6",
+      color: "#9B59B6", // Improved purple for better contrast
     },
   ];
 

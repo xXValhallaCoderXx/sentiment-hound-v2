@@ -1,19 +1,17 @@
 .faqBackground {
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3a 50%, #0f0f1e 100%);
   position: relative;
-  overflow: hidden;
+  /* Background now handled by parent section */
 }
 
-.faqBackground::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 50% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
-  pointer-events: none;
+/* Light mode background tint for better separation */
+[data-mantine-color-scheme="light"] .faqBackground {
+  background: radial-gradient(circle at 50% 20%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+}
+
+@media (prefers-color-scheme: light) {
+  .faqBackground {
+    background: radial-gradient(circle at 50% 20%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+  }
 }
 
 .wrapper {
@@ -28,15 +26,74 @@
   margin-bottom: calc(var(--mantine-spacing-xl) * 0.5);
   font-size: rem(48px);
   font-weight: 800;
-  color: #ffffff;
   line-height: 1.2;
+
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    font-size: rem(36px);
+  }
+}
+
+/* Dark mode title */
+[data-mantine-color-scheme="dark"] .title {
+  color: #ffffff;
   background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
 
-  @media (max-width: var(--mantine-breakpoint-sm)) {
-    font-size: rem(36px);
+/* Light mode title - strong contrast */
+[data-mantine-color-scheme="light"] .title {
+  color: #1A1B1E;
+  background: none;
+  background-clip: unset;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: #ffffff;
+    background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #1A1B1E;
+    background: none;
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+  }
+}
+
+.subtitle {
+  /* Subtitle styling */
+}
+
+/* Dark mode subtitle */
+[data-mantine-color-scheme="dark"] .subtitle {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Light mode subtitle - improved contrast */
+[data-mantine-color-scheme="light"] .subtitle {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: dark) {
+  .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .subtitle {
+    color: #2C2E33;
   }
 }
 
@@ -55,6 +112,37 @@
   }
 }
 
+/* Light mode accordion items */
+[data-mantine-color-scheme="light"] .item {
+  background: #F4F4F4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  backdrop-filter: none;
+  color: #1A1B1E;
+
+  &:hover {
+    background: #ECECEC;
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .item {
+    background: #F4F4F4;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    backdrop-filter: none;
+    color: #1A1B1E;
+
+    &:hover {
+      background: #ECECEC;
+      border-color: rgba(0, 0, 0, 0.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+  }
+}
+
 /* Accordion Control (Question titles) */
 .item [data-accordion-control] {
   color: #ffffff !important;
@@ -64,6 +152,27 @@
 .item [data-accordion-control]:hover {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Light mode accordion controls */
+[data-mantine-color-scheme="light"] .item [data-accordion-control] {
+  color: #1A1B1E !important;
+}
+
+[data-mantine-color-scheme="light"] .item [data-accordion-control]:hover {
+  color: #1A1B1E !important;
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .item [data-accordion-control] {
+    color: #1A1B1E !important;
+  }
+
+  .item [data-accordion-control]:hover {
+    color: #1A1B1E !important;
+    background-color: rgba(0, 0, 0, 0.03) !important;
+  }
 }
 
 /* Accordion Panel (Answer content) */
@@ -76,9 +185,39 @@
   color: rgba(255, 255, 255, 0.9) !important;
 }
 
+/* Light mode accordion panels */
+[data-mantine-color-scheme="light"] .item [data-accordion-panel] {
+  color: #2C2E33 !important;
+}
+
+[data-mantine-color-scheme="light"] .item [data-accordion-panel] div {
+  color: #2C2E33 !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .item [data-accordion-panel] {
+    color: #2C2E33 !important;
+  }
+
+  .item [data-accordion-panel] div {
+    color: #2C2E33 !important;
+  }
+}
+
 /* Accordion chevron icon */
 .item [data-accordion-control] svg {
   color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Light mode chevron */
+[data-mantine-color-scheme="light"] .item [data-accordion-control] svg {
+  color: rgba(26, 27, 30, 0.7) !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .item [data-accordion-control] svg {
+    color: rgba(26, 27, 30, 0.7) !important;
+  }
 }
 
 /* Additional fallback selectors */
@@ -105,4 +244,56 @@
 
 .item .mantine-Accordion-chevron {
   color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Light mode fallback selectors */
+[data-mantine-color-scheme="light"] .item button {
+  color: #1A1B1E !important;
+}
+
+[data-mantine-color-scheme="light"] .item [role="button"] {
+  color: #1A1B1E !important;
+}
+
+/* Light mode Mantine-specific overrides */
+[data-mantine-color-scheme="light"] .item .mantine-Accordion-control {
+  color: #1A1B1E !important;
+}
+
+[data-mantine-color-scheme="light"] .item .mantine-Accordion-panel {
+  color: #2C2E33 !important;
+}
+
+[data-mantine-color-scheme="light"] .item .mantine-Accordion-content {
+  color: #2C2E33 !important;
+}
+
+[data-mantine-color-scheme="light"] .item .mantine-Accordion-chevron {
+  color: rgba(26, 27, 30, 0.7) !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .item button {
+    color: #1A1B1E !important;
+  }
+
+  .item [role="button"] {
+    color: #1A1B1E !important;
+  }
+
+  .item .mantine-Accordion-control {
+    color: #1A1B1E !important;
+  }
+
+  .item .mantine-Accordion-panel {
+    color: #2C2E33 !important;
+  }
+
+  .item .mantine-Accordion-content {
+    color: #2C2E33 !important;
+  }
+
+  .item .mantine-Accordion-chevron {
+    color: rgba(26, 27, 30, 0.7) !important;
+  }
 }

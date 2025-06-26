@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works Section - Contrast Test</title>
+    <style>
+        /* Base styles */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        /* Light mode styles */
+        [data-theme="light"] {
+            background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+            color: #1A1B1E;
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] {
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
+            color: #ffffff;
+        }
+
+        /* Section wrapper */
+        .wrapper {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        [data-theme="light"] .wrapper {
+            background: radial-gradient(circle at center, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        [data-theme="dark"] .badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        [data-theme="light"] .badge {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            color: #2980B9;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        [data-theme="dark"] .title {
+            color: #ffffff;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .title {
+            color: #1A1B1E;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        [data-theme="dark"] .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="light"] .subtitle {
+            color: #2C2E33;
+        }
+
+        /* Steps container */
+        .stepsContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 80px 0;
+            flex-wrap: wrap;
+        }
+
+        .stepWrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stepCard {
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            width: 280px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        [data-theme="dark"] .stepCard {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] .stepCard {
+            background: #F4F4F4;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .stepCard:hover {
+            transform: translateY(-8px);
+        }
+
+        [data-theme="dark"] .stepCard:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] .stepCard:hover {
+            background: #ECECEC;
+            border-color: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .stepNumber {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .stepIcon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .stepTitle {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        [data-theme="dark"] .stepTitle {
+            color: #ffffff;
+        }
+
+        [data-theme="light"] .stepTitle {
+            color: #1A1B1E;
+        }
+
+        .stepDescription {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        [data-theme="dark"] .stepDescription {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="light"] .stepDescription {
+            color: #2C2E33;
+        }
+
+        .stepConnector {
+            margin: 0 8px;
+        }
+
+        [data-theme="dark"] .stepConnector {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        [data-theme="light"] .stepConnector {
+            color: rgba(26, 27, 30, 0.4);
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: #0056b3;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stepsContainer {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .stepWrapper {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .stepCard {
+                width: 100%;
+                max-width: 320px;
+            }
+
+            .title {
+                font-size: 36px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <div class="badge">How It Works</div>
+                <h2 class="title">Get Real Insights in Minutes.</h2>
+                <p class="subtitle">Our AI-powered platform transforms raw social data into actionable business intelligence</p>
+            </div>
+
+            <div class="stepsContainer">
+                <div class="stepWrapper">
+                    <div class="stepCard">
+                        <div class="stepNumber">01</div>
+                        <div class="stepIcon" style="background-color: #3498DB;">
+                            <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                <path d="M9.5 2.5v3h5v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1h1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1z"/>
+                            </svg>
+                        </div>
+                        <div class="stepContent">
+                            <div class="stepTitle">Connect Your Content.</div>
+                            <div class="stepDescription">Securely link your YouTube, Reddit, or other platforms in just a few clicks.</div>
+                        </div>
+                    </div>
+                    <div class="stepConnector">→</div>
+                </div>
+
+                <div class="stepWrapper">
+                    <div class="stepCard">
+                        <div class="stepNumber">02</div>
+                        <div class="stepIcon" style="background-color: #2ECC71;">
+                            <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 1l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/>
+                            </svg>
+                        </div>
+                        <div class="stepContent">
+                            <div class="stepTitle">Unleash the Hounds.</div>
+                            <div class="stepDescription">Our AI gets to work, sniffing out every mention and analyzing the true sentiment behind the words.</div>
+                        </div>
+                    </div>
+                    <div class="stepConnector">→</div>
+                </div>
+
+                <div class="stepWrapper">
+                    <div class="stepCard">
+                        <div class="stepNumber">03</div>
+                        <div class="stepIcon" style="background-color: #9B59B6;">
+                            <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+                                <path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/>
+                                <path d="M7 7h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM7 15h2v2H7zm4 0h2v2h-2z"/>
+                            </svg>
+                        </div>
+                        <div class="stepContent">
+                            <div class="stepTitle">Act with Confidence.</div>
+                            <div class="stepDescription">View everything on a single, beautiful dashboard and make smarter decisions with data you can trust.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            
+            // Update button text
+            const button = document.querySelector('.theme-toggle');
+            button.textContent = newTheme === 'dark' ? 'Switch to Light' : 'Switch to Dark';
+        }
+
+        // Initialize button text
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('.theme-toggle');
+            button.textContent = 'Switch to Light';
+        });
+    </script>
+</body>
+</html>

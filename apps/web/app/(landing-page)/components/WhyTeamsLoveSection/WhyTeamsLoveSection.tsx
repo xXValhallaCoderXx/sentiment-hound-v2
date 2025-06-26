@@ -14,7 +14,7 @@ const WhyTeamsLoveSection = () => {
       title: "Power That's Unleashed, Not Locked Up.",
       description:
         "We believe the best tools should be for everyone. We packed enterprise-level features into a simple, affordable platform for the new generation of builders.",
-      color: "#10B981",
+      color: "#2ECC71", // Improved green for better contrast
       stats: "Enterprise-grade",
     },
     {
@@ -22,7 +22,7 @@ const WhyTeamsLoveSection = () => {
       title: "Clarity You Can Act On.",
       description:
         "We don't just show you data; we help you understand it. Our goal is to give you the confidence to make your next move the right one.",
-      color: "#3B82F6",
+      color: "#3498DB", // Improved blue for better contrast
       stats: "Actionable insights",
     },
     {
@@ -30,7 +30,7 @@ const WhyTeamsLoveSection = () => {
       title: "Professional, Not Boring.",
       description:
         "We're serious about the quality of our data, but we don't think software has to be dull. We're building the tool we've always wanted to use.",
-      color: "#8B5CF6",
+      color: "#9B59B6", // Improved purple for better contrast
       stats: "Intuitive design",
     },
   ];
