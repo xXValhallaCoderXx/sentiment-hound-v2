@@ -104,7 +104,7 @@ const PricingPage = () => {
 
   return (
     <>
-      <section className={sectionClasses.sectionPrimary}>
+      <section className={`${sectionClasses.sectionPrimary} ${sectionClasses.wrapper}`}>
         <Container size="xl" className={classes.heroContainer}>
           <div className={classes.heroContent}>
             <PageTitle ta="center">
@@ -131,9 +131,9 @@ const PricingPage = () => {
       </section>
 
       {/* Pricing Cards */}
-      <section className={sectionClasses.sectionAlt}>
+      <section className={`${sectionClasses.sectionAlt} ${sectionClasses.wrapper}`}>
         <Container size="xl">
-          <Grid mt="xl" gutter="xl" justify="center">
+          <Grid gutter="xl" justify="center">
             {plans.map((plan, index) => (
               <GridCol key={index} span={{ base: 12, sm: 6, md: 4 }}>
                 <PricingCard plan={plan} />
@@ -144,7 +144,7 @@ const PricingPage = () => {
       </section>
 
       {/* Feature Comparison Table */}
-      <section className={sectionClasses.sectionPrimary}>
+      <section className={`${sectionClasses.sectionPrimary} ${sectionClasses.wrapper}`}>
         <Container size="xl">
           <SectionTitle ta="center" mb="xl">
             Feature Comparison
@@ -196,7 +196,7 @@ const PricingPage = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className={sectionClasses.sectionAlt}>
+      <section className={`${sectionClasses.sectionAlt} ${sectionClasses.wrapper}`}>
         <Container size="xl">
           <SectionTitle ta="center" mb="xl">
             Frequently Asked Questions

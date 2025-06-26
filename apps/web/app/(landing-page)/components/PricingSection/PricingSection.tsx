@@ -93,14 +93,9 @@ const PricingSection = () => {
                   </Text>
                   <div className={classes.priceWrapper}>
                     <Text className={classes.price}>{plan.price}</Text>
-                    <Text className={classes.period}>
-                      {plan.period}
-                    </Text>
+                    <Text className={classes.period}>{plan.period}</Text>
                   </div>
-                  <Text
-                    className={classes.planDescription}
-                    size="sm"
-                  >
+                  <Text className={classes.planDescription} size="sm">
                     {plan.description}
                   </Text>
                 </div>
@@ -122,7 +117,6 @@ const PricingSection = () => {
                   className={classes.planButton}
                   variant={plan.buttonVariant}
                   color={plan.popular ? "primary.5" : "gray"}
-                  className={classes.buttonText}
                   size="md"
                   fullWidth
                   mt="xl"
