@@ -13,6 +13,7 @@ import { Stack, Group, Button } from "@mantine/core";
 import { SpamDetectionSection } from "./components/SpamDetectionSection";
 import { CommandCenterSection } from "./components/CommandCenterSection";
 import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
+import AnimatedSection from "@/components/atoms/AnimatedSection/AnimatedSection";
 
 import sectionClasses from "./SectionBackgrounds.module.css";
 
@@ -27,27 +28,36 @@ const LandingPage = async () => {
       <section id="home" className={sectionClasses.sectionPrimary}>
         <Hero />
       </section>
-      <section id="early-access" className={sectionClasses.sectionAlt}>
-        <BeFirstToKnowSection />
-      </section>
-      <Stack
-        gap={96}
-        id="features"
-        className={`${sectionClasses.wrapper} ${sectionClasses.sectionPrimary}`}
-      >
-        <CommandCenterSection />
-        <SpamDetectionSection />
-      </Stack>
-      <section id="how-it-works" className={sectionClasses.sectionAlt}>
-        <HowItWorksSection />
-      </section>
-      <section id="why-you-love" className={sectionClasses.sectionPrimary}>
-        <WhyTeamsLoveSection />
-      </section>
-      
-      <section id="faq" className={sectionClasses.sectionPrimary}>
-        <FaqSection />
-      </section>
+      <AnimatedSection>
+        <section id="early-access" className={sectionClasses.sectionAlt}>
+          <BeFirstToKnowSection />
+        </section>
+      </AnimatedSection>
+      <AnimatedSection>
+        <Stack
+          gap={96}
+          id="features"
+          className={`${sectionClasses.wrapper} ${sectionClasses.sectionPrimary}`}
+        >
+          <CommandCenterSection />
+          <SpamDetectionSection />
+        </Stack>
+      </AnimatedSection>
+      <AnimatedSection>
+        <section id="how-it-works" className={sectionClasses.sectionAlt}>
+          <HowItWorksSection />
+        </section>
+      </AnimatedSection>
+      <AnimatedSection>
+        <section id="why-you-love" className={sectionClasses.sectionPrimary}>
+          <WhyTeamsLoveSection />
+        </section>
+      </AnimatedSection>
+      <AnimatedSection>
+        <section id="faq" className={sectionClasses.sectionPrimary}>
+          <FaqSection />
+        </section>
+      </AnimatedSection>
     </PublicPageLayout>
   );
 };
