@@ -195,6 +195,11 @@ export const theme: MantineThemeOverride = {
     fontFamily:
       "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     fontWeight: "700",
+    styles: (theme) => ({
+      root: {
+        color: theme.colorScheme === 'light' ? '#111111' : undefined,
+      },
+    }),
   },
 
   // Colors
@@ -215,6 +220,34 @@ export const theme: MantineThemeOverride = {
       defaultProps: {
         size: "md",
       },
+    },
+    Card: {
+      styles: (theme) => ({
+        root: {
+          backgroundColor: theme.colorScheme === 'light' ? '#FFFFFF' : undefined,
+          border: theme.colorScheme === 'light' ? '1px solid #EAEAEA' : undefined,
+          borderRadius: theme.colorScheme === 'light' ? '12px' : undefined,
+          boxShadow: theme.colorScheme === 'light' ? '0 4px 16px rgba(0, 0, 0, 0.04)' : undefined,
+        },
+      }),
+    },
+    TextInput: {
+      styles: (theme) => ({
+        input: {
+          border: theme.colorScheme === 'light' ? '1px solid #DCDCDC' : undefined,
+          background: theme.colorScheme === 'light' ? '#FFFFFF' : undefined,
+          boxShadow: theme.colorScheme === 'light' ? 'inset 0 1px 3px rgba(0, 0, 0, 0.04)' : undefined,
+        },
+      }),
+    },
+    PasswordInput: {
+      styles: (theme) => ({
+        input: {
+          border: theme.colorScheme === 'light' ? '1px solid #DCDCDC' : undefined,
+          background: theme.colorScheme === 'light' ? '#FFFFFF' : undefined,
+          boxShadow: theme.colorScheme === 'light' ? 'inset 0 1px 3px rgba(0, 0, 0, 0.04)' : undefined,
+        },
+      }),
     },
   },
 

@@ -33,7 +33,7 @@ const Starfield = ({ particleColor, ...props }: any) => {
 
 const ModernHero = () => {
   const { colorScheme } = useMantineTheme();
-  const particleColor = colorScheme === 'dark' ? '#ffa0e0' : '#868A8F';
+  const particleColor = colorScheme === 'dark' ? '#ffa0e0' : '#CCCCCC';
 
   return (
     <div className={classes.heroContainer}>

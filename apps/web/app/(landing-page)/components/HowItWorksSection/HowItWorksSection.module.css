@@ -6,7 +6,7 @@
 
 /* Light mode background tint for better separation */
 [data-mantine-color-scheme="light"] .wrapper {
-  background: radial-gradient(circle at center, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+  background: #FBFBFB;
 }
 
 @media (prefers-color-scheme: light) {
@@ -170,16 +170,17 @@
 
 /* Light mode step card styles - improved background and shadow */
 [data-mantine-color-scheme="light"] .stepCard {
-  background: #F4F4F4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
   backdrop-filter: none;
+  transition: transform 0.2s ease;
 
   &:hover {
-    background: #ECECEC;
-    border-color: rgba(0, 0, 0, 0.12);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    transform: translateY(-8px);
+    transform: scale(1.02);
+    background: #FFFFFF;
+    border-color: #EAEAEA;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -268,8 +269,11 @@
 }
 
 .stepConnector {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(26, 27, 30, 0.4);
   margin: 0 rem(8px);
+  width: rem(40px);
+  height: 2px;
+  background-color: rgba(26, 27, 30, 0.2);
 
   @media (max-width: var(--mantine-breakpoint-lg)) {
     transform: rotate(90deg);

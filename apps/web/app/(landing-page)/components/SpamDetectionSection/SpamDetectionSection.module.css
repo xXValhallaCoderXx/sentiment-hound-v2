@@ -150,7 +150,7 @@
 }
 
 .message {
-  color: #E2E8F0;
+  color: #444444;
   font-size: 0.85rem;
   line-height: 1.4;
   margin-bottom: 0.5rem;
@@ -275,11 +275,13 @@
 }
 
 /* Light mode feature item */
-[data-mantine-color-scheme="light"] .featureItem {
+[data-mantine-color-scheme="light"] .detectionItem {
+  padding: 1rem;
   background: #F4F4F4;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  backdrop-filter: none;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 @media (prefers-color-scheme: light) {

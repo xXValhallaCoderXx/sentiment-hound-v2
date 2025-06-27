@@ -12,7 +12,8 @@
 
 /* Light mode footer border */
 [data-mantine-color-scheme="light"] .footer {
-    border-top: rem(1px) solid rgba(0, 0, 0, 0.1);
+    background: #F0F0F0;
+    border-top: 1px solid #E0E0E0;
 }
 
 @media (prefers-color-scheme: dark) {

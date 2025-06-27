@@ -10,7 +10,7 @@
 
 /* Light mode background tint for better separation */
 [data-mantine-color-scheme="light"] .wrapper {
-  background: radial-gradient(circle at 70% 30%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+  background: linear-gradient(to bottom, #FAFAFA, #FFFFFF);
 }
 
 @media (prefers-color-scheme: light) {
@@ -163,15 +163,15 @@
 
 /* Light mode benefit card styles */
 [data-mantine-color-scheme="light"] .benefitCard {
-  background: #F4F4F4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
   backdrop-filter: none;
 
   &:hover {
-    background: #ECECEC;
-    border-color: rgba(0, 0, 0, 0.12);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    border-color: #EAEAEA;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     transform: translateY(-2px);
   }
 }
@@ -278,9 +278,9 @@
 
 /* Light mode form card styles */
 [data-mantine-color-scheme="light"] .formCard {
-  background: #F4F4F4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
   backdrop-filter: none;
 }
 

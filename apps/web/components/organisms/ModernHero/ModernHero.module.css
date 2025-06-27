@@ -5,6 +5,10 @@
   overflow: hidden;
 }
 
+[data-mantine-color-scheme="light"] .heroContainer {
+  background: radial-gradient(circle at center, #F7F5FF 0%, #FFFFFF 90%);
+}
+
 .inner {
   position: relative;
   z-index: 2;
@@ -17,11 +21,18 @@
   max-width: 800px;
 }
 
+[data-mantine-color-scheme="light"] .content {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 16px;
+}
+
 .mainTitle {
   font-size: 72px;
   font-weight: 700;
   color: #ff6b5a;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 .subtitle {

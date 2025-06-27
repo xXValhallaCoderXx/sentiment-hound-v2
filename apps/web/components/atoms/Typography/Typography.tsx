@@ -15,9 +15,9 @@ export const CardTitle = (props: TitleProps & { children?: ReactNode }) => (
 );
 
 export const BodyText = (props: TextProps & { children?: ReactNode }) => (
-  <Text fz={{ base: 16, md: 18 }} {...props} />
+  <Text fz={{ base: 16, md: 18 }} c="#444444" {...props} />
 );
 
 export const DimmedText = (props: TextProps & { children?: ReactNode }) => (
-  <Text c="dimmed" fz={{ base: 14, md: 16 }} {...props} />
+  <Text fz={{ base: 14, md: 16 }} c="#777777" {...props} />
 );

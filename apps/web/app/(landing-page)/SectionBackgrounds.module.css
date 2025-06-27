@@ -29,11 +29,11 @@
 
 /* Light mode specific subtle gradients */
 [data-mantine-color-scheme="light"] .sectionPrimary {
-  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  background: radial-gradient(circle at top, #F5F5F5, #FFFFFF);
 }
 
 [data-mantine-color-scheme="light"] .sectionAlt {
-  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+  background: #FDFDFD;
 }
 
 /* Fallback for systems without explicit color scheme */
