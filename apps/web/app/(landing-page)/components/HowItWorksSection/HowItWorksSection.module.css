@@ -4,14 +4,14 @@
   /* Background now handled by parent section */
 }
 
-/* Light mode background tint for better separation */
+/* Light mode background - Issue Requirements */
 [data-mantine-color-scheme="light"] .wrapper {
-  background: radial-gradient(circle at center, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+  background: #FBFBFB;
 }
 
 @media (prefers-color-scheme: light) {
   .wrapper {
-    background: radial-gradient(circle at center, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+    background: #FBFBFB;
   }
 }
 
@@ -168,33 +168,37 @@
   }
 }
 
-/* Light mode step card styles - improved background and shadow */
+/* Light mode step card styles - Issue Requirements */
 [data-mantine-color-scheme="light"] .stepCard {
-  background: #F4F4F4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
   backdrop-filter: none;
 
   &:hover {
-    background: #ECECEC;
-    border-color: rgba(0, 0, 0, 0.12);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    transform: translateY(-8px);
+    background: #FAFAFA;
+    border-color: #EAEAEA;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+    transform: scale(1.02);
   }
 }
 
 @media (prefers-color-scheme: light) {
   .stepCard {
-    background: #F4F4F4;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     backdrop-filter: none;
 
     &:hover {
-      background: #ECECEC;
-      border-color: rgba(0, 0, 0, 0.12);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      transform: translateY(-8px);
+      background: #FAFAFA;
+      border-color: #EAEAEA;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease;
+      transform: scale(1.02);
     }
   }
 }

@@ -5,6 +5,17 @@
   /* Background now handled by parent section */
 }
 
+/* Light mode background - Issue Requirements */
+[data-mantine-color-scheme="light"] .wrapper {
+  background: radial-gradient(circle at top, #F5F5F5, #FFFFFF);
+}
+
+@media (prefers-color-scheme: light) {
+  .wrapper {
+    background: radial-gradient(circle at top, #F5F5F5, #FFFFFF);
+  }
+}
+
 .container {
   position: relative;
   z-index: 1;
@@ -245,6 +256,21 @@
   backdrop-filter: blur(20px);
   position: relative;
   overflow: hidden;
+}
+
+/* Light mode dashboard card - Issue Requirements */
+[data-mantine-color-scheme="light"] .dashboard {
+  background: #F1F1F1;
+  border: 1px solid #DDDDDD;
+  backdrop-filter: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .dashboard {
+    background: #F1F1F1;
+    border: 1px solid #DDDDDD;
+    backdrop-filter: none;
+  }
 }
 
 .dashboard::before {

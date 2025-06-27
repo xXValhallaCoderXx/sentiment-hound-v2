@@ -16,19 +16,21 @@
   overflow: hidden;
 }
 
-/* Light mode detection interface */
+/* Light mode detection interface - Issue Requirements */
 [data-mantine-color-scheme="light"] .detectionInterface {
-  background: #F4F4F4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   backdrop-filter: none;
 }
 
 @media (prefers-color-scheme: light) {
   .detectionInterface {
-    background: #F4F4F4;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     backdrop-filter: none;
   }
 }
@@ -130,6 +132,31 @@
   border-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Light mode detection item - Issue Requirements */
+[data-mantine-color-scheme="light"] .detectionItem {
+  background: #FAFAFA;
+  border: 1px solid #EAEAEA;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+[data-mantine-color-scheme="light"] .detectionItem:hover {
+  background: #F0F0F0;
+  border-color: #DCDCDC;
+}
+
+@media (prefers-color-scheme: light) {
+  .detectionItem {
+    background: #FAFAFA;
+    border: 1px solid #EAEAEA;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  .detectionItem:hover {
+    background: #F0F0F0;
+    border-color: #DCDCDC;
+  }
+}
+
 .detectionHeader {
   display: flex;
   justify-content: space-between;
@@ -143,6 +170,17 @@
   font-size: 0.9rem;
 }
 
+/* Light mode username - improve contrast */
+[data-mantine-color-scheme="light"] .username {
+  color: #2980B9;
+}
+
+@media (prefers-color-scheme: light) {
+  .username {
+    color: #2980B9;
+  }
+}
+
 .statusBadge {
   font-size: 0.7rem;
   font-weight: 600;
@@ -154,6 +192,17 @@
   font-size: 0.85rem;
   line-height: 1.4;
   margin-bottom: 0.5rem;
+}
+
+/* Light mode message text - Issue Requirements: increase font contrast (#444 or darker) */
+[data-mantine-color-scheme="light"] .message {
+  color: #444444;
+}
+
+@media (prefers-color-scheme: light) {
+  .message {
+    color: #444444;
+  }
 }
 
 .detectionFooter {

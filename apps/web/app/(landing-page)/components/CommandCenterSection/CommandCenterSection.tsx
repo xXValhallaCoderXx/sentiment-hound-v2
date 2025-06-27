@@ -52,7 +52,7 @@ const CommandCenterSection = () => {
   ];
 
   return (
-    <div>
+    <div className={classes.wrapper}>
       <Container size="xl">
         <Grid align="center" gutter="xl">
           <GridCol span={{ base: 12, lg: 6 }}>
