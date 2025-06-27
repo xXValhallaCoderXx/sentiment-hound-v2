@@ -2,13 +2,23 @@
   --background: #0f0f1e;
   --foreground: #ffffff;
   
-  /* Section background variables for light mode */
-  --section-bg-primary: #ffffff;
-  --section-bg-alt: #f8f9fa;
+  /* Section background variables for light mode - Issue Requirements */
+  --section-bg-primary: #FAFAFA;
+  --section-bg-alt: #FDFDFD;
   
   /* Section background variables for dark mode (default) */
   --section-bg-primary-dark: #101113;
   --section-bg-alt-dark: #1a1b1e;
+  
+  /* Light Mode Global Design System - Issue Requirements */
+  --light-bg-card: #FFFFFF;
+  --light-border-card: #EAEAEA;
+  --light-text-primary: #111111;
+  --light-text-body: #444444;
+  --light-text-muted: #777777;
+  --light-border-form: #DCDCDC;
+  --light-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.04);
+  --light-shadow-form: inset 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,16 +34,16 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    /* Use light mode section backgrounds */
-    --section-bg-primary: #ffffff;
-    --section-bg-alt: #f8f9fa;
+    /* Use light mode section backgrounds - Issue Requirements */
+    --section-bg-primary: #FAFAFA;
+    --section-bg-alt: #FDFDFD;
   }
 }
 
 /* Mantine theme-specific overrides */
 [data-mantine-color-scheme="light"] {
-  --section-bg-primary: #ffffff;
-  --section-bg-alt: #f8f9fa;
+  --section-bg-primary: #FAFAFA;
+  --section-bg-alt: #FDFDFD;
 }
 
 [data-mantine-color-scheme="dark"] {
@@ -56,4 +66,63 @@ body {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+/* Global Light Mode Card System - Issue Requirements */
+[data-mantine-color-scheme="light"] .light-card {
+  background: var(--light-bg-card);
+  border: 1px solid var(--light-border-card);
+  border-radius: 12px;
+  box-shadow: var(--light-shadow-card);
+}
+
+@media (prefers-color-scheme: light) {
+  .light-card {
+    background: var(--light-bg-card);
+    border: 1px solid var(--light-border-card);
+    border-radius: 12px;
+    box-shadow: var(--light-shadow-card);
+  }
+}
+
+/* Global Light Mode Form System - Issue Requirements */
+[data-mantine-color-scheme="light"] .light-form-input {
+  border: 1px solid var(--light-border-form);
+  background: var(--light-bg-card);
+  box-shadow: var(--light-shadow-form);
+}
+
+@media (prefers-color-scheme: light) {
+  .light-form-input {
+    border: 1px solid var(--light-border-form);
+    background: var(--light-bg-card);
+    box-shadow: var(--light-shadow-form);
+  }
+}
+
+/* Global Light Mode Typography - Issue Requirements */
+[data-mantine-color-scheme="light"] .light-text-primary {
+  color: var(--light-text-primary);
+}
+
+[data-mantine-color-scheme="light"] .light-text-body {
+  color: var(--light-text-body);
+}
+
+[data-mantine-color-scheme="light"] .light-text-muted {
+  color: var(--light-text-muted);
+}
+
+@media (prefers-color-scheme: light) {
+  .light-text-primary {
+    color: var(--light-text-primary);
+  }
+  
+  .light-text-body {
+    color: var(--light-text-body);
+  }
+  
+  .light-text-muted {
+    color: var(--light-text-muted);
+  }
 }

@@ -8,14 +8,14 @@
   }
 }
 
-/* Light mode background tint for better separation */
+/* Light mode background - Issue Requirements */
 [data-mantine-color-scheme="light"] .wrapper {
-  background: radial-gradient(circle at 70% 30%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+  background: linear-gradient(to bottom, #FAFAFA, #FFFFFF);
 }
 
 @media (prefers-color-scheme: light) {
   .wrapper {
-    background: radial-gradient(circle at 70% 30%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
+    background: linear-gradient(to bottom, #FAFAFA, #FFFFFF);
   }
 }
 
@@ -161,32 +161,34 @@
   }
 }
 
-/* Light mode benefit card styles */
+/* Light mode benefit card styles - Issue Requirements */
 [data-mantine-color-scheme="light"] .benefitCard {
-  background: #F4F4F4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
   backdrop-filter: none;
 
   &:hover {
-    background: #ECECEC;
-    border-color: rgba(0, 0, 0, 0.12);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    background: #FAFAFA;
+    border-color: #EAEAEA;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
   }
 }
 
 @media (prefers-color-scheme: light) {
   .benefitCard {
-    background: #F4F4F4;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
     backdrop-filter: none;
 
     &:hover {
-      background: #ECECEC;
-      border-color: rgba(0, 0, 0, 0.12);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      background: #FAFAFA;
+      border-color: #EAEAEA;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       transform: translateY(-2px);
     }
   }
@@ -276,19 +278,21 @@
   }
 }
 
-/* Light mode form card styles */
+/* Light mode form card styles - Issue Requirements */
 [data-mantine-color-scheme="light"] .formCard {
-  background: #F4F4F4;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
   backdrop-filter: none;
 }
 
 @media (prefers-color-scheme: light) {
   .formCard {
-    background: #F4F4F4;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    background: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
     backdrop-filter: none;
   }
 }
@@ -315,21 +319,22 @@
   }
 }
 
-/* Light mode input styles */
+/* Light mode input styles - Issue Requirements */
 [data-mantine-color-scheme="light"] .input {
   input {
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    color: #1A1B1E;
+    background: #FFFFFF;
+    border: 1px solid #DCDCDC;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+    color: #111111;
 
     &::placeholder {
-      color: #6B7280;
+      color: #777777;
     }
 
     &:focus {
       border-color: #3498DB;
-      background: #ffffff;
-      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+      background: #FFFFFF;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(52, 152, 219, 0.1);
     }
   }
 }
@@ -337,15 +342,23 @@
 @media (prefers-color-scheme: light) {
   .input {
     input {
-      background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.15);
-      color: #1A1B1E;
+      background: #FFFFFF;
+      border: 1px solid #DCDCDC;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+      color: #111111;
 
       &::placeholder {
-        color: #6B7280;
+        color: #777777;
       }
 
       &:focus {
+        border-color: #3498DB;
+        background: #FFFFFF;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04), 0 0 0 2px rgba(52, 152, 219, 0.1);
+      }
+    }
+  }
+}
         border-color: #3498DB;
         background: #ffffff;
         box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
@@ -376,5 +389,16 @@
     text {
       font-size: rem(12px);
     }
+  }
+}
+
+/* Red CTA button glow on hover - Issue Requirements */
+[data-mantine-color-scheme="light"] .formCard button[type="submit"]:hover {
+  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: light) {
+  .formCard button[type="submit"]:hover {
+    box-shadow: 0 2px 6px rgba(255, 0, 0, 0.1);
   }
 }

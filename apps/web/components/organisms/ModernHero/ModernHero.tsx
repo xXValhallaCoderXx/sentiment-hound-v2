@@ -25,6 +25,7 @@ const Starfield = ({ particleColor, ...props }: any) => {
           size={0.005}
           sizeAttenuation={true}
           depthWrite={false}
+          opacity={particleColor === '#CCCCCC' ? 0.1 : 1} // Issue Requirements: 5-10% opacity for light mode
         />
       </Points>
     </group>
@@ -33,7 +34,8 @@ const Starfield = ({ particleColor, ...props }: any) => {
 
 const ModernHero = () => {
   const { colorScheme } = useMantineTheme();
-  const particleColor = colorScheme === 'dark' ? '#ffa0e0' : '#868A8F';
+  // Issue Requirements: faint starfield overlay with #CCCCCC 5-10% opacity dots
+  const particleColor = colorScheme === 'dark' ? '#ffa0e0' : '#CCCCCC';
 
   return (
     <div className={classes.heroContainer}>
