@@ -31,11 +31,37 @@
   opacity: 0.9;
 }
 
+/* Light mode subtitle */
+[data-mantine-color-scheme="light"] .subtitle {
+  color: #2c2e33;
+  opacity: 0.9;
+}
+
+@media (prefers-color-scheme: light) {
+  .subtitle {
+    color: #2c2e33;
+    opacity: 0.9;
+  }
+}
+
 .description {
   margin-top: 20px;
   font-size: 18px;
   color: #ffffff;
   opacity: 0.8;
+}
+
+/* Light mode description */
+[data-mantine-color-scheme="light"] .description {
+  color: #495057;
+  opacity: 0.9;
+}
+
+@media (prefers-color-scheme: light) {
+  .description {
+    color: #495057;
+    opacity: 0.9;
+  }
 }
 
 .controls {

@@ -218,11 +218,41 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* Light mode title styles */
+[data-mantine-color-scheme="light"] .title {
+  color: #1A1B1E;
+  background: none;
+  background-clip: unset;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+}
+
+@media (prefers-color-scheme: light) {
+  .title {
+    color: #1A1B1E;
+    background: none;
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+  }
+}
+
 .subtitle {
   color: #94A3B8;
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 2rem;
+}
+
+/* Light mode subtitle styles */
+[data-mantine-color-scheme="light"] .subtitle {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: light) {
+  .subtitle {
+    color: #2C2E33;
+  }
 }
 
 .featureList {
@@ -318,6 +348,17 @@
 .featureDescription {
   color: #94A3B8;
   font-size: 0.9rem;
+}
+
+/* Light mode feature description */
+[data-mantine-color-scheme="light"] .featureDescription {
+  color: #2C2E33;
+}
+
+@media (prefers-color-scheme: light) {
+  .featureDescription {
+    color: #2C2E33;
+  }
 }
 
 /* Light mode feature description */
