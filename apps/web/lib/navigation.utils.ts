@@ -36,6 +36,9 @@ export const useSmartNavigation = () => {
       case "Home":
         router.push("/");
         break;
+      case "Changelog":
+        router.push("/changelog");
+        break;
       default:
         // For any other links, use the href directly
         if (href.startsWith("#")) {
