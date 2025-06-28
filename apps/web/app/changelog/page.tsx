@@ -17,7 +17,6 @@ import {
   BodyText,
   DimmedText,
 } from "@/components/atoms/Typography";
-import sectionClasses from "../(landing-page)/SectionBackgrounds.module.css";
 import classes from "./ChangelogPage.module.css";
 
 interface ChangelogEntry {
@@ -33,120 +32,33 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
-    version: "v2.1.0",
-    date: "2025-01-15",
-    title: "Enhanced Sentiment Analysis & Mobile Experience",
+    version: "v0.0.1",
+    date: "2025-06-29",
+    title: "Website & Brand Identity Refinements",
     description:
-      "Major improvements to our AI sentiment detection and a completely redesigned mobile interface.",
+      "A major push on refining the design system and user experience across our marketing pages to prepare for the private alpha.",
     changes: [
       {
         type: "added",
         items: [
-          "New advanced sentiment scoring algorithm with 95% accuracy",
-          "Real-time sentiment trend graphs and analytics",
-          "Mobile-first responsive design across all pages",
-          "Dark mode support with automatic theme detection",
+          "Premium 'lift & glow' hover and 'press' click effects for all primary Call-to-Action buttons.",
+          "Site-wide smooth scrolling for a better user experience on internal anchor links.",
         ],
       },
       {
         type: "improved",
         items: [
-          "Faster comment processing (3x speed improvement)",
-          "Enhanced spam filtering with machine learning",
-          "Better keyword matching with fuzzy search",
+          "Unified the visual design of the Landing and Features pages with a new 'Living Canvas' background strategy, eliminating disjointed sections.",
+          "Overhauled the landing page's 'Plans' section to a 'Value Anchoring' model to better communicate future value and focus on the private alpha invitation.",
+          "Standardized all feature-grid components ('Core Features', 'Built for the Underdog') with a consistent design system and a unified icon set from Tabler Icons.",
+          "Enhanced navigation by making all 'Early Access' CTAs functional, page-scrolling anchor links.",
         ],
       },
       {
         type: "fixed",
         items: [
-          "YouTube integration connection timeout issues",
-          "Dashboard loading performance on large datasets",
-          "Notification settings not saving properly",
-        ],
-      },
-    ],
-  },
-  {
-    version: "v2.0.0",
-    date: "2024-12-20",
-    title: "Major Platform Overhaul",
-    description:
-      "Complete redesign with new features, improved performance, and expanded platform support.",
-    changes: [
-      {
-        type: "added",
-        items: [
-          "Reddit integration for comprehensive social monitoring",
-          "Advanced keyword tracking with sentiment alerts",
-          "Custom dashboard with drag-and-drop widgets",
-          "Team collaboration features and shared workspaces",
-        ],
-      },
-      {
-        type: "changed",
-        items: [
-          "Completely redesigned user interface",
-          "New pricing tiers with more flexible options",
-          "Improved onboarding flow for new users",
-        ],
-      },
-      {
-        type: "improved",
-        items: [
-          "API response times reduced by 60%",
-          "Enhanced data visualization with interactive charts",
-          "Better error handling and user feedback",
-        ],
-      },
-    ],
-  },
-  {
-    version: "v1.5.2",
-    date: "2024-11-10",
-    title: "Bug Fixes & Performance Improvements",
-    description:
-      "Critical bug fixes and under-the-hood improvements for better stability.",
-    changes: [
-      {
-        type: "fixed",
-        items: [
-          "Memory leak in real-time data processing",
-          "Incorrect sentiment scores for certain emoji combinations",
-          "Dashboard freezing when handling large comment volumes",
-        ],
-      },
-      {
-        type: "improved",
-        items: [
-          "Reduced memory usage by 40%",
-          "Faster initial page load times",
-          "More accurate language detection",
-        ],
-      },
-    ],
-  },
-  {
-    version: "v1.5.0",
-    date: "2024-10-25",
-    title: "YouTube Integration Launch",
-    description:
-      "Our first major platform integration brings comprehensive YouTube comment analysis.",
-    changes: [
-      {
-        type: "added",
-        items: [
-          "Full YouTube channel and video comment monitoring",
-          "Historical data import for existing content",
-          "Automated sentiment alerts via email and in-app notifications",
-          "Export functionality for reports and data analysis",
-        ],
-      },
-      {
-        type: "improved",
-        items: [
-          "Enhanced sentiment accuracy with context-aware analysis",
-          "Better handling of multiple languages",
-          "Improved user dashboard with real-time updates",
+          "Fixed a critical responsive layout bug causing the main headline on the Features page to be cut off on mobile viewports.",
+          "Resolved inconsistent vertical alignment of the hero section content on mobile devices to improve the 'above the fold' experience.",
         ],
       },
     ],
@@ -190,96 +102,98 @@ const getChangeTypeBadge = (type: string) => {
 const ChangelogPage = () => {
   return (
     <PublicPageLayout>
-      {/* Hero Section */}
-      <section
-        className={`${sectionClasses.sectionPrimary} ${sectionClasses.wrapper}`}
-      >
-        <Container size="xl" className={classes.heroContainer}>
-          <div className={classes.heroContent}>
-            <PageTitle ta="center">
-              What&apos;s New in Sentiment Hound
-            </PageTitle>
-            <BodyText ta="center" mt="md">
-              Stay up to date with new features, improvements, and bug fixes.
-              We&apos;re constantly working to make Sentiment Hound better for
-              you.
-            </BodyText>
-          </div>
-        </Container>
-      </section>
+      {/* Living Canvas Background - Fixed Layer */}
+      <div className={classes.livingCanvasBackground}>
+        <div className={classes.glow1}></div>
+        <div className={classes.glow2}></div>
+        <div className={classes.glow3}></div>
+      </div>
 
-      {/* Changelog Entries */}
-      <section
-        className={`${sectionClasses.sectionAlt} ${sectionClasses.wrapper}`}
-      >
-        <Container size="md" py="xl">
-          <Stack gap="xl">
-            {changelogData.map((entry) => (
-              <Card
-                key={entry.version}
-                className={classes.changelogCard}
-                padding="xl"
-                radius="lg"
-              >
-                <Group justify="space-between" align="flex-start" mb="md">
-                  <div>
-                    <Group gap="sm" mb="xs">
-                      <Badge size="lg" variant="filled" color="primary">
-                        {entry.version}
-                      </Badge>
-                      <Group gap="xs" c="dimmed">
-                        <IconCalendar size={16} />
-                        <DimmedText size="sm">
-                          {new Date(entry.date).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </DimmedText>
+      {/* Content Layer - Scrollable */}
+      <main className={classes.contentLayer}>
+        {/* Changelog Entries */}
+        <section className={classes.section}>
+          <Container size="xl" className={classes.heroContainer}>
+            <div className={classes.heroContent}>
+              <PageTitle ta="center">
+                What&apos;s New in Sentiment Hound
+              </PageTitle>
+              <BodyText ta="center" mt="md">
+                Stay up to date with new features, improvements, and bug fixes.
+                We&apos;re constantly working to make Sentiment Hound better for
+                you.
+              </BodyText>
+            </div>
+          </Container>
+          <Container size="md" py="xl">
+            <Stack gap="xl">
+              {changelogData.map((entry) => (
+                <Card
+                  key={entry.version}
+                  className={classes.changelogCard}
+                  padding="xl"
+                  radius="lg"
+                >
+                  <Group justify="space-between" align="flex-start" mb="md">
+                    <div>
+                      <Group gap="sm" mb="xs">
+                        <Badge size="lg" variant="filled" color="primary">
+                          {entry.version}
+                        </Badge>
+                        <Group gap="xs" c="dimmed">
+                          <IconCalendar size={16} />
+                          <DimmedText size="sm">
+                            {new Date(entry.date).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </DimmedText>
+                        </Group>
                       </Group>
-                    </Group>
-                    <SectionTitle order={3} size="h3" mb="xs">
-                      {entry.title}
-                    </SectionTitle>
-                    <BodyText c="dimmed" mb="lg">
-                      {entry.description}
-                    </BodyText>
-                  </div>
-                </Group>
-
-                <Stack gap="lg">
-                  {entry.changes.map((changeGroup, changeIndex) => (
-                    <div key={changeIndex}>
-                      <Group mb="sm">
-                        {getChangeTypeBadge(changeGroup.type)}
-                      </Group>
-                      <Stack gap="xs" pl="md">
-                        {changeGroup.items.map((item, itemIndex) => (
-                          <Group key={itemIndex} gap="sm" align="flex-start">
-                            <Text
-                              size="lg"
-                              c="dimmed"
-                              style={{ lineHeight: 1 }}
-                            >
-                              •
-                            </Text>
-                            <BodyText size="sm" style={{ flex: 1 }}>
-                              {item}
-                            </BodyText>
-                          </Group>
-                        ))}
-                      </Stack>
-                      {changeIndex < entry.changes.length - 1 && (
-                        <Divider my="md" variant="dashed" />
-                      )}
+                      <SectionTitle order={3} size="h3" mb="xs">
+                        {entry.title}
+                      </SectionTitle>
+                      <BodyText c="dimmed" mb="lg">
+                        {entry.description}
+                      </BodyText>
                     </div>
-                  ))}
-                </Stack>
-              </Card>
-            ))}
-          </Stack>
-        </Container>
-      </section>
+                  </Group>
+
+                  <Stack gap="lg">
+                    {entry.changes.map((changeGroup, changeIndex) => (
+                      <div key={changeIndex}>
+                        <Group mb="sm">
+                          {getChangeTypeBadge(changeGroup.type)}
+                        </Group>
+                        <Stack gap="xs" pl="md">
+                          {changeGroup.items.map((item, itemIndex) => (
+                            <Group key={itemIndex} gap="sm" align="flex-start">
+                              <Text
+                                size="lg"
+                                c="dimmed"
+                                style={{ lineHeight: 1 }}
+                              >
+                                •
+                              </Text>
+                              <BodyText size="sm" style={{ flex: 1 }}>
+                                {item}
+                              </BodyText>
+                            </Group>
+                          ))}
+                        </Stack>
+                        {changeIndex < entry.changes.length - 1 && (
+                          <Divider my="md" variant="dashed" />
+                        )}
+                      </div>
+                    ))}
+                  </Stack>
+                </Card>
+              ))}
+            </Stack>
+          </Container>
+        </section>
+      </main>
     </PublicPageLayout>
   );
 };

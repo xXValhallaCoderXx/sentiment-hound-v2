@@ -29,11 +29,15 @@ const LandingPage = async () => {
       {/* Content Layer - Scrollable */}
       <main className={classes.contentLayer}>
         <ScrollHandler />
-        
-        <section id="home" className={classes.section}>
+
+        <section
+          id="home"
+          style={{ paddingTop: 0 }}
+          className={classes.section}
+        >
           <ModernHero />
         </section>
-        
+
         <AnimatedSection>
           <section id="core-features" className={classes.toolkitSection}>
             <CoreFeaturesSection />
