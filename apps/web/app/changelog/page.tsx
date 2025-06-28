@@ -222,71 +222,72 @@ const ChangelogPage = () => {
           <Container size="md" py="xl">
             <Stack gap="xl">
               {changelogData.map((entry) => (
-              <Card
-                key={entry.version}
-                className={classes.changelogCard}
-                padding="xl"
-                radius="lg"
-              >
-                <Group justify="space-between" align="flex-start" mb="md">
-                  <div>
-                    <Group gap="sm" mb="xs">
-                      <Badge size="lg" variant="filled" color="primary">
-                        {entry.version}
-                      </Badge>
-                      <Group gap="xs" c="dimmed">
-                        <IconCalendar size={16} />
-                        <DimmedText size="sm">
-                          {new Date(entry.date).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </DimmedText>
+                <Card
+                  key={entry.version}
+                  className={classes.changelogCard}
+                  padding="xl"
+                  radius="lg"
+                >
+                  <Group justify="space-between" align="flex-start" mb="md">
+                    <div>
+                      <Group gap="sm" mb="xs">
+                        <Badge size="lg" variant="filled" color="primary">
+                          {entry.version}
+                        </Badge>
+                        <Group gap="xs" c="dimmed">
+                          <IconCalendar size={16} />
+                          <DimmedText size="sm">
+                            {new Date(entry.date).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </DimmedText>
+                        </Group>
                       </Group>
-                    </Group>
-                    <SectionTitle order={3} size="h3" mb="xs">
-                      {entry.title}
-                    </SectionTitle>
-                    <BodyText c="dimmed" mb="lg">
-                      {entry.description}
-                    </BodyText>
-                  </div>
-                </Group>
-
-                <Stack gap="lg">
-                  {entry.changes.map((changeGroup, changeIndex) => (
-                    <div key={changeIndex}>
-                      <Group mb="sm">
-                        {getChangeTypeBadge(changeGroup.type)}
-                      </Group>
-                      <Stack gap="xs" pl="md">
-                        {changeGroup.items.map((item, itemIndex) => (
-                          <Group key={itemIndex} gap="sm" align="flex-start">
-                            <Text
-                              size="lg"
-                              c="dimmed"
-                              style={{ lineHeight: 1 }}
-                            >
-                              •
-                            </Text>
-                            <BodyText size="sm" style={{ flex: 1 }}>
-                              {item}
-                            </BodyText>
-                          </Group>
-                        ))}
-                      </Stack>
-                      {changeIndex < entry.changes.length - 1 && (
-                        <Divider my="md" variant="dashed" />
-                      )}
+                      <SectionTitle order={3} size="h3" mb="xs">
+                        {entry.title}
+                      </SectionTitle>
+                      <BodyText c="dimmed" mb="lg">
+                        {entry.description}
+                      </BodyText>
                     </div>
-                  ))}
-                </Stack>
-              </Card>
-            ))}
-          </Stack>
-        </Container>
-      </section>
+                  </Group>
+
+                  <Stack gap="lg">
+                    {entry.changes.map((changeGroup, changeIndex) => (
+                      <div key={changeIndex}>
+                        <Group mb="sm">
+                          {getChangeTypeBadge(changeGroup.type)}
+                        </Group>
+                        <Stack gap="xs" pl="md">
+                          {changeGroup.items.map((item, itemIndex) => (
+                            <Group key={itemIndex} gap="sm" align="flex-start">
+                              <Text
+                                size="lg"
+                                c="dimmed"
+                                style={{ lineHeight: 1 }}
+                              >
+                                •
+                              </Text>
+                              <BodyText size="sm" style={{ flex: 1 }}>
+                                {item}
+                              </BodyText>
+                            </Group>
+                          ))}
+                        </Stack>
+                        {changeIndex < entry.changes.length - 1 && (
+                          <Divider my="md" variant="dashed" />
+                        )}
+                      </div>
+                    ))}
+                  </Stack>
+                </Card>
+              ))}
+            </Stack>
+          </Container>
+        </section>
+      </main>
     </PublicPageLayout>
   );
 };
