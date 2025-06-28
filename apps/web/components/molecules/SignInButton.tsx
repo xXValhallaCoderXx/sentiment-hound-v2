@@ -10,7 +10,7 @@ export function SignInButton() {
   return (
     <>
       <Button variant="filled" onClick={() => setOpened(true)}>
-        Sign in
+        Early Access
       </Button>
       <AuthModal opened={opened} onClose={() => setOpened(false)} />
     </>

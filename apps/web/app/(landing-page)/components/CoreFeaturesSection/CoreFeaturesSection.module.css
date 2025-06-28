@@ -1,36 +1,13 @@
-/* Why Teams Love Section - Consistent with Core Features */
+/* Core Features Section Styles */
 .wrapper {
   position: relative;
   padding: 120px 0;
-}
-
-.container {
-  position: relative;
-  z-index: 1;
 }
 
 /* Section Header */
 .header {
   text-align: center;
   margin-bottom: 5rem;
-}
-
-.badge {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  margin-bottom: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-[data-mantine-color-scheme="light"] .badge {
-  background: rgba(52, 152, 219, 0.1);
-  border: 1px solid rgba(52, 152, 219, 0.2);
-  color: #2980B9;
-  backdrop-filter: none;
 }
 
 .title {
@@ -54,7 +31,7 @@
   margin-top: 4rem;
 }
 
-/* Feature Cards - Matching Core Features exactly */
+/* Feature Cards */
 .featureCard {
   text-align: center;
   padding: 2rem 1rem;
@@ -64,7 +41,7 @@
   align-items: center;
 }
 
-/* Icon Container with Hover Effects - Exact match to Core Features */
+/* Icon Container with Hover Effects */
 .iconContainer {
   width: 64px;
   height: 64px;
@@ -88,7 +65,7 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Hover Effects - Sophisticated Glow (matching Core Features) */
+/* Hover Effects - Sophisticated Glow (matching benefit cards) */
 .iconContainer:hover {
   transform: translateY(-2px);
   border: 1px solid transparent;
@@ -111,7 +88,7 @@
   z-index: 1;
 }
 
-/* Feature Typography - Matching Core Features */
+/* Feature Typography */
 .featureTitle {
   font-size: 1.5rem;
   font-weight: 700;

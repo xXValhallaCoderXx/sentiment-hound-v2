@@ -2,18 +2,12 @@ import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import PublicPageLayout from "@/components/templates/PublicPageLayout";
 import ModernHero from "@/components/organisms/ModernHero/ModernHero";
-import { FeaturesSection } from "./components/FeaturesSection";
-import { CompetitiveSection } from "./components/CompetitiveSection";
-import { HowItWorksSection } from "./components/HowItWorksSection";
 import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
-import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
-import { IconEye } from "@tabler/icons-react";
-import { Stack, Group, Button } from "@mantine/core";
-import { SpamDetectionSection } from "./components/SpamDetectionSection";
-import { CommandCenterSection } from "./components/CommandCenterSection";
-import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
+import PlansAndEarlyAccessSection from "./components/PlansAndEarlyAccessSection";
+import CoreFeaturesSection from "./components/CoreFeaturesSection";
 import AnimatedSection from "@/components/atoms/AnimatedSection/AnimatedSection";
+import ScrollHandler from "./components/ScrollHandler";
 
 import sectionClasses from "./SectionBackgrounds.module.css";
 
@@ -25,36 +19,32 @@ const LandingPage = async () => {
 
   return (
     <PublicPageLayout>
+      <ScrollHandler />
       <section id="home" className={sectionClasses.sectionPrimary}>
         <ModernHero />
       </section>
       <AnimatedSection>
-        <section id="early-access" className={sectionClasses.sectionAlt}>
-          <BeFirstToKnowSection />
+        <section id="core-features" className={sectionClasses.sectionAlt}>
+          <CoreFeaturesSection />
         </section>
       </AnimatedSection>
+
       <AnimatedSection>
-        <Stack
-          gap={96}
-          id="features"
-          className={`${sectionClasses.wrapper} ${sectionClasses.sectionPrimary}`}
+        <section
+          id="plans-early-access"
+          className={sectionClasses.sectionPrimary}
         >
-          <CommandCenterSection />
-          <SpamDetectionSection />
-        </Stack>
-      </AnimatedSection>
-      <AnimatedSection>
-        <section id="how-it-works" className={sectionClasses.sectionAlt}>
-          <HowItWorksSection />
+          <PlansAndEarlyAccessSection />
         </section>
       </AnimatedSection>
+
       <AnimatedSection>
         <section id="why-you-love" className={sectionClasses.sectionPrimary}>
           <WhyTeamsLoveSection />
         </section>
       </AnimatedSection>
       <AnimatedSection>
-        <section id="faq" className={sectionClasses.sectionPrimary}>
+        <section id="faq" className={sectionClasses.sectionAlt}>
           <FaqSection />
         </section>
       </AnimatedSection>

@@ -1,0 +1,246 @@
+/* Command Center Feature Section */
+.wrapper {
+  padding: 6rem 0;
+  position: relative;
+  background-color: transparent;
+}
+
+.content {
+  padding-left: 2rem;
+}
+
+.badge {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #60A5FA;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Light mode badge styles */
+[data-mantine-color-scheme="light"] .badge {
+  background: rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.2);
+  color: #2980B9;
+  backdrop-filter: none;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--mantine-color-text);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--mantine-color-dimmed);
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature {
+  margin: 0;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--mantine-color-gray-4);
+}
+
+[data-mantine-color-scheme="dark"] .feature {
+  border-bottom: 1px solid var(--mantine-color-dark-5);
+}
+
+.feature:last-child {
+  border-bottom: none;
+}
+
+.featureContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkIcon {
+  color: var(--mantine-color-green-5);
+  flex-shrink: 0;
+}
+
+/* Dashboard */
+.dashboard {
+  background: rgba(15, 20, 25, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-mantine-color-scheme="light"] .dashboard {
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  backdrop-filter: none;
+}
+
+.dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  pointer-events: none;
+}
+
+[data-mantine-color-scheme="light"] .dashboard::before {
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.02) 0%, rgba(46, 204, 113, 0.02) 100%);
+}
+
+.dashboardHeader {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1.5rem;
+}
+
+.dashboardTitle {
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+[data-mantine-color-scheme="light"] .dashboardTitle {
+  color: var(--mantine-color-text);
+}
+
+.sentimentStats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.sentimentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+}
+
+[data-mantine-color-scheme="light"] .sentimentItem {
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+}
+
+.sentimentLabel {
+  color: #94A3B8;
+  font-size: 0.9rem;
+}
+
+[data-mantine-color-scheme="light"] .sentimentLabel {
+  color: var(--mantine-color-dimmed);
+}
+
+.sentimentValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.chartContainer {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1.5rem;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+[data-mantine-color-scheme="light"] .chartContainer {
+  background: var(--mantine-color-gray-0);
+  border: 1px solid var(--mantine-color-gray-2);
+}
+
+.trendChart {
+  width: 100%;
+  height: 100%;
+}
+
+.trendLine {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.activityFeed {
+  position: relative;
+  z-index: 1;
+}
+
+.activityTitle {
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+[data-mantine-color-scheme="light"] .activityTitle {
+  color: var(--mantine-color-text);
+}
+
+.activityItem {
+  color: #94A3B8;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0.25rem;
+}
+
+[data-mantine-color-scheme="light"] .activityItem {
+  color: var(--mantine-color-dimmed);
+  background: var(--mantine-color-gray-0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 4rem 0;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+  
+  .content {
+    padding-left: 0;
+    margin-bottom: 3rem;
+  }
+  
+  .dashboard {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .wrapper {
+    padding: 3rem 0;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+}

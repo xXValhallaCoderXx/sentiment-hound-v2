@@ -1,8 +1,8 @@
 import { Container, Title, Text, Grid, GridCol, Badge } from "@mantine/core";
 import {
-  IconShieldCheck,
-  IconEye,
-  IconBrain,
+  IconRocket,
+  IconBulb,
+  IconSparkles,
   IconHeart,
 } from "@tabler/icons-react";
 import classes from "./WhyTeamsLoveSection.module.css";
@@ -10,28 +10,22 @@ import classes from "./WhyTeamsLoveSection.module.css";
 const WhyTeamsLoveSection = () => {
   const features = [
     {
-      icon: IconShieldCheck,
-      title: "Power That's Unleashed, Not Locked Up.",
+      icon: IconRocket,
+      title: "Power That's Unleashed, Not Locked Up",
       description:
-        "We believe the best tools should be for everyone. We packed enterprise-level features into a simple, affordable platform for the new generation of builders.",
-      color: "#2ECC71", // Improved green for better contrast
-      stats: "Enterprise-grade",
+        "We pack enterprise-grade features into a simple, affordable platform. We believe the best tools should be for everyone, not locked behind complex enterprise contracts.",
     },
     {
-      icon: IconEye,
-      title: "Clarity You Can Act On.",
+      icon: IconBulb,
+      title: "Clarity You Can Act On",
       description:
-        "We don't just show you data; we help you understand it. Our goal is to give you the confidence to make your next move the right one.",
-      color: "#3498DB", // Improved blue for better contrast
-      stats: "Actionable insights",
+        "We deliver actionable insights, not just data dumps. Our goal is to give you the confidence to make your next move the right one with clear, understandable analytics.",
     },
     {
-      icon: IconBrain,
-      title: "Professional, Not Boring.",
+      icon: IconSparkles,
+      title: "Professional, Not Boring",
       description:
-        "We're serious about the quality of our data, but we don't think software has to be dull. We're building the tool we've always wanted to use.",
-      color: "#9B59B6", // Improved purple for better contrast
-      stats: "Intuitive design",
+        "We combine intuitive design with serious data quality. We're building the tool we've always wanted to use - powerful yet delightful, professional yet approachable.",
     },
   ];
 
@@ -54,36 +48,21 @@ const WhyTeamsLoveSection = () => {
           </Text>
         </div>
 
-        <Grid gutter="xl" className={classes.featuresGrid}>
+        <Grid gutter="xl" justify="center" className={classes.featuresGrid}>
           {features.map((feature, index) => (
             <GridCol key={index} span={{ base: 12, md: 4 }}>
               <div className={classes.featureCard}>
-                <div className={classes.cardContent}>
-                  <div
-                    className={classes.featureIcon}
-                    style={{ backgroundColor: feature.color }}
-                  >
-                    <feature.icon size={28} color="white" stroke={1.5} />
-                  </div>
-
-                  <div className={classes.featureHeader}>
-                    <Text className={classes.featureTitle}>
-                      {feature.title}
-                    </Text>
-                    <Text className={classes.featureStats}>
-                      {feature.stats}
-                    </Text>
-                  </div>
-
-                  <Text className={classes.featureDescription}>
-                    {feature.description}
-                  </Text>
+                <div className={classes.iconContainer}>
+                  <feature.icon size={48} className={classes.icon} />
                 </div>
 
-                <div
-                  className={classes.cardGlow}
-                  style={{ backgroundColor: feature.color }}
-                ></div>
+                <Title order={3} className={classes.featureTitle}>
+                  {feature.title}
+                </Title>
+
+                <Text className={classes.featureDescription}>
+                  {feature.description}
+                </Text>
               </div>
             </GridCol>
           ))}

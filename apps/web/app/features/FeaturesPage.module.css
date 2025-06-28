@@ -1,0 +1,153 @@
+/* Features Page - Living Canvas Background Implementation */
+
+/* Task 1: Living Canvas Background - Fixed Layer */
+.livingCanvasBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-color: #1A1B1E;
+  overflow: hidden;
+}
+
+/* Aurora Effect Glows */
+.glow1 {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  top: -25%;
+  left: -25%;
+  background-color: #FF4500;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+}
+
+.glow2 {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  bottom: -20%;
+  right: -20%;
+  background-color: #8B5CF6;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+}
+
+.glow3 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #10B981;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.1;
+}
+
+/* Content Layer - Scrollable */
+.contentLayer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Section Styling - Transparent Backgrounds */
+.section {
+  background-color: transparent;
+  position: relative;
+}
+
+/* Task 2: How It Works Section - Special Spacing */
+.howItWorksSection {
+  background-color: transparent;
+  padding-top: 120px;
+  padding-bottom: 120px;
+  position: relative;
+}
+
+/* Task 3: Sectional Dividers */
+.sectionDivider {
+  width: 100%;
+  height: 1px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 0;
+}
+
+/* Light Mode Adjustments */
+[data-mantine-color-scheme="light"] .livingCanvasBackground {
+  background-color: #FFFFFF;
+}
+
+[data-mantine-color-scheme="light"] .glow1 {
+  background-color: #FF6B35;
+  opacity: 0.08;
+}
+
+[data-mantine-color-scheme="light"] .glow2 {
+  background-color: #9C88FF;
+  opacity: 0.08;
+}
+
+[data-mantine-color-scheme="light"] .glow3 {
+  background-color: #2ECC71;
+  opacity: 0.06;
+}
+
+[data-mantine-color-scheme="light"] .sectionDivider {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .glow1 {
+    width: 600px;
+    height: 600px;
+    top: -30%;
+    left: -30%;
+  }
+
+  .glow2 {
+    width: 500px;
+    height: 500px;
+    bottom: -25%;
+    right: -25%;
+  }
+
+  .glow3 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .howItWorksSection {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+}
+
+@media (max-width: 576px) {
+  .glow1 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .glow2 {
+    width: 350px;
+    height: 350px;
+  }
+
+  .glow3 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .howItWorksSection {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+}

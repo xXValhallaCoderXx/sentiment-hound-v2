@@ -55,19 +55,8 @@ const ModernHero = () => {
           >
             Cut through the noise.
           </Title>
-          <Title
-            order={2}
-            className={classes.subtitle}
-            fw={400}
-            lh={1.3}
-            mb="xl"
-          >
-            Fetch the insights your audience is hiding
-          </Title>
-          <Text className={classes.description} size="lg" lh={1.6}>
-            Sentiment Hound turns comments, reviews, and social chatter into
-            clear, ready-to-act insights—priced for creators, solo founders, and
-            growing brands.
+          <Text c="dimmed" size="lg" lh={1.6} mb="xl">
+            Sentiment Hound gives you clear, actionable insights from comments, reviews, and social chatter. Built for founders, creators, and brands.
           </Text>
 
           <Group className={classes.controls} mt="xl">
@@ -79,15 +68,7 @@ const ModernHero = () => {
             >
               Early Access
             </Button>
-            <Button
-              size="lg"
-              className={classes.controlSecondary}
-              variant="outline"
-              color="text-primary"
-              c="text-primary"
-            >
-              See a Live Demo
-            </Button>
+            
           </Group>
         </div>
       </Container>
