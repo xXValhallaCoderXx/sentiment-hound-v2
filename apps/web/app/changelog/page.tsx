@@ -17,7 +17,6 @@ import {
   BodyText,
   DimmedText,
 } from "@/components/atoms/Typography";
-import sectionClasses from "../(landing-page)/SectionBackgrounds.module.css";
 import classes from "./ChangelogPage.module.css";
 
 interface ChangelogEntry {
@@ -190,31 +189,39 @@ const getChangeTypeBadge = (type: string) => {
 const ChangelogPage = () => {
   return (
     <PublicPageLayout>
-      {/* Hero Section */}
-      <section
-        className={`${sectionClasses.sectionPrimary} ${sectionClasses.wrapper}`}
-      >
-        <Container size="xl" className={classes.heroContainer}>
-          <div className={classes.heroContent}>
-            <PageTitle ta="center">
-              What&apos;s New in Sentiment Hound
-            </PageTitle>
-            <BodyText ta="center" mt="md">
-              Stay up to date with new features, improvements, and bug fixes.
-              We&apos;re constantly working to make Sentiment Hound better for
-              you.
-            </BodyText>
-          </div>
-        </Container>
-      </section>
+      {/* Living Canvas Background - Fixed Layer */}
+      <div className={classes.livingCanvasBackground}>
+        <div className={classes.glow1}></div>
+        <div className={classes.glow2}></div>
+        <div className={classes.glow3}></div>
+      </div>
 
-      {/* Changelog Entries */}
-      <section
-        className={`${sectionClasses.sectionAlt} ${sectionClasses.wrapper}`}
-      >
-        <Container size="md" py="xl">
-          <Stack gap="xl">
-            {changelogData.map((entry) => (
+      {/* Content Layer - Scrollable */}
+      <main className={classes.contentLayer}>
+        {/* Hero Section */}
+        <section className={classes.section}>
+          <Container size="xl" className={classes.heroContainer}>
+            <div className={classes.heroContent}>
+              <PageTitle ta="center">
+                What&apos;s New in Sentiment Hound
+              </PageTitle>
+              <BodyText ta="center" mt="md">
+                Stay up to date with new features, improvements, and bug fixes.
+                We&apos;re constantly working to make Sentiment Hound better for
+                you.
+              </BodyText>
+            </div>
+          </Container>
+        </section>
+
+        {/* Sectional Divider */}
+        <hr className={classes.sectionDivider} />
+
+        {/* Changelog Entries */}
+        <section className={classes.section}>
+          <Container size="md" py="xl">
+            <Stack gap="xl">
+              {changelogData.map((entry) => (
               <Card
                 key={entry.version}
                 className={classes.changelogCard}
