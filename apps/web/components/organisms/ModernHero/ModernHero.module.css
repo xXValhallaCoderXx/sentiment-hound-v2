@@ -5,6 +5,22 @@
   overflow: hidden;
 }
 
+[data-mantine-color-scheme="dark"] .heroContainer {
+  background: linear-gradient(to bottom, rgba(10, 10, 20, 0) 70%, #0c0f1a 100%);
+}
+
+.heroContainer::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #0c0f1a 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .inner {
   position: relative;
   z-index: 2;

@@ -1,0 +1,456 @@
+/* Plans and Early Access Section Styles */
+.wrapper {
+  position: relative;
+  padding: 6rem 0; /* Generous vertical spacing: 100-140px equivalent */
+}
+
+/* Section Header */
+.header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--mantine-color-text);
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--mantine-color-dimmed);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Value Anchor Section (Pricing Cards) */
+.valueAnchor {
+  margin-bottom: 5rem;
+}
+
+.pricingCard {
+  height: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  min-height: 520px;
+  padding: 3rem 2.5rem;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-lg);
+  background: var(--mantine-color-white);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+[data-mantine-color-scheme="dark"] .pricingCard {
+  background: var(--mantine-color-dark-7);
+  border: 1px solid var(--mantine-color-dark-4);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.pricingCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+[data-mantine-color-scheme="dark"] .pricingCard:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.popularCard {
+  border: 2px solid transparent;
+  background: linear-gradient(var(--mantine-color-white), var(--mantine-color-white)) padding-box,
+              linear-gradient(180deg, #c0c0c0, #ff6b35) border-box;
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 107, 53, 0.15);
+  position: relative;
+}
+
+[data-mantine-color-scheme="dark"] .popularCard {
+  background: linear-gradient(var(--mantine-color-dark-7), var(--mantine-color-dark-7)) padding-box,
+              linear-gradient(180deg, #c0c0c0, #ff6b35) border-box;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 107, 53, 0.2);
+}
+
+[data-mantine-color-scheme="dark"] .popularCard:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 107, 53, 0.3);
+}
+
+.popularCard:hover {
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), 0 0 30px rgba(255, 107, 53, 0.25);
+}
+
+.popularBadge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 1;
+}
+
+.cardHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.planName {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.priceSection {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.price {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--mantine-color-text);
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.period {
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--mantine-color-dimmed);
+  margin-left: 0.25rem;
+}
+
+.estimatedPrice {
+  color: var(--mantine-color-dimmed);
+  font-style: italic;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 280px;
+  text-align: left;
+}
+
+.feature {
+  margin: 0;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--mantine-color-gray-4);
+}
+
+[data-mantine-color-scheme="dark"] .feature {
+  border-bottom: 1px solid var(--mantine-color-dark-5);
+}
+
+.feature:last-child {
+  border-bottom: none;
+}
+
+.featureContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkIcon {
+  color: var(--mantine-color-green-5);
+  flex-shrink: 0;
+}
+
+/* Pricing Disclaimer */
+.pricingDisclaimer {
+  text-align: center;
+  margin: 3rem 0 2rem 0;
+}
+
+.disclaimerText {
+  font-size: 0.875rem; /* 14px */
+  font-style: italic;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.4;
+}
+
+/* Transition Section */
+.transition {
+  margin: 6rem 0;
+}
+
+.transitionDivider {
+  text-align: center;
+  position: relative;
+}
+
+.dividerLine {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--mantine-color-gray-3) 50%,
+    transparent 100%
+  );
+  margin: 0 0 2rem 0;
+  width: 100%;
+}
+
+[data-mantine-color-scheme="dark"] .dividerLine {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--mantine-color-dark-4) 50%,
+    transparent 100%
+  );
+}
+
+.transitionHeading {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--mantine-color-text);
+  margin: 0;
+  text-align: center;
+}
+
+/* Golden Ticket CTA Section */
+.goldenTicket {
+  position: relative;
+}
+
+.ctaHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.badge {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.ctaTitle {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--mantine-color-text);
+  line-height: 1.2;
+}
+
+.ctaSubtitle {
+  font-size: 1.25rem;
+  color: var(--mantine-color-dimmed);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.ctaContent {
+  margin-top: 4rem;
+}
+
+/* Benefits Grid */
+.benefitsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.benefitCard {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--mantine-radius-md);
+  background: var(--mantine-color-white);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+[data-mantine-color-scheme="dark"] .benefitCard {
+  background: var(--mantine-color-dark-7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.benefitCard:hover {
+  transform: translateY(-2px);
+  border: 1px solid transparent;
+  background: linear-gradient(var(--mantine-color-white), var(--mantine-color-white)) padding-box,
+              linear-gradient(135deg, #ff6b35, #9c88ff) border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 32px rgba(255, 107, 53, 0.15);
+}
+
+[data-mantine-color-scheme="dark"] .benefitCard:hover {
+  background: linear-gradient(var(--mantine-color-dark-7), var(--mantine-color-dark-7)) padding-box,
+              linear-gradient(135deg, #ff6b35, #9c88ff) border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 32px rgba(255, 107, 53, 0.2);
+}
+
+.benefitIcon {
+  flex-shrink: 0;
+}
+
+.benefitTitle {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  color: var(--mantine-color-text);
+  font-weight: 600;
+}
+
+.benefitDescription {
+  line-height: 1.5;
+  color: var(--mantine-color-dimmed);
+}
+
+/* Form Card */
+.formCard {
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: var(--mantine-radius-lg);
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+[data-mantine-color-scheme="dark"] .formCard {
+  background: var(--mantine-color-dark-7);
+  border: 1px solid var(--mantine-color-dark-4);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.input {
+  border-radius: var(--mantine-radius-md);
+}
+
+.disclaimer {
+  margin-top: 1rem;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 4rem 0;
+  }
+
+  .header {
+    margin-bottom: 3rem;
+  }
+
+  .title {
+    font-size: 2.25rem;
+  }
+
+  .ctaTitle {
+    font-size: 2rem;
+  }
+
+  .subtitle,
+  .ctaSubtitle {
+    font-size: 1.125rem;
+  }
+
+  .pricingCard {
+    max-width: 340px;
+    min-height: 480px;
+    padding: 2.5rem 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .popularCard {
+    transform: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .popularCard:hover {
+    transform: translateY(-2px);
+  }
+
+  .price {
+    font-size: 2.5rem;
+  }
+
+  .formCard {
+    position: static;
+    margin-top: 2rem;
+  }
+
+  .benefitsGrid {
+    margin-bottom: 2rem;
+  }
+
+  .valueAnchor {
+    margin-bottom: 3rem;
+  }
+
+  .transition {
+    margin: 4rem 0;
+  }
+
+  .transitionHeading {
+    font-size: 1.5rem;
+  }
+
+  .ctaContent {
+    margin-top: 3rem;
+  }
+
+  .ctaHeader {
+    margin-bottom: 3rem;
+  }
+
+  .pricingDisclaimer {
+    margin: 2rem 0 1.5rem 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .wrapper {
+    padding: 3rem 0;
+  }
+
+  .title {
+    font-size: 1.875rem;
+  }
+
+  .ctaTitle {
+    font-size: 1.75rem;
+  }
+
+  .pricingCard {
+    max-width: 320px;
+    min-height: 440px;
+    padding: 2rem 1.5rem;
+  }
+
+  .price {
+    font-size: 2.25rem;
+  }
+
+  .planName {
+    font-size: 1.5rem;
+  }
+
+  .transitionHeading {
+    font-size: 1.25rem;
+  }
+
+  .pricingDisclaimer {
+    margin: 1.5rem 0 1rem 0;
+  }
+
+  .disclaimerText {
+    font-size: 0.8125rem; /* 13px */
+  }
+}

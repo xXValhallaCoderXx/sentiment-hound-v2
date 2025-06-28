@@ -2,17 +2,13 @@ import { auth } from "@/lib/next-auth.lib";
 import { redirect } from "next/navigation";
 import PublicPageLayout from "@/components/templates/PublicPageLayout";
 import ModernHero from "@/components/organisms/ModernHero/ModernHero";
-import { FeaturesSection } from "./components/FeaturesSection";
-import { CompetitiveSection } from "./components/CompetitiveSection";
 import { HowItWorksSection } from "./components/HowItWorksSection";
 import { WhyTeamsLoveSection } from "./components/WhyTeamsLoveSection";
-import { PricingSection } from "./components/PricingSection";
 import { FaqSection } from "./components/FaqSection";
-import { IconEye } from "@tabler/icons-react";
-import { Stack, Group, Button } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import { SpamDetectionSection } from "./components/SpamDetectionSection";
 import { CommandCenterSection } from "./components/CommandCenterSection";
-import { BeFirstToKnowSection } from "./components/BeFirstToKnowSection";
+import PlansAndEarlyAccessSection from "./components/PlansAndEarlyAccessSection";
 import AnimatedSection from "@/components/atoms/AnimatedSection/AnimatedSection";
 
 import sectionClasses from "./SectionBackgrounds.module.css";
@@ -29,11 +25,6 @@ const LandingPage = async () => {
         <ModernHero />
       </section>
       <AnimatedSection>
-        <section id="early-access" className={sectionClasses.sectionAlt}>
-          <BeFirstToKnowSection />
-        </section>
-      </AnimatedSection>
-      <AnimatedSection>
         <Stack
           gap={96}
           id="features"
@@ -44,12 +35,17 @@ const LandingPage = async () => {
         </Stack>
       </AnimatedSection>
       <AnimatedSection>
-        <section id="how-it-works" className={sectionClasses.sectionAlt}>
+        <section id="plans-early-access" className={sectionClasses.sectionAlt}>
+          <PlansAndEarlyAccessSection />
+        </section>
+      </AnimatedSection>
+      <AnimatedSection>
+        <section id="how-it-works" className={sectionClasses.sectionPrimary}>
           <HowItWorksSection />
         </section>
       </AnimatedSection>
       <AnimatedSection>
-        <section id="why-you-love" className={sectionClasses.sectionPrimary}>
+        <section id="why-you-love" className={sectionClasses.sectionAlt}>
           <WhyTeamsLoveSection />
         </section>
       </AnimatedSection>

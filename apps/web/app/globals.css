@@ -32,6 +32,7 @@
 
 /* Mantine theme-specific overrides */
 [data-mantine-color-scheme="light"] {
+  --background: #F8F9FA;
   --section-bg-primary: #ffffff;
   --section-bg-alt: #f8f9fa;
 }
