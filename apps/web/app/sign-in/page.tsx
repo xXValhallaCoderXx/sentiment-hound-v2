@@ -135,7 +135,13 @@ export default function SignInPage() {
 
                       {/* Forgot Password Link */}
                       <Group justify="flex-end">
-                        <Anchor component={Link} href="/forgot-password" size="sm">
+                        <Anchor 
+                          component={Link} 
+                          href="/forgot-password" 
+                          size="sm"
+                          c="primary"
+                          fw={500}
+                        >
                           Forgot Password?
                         </Anchor>
                       </Group>
@@ -164,9 +170,14 @@ export default function SignInPage() {
                   />
 
                   {/* Sign Up Link */}
-                  <Text ta="center" size="sm">
+                  <Text ta="center" size="sm" c="dimmed">
                     Don&apos;t have an account?{" "}
-                    <Anchor component={Link} href="/#early-access">
+                    <Anchor 
+                      component={Link} 
+                      href="/#early-access"
+                      c="primary"
+                      fw={500}
+                    >
                       Join the waitlist
                     </Anchor>
                   </Text>
