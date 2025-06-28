@@ -4,6 +4,7 @@ import { Group, Anchor, Text, Burger, Drawer, Stack, Box } from "@mantine/core";
 import { ThemeToggle } from "@/components/molecules/ThemeToggle";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
+import { useSmartNavigation } from "@/lib/navigation.utils";
 
 interface SharedNavigationMenuProps {
   links: { href: string; label: string }[];
@@ -13,6 +14,7 @@ interface SharedNavigationMenuProps {
 const SharedNavigationMenu = ({ links, ctaButton }: SharedNavigationMenuProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const pathname = usePathname();
+  const { handleNavigation } = useSmartNavigation();
 
   const isPricingPage = pathname === '/pricing';
 
@@ -20,8 +22,19 @@ const SharedNavigationMenu = ({ links, ctaButton }: SharedNavigationMenuProps) =
     ? [{ href: '/', label: 'Home' }]
     : links;
 
+  const handleLinkClick = (href: string, label: string) => {
+    close(); // Close mobile menu
+    handleNavigation(href, label);
+  };
+
   const navigationLinks = filteredLinks.map(link => (
-      <Anchor href={link.href} c="dimmed" fw={500} onClick={close} key={link.href}>
+      <Anchor 
+        c="dimmed" 
+        fw={500} 
+        onClick={() => handleLinkClick(link.href, link.label)} 
+        key={link.href}
+        style={{ cursor: 'pointer' }}
+      >
         {link.label}
       </Anchor>
   ));

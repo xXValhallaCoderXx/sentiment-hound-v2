@@ -1,7 +1,7 @@
 /* How It Works Overview Section Styles */
 .wrapper {
   position: relative;
-  padding: 6rem 0;
+  background-color: transparent;
 }
 
 .container {

@@ -7,6 +7,7 @@ import { FaqSection } from "./components/FaqSection";
 import PlansAndEarlyAccessSection from "./components/PlansAndEarlyAccessSection";
 import CoreFeaturesSection from "./components/CoreFeaturesSection";
 import AnimatedSection from "@/components/atoms/AnimatedSection/AnimatedSection";
+import ScrollHandler from "./components/ScrollHandler";
 
 import sectionClasses from "./SectionBackgrounds.module.css";
 
@@ -18,6 +19,7 @@ const LandingPage = async () => {
 
   return (
     <PublicPageLayout>
+      <ScrollHandler />
       <section id="home" className={sectionClasses.sectionPrimary}>
         <ModernHero />
       </section>
