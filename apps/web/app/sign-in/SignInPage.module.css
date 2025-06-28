@@ -1,0 +1,116 @@
+/* Sign In Page Styles */
+
+/* Page Container - Full viewport */
+.pageContainer {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Living Canvas Background - Fixed Layer */
+.livingCanvasBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-color: #1A1B1E;
+  overflow: hidden;
+}
+
+/* Aurora Effect Glows - Positioned for Sign In Page */
+.glow1 {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  top: -20%;
+  left: -15%;
+  background-color: #FF4500;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+}
+
+.glow2 {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  bottom: -15%;
+  right: -10%;
+  background-color: #8B5CF6;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+}
+
+.glow3 {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  top: 40%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  background-color: #10B981;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.08;
+}
+
+/* Content Container */
+.contentContainer {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* Centered Content */
+.centeredContent {
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Action Card */
+.actionCard {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Light Mode - Off-White Base with Subtle Gradients */
+[data-mantine-color-scheme="light"] .livingCanvasBackground {
+  background-color: #F8F9FA; /* Professional off-white */
+}
+
+[data-mantine-color-scheme="light"] .glow1 {
+  background-color: #FFE5D9; /* Whisper of peach */
+  opacity: 0.4;
+}
+
+[data-mantine-color-scheme="light"] .glow2 {
+  background-color: #E8F4FD; /* Hint of sky blue */
+  opacity: 0.5;
+}
+
+[data-mantine-color-scheme="light"] .glow3 {
+  background-color: #F0FDF4; /* Subtle mint */
+  opacity: 0.3;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .contentContainer {
+    padding: 1rem;
+  }
+  
+  .centeredContent {
+    max-width: 100%;
+  }
+  
+  .actionCard {
+    max-width: none;
+  }
+}
