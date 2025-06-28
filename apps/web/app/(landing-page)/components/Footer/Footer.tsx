@@ -75,6 +75,15 @@ export function Footer() {
                   How It Works
                 </Anchor>
               </li>
+              <li className={classes.linkItem}>
+                <Anchor
+                  className={classes.link}
+                  onClick={() => handleLinkClick("/changelog", "Changelog")}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Changelog
+                </Anchor>
+              </li>
             </ul>
           </div>
 
