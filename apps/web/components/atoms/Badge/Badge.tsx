@@ -11,16 +11,16 @@ interface BadgeProps {
   children: ReactNode;
 }
 
-export const Badge = ({ 
-  variant = "filled", 
-  colorScheme = "primary", 
-  icon, 
-  children 
+export const Badge = ({
+  variant = "filled",
+  colorScheme = "primary",
+  icon,
+  children,
 }: BadgeProps) => {
   const badgeClasses = [
     classes.badge,
     classes[variant],
-    classes[colorScheme]
+    classes[colorScheme],
   ].join(" ");
 
   return (

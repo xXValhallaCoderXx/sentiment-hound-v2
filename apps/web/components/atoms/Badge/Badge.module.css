@@ -29,23 +29,23 @@
 
 /* Variant: Filled */
 .filled.primary {
-  background-color: #FF4500; /* Primary Accent */
+  background-color: #ff4500; /* Primary Accent */
   color: white;
 }
 
 /* Special styling for icon in primary filled variant */
 .filled.primary .icon {
-  color: #FBBF24; /* Vibrant warm yellow/gold for the icon */
+  color: #fbbf24; /* Vibrant warm yellow/gold for the icon */
 }
 
 .filled.secondary {
   background-color: #374151; /* Medium-dark gray for dark mode */
-  color: #D1D5DB; /* High-contrast lighter gray */
+  color: #d1d5db; /* High-contrast lighter gray */
 }
 
 /* Light mode adjustments for filled secondary */
 [data-mantine-color-scheme="light"] .filled.secondary {
-  background-color: #E5E7EB; /* Light-to-medium gray for light mode */
+  background-color: #e5e7eb; /* Light-to-medium gray for light mode */
   color: #374151; /* High-contrast darker gray */
 }
 
@@ -56,8 +56,8 @@
 }
 
 .outline.primary {
-  border-color: #FF4500;
-  color: #FF4500;
+  border-color: #ff4500;
+  color: #ff4500;
 }
 
 .outline.secondary {
