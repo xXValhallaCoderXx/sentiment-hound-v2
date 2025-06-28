@@ -121,6 +121,11 @@
   position: relative;
 }
 
+/* First section needs top padding to account for fixed header */
+.section:first-of-type {
+  padding-top: calc(70px + 2rem); /* Header height + additional spacing */
+}
+
 /* Sectional Dividers */
 .sectionDivider {
   width: 100%;
@@ -184,5 +189,10 @@
   .changelogCard {
     padding: rem(20px) !important; /* Slightly reduced padding for smaller screens */
     backdrop-filter: blur(8px); /* Reduce blur on smaller screens if performance is a concern */
+  }
+
+  /* Increase top padding on mobile for better visibility */
+  .section:first-of-type {
+    padding-top: calc(70px + 3rem); /* More spacing on mobile */
   }
 }
