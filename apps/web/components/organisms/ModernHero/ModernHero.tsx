@@ -4,7 +4,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as random from 'maath/random/dist/maath-random.esm';
 import { useState, useRef } from 'react';
-import { Container, Title, Text, Button, Group, useMantineTheme } from '@mantine/core';
+import { Container, Title, Text, Button, Group, useMantineTheme, Anchor } from '@mantine/core';
+import { useSmartNavigation } from '@/lib/navigation.utils';
 import classes from './ModernHero.module.css';
 
 const Starfield = ({ particleColor, ...props }: any) => {
@@ -33,6 +34,7 @@ const Starfield = ({ particleColor, ...props }: any) => {
 
 const ModernHero = () => {
   const { colorScheme } = useMantineTheme();
+  const { handleNavigation } = useSmartNavigation();
   const particleColor = colorScheme === 'dark' ? '#ffa0e0' : '#868A8F';
 
   return (
@@ -62,9 +64,10 @@ const ModernHero = () => {
           <Group className={classes.controls} mt="xl">
             <Button
               size="lg"
-              className={classes.control}
+              className={classes.earlyAccessButton}
               color="primary.5"
               c="white"
+              onClick={() => handleNavigation("#early-access", "Early Access")}
             >
               Early Access
             </Button>

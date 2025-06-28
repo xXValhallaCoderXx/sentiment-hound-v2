@@ -1,0 +1,29 @@
+/* Enhanced Early Access Button Styling */
+.earlyAccessButton {
+  /* 3.4: Smooth Transition - CRITICAL */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  
+  /* Default state maintains Mantine styling */
+  background-color: #FF4500;
+  color: white;
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+}
+
+/* 3.2: Hover State - "Lift & Glow" Effect */
+.earlyAccessButton:hover {
+  /* Specification 2: The Lift */
+  transform: translateY(-2px);
+  
+  /* Specification 1: The Glow */
+  box-shadow: 0 0 25px rgba(255, 69, 0, 0.5);
+}
+
+/* 3.3: Active/Click State - "Press" Effect */
+.earlyAccessButton:active {
+  /* Specification 1: The Press - removes lift */
+  transform: translateY(0);
+  
+  /* Specification 2: The Feedback - darkens button */
+  filter: brightness(0.9);
+}

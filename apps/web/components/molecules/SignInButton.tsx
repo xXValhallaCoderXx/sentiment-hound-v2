@@ -1,18 +1,19 @@
 "use client";
 
 import { Button } from "@mantine/core";
-import { useState } from "react";
-import { AuthModal } from "@/components/organisms/AuthModal";
+import { useSmartNavigation } from "@/lib/navigation.utils";
+import classes from "./SignInButton.module.css";
 
 export function SignInButton() {
-  const [opened, setOpened] = useState(false);
+  const { handleNavigation } = useSmartNavigation();
 
   return (
-    <>
-      <Button variant="filled" onClick={() => setOpened(true)}>
-        Early Access
-      </Button>
-      <AuthModal opened={opened} onClose={() => setOpened(false)} />
-    </>
+    <Button 
+      variant="filled" 
+      className={classes.earlyAccessButton}
+      onClick={() => handleNavigation("#early-access", "Early Access")}
+    >
+      Early Access
+    </Button>
   );
 }

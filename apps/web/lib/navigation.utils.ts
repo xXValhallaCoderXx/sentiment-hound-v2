@@ -30,6 +30,9 @@ export const useSmartNavigation = () => {
       case "Pricing":
         navigateToSection("plans-early-access", "/");
         break;
+      case "Early Access":
+        navigateToSection("early-access", "/");
+        break;
       case "Home":
         router.push("/");
         break;
