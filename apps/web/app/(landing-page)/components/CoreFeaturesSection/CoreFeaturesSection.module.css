@@ -1,0 +1,156 @@
+/* Core Features Section Styles */
+.wrapper {
+  position: relative;
+  padding: 120px 0;
+}
+
+/* Section Header */
+.header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--mantine-color-text);
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--mantine-color-dimmed);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Features Grid */
+.featuresGrid {
+  margin-top: 4rem;
+}
+
+/* Feature Cards */
+.featureCard {
+  text-align: center;
+  padding: 2rem 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Icon Container with Hover Effects */
+.iconContainer {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+  position: relative;
+}
+
+/* Light mode icon container */
+[data-mantine-color-scheme="light"] .iconContainer {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Hover Effects - Sophisticated Glow (matching benefit cards) */
+.iconContainer:hover {
+  transform: translateY(-2px);
+  border: 1px solid transparent;
+  background: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05)) padding-box,
+              linear-gradient(135deg, #ff6b35, #9c88ff) border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 32px rgba(255, 107, 53, 0.15);
+}
+
+[data-mantine-color-scheme="light"] .iconContainer:hover {
+  transform: translateY(-2px);
+  border: 1px solid transparent;
+  background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)) padding-box,
+              linear-gradient(135deg, #ff6b35, #9c88ff) border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 32px rgba(255, 107, 53, 0.15);
+}
+
+/* Icon Styling */
+.icon {
+  color: var(--mantine-color-text);
+  z-index: 1;
+}
+
+/* Feature Typography */
+.featureTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--mantine-color-text);
+  text-align: center;
+}
+
+.featureDescription {
+  color: var(--mantine-color-dimmed);
+  font-size: 16px;
+  line-height: 1.7;
+  text-align: center;
+  max-width: 280px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 4rem 0;
+  }
+
+  .header {
+    margin-bottom: 3rem;
+  }
+
+  .title {
+    font-size: 2.25rem;
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+  }
+
+  .featuresGrid {
+    margin-top: 3rem;
+  }
+
+  .featureCard {
+    padding: 2rem 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .featureTitle {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .wrapper {
+    padding: 3rem 0;
+  }
+
+  .title {
+    font-size: 1.875rem;
+  }
+
+  .featureCard {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .iconContainer {
+    margin-bottom: 1rem;
+  }
+}
