@@ -15,6 +15,7 @@ import { Logo } from "@/components/atoms/Logo/Logo";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormField } from "@/components/molecules/FormField/FormField";
 import { SocialLoginButton } from "@/components/molecules/SocialLoginButton/SocialLoginButton";
+import { ThemeToggle } from "@/components/molecules/ThemeToggle/ThemeToggle";
 import { Card } from "@/components/organisms/Card/Card";
 import { RotatingPillarCard } from "@/components/organisms/RotatingPillarCard/RotatingPillarCard";
 
@@ -73,6 +74,11 @@ export default function SignInPage() {
 
   return (
     <div className={classes.pageContainer}>
+      {/* Theme Toggle - Subtle positioning */}
+      <div className={classes.themeToggleContainer}>
+        <ThemeToggle />
+      </div>
+
       {/* Living Canvas Background */}
       <div className={classes.livingCanvasBackground}>
         <div className={classes.glow1}></div>
@@ -89,7 +95,7 @@ export default function SignInPage() {
               <Card className={classes.actionCard}>
                 <Stack gap="xl">
                   {/* Logo */}
-                  <Logo size={48} />
+                  <Logo size={40} href="/" showText={true} />
                   
                   {/* Headlines */}
                   <div>
@@ -170,7 +176,9 @@ export default function SignInPage() {
 
             {/* Brand Pane (Right Column on Desktop) */}
             <Grid.Col span={{ base: 12, md: 6 }} order={{ base: 2, md: 2 }}>
-              <RotatingPillarCard />
+              <div className={classes.brandPane}>
+                <RotatingPillarCard />
+              </div>
             </Grid.Col>
           </Grid>
         </div>
