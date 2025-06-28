@@ -3,22 +3,7 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-}
-
-[data-mantine-color-scheme="dark"] .heroContainer {
-  background: linear-gradient(to bottom, rgba(10, 10, 20, 0) 70%, #0c0f1a 100%);
-}
-
-.heroContainer::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #0c0f1a 100%);
-  pointer-events: none;
-  z-index: 1;
+  background-color: transparent;
 }
 
 .inner {
@@ -82,4 +67,65 @@
 
 .controls {
   margin-top: 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* REQ-01: Modify Vertical Alignment on Mobile */
+  .inner {
+    align-items: flex-start; /* Override center alignment for mobile */
+  }
+
+  /* REQ-02 & REQ-03: Implement Top Padding (90px for optimal above-the-fold experience) */
+  .content {
+    padding-top: 90px; /* Deliberate whitespace below header */
+  }
+
+  .heroContainer {
+    min-height: 100vh;
+  }
+
+  .mainTitle {
+    font-size: 48px;
+  }
+
+  .subtitle {
+    font-size: 24px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  /* REQ-01: Maintain flex-start alignment for smaller mobile */
+  .inner {
+    align-items: flex-start;
+  }
+
+  /* REQ-02 & REQ-03: Adjust padding for smaller screens */
+  .content {
+    padding-top: 80px; /* Slightly reduced for smaller screens */
+  }
+
+  .heroContainer {
+    min-height: 100vh;
+  }
+
+  .mainTitle {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .controls {
+    margin-top: 30px;
+  }
 }

@@ -1,17 +1,6 @@
 .faqBackground {
   position: relative;
-  /* Background now handled by parent section */
-}
-
-/* Light mode background tint for better separation */
-[data-mantine-color-scheme="light"] .faqBackground {
-  background: radial-gradient(circle at 50% 20%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
-}
-
-@media (prefers-color-scheme: light) {
-  .faqBackground {
-    background: radial-gradient(circle at 50% 20%, rgba(240, 240, 240, 0.4), rgba(255, 255, 255, 1));
-  }
+  background-color: transparent;
 }
 
 .wrapper {

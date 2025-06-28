@@ -1,7 +1,7 @@
 /* Plans and Early Access Section Styles */
 .wrapper {
   position: relative;
-  padding: 6rem 0; /* Generous vertical spacing: 100-140px equivalent */
+  background-color: transparent;
 }
 
 /* Section Header */

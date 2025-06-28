@@ -9,7 +9,7 @@ import CoreFeaturesSection from "./components/CoreFeaturesSection";
 import AnimatedSection from "@/components/atoms/AnimatedSection/AnimatedSection";
 import ScrollHandler from "./components/ScrollHandler";
 
-import sectionClasses from "./SectionBackgrounds.module.css";
+import classes from "./LandingPage.module.css";
 
 const LandingPage = async () => {
   const session = await auth();
@@ -19,35 +19,54 @@ const LandingPage = async () => {
 
   return (
     <PublicPageLayout>
-      <ScrollHandler />
-      <section id="home" className={sectionClasses.sectionPrimary}>
-        <ModernHero />
-      </section>
-      <AnimatedSection>
-        <section id="core-features" className={sectionClasses.sectionAlt}>
-          <CoreFeaturesSection />
-        </section>
-      </AnimatedSection>
+      {/* Living Canvas Background - Fixed Layer */}
+      <div className={classes.livingCanvasBackground}>
+        <div className={classes.glow1}></div>
+        <div className={classes.glow2}></div>
+        <div className={classes.glow3}></div>
+      </div>
 
-      <AnimatedSection>
-        <section
-          id="plans-early-access"
-          className={sectionClasses.sectionPrimary}
-        >
-          <PlansAndEarlyAccessSection />
+      {/* Content Layer - Scrollable */}
+      <main className={classes.contentLayer}>
+        <ScrollHandler />
+        
+        <section id="home" className={classes.section}>
+          <ModernHero />
         </section>
-      </AnimatedSection>
+        
+        <AnimatedSection>
+          <section id="core-features" className={classes.toolkitSection}>
+            <CoreFeaturesSection />
+          </section>
+        </AnimatedSection>
 
-      <AnimatedSection>
-        <section id="why-you-love" className={sectionClasses.sectionPrimary}>
-          <WhyTeamsLoveSection />
-        </section>
-      </AnimatedSection>
-      <AnimatedSection>
-        <section id="faq" className={sectionClasses.sectionAlt}>
-          <FaqSection />
-        </section>
-      </AnimatedSection>
+        {/* Sectional Divider */}
+        <hr className={classes.sectionDivider} />
+
+        <AnimatedSection>
+          <section id="plans-early-access" className={classes.section}>
+            <PlansAndEarlyAccessSection />
+          </section>
+        </AnimatedSection>
+
+        {/* Sectional Divider */}
+        <hr className={classes.sectionDivider} />
+
+        <AnimatedSection>
+          <section id="why-you-love" className={classes.section}>
+            <WhyTeamsLoveSection />
+          </section>
+        </AnimatedSection>
+
+        {/* Sectional Divider */}
+        <hr className={classes.sectionDivider} />
+
+        <AnimatedSection>
+          <section id="faq" className={classes.section}>
+            <FaqSection />
+          </section>
+        </AnimatedSection>
+      </main>
     </PublicPageLayout>
   );
 };
