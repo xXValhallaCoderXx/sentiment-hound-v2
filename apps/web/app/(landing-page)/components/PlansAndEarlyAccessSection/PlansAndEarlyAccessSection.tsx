@@ -187,7 +187,7 @@ const PlansAndEarlyAccessSection = () => {
         </div>
 
         {/* Golden Ticket CTA Sub-section */}
-        <div className={classes.goldenTicket}>
+        <div id="early-access" className={classes.goldenTicket}>
           <div className={classes.ctaHeader}>
             <Badge
               variant="gradient"

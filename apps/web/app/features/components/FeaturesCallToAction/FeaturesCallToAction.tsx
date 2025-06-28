@@ -76,7 +76,7 @@ const FeaturesCallToAction = () => {
     <div className={classes.wrapper}>
       <Container size="xl" py="xl">
         {/* Golden Ticket CTA Sub-section */}
-        <div className={classes.goldenTicket}>
+        <div id="early-access" className={classes.goldenTicket}>
           <div className={classes.ctaHeader}>
             <Badge
               variant="gradient"
