@@ -1,8 +1,8 @@
 "use client";
 
-import { Container, Grid, Stack, Anchor, Text, Divider } from "@mantine/core";
+import { Container, Grid, Stack, Anchor, Text, Divider, Alert } from "@mantine/core";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useActionState, useTransition } from "react";
 import Link from "next/link";
 
 // Components
@@ -15,8 +15,11 @@ import { ThemeToggle } from "@/components/molecules/ThemeToggle/ThemeToggle";
 import { Card } from "@/components/organisms/Card/Card";
 import { RotatingPillarCard } from "@/components/organisms/RotatingPillarCard/RotatingPillarCard";
 
+// Actions
+import { handleEmailSignUp, handleGoogleSignInWithToken } from "@/actions/auth.actions";
+
 // Icons
-import { IconLock } from "@tabler/icons-react";
+import { IconLock, IconAlertCircle } from "@tabler/icons-react";
 
 // Styles
 import classes from "./SignUpPage.module.css";
@@ -25,6 +28,10 @@ export default function SignUpForm() {
   const searchParams = useSearchParams();
   const [invitationCode, setInvitationCode] = useState("");
   const [isTokenFromUrl, setIsTokenFromUrl] = useState(false);
+
+  // Server action state
+  const [signUpState, signUpAction] = useActionState(handleEmailSignUp, null);
+  const [isPending, startTransition] = useTransition();
 
   // Get token/code from URL parameters on component mount
   useEffect(() => {
@@ -37,13 +44,8 @@ export default function SignUpForm() {
   }, [searchParams]);
 
   // Client-side handlers
-  const handleGoogleLogin = () => {
-    // Static UI - no functionality needed per PRD
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Static UI - no functionality needed per PRD
+  const handleGoogleLogin = async () => {
+    await handleGoogleSignInWithToken(invitationCode);
   };
 
   return (
@@ -81,24 +83,47 @@ export default function SignUpForm() {
                   </div>
 
                   {/* Sign Up Form */}
-                  <form onSubmit={handleFormSubmit}>
+                  <form action={signUpAction}>
                     <Stack gap="md">
+                      {/* Error Alert */}
+                      {signUpState?.error && (
+                        <Alert
+                          icon={<IconAlertCircle size={16} />}
+                          color="red"
+                          variant="light"
+                        >
+                          {signUpState.error}
+                        </Alert>
+                      )}
+
+                      <FormField
+                        type="text"
+                        label="Name (Optional)"
+                        placeholder="Your full name"
+                        name="name"
+                      />
+
                       <FormField
                         type="email"
                         label="Email"
                         placeholder="user@example.com"
+                        name="email"
+                        required
                       />
 
                       <FormField
                         type="password"
                         label="Password"
                         placeholder="Enter your password"
+                        name="password"
+                        required
                       />
 
                       <FormField
                         type="text"
                         label="Invitation Code"
                         placeholder={isTokenFromUrl ? "Code from invitation link" : "Enter your invitation code"}
+                        name="invitationToken"
                         value={invitationCode}
                         onChange={(e) => {
                           if (!isTokenFromUrl) {
@@ -121,8 +146,9 @@ export default function SignUpForm() {
                         fullWidth
                         size="md"
                         variant="filled"
+                        loading={isPending}
                       >
-                        Create Account (Coming Soon)
+                        Create Account
                       </Button>
                     </Stack>
                   </form>

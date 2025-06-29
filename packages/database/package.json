@@ -19,7 +19,8 @@
     "db:seed:build": "node ./dist/seed.js",
     "db:seed:dev": "pnpm build && pnpm db:seed:build",
     "db:reset": "prisma db push --force-reset --accept-data-loss",
-    "deploy": "./scripts/deploy.sh"
+    "deploy": "./scripts/deploy.sh",
+    "generate-token": "node scripts/generate-token.js"
   },
   "prisma": {
     "seed": "ts-node --project tsconfig.seed.json src/seed.ts"

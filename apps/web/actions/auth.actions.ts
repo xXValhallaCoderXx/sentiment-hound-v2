@@ -38,50 +38,71 @@ export async function handleGoogleSignInWithToken(invitationToken?: string) {
 
 export async function handleEmailSignUp(prevState: any, formData: FormData) {
   try {
+    // Step A: Read Form Data
     const rawData = {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       name: formData.get("name") as string,
       invitationToken: formData.get("invitationToken") as string,
     };
-    console.log("Raw sign up data:", rawData);
+    
     const validatedData = signUpSchema.parse(rawData);
-    console.log("Validated sign up data:", validatedData);
 
-    // Check if user already exists
+    // Step B: Conditional Token Validation (The Feature Flag)
+    const requiresInvitation = process.env.SIGNUPS_REQUIRE_INVITATION === 'true';
+    let planId: number | undefined;
+
+    if (requiresInvitation) {
+      // When flag is true, invitation token is mandatory
+      if (!validatedData.invitationToken || validatedData.invitationToken.trim() === "") {
+        return {
+          error: "A valid invitation token is required.",
+        };
+      }
+
+      // Validate and consume the invitation token
+      const tokenValidation = await invitationTokenService.consumeInvitationToken(
+        validatedData.invitationToken,
+        "pending-user" // Will be updated after user creation
+      );
+      
+      if (!tokenValidation.isValid) {
+        return {
+          error: tokenValidation.error || "A valid invitation token is required.",
+        };
+      }
+      
+      planId = tokenValidation.planId;
+    } else {
+      // When flag is false, token is optional but still processed if provided
+      if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
+        const tokenValidation = await invitationTokenService.consumeInvitationToken(
+          validatedData.invitationToken,
+          "pending-user"
+        );
+        
+        if (tokenValidation.isValid) {
+          planId = tokenValidation.planId;
+        }
+        // If token is invalid when flag is false, we ignore it and continue
+      }
+    }
+
+    // Step C: User Existence Check
     const existingUser = await prisma.user.findUnique({
       where: { email: validatedData.email },
     });
-    console.log("Existing user:", existingUser);
+    
     if (existingUser) {
       return {
         error: "An account with this email already exists. Please sign in.",
       };
     }
 
-    // Validate invitation token if provided
-    let planId: number | undefined;
-    if (
-      validatedData.invitationToken &&
-      validatedData.invitationToken.trim() !== ""
-    ) {
-      // For sign-up, we immediately consume the token
-      const tokenValidation = await invitationTokenService.consumeInvitationToken(
-        validatedData.invitationToken,
-        "pending-user" // Will be updated after user creation
-      );
-      if (!tokenValidation.isValid) {
-        return {
-          error: tokenValidation.error || "Invalid invitation token",
-        };
-      }
-      planId = tokenValidation.planId;
-    }
-
-    // Hash password
+    // Step D: Password Hashing
     const hashedPassword = await bcrypt.hash(validatedData.password, 12);
-    console.log("Hashed password:", hashedPassword);
-    // Get default plan (trial) if no invitation code provided
+
+    // Get default plan (trial) if no plan was assigned from invitation token
     if (!planId) {
       const trialPlan = await prisma.plan.findUnique({
         where: { name: PlanName.TRIAL },
@@ -89,7 +110,7 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       planId = trialPlan?.id;
     }
 
-    // Create user
+    // Step E: User Creation
     const user = await prisma.user.create({
       data: {
         email: validatedData.email,
@@ -100,11 +121,7 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     });
 
     // Update the token with the actual user ID if a token was used
-    if (
-      validatedData.invitationToken &&
-      validatedData.invitationToken.trim() !== ""
-    ) {
-      // The token was already consumed earlier, but we need to update the user ID
+    if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
       await prisma.invitationToken.updateMany({
         where: { 
           token: validatedData.invitationToken.trim(),
@@ -116,17 +133,16 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       });
     }
 
-    // Sign in the user
+    // Step F: Post-Creation Sign-In
     const result = await signIn("credentials", {
       email: validatedData.email,
       password: validatedData.password,
       redirect: false,
     });
-    console.log("Sign in result:", result);
+    
     if (result?.error) {
       return {
-        error:
-          "Failed to sign in after registration. Please try signing in manually.",
+        error: "Failed to sign in after registration. Please try signing in manually.",
       };
     }
 
@@ -134,7 +150,6 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     redirect("/dashboard");
     return { success: true };
   } catch (error) {
-    console.error("Sign up error:", error);
     if (error instanceof z.ZodError) {
       return {
         error: error.errors[0]?.message || "Validation failed",
