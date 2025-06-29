@@ -1,7 +1,6 @@
 {
   "name": "@repo/db",
   "version": "0.0.0",
-  "type": "module",
   "main": "dist/index.js",
   "exports": {
     ".": {
@@ -11,6 +10,8 @@
   },
   "scripts": {
     "build": "prisma generate && tsc -p tsconfig.build.json",
+    "db:build": "prisma generate && tsc -p tsconfig.build.json",
+    "dev:watch": "tsc -p tsconfig.build.json --watch",
     "db:push": "prisma db push --accept-data-loss",
     "db:format": "prisma format",
     "db:generate": "prisma generate",

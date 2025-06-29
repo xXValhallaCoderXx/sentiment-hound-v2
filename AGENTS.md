@@ -339,6 +339,23 @@ pnpm --filter web build
 4. **Python dependencies**: Use virtual environment for sentiment service
 5. **Memory issues**: Sentiment analysis models require significant RAM
 
+
+### General Guidance for Copilot
+
+- **Understand the Monorepo Context:** Changes in one package (e.g., `packages/services`) can affect multiple applications. Be mindful of these dependencies.
+- **Separation of Concerns:**
+  - UI logic resides in `apps/web`.
+  - Backend API logic resides in `apps/server`.
+  - Core sentiment analysis is in `apps/sentiment-analysis-service`.
+  - Shared business logic and database interactions are often in `packages/services` and `packages/database`.
+- **Prisma Usage:** When interacting with the database, use the Prisma client from `packages/database`. Schema changes should be made in `packages/database/prisma/schema.prisma`, followed by generating the client.
+- **Next.js App Router & Server Actions:** The `apps/web` application uses the Next.js App Router. Prefer Server Actions (in `apps/web/actions/`) for mutations and data fetching where appropriate to maintain SSR/RSC benefits.
+- **NestJS Conventions:** Follow NestJS conventions (modules, services, controllers) when working in `apps/server`.
+- **Service Layer:** Utilize services from `packages/services` for reusable business logic rather than duplicating code in applications.
+- **Environment Variables:** Be aware that applications will likely use environment variables for configuration (e.g., database connections, API keys). These are not committed to the repository.
+- **Styling:** The `apps/web` application uses Mantine UI and CSS Modules.
+- **Error Handling & Validation:** Implement robust error handling and input validation, especially at API boundaries and in server actions.
+
 ### Performance Optimization
 - Use database indexes for frequently queried fields
 - Implement pagination for large data sets
@@ -360,6 +377,6 @@ pnpm --filter web build
 - [ ] TypeScript types are properly defined
 - [ ] Database migrations are included if needed
 - [ ] Error handling is implemented
-- [ ] Documentation is updated
+- [ ] Documentation is updated in the docs folder, you may append to an existing if relevant or make a new markdown  file.
 - [ ] Security considerations are addressed
 - [ ] Performance impact is considered

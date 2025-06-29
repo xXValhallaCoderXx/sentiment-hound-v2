@@ -77,6 +77,66 @@ This monorepo is managed using `pnpm` and `Turborepo`. It consists of the follow
 
     Refer to the individual README files in `apps/web`, `apps/server`, and `apps/sentiment-analysis-service` for specific port numbers and to confirm they are part of the `turbo dev` pipeline.
 
+## Development Workflow
+
+### Two-Terminal Development Setup
+
+For optimal development experience with hot-reloading of shared packages, use this **two-terminal workflow**:
+
+#### Terminal 1: Package Watcher (The Builder)
+Start the package watcher to automatically rebuild shared packages when their source files change:
+
+```bash
+# Primary approach (uses Turborepo's watch mode)
+pnpm run watch
+
+# Alternative approach (uses TypeScript's native watch mode)
+pnpm run watch:packages
+```
+
+**What this does:**
+- Continuously watches `packages/services/src/` and `packages/database/src/` for changes
+- Automatically rebuilds packages when you save files
+- Updates the `dist/` folders that your applications consume
+- Shows compilation status and any TypeScript errors
+
+#### Terminal 2: Development Servers (The Dev Servers)
+Start all your application development servers:
+
+```bash
+pnpm run dev
+```
+
+**What this does:**
+- Starts Next.js frontend on `http://localhost:3000`
+- Starts NestJS backend on `http://localhost:3001`
+- Starts other services as configured
+- Monitors the built package outputs for changes and hot-reloads accordingly
+
+### How It Works Together
+
+1. **You make changes** to shared package source files (e.g., `packages/services/src/plans/plans.service.ts`)
+2. **Terminal 1** detects the change and rebuilds the package (~100ms)
+3. **Terminal 2** sees the updated build output and triggers application hot-reload
+4. **Your browser/app** automatically refreshes with the new changes
+
+### Benefits
+
+- ✅ **Instant feedback**: Changes to shared packages appear immediately in your applications
+- ✅ **No manual restarts**: No more `Ctrl+C` and `pnpm run dev` cycles
+- ✅ **Type safety**: TypeScript compilation happens in real-time with error reporting
+- ✅ **Optimized builds**: Only changed packages are rebuilt
+- ✅ **Standard workflow**: Works consistently across all development environments
+
+### Troubleshooting
+
+If hot-reloading isn't working:
+
+1. **Check both terminals are running**: Both watch and dev commands should be active
+2. **Verify file changes are detected**: Terminal 1 should show "File change detected" messages
+3. **Check for TypeScript errors**: Fix any compilation errors shown in Terminal 1
+4. **Restart if needed**: Kill both terminals and restart the two-terminal workflow
+
 ## Development
 
 ### Common Scripts

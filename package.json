@@ -4,7 +4,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "dev:watch": "turbo dev services:watch",
+    "watch": "turbo watch services:build db:build",
+    "watch:packages": "pnpm run --parallel --filter @repo/services --filter @repo/db dev:watch",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:deploy": "pnpm --filter @repo/db deploy"
