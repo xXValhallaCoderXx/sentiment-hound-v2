@@ -10,16 +10,16 @@ interface SignUpPageProps {
 }
 
 export default async function SignUpPage({ searchParams }: SignUpPageProps) {
-  // Server-side token check
+  // Server-side token/code check
   const resolvedSearchParams = await searchParams;
-  const token = resolvedSearchParams.token;
+  const token = resolvedSearchParams.token || resolvedSearchParams.code;
   
-  // Redirect if token is missing or empty
+  // Redirect if token/code is missing or empty
   if (!token || token === '') {
     // Use HTTP 308 (Permanent Redirect) to redirect to sign-in page
     permanentRedirect('/sign-in');
   }
   
-  // If token exists, render the sign-up form
+  // If token/code exists, render the sign-up form
   return <SignUpForm />;
 }

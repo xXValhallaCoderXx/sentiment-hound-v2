@@ -1,6 +1,8 @@
 "use client";
 
 import { Container, Grid, Stack, Anchor, Text, Divider } from "@mantine/core";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 // Components
@@ -13,10 +15,27 @@ import { ThemeToggle } from "@/components/molecules/ThemeToggle/ThemeToggle";
 import { Card } from "@/components/organisms/Card/Card";
 import { RotatingPillarCard } from "@/components/organisms/RotatingPillarCard/RotatingPillarCard";
 
+// Icons
+import { IconLock } from "@tabler/icons-react";
+
 // Styles
 import classes from "./SignUpPage.module.css";
 
 export default function SignUpForm() {
+  const searchParams = useSearchParams();
+  const [invitationCode, setInvitationCode] = useState("");
+  const [isTokenFromUrl, setIsTokenFromUrl] = useState(false);
+
+  // Get token/code from URL parameters on component mount
+  useEffect(() => {
+    // Check for both 'token' and 'code' parameters for flexibility
+    const token = searchParams.get("token") || searchParams.get("code");
+    if (token) {
+      setInvitationCode(token);
+      setIsTokenFromUrl(true);
+    }
+  }, [searchParams]);
+
   // Client-side handlers
   const handleGoogleLogin = () => {
     // Static UI - no functionality needed per PRD
@@ -79,7 +98,21 @@ export default function SignUpForm() {
                       <FormField
                         type="text"
                         label="Invitation Code"
-                        placeholder="Enter your invitation code"
+                        placeholder={isTokenFromUrl ? "Code from invitation link" : "Enter your invitation code"}
+                        value={invitationCode}
+                        onChange={(e) => {
+                          if (!isTokenFromUrl) {
+                            setInvitationCode(e.target.value);
+                          }
+                        }}
+                        readOnly={isTokenFromUrl}
+                        rightSection={isTokenFromUrl ? <IconLock size={16} style={{ color: 'var(--mantine-color-gray-6)' }} /> : undefined}
+                        styles={{
+                          input: {
+                            backgroundColor: isTokenFromUrl ? 'var(--mantine-color-gray-1)' : undefined,
+                            cursor: isTokenFromUrl ? 'not-allowed' : undefined,
+                          }
+                        }}
                       />
 
                       {/* Create Account Button */}
