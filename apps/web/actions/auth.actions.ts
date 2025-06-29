@@ -90,7 +90,7 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     }
 
     // Create user
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email: validatedData.email,
         password: hashedPassword,
@@ -99,7 +99,6 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       },
     });
 
-    // Redeem invitation code if provided
     // Update the token with the actual user ID if a token was used
     if (
       validatedData.invitationToken &&
