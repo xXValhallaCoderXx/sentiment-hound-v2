@@ -23,7 +23,7 @@ import { RedditService } from "./reddit/reddit.services";
 import { CompetitorRepository } from "./competitors/competitors.repository";
 import { CoreCompetitorService } from "./competitors/competitors.service";
 import { CoreDashboardService } from "./dashboard/dashboard.service";
-import { InvitationCodeService } from "./invitation-codes/invitation-codes.service";
+import { InvitationTokenService } from "./invitation-tokens/invitation-tokens.service";
 import { EarlyAccessService } from "./early-access/early-access.service";
 
 export * from "./posts/post.interface";
@@ -63,7 +63,7 @@ export const competitorService = new CoreCompetitorService(
   competitorRepository
 );
 export const dashboardService = new CoreDashboardService(mentionRepository);
-export const invitationCodeService = new InvitationCodeService(prisma);
+export const invitationTokenService = new InvitationTokenService(prisma);
 export const earlyAccessService = new EarlyAccessService();
 
 // Set up circular dependencies
