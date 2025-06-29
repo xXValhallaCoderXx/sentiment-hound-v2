@@ -51,11 +51,14 @@ export default function SignUpForm() {
                 <Stack gap="xl">
                   {/* Logo */}
                   <Logo size={40} href="/" showText={true} />
-                  
+
                   {/* Headlines */}
                   <div>
                     <CardTitle mb="xs">Create Your Account</CardTitle>
-                    <DimmedText>You&apos;ve been invited! Complete the details below to get started.</DimmedText>
+                    <DimmedText>
+                      You&apos;ve been invited! Complete the details below to
+                      get started.
+                    </DimmedText>
                   </div>
 
                   {/* Sign Up Form */}
@@ -85,7 +88,6 @@ export default function SignUpForm() {
                         fullWidth
                         size="md"
                         variant="filled"
-                        disabled={true}
                       >
                         Create Account (Coming Soon)
                       </Button>
@@ -100,14 +102,13 @@ export default function SignUpForm() {
                     provider="google"
                     onClick={handleGoogleLogin}
                     loading={false}
-                    disabled={true}
                   />
 
                   {/* Log In Link */}
                   <Text ta="center" size="sm" c="dimmed">
                     Already have an account?{" "}
-                    <Anchor 
-                      component={Link} 
+                    <Anchor
+                      component={Link}
                       href="/sign-in"
                       c="primary"
                       fw={500}
