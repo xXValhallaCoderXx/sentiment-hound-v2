@@ -11,7 +11,7 @@ import {
   GridCol,
   ThemeIcon,
   Paper,
-  Badge,
+  Badge as MantineBadge,
   Stack,
   Alert,
   List,
@@ -26,8 +26,10 @@ import {
   IconArrowRight,
   IconCheck,
   IconInfoCircle,
+  IconStar,
 } from "@tabler/icons-react";
 import { handleEarlyAccessSignup } from "@/actions/early-access.actions";
+import { Badge } from "@/components/atoms/Badge";
 import classes from "./PlansAndEarlyAccessSection.module.css";
 
 interface FormValues {
@@ -129,9 +131,9 @@ const PlansAndEarlyAccessSection = () => {
                   className={`${classes.pricingCard} ${plan.popular ? classes.popularCard : ""}`}
                 >
                   {plan.popular && (
-                    <Badge className={classes.popularBadge} color="primary.5">
+                    <MantineBadge className={classes.popularBadge} color="primary.5">
                       Most Popular
-                    </Badge>
+                    </MantineBadge>
                   )}
 
                   <div className={classes.cardHeader}>
@@ -190,12 +192,11 @@ const PlansAndEarlyAccessSection = () => {
         <div id="early-access" className={classes.goldenTicket}>
           <div className={classes.ctaHeader}>
             <Badge
-              variant="gradient"
-              gradient={{ from: "red", to: "pink" }}
-              size="lg"
-              className={classes.badge}
+              variant="filled"
+              colorScheme="primary"
+              icon={<IconStar size={14} />}
             >
-              ⭐ EARLY PUP ACCESS
+              EARLY PUP ACCESS
             </Badge>
 
             <Title order={3} className={classes.ctaTitle}>

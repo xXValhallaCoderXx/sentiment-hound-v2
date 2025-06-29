@@ -1,0 +1,26 @@
+/* RotatingPillarCard Component Styles */
+.rotatingCard {
+  min-height: 600px;
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.contentContainer {
+  padding: 3rem 2rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .rotatingCard {
+    min-height: 500px;
+    max-width: 100%;
+  }
+  
+  .contentContainer {
+    padding: 2rem 1.5rem;
+  }
+}

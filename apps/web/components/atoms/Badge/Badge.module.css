@@ -1,0 +1,72 @@
+/* Badge Component Styles */
+
+/* Base Styles - Apply to all variants */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 9999px; /* Pill-shaped */
+  font-size: 12px;
+  font-weight: 600; /* Semi-Bold */
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  transition: all 0.2s ease;
+  margin-bottom: 24px; /* Add consistent vertical spacing below badges */
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.text {
+  line-height: 1;
+}
+
+/* Variant: Filled */
+.filled.primary {
+  background-color: #ff4500; /* Primary Accent */
+  color: white;
+}
+
+/* Special styling for icon in primary filled variant */
+.filled.primary .icon {
+  color: #fbbf24; /* Vibrant warm yellow/gold for the icon */
+}
+
+.filled.secondary {
+  background-color: #374151; /* Medium-dark gray for dark mode */
+  color: #d1d5db; /* High-contrast lighter gray */
+}
+
+/* Light mode adjustments for filled secondary */
+[data-mantine-color-scheme="light"] .filled.secondary {
+  background-color: #e5e7eb; /* Light-to-medium gray for light mode */
+  color: #374151; /* High-contrast darker gray */
+}
+
+/* Variant: Outline */
+.outline {
+  background-color: transparent;
+  border: 1px solid;
+}
+
+.outline.primary {
+  border-color: #ff4500;
+  color: #ff4500;
+}
+
+.outline.secondary {
+  border-color: #adb5bd;
+  color: #adb5bd;
+}
+
+/* Light mode adjustments for outline secondary */
+[data-mantine-color-scheme="light"] .outline.secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+}

@@ -79,24 +79,24 @@
   margin: 0;
 }
 
-/* Light Mode Adjustments */
+/* Light Mode - Off-White Base with Sophisticated Glows */
 [data-mantine-color-scheme="light"] .livingCanvasBackground {
-  background-color: #FFFFFF;
+  background-color: #F8F9FA; /* Professional off-white - gray.1 theme token */
 }
 
 [data-mantine-color-scheme="light"] .glow1 {
-  background-color: #FF6B35;
-  opacity: 0.08;
+  background-color: #FFF4E6; /* Very light, desaturated peach/cream */
+  opacity: 0.25;
 }
 
 [data-mantine-color-scheme="light"] .glow2 {
-  background-color: #9C88FF;
-  opacity: 0.08;
+  background-color: #F0F3FF; /* Very light, desaturated sky blue/lilac */
+  opacity: 0.25;
 }
 
 [data-mantine-color-scheme="light"] .glow3 {
-  background-color: #2ECC71;
-  opacity: 0.06;
+  background-color: #FFF4E6; /* Complementary warm tone for balance */
+  opacity: 0.15;
 }
 
 [data-mantine-color-scheme="light"] .sectionDivider {

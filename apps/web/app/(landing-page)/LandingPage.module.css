@@ -80,24 +80,24 @@
   margin: 0;
 }
 
-/* Task 3: Light Mode - Off-White Base with Subtle Gradients */
+/* Task 3: Light Mode - Off-White Base with Sophisticated Glows */
 [data-mantine-color-scheme="light"] .livingCanvasBackground {
-  background-color: #F8F9FA; /* Professional off-white */
+  background-color: #F8F9FA; /* Professional off-white - gray.1 theme token */
 }
 
 [data-mantine-color-scheme="light"] .glow1 {
-  background-color: #FFE5D9; /* Whisper of peach */
-  opacity: 0.4;
+  background-color: #FFF4E6; /* Very light, desaturated peach/cream */
+  opacity: 0.25;
 }
 
 [data-mantine-color-scheme="light"] .glow2 {
-  background-color: #E8F4FD; /* Hint of sky blue */
-  opacity: 0.5;
+  background-color: #F0F3FF; /* Very light, desaturated sky blue/lilac */
+  opacity: 0.25;
 }
 
 [data-mantine-color-scheme="light"] .glow3 {
-  background-color: #F0FDF4; /* Subtle mint */
-  opacity: 0.3;
+  background-color: #FFF4E6; /* Complementary warm tone for balance */
+  opacity: 0.15;
 }
 
 [data-mantine-color-scheme="light"] .sectionDivider {

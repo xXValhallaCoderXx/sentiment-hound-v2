@@ -1,0 +1,14 @@
+/* Card Component Styles */
+.card {
+  background-color: rgba(26, 27, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Light mode styles */
+[data-mantine-color-scheme="light"] .card {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}

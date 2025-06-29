@@ -1,10 +1,11 @@
-import { Container, Title, Text, Grid, GridCol, Badge } from "@mantine/core";
+import { Container, Title, Text, Grid, GridCol } from "@mantine/core";
 import {
   IconRocket,
   IconBulb,
   IconSparkles,
   IconHeart,
 } from "@tabler/icons-react";
+import { Badge } from "@/components/atoms/Badge";
 import classes from "./WhyTeamsLoveSection.module.css";
 
 const WhyTeamsLoveSection = () => {
@@ -33,9 +34,12 @@ const WhyTeamsLoveSection = () => {
     <div className={classes.wrapper}>
       <Container size="xl" className={classes.container}>
         <div className={classes.header}>
-          <Badge className={classes.badge} size="lg" variant="light">
-            <IconHeart size={16} />
-            Why You&apos;ll Love Us
+          <Badge 
+            variant="filled" 
+            colorScheme="secondary" 
+            icon={<IconHeart size={14} />}
+          >
+            WHY YOU&apos;LL LOVE US
           </Badge>
 
           <Title order={2} className={classes.title}>
