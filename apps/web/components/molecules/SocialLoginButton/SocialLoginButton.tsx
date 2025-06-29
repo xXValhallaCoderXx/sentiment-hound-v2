@@ -7,6 +7,7 @@ interface SocialLoginButtonProps {
   provider: "google";
   onClick: () => void;
   loading?: boolean;
+  disabled?: boolean;
 }
 
 const providerConfig = {
@@ -17,7 +18,7 @@ const providerConfig = {
   },
 };
 
-export const SocialLoginButton = ({ provider, onClick, loading = false }: SocialLoginButtonProps) => {
+export const SocialLoginButton = ({ provider, onClick, loading = false, disabled = false }: SocialLoginButtonProps) => {
   const config = providerConfig[provider];
 
   return (
@@ -26,10 +27,11 @@ export const SocialLoginButton = ({ provider, onClick, loading = false }: Social
       leftSection={config.icon}
       onClick={onClick}
       loading={loading}
+      disabled={disabled}
       fullWidth
       size="md"
     >
-      {config.label}
+      {disabled ? "Continue with Google (Coming Soon)" : config.label}
     </Button>
   );
 };

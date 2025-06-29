@@ -11,9 +11,9 @@ export function SignInButton() {
     <Button 
       variant="filled" 
       className={classes.earlyAccessButton}
-      onClick={() => handleNavigation("#early-access", "Early Access")}
+      onClick={() => handleNavigation("/sign-in", "Sign In")}
     >
-      Early Access
+      Sign In
     </Button>
   );
 }

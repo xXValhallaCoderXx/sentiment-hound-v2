@@ -153,8 +153,9 @@ export default function SignInPage() {
                         size="md"
                         loading={isPending}
                         variant="filled"
+                        disabled={true}
                       >
-                        Log In
+                        Log In (Coming Soon)
                       </Button>
                     </Stack>
                   </form>
@@ -167,6 +168,7 @@ export default function SignInPage() {
                     provider="google"
                     onClick={handleGoogleLogin}
                     loading={isLoading}
+                    disabled={true}
                   />
 
                   {/* Sign Up Link */}
