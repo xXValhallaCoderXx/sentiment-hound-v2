@@ -2,7 +2,7 @@
 
 import { signIn } from "@/lib/next-auth.lib";
 import { prisma } from "@repo/db";
-import { invitationCodeService, PlanName } from "@repo/services";
+import { invitationTokenService, PlanName } from "@repo/services";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -12,7 +12,7 @@ const signUpSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
   name: z.string().nullable().optional(),
-  invitationCode: z.string().nullable().optional(),
+  invitationToken: z.string().nullable().optional(),
 });
 
 const signInSchema = z.object({
@@ -28,10 +28,10 @@ export async function handleGoogleSignIn() {
   await signIn("google");
 }
 
-export async function handleGoogleSignInWithCode(invitationCode?: string) {
-  // Store invitation code in localStorage before redirect
-  if (invitationCode && typeof window !== "undefined") {
-    localStorage.setItem("pendingInvitationCode", invitationCode);
+export async function handleGoogleSignInWithToken(invitationToken?: string) {
+  // Store invitation token in localStorage before redirect
+  if (invitationToken && typeof window !== "undefined") {
+    localStorage.setItem("pendingInvitationToken", invitationToken);
   }
   await signIn("google");
 }
@@ -42,7 +42,7 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       name: formData.get("name") as string,
-      invitationCode: formData.get("invitationCode") as string,
+      invitationToken: formData.get("invitationToken") as string,
     };
     console.log("Raw sign up data:", rawData);
     const validatedData = signUpSchema.parse(rawData);
@@ -59,21 +59,23 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       };
     }
 
-    // Validate invitation code if provided
+    // Validate invitation token if provided
     let planId: number | undefined;
     if (
-      validatedData.invitationCode &&
-      validatedData.invitationCode.trim() !== ""
+      validatedData.invitationToken &&
+      validatedData.invitationToken.trim() !== ""
     ) {
-      const codeValidation = await invitationCodeService.validateCode(
-        validatedData.invitationCode
+      // For sign-up, we immediately consume the token
+      const tokenValidation = await invitationTokenService.consumeInvitationToken(
+        validatedData.invitationToken,
+        "pending-user" // Will be updated after user creation
       );
-      if (!codeValidation.isValid) {
+      if (!tokenValidation.isValid) {
         return {
-          error: codeValidation.error || "Invalid invitation code",
+          error: tokenValidation.error || "Invalid invitation token",
         };
       }
-      planId = codeValidation.planId;
+      planId = tokenValidation.planId;
     }
 
     // Hash password
@@ -88,7 +90,7 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     }
 
     // Create user
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email: validatedData.email,
         password: hashedPassword,
@@ -97,12 +99,21 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       },
     });
 
-    // Redeem invitation code if provided
+    // Update the token with the actual user ID if a token was used
     if (
-      validatedData.invitationCode &&
-      validatedData.invitationCode.trim() !== ""
+      validatedData.invitationToken &&
+      validatedData.invitationToken.trim() !== ""
     ) {
-      await invitationCodeService.redeemCode(validatedData.invitationCode);
+      // The token was already consumed earlier, but we need to update the user ID
+      await prisma.invitationToken.updateMany({
+        where: { 
+          token: validatedData.invitationToken.trim(),
+          redeemedByUserId: "pending-user"
+        },
+        data: { 
+          redeemedByUserId: user.id 
+        }
+      });
     }
 
     // Sign in the user

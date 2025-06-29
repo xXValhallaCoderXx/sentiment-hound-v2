@@ -3,13 +3,16 @@ import { permanentRedirect } from "next/navigation";
 // Import the client component
 import SignUpForm from "./SignUpForm";
 
+// Use the correct type for Next.js App Router pages
 interface SignUpPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ [key: string]: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default function SignUpPage({ searchParams }: SignUpPageProps) {
+export default async function SignUpPage({ searchParams }: SignUpPageProps) {
   // Server-side token check
-  const token = searchParams.token;
+  const resolvedSearchParams = await searchParams;
+  const token = resolvedSearchParams.token;
   
   // Redirect if token is missing or empty
   if (!token || token === '') {

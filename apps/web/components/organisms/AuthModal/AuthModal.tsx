@@ -33,9 +33,9 @@ import {
   handleForgotPassword,
 } from "@/actions/auth.actions";
 import {
-  getInvitationCodeFromUrl,
-  setInvitationCodeInStorage,
-  validateInvitationCodeFormat,
+  getInvitationTokenFromUrl,
+  setInvitationTokenInStorage,
+  validateInvitationTokenFormat,
 } from "@/lib/invitation-code.utils";
 import classes from "./AuthModal.module.css";
 
@@ -95,7 +95,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
         return null;
       },
       invitationCode: (value) => {
-        if (value && !validateInvitationCodeFormat(value)) {
+        if (value && !validateInvitationTokenFormat(value)) {
           return "Invalid invitation code format";
         }
         return null;
@@ -112,8 +112,8 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
 
   // Check for invitation code in URL on component mount
   useEffect(() => {
-    const urlCode = getInvitationCodeFromUrl();
-    if (urlCode && validateInvitationCodeFormat(urlCode)) {
+    const urlCode = getInvitationTokenFromUrl();
+    if (urlCode && validateInvitationTokenFormat(urlCode)) {
       form.setFieldValue("invitationCode", urlCode);
       setPendingInvitationCode(urlCode);
       setInvitationCodeApplied(true);
@@ -132,10 +132,10 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
 
   const handleApplyInvitationCode = () => {
     const code = form.getValues().invitationCode;
-    if (code && validateInvitationCodeFormat(code)) {
+    if (code && validateInvitationTokenFormat(code)) {
       setPendingInvitationCode(code);
       setInvitationCodeApplied(true);
-      setInvitationCodeInStorage(code);
+      setInvitationTokenInStorage(code);
     }
   };
 
@@ -144,7 +144,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
     try {
       // Store invitation code before OAuth redirect
       if (pendingInvitationCode) {
-        setInvitationCodeInStorage(pendingInvitationCode);
+        setInvitationTokenInStorage(pendingInvitationCode);
       }
       await handleGoogleSignIn();
     } catch (error) {
