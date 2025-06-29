@@ -1,204 +1,365 @@
-# AGENTS.MD - Web App Context for sentiment-hound-v2
+# Sentiment Analysis Platform - Developer Guide
 
-This document provides comprehensive context for AI agents working on the **web application** (`apps/web/`) within the sentiment-hound-v2 monorepo.
+## Project Overview
 
-## 🏗️ Web App Architecture Overview
+This is a **Sentiment Analysis Platform** (codenamed "Sentiment Hound") built as a monorepo using **pnpm** and **Turborepo**. The platform analyzes sentiment from social media platforms (YouTube, Reddit) and provides insights through a web dashboard.
 
-The web application is a **Next.js 15** application using the **App Router** with the following key characteristics:
+### Tech Stack
+- **Frontend**: Next.js 15 with React 19, Mantine UI, TypeScript
+- **Backend**: NestJS with TypeScript
+- **Database**: PostgreSQL with Prisma ORM
+- **Sentiment Analysis**: Python FastAPI service with transformers and PyABSA
+- **Authentication**: NextAuth.js with OAuth (Google, Reddit, YouTube)
+- **Monorepo**: pnpm workspaces + Turborepo
+- **Deployment**: Railway (with Docker support)
 
-- **Framework**: Next.js 15 with App Router
-- **UI Library**: Mantine UI v8.0.2
-- **Styling**: CSS Modules + Mantine components
-- **Authentication**: NextAuth.js v5 (beta)
-- **Database**: Prisma (via `@repo/db` workspace package)
-- **Type Safety**: TypeScript with strict configuration
-- **State Management**: Server Actions + React Server Components
+## Architecture
 
-## 📁 Directory Structure
+### Applications (`apps/`)
+- **`apps/web`**: Next.js frontend (port 3000)
+- **`apps/server`**: NestJS backend API (port 3001)
+- **`apps/sentiment-analysis-service`**: Python FastAPI service (port 8000)
+- **`apps/spam-detection-service`**: TypeScript spam detection service
 
+### Packages (`packages/`)
+- **`packages/database`**: Prisma schema, migrations, and database client
+- **`packages/services`**: Shared business logic and services
+- **`packages/eslint-config`**: Shared ESLint configurations
+- **`packages/typescript-config`**: Shared TypeScript configurations
+
+## Development Setup
+
+### Prerequisites
+- Node.js 18+
+- pnpm 8.6.11+
+- Docker (for PostgreSQL)
+- Python 3.10+ (for sentiment analysis service)
+
+### Quick Start
+```bash
+# Install dependencies
+pnpm install
+
+# Start database
+docker-compose up -d
+
+# Run all services in development
+pnpm run dev
 ```
-apps/web/
-├── actions/           # Server Actions for data mutations/fetching
-├── app/              # Next.js App Router pages
-│   ├── (landing-page)/  # Landing page routes (grouped)
-│   ├── api/            # API routes
-│   ├── dashboard/      # Protected dashboard routes
-│   ├── pricing/        # Pricing page
-│   ├── layout.tsx      # Root layout with Mantine provider
-│   └── globals.css     # Global styles
-├── components/        # React components (Atomic Design)
-│   ├── atoms/         # Basic UI elements
-│   ├── molecules/     # Component combinations
-│   ├── organisms/     # Complex UI sections
-│   └── templates/     # Page-level layouts
-├── lib/              # Utility functions and configurations
-├── public/           # Static assets
-└── types/           # TypeScript type definitions
-```
-
-## 🔑 Key Reference Points
-
-### 1. **Layout & Theming**
-- **Root Layout**: `app/layout.tsx` - Sets up Mantine provider, global styles, and metadata
-- **Theme Configuration**: `lib/theme.ts` - Mantine theme customization
-- **Global Styles**: `app/globals.css` - CSS variables and global styling
-
-### 2. **Authentication System**
-- **NextAuth Configuration**: `lib/next-auth.lib.ts`
-- **Auth Actions**: `actions/auth.actions.ts`
-- **Adapter**: Uses Prisma adapter for database persistence
-- **Provider**: Currently supports credential-based authentication
-
-### 3. **Component Architecture (Atomic Design)**
-- **Atoms**: Basic UI components (buttons, inputs, etc.)
-- **Molecules**: Component combinations (cards, forms, etc.)  
-- **Organisms**: Complex sections (headers, footers, feature sections)
-- **Templates**: Page layouts and structures
-
-### 4. **Server Actions** (`actions/`)
-- `auth.actions.ts` - Authentication operations
-- `dashboard.actions.ts` - Dashboard data operations
-- `early-access.actions.ts` - Early access system
-- `integrations.actions.ts` - Third-party integrations
-- `keywords.actions.ts` - Keyword management
-- `navigation.actions.ts` - Navigation state
-- `plan-usage.actions.ts` - Usage tracking
-- `providers.actions.ts` - Content provider management
-- `youtube.actions.ts` - YouTube integration
-
-### 5. **Routing Structure**
-- **(landing-page)** - Marketing pages (grouped route)
-- **dashboard** - Protected user dashboard
-- **api** - API endpoints
-- **pricing** - Pricing and plans page
-
-### 6. **Special Features**
-- **Invitation Code System**: `components/InvitationCodeHandler.tsx` + `lib/invitation-code.utils.ts`
-- **Early Access System**: Controlled via feature flags
-- **Dashboard**: Multi-step onboarding and analytics interface
-
-## 🎨 Design System
-
-### UI Framework: Mantine v8.0.2
-- **Components**: Uses Mantine's component library
-- **Theming**: Custom theme in `lib/theme.ts`
-- **Icons**: Tabler Icons React
-- **Charts**: Mantine Charts + Recharts
-
-### Styling Approach
-- **CSS Modules**: Component-specific styles (`.module.css`)
-- **Mantine Classes**: Utility classes and component styling
-- **Custom Properties**: CSS variables for consistent theming
-
-### Color Palette
-- **Primary**: Custom red/orange gradient (#ef4444 to #dc2626)
-- **Background**: Dark theme with gradients
-- **Accent**: Blue (#3B82F6), Green (#10B981), Purple (#8B5CF6)
-
-## 🔌 Integration Points
-
-### Database
-- **ORM**: Prisma via `@repo/db` workspace package
-- **Client**: Pre-configured Prisma client
-- **Schemas**: User, Plans, Integrations, Analytics data
-
-### Services Layer
-- **Package**: `@repo/services` workspace package
-- **Purpose**: Shared business logic between web app and server
-- **Usage**: Imported in Server Actions and API routes
-
-### External Services
-- **YouTube API**: Video/channel analytics integration
-- **Reddit API**: Subreddit sentiment analysis
-- **Sentiment Analysis**: Internal Python service communication
-
-## 🛠️ Development Guidelines
-
-### File Naming Conventions
-- **Components**: PascalCase with `.tsx` extension
-- **Styles**: Component name + `.module.css`
-- **Actions**: kebab-case + `.actions.ts`
-- **Utils**: kebab-case + `.utils.ts`
-
-### Component Structure
-```tsx
-// Standard component pattern
-import { ComponentProps } from "@mantine/core";
-import classes from "./ComponentName.module.css";
-
-interface ComponentNameProps {
-  // Props definition
-}
-
-const ComponentName = ({ ...props }: ComponentNameProps) => {
-  return (
-    <div className={classes.wrapper}>
-      {/* Component JSX */}
-    </div>
-  );
-};
-
-export default ComponentName;
-```
-
-### Server Actions Pattern
-```tsx
-"use server";
-
-import { redirect } from "next/navigation";
-import { auth } from "@/lib/next-auth.lib";
-
-export async function actionName(formData: FormData) {
-  const session = await auth();
-  if (!session) redirect("/auth/signin");
-  
-  // Action logic
-}
-```
-
-## 🚀 Build & Development
-
-### Scripts
-- `pnpm dev` - Development server with Turbopack
-- `pnpm build` - Production build
-- `pnpm lint` - ESLint with max 0 warnings
-- `pnpm check-types` - TypeScript type checking
 
 ### Environment Variables
-- Authentication secrets (NextAuth)
-- Database connection strings
-- API keys for integrations
-- Feature flag configurations
+Create `.env` files in relevant apps:
 
-## 📱 Responsive Design
+**apps/server/.env**:
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/sentiment-hound?schema=public"
+```
 
-### Breakpoints (Mantine)
-- **xs**: 576px
-- **sm**: 768px  
-- **md**: 992px
-- **lg**: 1200px
-- **xl**: 1400px
+**apps/web/.env.local**:
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/sentiment-hound?schema=public"
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-here
 
-### Mobile-First Approach
-- Components use responsive Mantine props
-- CSS modules include media queries
-- Touch-friendly interface elements
+# OAuth providers
+REDDIT_CLIENT_ID=your_reddit_client_id
+REDDIT_CLIENT_SECRET=your_reddit_client_secret
+REDDIT_USER_AGENT=your_app_name:version (by /u/yourusername)
+```
 
-## 🔒 Security Considerations
+## Database Management
 
-- **Authentication**: Session-based with NextAuth.js
-- **Authorization**: Route protection via middleware
-- **CSRF Protection**: Built into Server Actions
-- **Input Validation**: Zod schemas for form validation
-- **Environment**: Secure environment variable handling
+### Key Commands
+```bash
+# Generate Prisma client
+pnpm turbo db:generate
 
-## 🎯 Key User Flows
+# Run migrations
+pnpm turbo db:migrate
 
-1. **Landing → Early Access Signup** (if feature flagged)
-2. **Landing → Authentication → Dashboard Onboarding**
-3. **Dashboard → Integration Setup → Analytics View**
-4. **Settings → Plan Management → Usage Monitoring**
+# Deploy to production
+pnpm turbo db:deploy
 
----
+# Seed database
+pnpm turbo db:seed
 
-**Note**: This web app is part of a larger monorepo. Always consider the integration points with `apps/server/`, `apps/sentiment-analysis-service/`, and shared packages when making changes.
+# Reset database (development only)
+pnpm turbo db:reset
+```
+
+### Database Schema Overview
+- **Users**: Authentication, plans, feature flags, token usage
+- **Integrations**: OAuth connections to social platforms
+- **Posts**: Social media posts being tracked
+- **Mentions**: Individual comments/mentions with sentiment analysis
+- **Tasks/SubTasks**: Background job processing system
+- **Plans**: Subscription tiers with feature limits
+- **Competitors**: Competitor tracking functionality
+- **InvitationTokens**: Early access invitation system
+
+## Code Organization
+
+### Frontend Structure (`apps/web/`)
+```
+app/
+├── (landing-page)/          # Marketing pages
+├── dashboard/               # Main application UI
+├── api/                     # API routes
+└── globals.css             # Global styles
+
+components/
+├── atoms/                   # Basic UI components
+├── molecules/               # Composite components
+├── organisms/               # Complex components
+└── templates/               # Page layouts
+
+actions/                     # Server actions
+types/                       # TypeScript type definitions
+lib/                         # Utility functions
+```
+
+### Backend Structure (`apps/server/`)
+```
+src/
+├── api/                     # API controllers
+├── modules/
+│   ├── jobs/               # Background job processors
+│   ├── queue/              # Queue management
+│   └── tasks/              # Task management
+├── app.module.ts           # Main NestJS module
+└── main.ts                 # Application entry point
+```
+
+### Services Structure (`packages/services/`)
+```
+src/
+├── aspects/                # Aspect analysis
+├── competitors/            # Competitor tracking
+├── dashboard/              # Dashboard data aggregation
+├── early-access/           # Early access signup system
+├── integrations/           # OAuth integrations
+├── invitation-tokens/      # Invitation system
+├── mentions/               # Mention management
+├── plans/                  # Subscription plans
+├── posts/                  # Post management
+├── providers/              # Social media providers
+├── reddit/                 # Reddit-specific services
+├── tasks/                  # Task processing
+├── users/                  # User management
+└── youtube/                # YouTube-specific services
+```
+
+## Development Best Practices
+
+### Code Style
+- Use TypeScript for all new code
+- Follow ESLint rules defined in `packages/eslint-config`
+- Use Prettier for code formatting: `pnpm format`
+- Prefer functional components with hooks in React
+
+### Database
+- Always create migrations for schema changes
+- Use Prisma's type-safe client for database operations
+- Include proper indexes for performance-critical queries
+- Use transactions for multi-table operations
+
+### API Design
+- Use server actions for form submissions in Next.js
+- Implement proper error handling with typed responses
+- Use Zod for runtime validation
+- Follow RESTful conventions for NestJS APIs
+
+### Authentication
+- Use NextAuth.js for all authentication flows
+- Store OAuth tokens securely in the database
+- Implement proper session management
+- Handle token refresh automatically
+
+### Background Jobs
+- Use the task/subtask system for long-running operations
+- Implement proper error handling and retry logic
+- Monitor job queues for performance issues
+- Use appropriate queue priorities
+
+## Feature Systems
+
+### Invitation System
+- Generate invitation codes: `node scripts/generate-invitation-code.js`
+- Support for plan assignment and usage limits
+- URL-based and manual code entry flows
+- See `docs/invitation-code-system.md` for details
+
+### Early Access System
+- Landing page signup collection
+- Duplicate prevention and analytics tracking
+- Admin scripts for management
+- See `docs/early-access-system.md` for details
+
+### Plan Management
+- Tiered subscription system with feature flags
+- Token-based usage tracking
+- Integration and keyword limits
+- Competitor tracking limits
+
+### Sentiment Analysis
+- General sentiment using DistilBERT
+- Aspect-based sentiment analysis with PyABSA
+- Batch processing for performance
+- Text chunking for long content
+
+## Testing
+
+### Available Test Scripts
+```bash
+# Test invitation code system
+node test-invitation-codes.js
+
+# Test early access functionality
+node scripts/test-early-access.js
+
+# Test spam detection integration
+node test-spam-detection-integration.js
+
+# Test feature entitlements
+node test-feature-entitlement.js
+```
+
+### Testing Guidelines
+- Write unit tests for business logic
+- Use integration tests for API endpoints
+- Test OAuth flows thoroughly
+- Validate database constraints
+
+## Deployment
+
+### Production Environment
+- Use Railway for hosting
+- Set `DATABASE_URL` to production PostgreSQL
+- Configure `NEXTAUTH_URL` to production domain
+- Set up proper OAuth redirect URLs
+
+### Database Deployment
+```bash
+# Deploy migrations
+pnpm --filter @repo/db deploy
+
+# Seed production data
+pnpm --filter @repo/db db:seed:build
+```
+
+### Build Process
+```bash
+# Build all applications
+pnpm build
+
+# Build specific app
+pnpm --filter web build
+```
+
+## Monitoring and Analytics
+
+### Key Metrics to Track
+- User signup and activation rates
+- Sentiment analysis processing times
+- API response times and error rates
+- Database query performance
+- OAuth integration success rates
+- Plan upgrade/downgrade patterns
+
+### Error Handling
+- Use structured logging throughout the application
+- Implement proper error boundaries in React
+- Monitor background job failures
+- Set up alerts for critical system failures
+
+## Security Considerations
+
+### Authentication & Authorization
+- Validate all user inputs with Zod schemas
+- Use CSRF protection for forms
+- Implement rate limiting on sensitive endpoints
+- Secure OAuth token storage and refresh
+
+### Data Protection
+- Encrypt sensitive data at rest
+- Use HTTPS in production
+- Implement proper session management
+- Follow GDPR compliance for user data
+
+### API Security
+- Validate all API inputs
+- Use proper HTTP status codes
+- Implement request rate limiting
+- Sanitize database queries (Prisma handles this)
+
+## Common Tasks
+
+### Adding a New Social Media Provider
+1. Create provider entry in database
+2. Add OAuth configuration
+3. Implement provider-specific service in `packages/services/src/`
+4. Add API endpoints for authentication
+5. Create UI components for integration setup
+6. Add background job processors for data fetching
+
+### Adding a New Plan Feature
+1. Update Plan model with new feature flag
+2. Add feature validation in relevant services
+3. Update plan seeding data
+4. Add UI components for feature display
+5. Implement usage tracking if needed
+
+### Debugging Common Issues
+- **Database connection**: Check `DATABASE_URL` and PostgreSQL status
+- **OAuth failures**: Verify client IDs, secrets, and redirect URLs
+- **Build errors**: Clear `.turbo` cache and `node_modules`
+- **Type errors**: Run `pnpm turbo db:generate` to update Prisma types
+- **Background jobs**: Check queue status and error logs
+
+## Scripts and Utilities
+
+### Database Scripts
+- `scripts/generate-invitation-code.js` - Create invitation codes
+- `scripts/view-early-access-signups.js` - View signup data
+- `scripts/clear-early-access-signups.js` - Clear test data
+- `scripts/manage-feature-flags.js` - Manage user feature flags
+
+### Development Scripts
+- `pnpm dev` - Start all services
+- `pnpm build` - Build all applications
+- `pnpm lint` - Lint all code
+- `pnpm format` - Format all code
+
+## Troubleshooting
+
+### Common Issues
+1. **Port conflicts**: Ensure ports 3000, 3001, 5432, 8000 are available
+2. **Database migrations**: Run `pnpm turbo db:generate` after schema changes
+3. **OAuth setup**: Verify redirect URLs match exactly
+4. **Python dependencies**: Use virtual environment for sentiment service
+5. **Memory issues**: Sentiment analysis models require significant RAM
+
+### Performance Optimization
+- Use database indexes for frequently queried fields
+- Implement pagination for large data sets
+- Cache frequently accessed data
+- Optimize sentiment analysis batch sizes
+- Monitor and optimize slow database queries
+
+## Contributing
+
+### Before Making Changes
+1. Read this guide thoroughly
+2. Set up the development environment
+3. Run existing tests to ensure everything works
+4. Create feature branches for new work
+5. Write tests for new functionality
+6. Update documentation as needed
+
+### Code Review Checklist
+- [ ] TypeScript types are properly defined
+- [ ] Database migrations are included if needed
+- [ ] Error handling is implemented
+- [ ] Documentation is updated
+- [ ] Security considerations are addressed
+- [ ] Performance impact is considered
