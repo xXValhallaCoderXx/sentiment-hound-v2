@@ -56,6 +56,10 @@
       "inputs": ["src/**/*.ts", "tsconfig.build.json"],
       "outputs": ["dist/**"]
     },
+    "scripts:build": {
+      "inputs": ["src/**/*.ts", "tsconfig.build.json"],
+      "outputs": ["dist/**"]
+    },
     "services:watch": {
       "cache": false,
       "persistent": true
