@@ -37,15 +37,13 @@ async function main(): Promise<void> {
   }
 
   try {
-    // Find the plan
-    const plan = await prisma.plan.findUnique({
-      where: { name: planName },
-    });
+    // Find the plan (case-insensitive search)
+    const plans = await prisma.plan.findMany({ select: { id: true, name: true, description: true } });
+    const plan = plans.find(p => p.name.toLowerCase() === planName.toLowerCase());
 
     if (!plan) {
       console.error(`Error: Plan "${planName}" not found.`);
       console.error("Available plans:");
-      const plans = await prisma.plan.findMany({ select: { name: true } });
       plans.forEach((p) => console.error(`  - ${p.name}`));
       process.exit(1);
     }

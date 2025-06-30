@@ -16,38 +16,150 @@ The `@repo/scripts` package provides a standardized way to execute administrativ
 
 ## Available Scripts
 
-### generate-invitation-token.ts
+### Generate Invitation Token
 
 Generates invitation tokens for user registration with specific plan assignments.
 
 **Usage:**
 
 ```bash
-# From root of monorepo
-pnpm run script:gen-token --plan=Developer
+# Generate a token for the developer plan (default)
+pnpm --filter @repo/scripts gen-token
 
-# With expiration
-pnpm run script:gen-token --plan=Developer --expires-in-days=30
+# Generate a token for a specific plan (case-insensitive)
+pnpm --filter @repo/scripts gen-token --plan=starter
 
-# Direct execution (from scripts package)
-pnpm --filter @repo/scripts gen-token --plan=Developer
+# Generate a token with custom expiration (default is 7 days)
+pnpm --filter @repo/scripts gen-token --plan=pro --expires-in-days=30
 ```
 
 **Options:**
 
-- `--plan=<plan_name>`: Plan name (Trial, Developer, Starter, Pro)
-- `--expires-in-days=<days>`: Optional expiration in days
+- `--plan=<plan_name>`: Plan name (Trial, Developer, Starter, Pro) - case insensitive
+- `--expires-in-days=<days>`: Optional expiration in days (default: 7)
 
 **Example Output:**
 
 ```
 ✅ Successfully generated invitation token
-   Token: HTpAYNY0mH8xmAPnAoiVhIYlotWcSSSB
+   Token: VIUYYncAkY9mq1asLZ8tyaM8LxojuprL
    Plan: Developer (Developer plan for testing purposes)
 
 Share this link with the invited user:
-https://sentimenthound.com/sign-up?token=HTpAYNY0mH8xmAPnAoiVhIYlotWcSSSB
+https://sentimenthound.com/sign-up?token=VIUYYncAkY9mq1asLZ8tyaM8LxojuprL
 ```
+
+### Test Invitation Token
+
+Validates and inspects an invitation token without consuming it.
+
+**Usage:**
+
+```bash
+# Test a specific token
+pnpm --filter @repo/scripts test-token --token=YOUR_TOKEN_HERE
+```
+
+**Example Output:**
+
+```
+📋 Token Details:
+   Token: VIUYYncAkY9mq1asLZ8tyaM8LxojuprL
+   Status: PENDING
+   Plan: Developer (Developer plan for testing purposes)
+   Expires: 2025-07-07T20:24:19.505Z
+   Created: 2025-06-30T20:24:19.526Z
+
+🧪 Testing token validation (without consuming):
+   Is expired: No
+   Is valid for signup: Yes
+
+✅ Token is ready for use!
+   Sign-up URL: http://localhost:3000/sign-up?token=VIUYYncAkY9mq1asLZ8tyaM8LxojuprL
+```
+
+### List Invitation Tokens
+
+Lists all invitation tokens with optional filtering.
+
+**Usage:**
+
+```bash
+# List all tokens
+pnpm --filter @repo/scripts list-tokens
+
+# List only pending tokens
+pnpm --filter @repo/scripts list-tokens --status=pending
+
+# List tokens for a specific plan
+pnpm --filter @repo/scripts list-tokens --plan=developer
+
+# Combine filters
+pnpm --filter @repo/scripts list-tokens --status=pending --plan=pro
+```
+
+**Options:**
+
+- `--status=<status>`: Filter by status (PENDING, USED, EXPIRED)
+- `--plan=<plan_name>`: Filter by plan name (case insensitive)
+
+## Available Plans
+
+- **Trial** - Trial plan with basic access (0 integrations, 0 keywords, 0 competitors)
+- **Developer** - Developer plan for testing purposes (1 integration, 0 keywords, 0 competitors)
+- **Starter** - Starter plan for small businesses ($29/month, 3 integrations, 3 keywords, 1 competitor)
+- **Pro** - Pro plan with advanced features ($99/month, 10 integrations, 10 keywords, 5 competitors)
+
+## Environment Setup
+
+Make sure you have a `.env` file in this directory with:
+
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/sentiment-hound
+# Dummy Reddit credentials to suppress warnings
+REDDIT_CLIENT_ID=dummy
+REDDIT_CLIENT_SECRET=dummy
+```
+
+## Usage Examples
+
+```bash
+# Generate a developer token (expires in 7 days)
+pnpm --filter @repo/scripts gen-token --plan=developer
+
+# Generate a pro token that expires in 30 days
+pnpm --filter @repo/scripts gen-token --plan=pro --expires-in-days=30
+
+# Generate a starter token
+pnpm --filter @repo/scripts gen-token --plan=starter
+
+# Test if a token is valid
+pnpm --filter @repo/scripts test-token --token=VIUYYncAkY9mq1asLZ8tyaM8LxojuprL
+
+# List all pending tokens
+pnpm --filter @repo/scripts list-tokens --status=pending
+
+# List all developer plan tokens
+pnpm --filter @repo/scripts list-tokens --plan=developer
+```
+
+## Testing the Sign-up Flow
+
+1. **Generate an invitation token:**
+   ```bash
+   pnpm --filter @repo/scripts gen-token --plan=developer
+   ```
+
+2. **Copy the generated sign-up URL and open it in your browser**
+
+3. **Fill out the sign-up form** - the invitation token should be pre-filled and locked
+
+4. **Complete the registration process**
+
+5. **Verify the token status changed to "USED":**
+   ```bash
+   pnpm --filter @repo/scripts list-tokens --status=used
+   ```
 
 ## Development
 
