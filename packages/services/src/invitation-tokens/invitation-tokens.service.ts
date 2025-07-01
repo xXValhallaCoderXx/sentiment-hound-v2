@@ -9,6 +9,44 @@ export interface ValidateTokenResult {
 export class InvitationTokenService {
   constructor(private prisma: PrismaClient) {}
 
+  async validateToken(token: string): Promise<ValidateTokenResult> {
+    if (!token || token.trim() === "") {
+      return { isValid: false, error: "Token is required" };
+    }
+
+    try {
+      // Find the token
+      const invitationToken = await this.prisma.invitationToken.findUnique({
+        where: { token: token.trim() },
+        include: { planToAssign: true },
+      });
+
+      if (!invitationToken) {
+        return { isValid: false, error: "Invalid invitation token" };
+      }
+
+      // Check if token is already used
+      if (invitationToken.status === "USED") {
+        return { isValid: false, error: "This invitation token has already been used" };
+      }
+
+      // Check if token is expired
+      if (invitationToken.status === "EXPIRED" || 
+          (invitationToken.expiresAt && new Date() > invitationToken.expiresAt)) {
+        return { isValid: false, error: "This invitation token has expired" };
+      }
+
+      // Return success with the plan ID
+      return { 
+        isValid: true, 
+        planId: invitationToken.planToAssignId
+      };
+    } catch (error) {
+      console.error("Error validating invitation token:", error);
+      return { isValid: false, error: "Failed to validate token" };
+    }
+  }
+
   async consumeInvitationToken(token: string, userId: string): Promise<ValidateTokenResult> {
     if (!token || token.trim() === "") {
       return { isValid: false, error: "Token is required" };

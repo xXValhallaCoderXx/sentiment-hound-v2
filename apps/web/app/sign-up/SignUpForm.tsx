@@ -1,7 +1,7 @@
 "use client";
 
 import { Container, Grid, Stack, Anchor, Text, Divider, Alert } from "@mantine/core";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useActionState, useTransition } from "react";
 import Link from "next/link";
 
@@ -19,13 +19,14 @@ import { RotatingPillarCard } from "@/components/organisms/RotatingPillarCard/Ro
 import { handleEmailSignUp, handleGoogleSignInWithToken } from "@/actions/auth.actions";
 
 // Icons
-import { IconLock, IconAlertCircle } from "@tabler/icons-react";
+import { IconLock, IconAlertCircle, IconCheck } from "@tabler/icons-react";
 
 // Styles
 import classes from "./SignUpPage.module.css";
 
 export default function SignUpForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [invitationCode, setInvitationCode] = useState("");
   const [isTokenFromUrl, setIsTokenFromUrl] = useState(false);
 
@@ -42,6 +43,18 @@ export default function SignUpForm() {
       setIsTokenFromUrl(true);
     }
   }, [searchParams]);
+
+  // Handle successful signup and redirect
+  useEffect(() => {
+    if (signUpState?.success && signUpState?.redirectTo) {
+      // Show success message briefly, then redirect
+      const timer = setTimeout(() => {
+        router.push(signUpState.redirectTo);
+      }, 2000); // 2 second delay to show success message
+
+      return () => clearTimeout(timer);
+    }
+  }, [signUpState, router]);
 
   // Client-side handlers
   const handleGoogleLogin = async () => {
@@ -85,6 +98,17 @@ export default function SignUpForm() {
                   {/* Sign Up Form */}
                   <form action={signUpAction}>
                     <Stack gap="md">
+                      {/* Success Alert */}
+                      {signUpState?.success && (
+                        <Alert
+                          icon={<IconCheck size={16} />}
+                          color="green"
+                          variant="light"
+                        >
+                          {signUpState.message || "Account created successfully!"}
+                        </Alert>
+                      )}
+
                       {/* Error Alert */}
                       {signUpState?.error && (
                         <Alert
@@ -147,8 +171,9 @@ export default function SignUpForm() {
                         size="md"
                         variant="filled"
                         loading={isPending}
+                        disabled={signUpState?.success}
                       >
-                        Create Account
+                        {signUpState?.success ? "Account Created!" : "Create Account"}
                       </Button>
                     </Stack>
                   </form>

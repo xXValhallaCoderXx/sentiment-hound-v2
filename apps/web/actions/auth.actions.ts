@@ -52,40 +52,39 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     const requiresInvitation = process.env.SIGNUPS_REQUIRE_INVITATION === 'true';
     let planId: number | undefined;
 
-    if (requiresInvitation) {
-      // When flag is true, invitation token is mandatory
-      if (!validatedData.invitationToken || validatedData.invitationToken.trim() === "") {
+    // Validate invitation token if provided
+    if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
+      // Check if token exists and is valid without consuming it
+      const tokenCheck = await prisma.invitationToken.findUnique({
+        where: { token: validatedData.invitationToken.trim() },
+        include: { planToAssign: true },
+      });
+
+      if (!tokenCheck) {
         return {
-          error: "A valid invitation token is required.",
+          error: "Invalid invitation token.",
         };
       }
 
-      // Validate and consume the invitation token
-      const tokenValidation = await invitationTokenService.consumeInvitationToken(
-        validatedData.invitationToken,
-        "pending-user" // Will be updated after user creation
-      );
-      
-      if (!tokenValidation.isValid) {
+      if (tokenCheck.status === "USED") {
         return {
-          error: tokenValidation.error || "A valid invitation token is required.",
+          error: "This invitation token has already been used.",
         };
       }
-      
-      planId = tokenValidation.planId;
-    } else {
-      // When flag is false, token is optional but still processed if provided
-      if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
-        const tokenValidation = await invitationTokenService.consumeInvitationToken(
-          validatedData.invitationToken,
-          "pending-user"
-        );
-        
-        if (tokenValidation.isValid) {
-          planId = tokenValidation.planId;
-        }
-        // If token is invalid when flag is false, we ignore it and continue
+
+      if (tokenCheck.status === "EXPIRED" || 
+          (tokenCheck.expiresAt && new Date() > tokenCheck.expiresAt)) {
+        return {
+          error: "This invitation token has expired.",
+        };
       }
+
+      planId = tokenCheck.planToAssignId;
+    } else if (requiresInvitation) {
+      // When flag is true, invitation token is mandatory
+      return {
+        error: "A valid invitation token is required.",
+      };
     }
 
     // Step C: User Existence Check
@@ -120,15 +119,14 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       },
     });
 
-    // Update the token with the actual user ID if a token was used
+    // Consume the invitation token now that we have a real user ID
     if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
-      await prisma.invitationToken.updateMany({
-        where: { 
-          token: validatedData.invitationToken.trim(),
-          redeemedByUserId: "pending-user"
-        },
-        data: { 
-          redeemedByUserId: user.id 
+      await prisma.invitationToken.update({
+        where: { token: validatedData.invitationToken.trim() },
+        data: {
+          status: "USED",
+          redeemedAt: new Date(),
+          redeemedByUserId: user.id
         }
       });
     }
@@ -146,9 +144,12 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       };
     }
 
-    // Redirect on success
-    redirect("/dashboard");
-    return { success: true };
+    // Return success without redirecting - let the client handle the redirect
+    return { 
+      success: true, 
+      message: "Account created successfully! Redirecting to dashboard...",
+      redirectTo: "/dashboard"
+    };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
