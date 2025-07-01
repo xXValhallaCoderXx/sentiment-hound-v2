@@ -16,6 +16,7 @@ const JobsPage = async ({
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const session = await auth();
+  console.log("JOOOOBS: ", session);
   const {
     status,
     type,

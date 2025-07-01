@@ -171,6 +171,12 @@ export async function handleEmailSignIn(prevState: any, formData: FormData) {
       password: formData.get("password") as string,
     };
 
+    console.log("� Sign-in attempt:", {
+      email: rawData.email,
+      hasPassword: !!rawData.password,
+      passwordLength: rawData.password?.length || 0,
+    });
+
     const validatedData = signInSchema.parse(rawData);
 
     const result = await signIn("credentials", {
@@ -179,15 +185,24 @@ export async function handleEmailSignIn(prevState: any, formData: FormData) {
       redirect: false,
     });
 
+    console.log("🔑 SignIn result:", {
+      error: result?.error,
+      ok: result?.ok,
+      status: result?.status,
+      url: result?.url,
+    });
+
     if (result?.error) {
       return {
         error: "Invalid email or password",
       };
     }
 
-    // Redirect on success
-    redirect("/dashboard");
-    return { success: true };
+    // Return success and let the client handle the redirect
+    return {
+      success: true,
+      redirectTo: "/dashboard",
+    };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
