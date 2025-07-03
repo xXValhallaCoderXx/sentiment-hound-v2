@@ -9,7 +9,7 @@ import { prisma } from "@repo/db";
 const ProfilePage = async () => {
   const session = await auth();
   const userId = session?.user?.id;
-
+  console.log("PROFILE PAGE SESSION: ", session);
   if (!userId) {
     return (
       <PageLayout title="Profile" description="User profile page">

@@ -9,7 +9,7 @@ We've successfully set up token generation using the pnpm workspace context. Her
 ### **Generate a Real Invitation Token**
 ```bash
 # Method 1: Using pnpm filter (recommended)
-pnpm --filter @repo/db exec node scripts/generate-token.js --plan=Developer
+pnpm --filter @repo/db exec node scripts/generate-token.mjs --plan=Developer
 
 # Method 2: Using the npm script
 pnpm --filter @repo/db generate-token --plan=Developer
