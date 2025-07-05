@@ -1,0 +1,48 @@
+/* TokenUsageProgress CSS Module */
+
+.container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.progress {
+  /* Enhanced progress bar styling */
+  position: relative;
+  overflow: hidden;
+}
+
+.progress::-webkit-progress-bar {
+  background-color: var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-sm);
+}
+
+.progress[data-color="green"]::-webkit-progress-value {
+  background: linear-gradient(
+    45deg,
+    var(--mantine-color-green-6),
+    var(--mantine-color-green-5)
+  );
+}
+
+.progress[data-color="yellow"]::-webkit-progress-value {
+  background: linear-gradient(
+    45deg,
+    var(--mantine-color-yellow-6),
+    var(--mantine-color-yellow-5)
+  );
+}
+
+.progress[data-color="red"]::-webkit-progress-value {
+  background: linear-gradient(
+    45deg,
+    var(--mantine-color-red-6),
+    var(--mantine-color-red-5)
+  );
+}
+
+/* Responsive adjustments */
+@media (max-width: 48em) {
+  .container {
+    font-size: var(--mantine-font-size-xs);
+  }
+}

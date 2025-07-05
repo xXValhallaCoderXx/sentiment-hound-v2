@@ -1,6 +1,8 @@
 "use client";
 
-import { Container, Grid, Stack, Anchor, Text, Divider } from "@mantine/core";
+import { Container, Grid, Stack, Anchor, Text, Divider, Alert } from "@mantine/core";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState, useActionState, useTransition } from "react";
 import Link from "next/link";
 
 // Components
@@ -13,18 +15,50 @@ import { ThemeToggle } from "@/components/molecules/ThemeToggle/ThemeToggle";
 import { Card } from "@/components/organisms/Card/Card";
 import { RotatingPillarCard } from "@/components/organisms/RotatingPillarCard/RotatingPillarCard";
 
+// Actions
+import { handleEmailSignUp, handleGoogleSignInWithToken } from "@/actions/auth.actions";
+
+// Icons
+import { IconLock, IconAlertCircle, IconCheck } from "@tabler/icons-react";
+
 // Styles
 import classes from "./SignUpPage.module.css";
 
 export default function SignUpForm() {
-  // Client-side handlers
-  const handleGoogleLogin = () => {
-    // Static UI - no functionality needed per PRD
-  };
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [invitationCode, setInvitationCode] = useState("");
+  const [isTokenFromUrl, setIsTokenFromUrl] = useState(false);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Static UI - no functionality needed per PRD
+  // Server action state
+  const [signUpState, signUpAction] = useActionState(handleEmailSignUp, null);
+  const [isPending, startTransition] = useTransition();
+
+  // Get token/code from URL parameters on component mount
+  useEffect(() => {
+    // Check for both 'token' and 'code' parameters for flexibility
+    const token = searchParams.get("token") || searchParams.get("code");
+    if (token) {
+      setInvitationCode(token);
+      setIsTokenFromUrl(true);
+    }
+  }, [searchParams]);
+
+  // Handle successful signup and redirect
+  useEffect(() => {
+    if (signUpState?.success && signUpState?.redirectTo) {
+      // Show success message briefly, then redirect
+      const timer = setTimeout(() => {
+        router.push(signUpState.redirectTo);
+      }, 2000); // 2 second delay to show success message
+
+      return () => clearTimeout(timer);
+    }
+  }, [signUpState, router]);
+
+  // Client-side handlers
+  const handleGoogleLogin = async () => {
+    await handleGoogleSignInWithToken(invitationCode);
   };
 
   return (
@@ -62,24 +96,72 @@ export default function SignUpForm() {
                   </div>
 
                   {/* Sign Up Form */}
-                  <form onSubmit={handleFormSubmit}>
+                  <form action={signUpAction}>
                     <Stack gap="md">
+                      {/* Success Alert */}
+                      {signUpState?.success && (
+                        <Alert
+                          icon={<IconCheck size={16} />}
+                          color="green"
+                          variant="light"
+                        >
+                          {signUpState.message || "Account created successfully!"}
+                        </Alert>
+                      )}
+
+                      {/* Error Alert */}
+                      {signUpState?.error && (
+                        <Alert
+                          icon={<IconAlertCircle size={16} />}
+                          color="red"
+                          variant="light"
+                        >
+                          {signUpState.error}
+                        </Alert>
+                      )}
+
+                      <FormField
+                        type="text"
+                        label="Name (Optional)"
+                        placeholder="Your full name"
+                        name="name"
+                      />
+
                       <FormField
                         type="email"
                         label="Email"
                         placeholder="user@example.com"
+                        name="email"
+                        required
                       />
 
                       <FormField
                         type="password"
                         label="Password"
                         placeholder="Enter your password"
+                        name="password"
+                        required
                       />
 
                       <FormField
                         type="text"
                         label="Invitation Code"
-                        placeholder="Enter your invitation code"
+                        placeholder={isTokenFromUrl ? "Code from invitation link" : "Enter your invitation code"}
+                        name="invitationToken"
+                        value={invitationCode}
+                        onChange={(e) => {
+                          if (!isTokenFromUrl) {
+                            setInvitationCode(e.target.value);
+                          }
+                        }}
+                        readOnly={isTokenFromUrl}
+                        rightSection={isTokenFromUrl ? <IconLock size={16} style={{ color: 'var(--mantine-color-gray-6)' }} /> : undefined}
+                        styles={{
+                          input: {
+                            backgroundColor: isTokenFromUrl ? 'var(--mantine-color-gray-1)' : undefined,
+                            cursor: isTokenFromUrl ? 'not-allowed' : undefined,
+                          }
+                        }}
                       />
 
                       {/* Create Account Button */}
@@ -88,8 +170,10 @@ export default function SignUpForm() {
                         fullWidth
                         size="md"
                         variant="filled"
+                        loading={isPending}
+                        disabled={signUpState?.success}
                       >
-                        Create Account (Coming Soon)
+                        {signUpState?.success ? "Account Created!" : "Create Account"}
                       </Button>
                     </Stack>
                   </form>

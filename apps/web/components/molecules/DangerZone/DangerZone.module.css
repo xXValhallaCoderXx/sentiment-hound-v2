@@ -1,0 +1,78 @@
+/* DangerZone CSS Module */
+
+.container {
+  width: 100%;
+}
+
+.divider {
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.content {
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-red-0) 30%,
+    var(--mantine-color-body) 70%
+  );
+  border-radius: var(--mantine-radius-sm);
+  padding: var(--mantine-spacing-md);
+  border: 1px solid var(--mantine-color-red-2);
+}
+
+.deleteButton {
+  align-self: flex-start;
+  border-color: var(--mantine-color-red-5);
+  color: var(--mantine-color-red-7);
+}
+
+.deleteButton:hover {
+  background-color: var(--mantine-color-red-1);
+  border-color: var(--mantine-color-red-6);
+}
+
+.deleteButton:active {
+  background-color: var(--mantine-color-red-2);
+}
+
+/* Dark theme adjustments */
+:global([data-mantine-color-scheme="dark"]) .content {
+  background: color-mix(
+    in srgb,
+    var(--mantine-color-red-9) 20%,
+    var(--mantine-color-body) 80%
+  );
+  border-color: var(--mantine-color-red-8);
+}
+
+:global([data-mantine-color-scheme="dark"]) .deleteButton {
+  color: var(--mantine-color-red-4);
+  border-color: var(--mantine-color-red-6);
+}
+
+:global([data-mantine-color-scheme="dark"]) .deleteButton:hover {
+  background-color: var(--mantine-color-red-9);
+  border-color: var(--mantine-color-red-5);
+}
+
+/* Loading state styling */
+.deleteButton[data-loading="true"] {
+  pointer-events: none;
+}
+
+/* Disabled state styling */
+.deleteButton[data-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 48em) {
+  .content {
+    padding: var(--mantine-spacing-sm);
+  }
+
+  .deleteButton {
+    width: 100%;
+    align-self: stretch;
+  }
+}

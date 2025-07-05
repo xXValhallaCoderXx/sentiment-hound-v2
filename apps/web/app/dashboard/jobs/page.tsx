@@ -1,13 +1,12 @@
 import { auth } from "@/lib/next-auth.lib";
 import { Suspense } from "react";
-import { Box, Text } from "@mantine/core"; // Removed Title, Group, Button
+import { Box, Text, Title, Stack } from "@mantine/core"; // Removed Title, Group, Button
 // import { IconListCheck } from "@tabler/icons-react"; // Unused
 import JobListTable from "./components/JobListTable";
 import JobListTableLoading from "./components/JobListTableLoading";
 import TaskFilter from "./components/TaskFilter";
 // import { integrationsService } from "@repo/services"; // Unused
 import { TaskStatus, TaskType } from "@repo/db";
-import PageLayout from "@/components/templates/PageLayout";
 import JobDetailDrawer from "./components/JobDetailDrawer";
 
 const JobsPage = async ({
@@ -16,6 +15,7 @@ const JobsPage = async ({
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const session = await auth();
+  console.log("JOOOOBS: ", session);
   const {
     status,
     type,
@@ -37,26 +37,32 @@ const JobsPage = async ({
   }
 
   return (
-    <PageLayout
-      title="Job List"
-      description=" A list of all analysis tasks and their current status."
-    >
-      <TaskFilter />
-      <Suspense fallback={<JobListTableLoading />}>
-        <JobListTable
-          userId={session.user.id}
-          filters={{
-            status: status as TaskStatus | undefined,
-            type: type as TaskType | undefined,
-          }}
-          pagination={{
-            page: currentPage,
-            pageSize: itemsPerPage,
-          }}
-        />
-      </Suspense>
-      <JobDetailDrawer jobId={jobId || ""} />
-    </PageLayout>
+    <Box p={{ base: 12, sm: 16, md: 24 }}>
+      <Stack gap={24}>
+        <Title order={1} fw={600}>
+          Job List
+        </Title>
+        <Text c="dimmed">
+          A list of all analysis tasks and their current status.
+        </Text>
+
+        <TaskFilter />
+        <Suspense fallback={<JobListTableLoading />}>
+          <JobListTable
+            userId={session.user.id}
+            filters={{
+              status: status as TaskStatus | undefined,
+              type: type as TaskType | undefined,
+            }}
+            pagination={{
+              page: currentPage,
+              pageSize: itemsPerPage,
+            }}
+          />
+        </Suspense>
+        <JobDetailDrawer jobId={jobId || ""} />
+      </Stack>
+    </Box>
   );
 };
 

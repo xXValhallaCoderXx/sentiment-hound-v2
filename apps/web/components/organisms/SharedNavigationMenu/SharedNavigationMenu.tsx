@@ -1,10 +1,10 @@
 "use client";
-import Image from "next/image";
-import { Group, Anchor, Text, Burger, Drawer, Stack, Box } from "@mantine/core";
+import { Group, Anchor, Burger, Drawer, Stack, Box } from "@mantine/core";
 import { ThemeToggle } from "@/components/molecules/ThemeToggle";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
 import { useSmartNavigation } from "@/lib/navigation.utils";
+import { Logo } from "@/components/atoms/Logo/Logo";
 
 interface SharedNavigationMenuProps {
   links: { href: string; label: string }[];
@@ -43,19 +43,7 @@ const SharedNavigationMenu = ({ links, ctaButton }: SharedNavigationMenuProps) =
     <>
       <Group justify="space-between" px={24} h="100%">
         <Group gap="sm">
-          <Image
-            src="/images/logos/main-logo.png"
-            alt=""
-            height={50}
-            width={50}
-            className="mx-auto"
-          />
-          <Text c="dimmed">
-            <Text span fw={700} c="primary.5" component="span">
-              Sentiment
-            </Text>{" "}
-            Hound
-          </Text>
+          <Logo size={50} showText={true} />
         </Group>
 
         {/* Desktop Navigation */}
@@ -80,22 +68,13 @@ const SharedNavigationMenu = ({ links, ctaButton }: SharedNavigationMenuProps) =
       <Drawer
         opened={opened}
         onClose={close}
-        title={
-          <Text fw={700} c="dimmed">
-            <Text span fw={700} c="primary.5" component="span">
-              Sentiment
-            </Text>{" "}
-            Hound
-          </Text>
-        }
+        title={<Logo size={32} showText={true} />}
         padding="md"
         size="xs"
         position="right"
       >
         <Stack gap="lg">
-          <Box>
-            {ctaButton}
-          </Box>
+          <Box>{ctaButton}</Box>
           <Stack gap="md">{navigationLinks}</Stack>
         </Stack>
       </Drawer>

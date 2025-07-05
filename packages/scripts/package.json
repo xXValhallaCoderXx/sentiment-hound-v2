@@ -1,0 +1,22 @@
+{
+  "name": "@repo/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "dev": "tsc --project tsconfig.build.json --watch",
+    "gen-token": "dotenv -e .env -- tsx src/generate-invitation-token.ts",
+    "db-seed": "dotenv -e .env -- tsx src/seed.ts"
+  },
+  "dependencies": {
+    "@repo/db": "workspace:*",
+    "@repo/services": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.13.8",
+    "dotenv-cli": "^8.0.0",
+    "tsx": "^4.20.3"
+  }
+}

@@ -1,0 +1,131 @@
+/* NavigationLink.module.css - Navigation link styles with interaction states */
+
+.linkWrapper {
+  text-decoration: none;
+  display: block;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-sm);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+}
+
+/* Default state with dimmed text color */
+.link {
+  color: var(--mantine-color-gray-6);
+}
+
+.link .icon {
+  color: var(--mantine-color-gray-6);
+  transition: color 0.15s ease;
+}
+
+.link .label {
+  color: var(--mantine-color-gray-6);
+  transition: color 0.15s ease;
+}
+
+/* Hover state with subtle highlight */
+.link:hover:not(.disabled) {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--mantine-color-gray-8);
+}
+
+.link:hover:not(.disabled) .icon {
+  color: var(--mantine-color-gray-8);
+}
+
+.link:hover:not(.disabled) .label {
+  color: var(--mantine-color-gray-8);
+}
+
+/* Active state styling with solid background and primary text color */
+.link.active {
+  background-color: var(--mantine-color-blue-light);
+  color: var(--mantine-color-blue-filled);
+}
+
+.link.active .icon {
+  color: var(--mantine-color-blue-filled);
+}
+
+.link.active .label {
+  color: var(--mantine-color-blue-filled);
+  font-weight: 600;
+}
+
+.link.active:hover {
+  background-color: var(--mantine-color-blue-light-hover);
+}
+
+/* Disabled state */
+.link.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Icon wrapper */
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+}
+
+/* Label styling */
+.label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge styling */
+.badge {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .link {
+    color: var(--mantine-color-dark-2);
+  }
+
+  .link .icon,
+  .link .label {
+    color: var(--mantine-color-dark-2);
+  }
+
+  .link:hover:not(.disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--mantine-color-dark-0);
+  }
+
+  .link:hover:not(.disabled) .icon,
+  .link:hover:not(.disabled) .label {
+    color: var(--mantine-color-dark-0);
+  }
+}
+
+/* Focus styles for accessibility */
+.link:focus {
+  outline: 2px solid var(--mantine-color-blue-6);
+  outline-offset: 2px;
+}
+
+.link:focus:not(.active) {
+  background-color: rgba(255, 255, 255, 0.05);
+}

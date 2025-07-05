@@ -1,10 +1,9 @@
 import { postService, ProcessedPost } from "@repo/services";
 import { Suspense } from "react";
 import { auth } from "@/lib/next-auth.lib";
-import { Box, Flex } from "@mantine/core";
+import { Box, Flex, Title, Text, Stack } from "@mantine/core";
 import PostListTable from "./components/PostListTable";
 import LoadingList from "./components/LoadingList";
-import PageLayout from "@/components/templates/PageLayout";
 import PostFilter from "./components/PostFilter";
 
 export default async function PostsDefaultPage({
@@ -57,44 +56,51 @@ export default async function PostsDefaultPage({
   });
 
   return (
-    <PageLayout
-      title="Social Media Posts"
-      description="A list of all your social media posts and their sentiment analysis results."
-    >
-      <Suspense fallback={<LoadingList />}>
-        <Box p={16}>
-          <Box mb={16}>
-            <PostFilter
-              currentFilters={{
-                providerId: providerId?.toString(),
-                sentiment,
-                startDate: startDateFilter?.toISOString().split("T")[0],
-                endDate: endDateFilter?.toISOString().split("T")[0],
-                searchTerm,
-                sortBy,
-                sortOrder,
-              }}
-            />
+    <Box p={{ base: 12, sm: 16, md: 24 }}>
+      <Stack gap={24}>
+        <Title order={1} fw={600}>
+          Social Media Posts
+        </Title>
+        <Text c="dimmed">
+          A list of all your social media posts and their sentiment analysis
+          results.
+        </Text>
+
+        <Suspense fallback={<LoadingList />}>
+          <Box p={16}>
+            <Box mb={16}>
+              <PostFilter
+                currentFilters={{
+                  providerId: providerId?.toString(),
+                  sentiment,
+                  startDate: startDateFilter?.toISOString().split("T")[0],
+                  endDate: endDateFilter?.toISOString().split("T")[0],
+                  searchTerm,
+                  sortBy,
+                  sortOrder,
+                }}
+              />
+            </Box>
+            {postsData?.data?.length > 0 ? (
+              <PostListTable
+                data={postsData?.data as ProcessedPost[]}
+                pagination={{
+                  page: pageFilter,
+                  totalPages: postsData.totalPages || 0,
+                  onPageChange: () => {
+                    // This will be handled by a client component
+                  },
+                }}
+              />
+            ) : (
+              <Flex justify="center">
+                No posts found with the current filters. Try adjusting your
+                search criteria.
+              </Flex>
+            )}
           </Box>
-          {postsData?.data?.length > 0 ? (
-            <PostListTable
-              data={postsData?.data as ProcessedPost[]}
-              pagination={{
-                page: pageFilter,
-                totalPages: postsData.totalPages || 0,
-                onPageChange: () => {
-                  // This will be handled by a client component
-                },
-              }}
-            />
-          ) : (
-            <Flex justify="center">
-              No posts found with the current filters. Try adjusting your search
-              criteria.
-            </Flex>
-          )}
-        </Box>
-      </Suspense>
-    </PageLayout>
+        </Suspense>
+      </Stack>
+    </Box>
   );
 }

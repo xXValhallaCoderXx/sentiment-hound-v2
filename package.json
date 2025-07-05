@@ -1,17 +1,22 @@
 {
-  "name": "hello-world",
+  "name": "sentiment-hound",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "dev:watch": "turbo dev services:watch",
+    "watch": "turbo watch services:build db:build",
+    "watch:packages": "pnpm run --parallel --filter @repo/services --filter @repo/db dev:watch",
+    "script:gen-token": "pnpm --filter @repo/scripts gen-token",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:deploy": "pnpm --filter @repo/db deploy"
   },
   "devDependencies": {
+    "@types/node": "^24.0.7",
+    "dotenv-cli": "^8.0.0",
     "prettier": "^3.5.0",
-    "turbo": "^2.4.2",
+    "tsx": "^4.20.3",
+    "turbo": "^2.5.4",
     "typescript": "5.7.3"
   },
   "packageManager": "pnpm@8.6.11",
