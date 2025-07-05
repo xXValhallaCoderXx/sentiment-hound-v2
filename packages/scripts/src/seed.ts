@@ -52,7 +52,7 @@ const seed = async (): Promise<void> => {
       maxIntegrations: 1,
       maxTrackedKeywords: 0,
       maxCompetitors: 0,
-      monthlyTokenAllowance: 0,
+      monthlyTokenAllowance: 5000,
       features: { canExport: false },
       isActive: true,
       displayOrder: 1,
