@@ -1,5 +1,5 @@
 {
-  "name": "hello-world",
+  "name": "sentiment-hound",
   "private": true,
   "scripts": {
     "build": "turbo build",

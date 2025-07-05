@@ -149,3 +149,5 @@ For more detailed information on each specific application or service, including
 *   [apps/server/README.md](./apps/server/README.md)
 *   [apps/sentiment-analysis-service/README.md](./apps/sentiment-analysis-service/README.md)
 
+## Agent Files
+- `.agent.md`: Rovodev
