@@ -60,6 +60,18 @@
       "inputs": ["src/**/*.ts", "tsconfig.build.json"],
       "outputs": ["dist/**"]
     },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "vitest.config.ts",
+        "vitest.setup.ts"
+      ],
+      "outputs": []
+    },
     "services:watch": {
       "cache": false,
       "persistent": true

@@ -20,6 +20,40 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
 
+## Testing
+
+This application uses [Vitest](https://vitest.dev/) with jsdom environment for React component testing.
+
+### Running Tests
+
+```bash
+# Run tests once
+pnpm test
+
+# Run tests in watch mode (recommended for development)
+pnpm test
+
+# Run tests from the monorepo root
+pnpm turbo test --filter=web
+```
+
+### Testing Setup
+- **Framework**: Vitest with jsdom environment for React component testing
+- **Testing Library**: @testing-library/react for component rendering and queries
+- **Assertions**: @testing-library/jest-dom for DOM-specific matchers
+- **Path Aliases**: Tests support Next.js path aliases (e.g., `@/components`, `@/lib`)
+
+### Test File Organization
+- Test files are co-located with components using `.test.tsx` extension
+- Example: `page.tsx` → `page.test.tsx`
+- Test setup files: `vitest.config.ts` and `vitest.setup.ts`
+
+### Writing Tests
+Tests should follow React Testing Library best practices:
+- Test user interactions and behavior, not implementation details
+- Use semantic queries (`getByRole`, `getByLabelText`, etc.)
+- Mock external dependencies and Next.js specific modules as needed
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
