@@ -231,20 +231,3 @@ The token generation and signup flow is now fully functional! You can:
 
 The system is ready for the private alpha phase with invitation-only signups!
 
-## 📝 Quick Reference
-
-**Most Common Command:**
-```bash
-pnpm --filter @repo/db generate-token --plan=Developer
-```
-
-**Complete Test Sequence:**
-```bash
-docker-compose up -d
-pnpm turbo db:seed
-pnpm --filter @repo/db generate-token --plan=Developer
-pnpm dev
-# Visit generated URL and test signup
-```
-
-Happy testing! 🎉
