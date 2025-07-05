@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Stack } from "@mantine/core";
+import { Stack, Title, Text } from "@mantine/core";
 import PlanUsageCard from "@/components/organisms/PlanUsageCard/PlanUsageCard";
 import AccountManagementCard from "@/components/organisms/AccountManagementCard/AccountManagementCard";
 import DeleteAccountModal from "@/components/molecules/DeleteAccountModal/DeleteAccountModal";
@@ -12,11 +12,17 @@ import { PlanData, TokenUsage } from "@/types";
 interface ProfileContentProps {
   planData?: PlanData;
   tokenUsage?: TokenUsage;
+  userEmail?: string;
+  userId?: string;
+  userCreatedAt?: Date;
 }
 
 const ProfileContent: React.FC<ProfileContentProps> = ({
   planData,
   tokenUsage,
+  userEmail,
+  userId,
+  userCreatedAt,
 }) => {
   const [
     deleteModalOpened,
@@ -48,6 +54,16 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
 
   return (
     <>
+      {/* Page Header */}
+      <Stack gap="xs" mb="xl">
+        <Title order={1} fw={700}>
+          Settings
+        </Title>
+        <Text c="dimmed" size="md">
+          Manage your plan, usage, and account settings
+        </Text>
+      </Stack>
+
       <Stack gap="xl">
         {/* Plan & Usage Card */}
         <PlanUsageCard
@@ -63,6 +79,9 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
           onDeleteAccount={handleDeleteAccountRequest}
           isLoading={isDeleting}
           disabled={false}
+          userEmail={userEmail}
+          userId={userId}
+          userCreatedAt={userCreatedAt}
         />
       </Stack>
 

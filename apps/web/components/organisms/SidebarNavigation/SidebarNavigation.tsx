@@ -10,6 +10,7 @@ import {
   IconLogout,
 } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
+import { Logo } from "@/components/atoms/Logo/Logo";
 import NavigationLink from "../../molecules/NavigationLink/NavigationLink";
 import classes from "./SidebarNavigation.module.css";
 
@@ -86,13 +87,7 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
         <Stack gap={0} className={classes.navigationContainer}>
           {/* Logo Section */}
           <Box className={classes.logoSection}>
-            {logo || (
-              <Group gap="sm" p="md">
-                <Text size="lg" fw={700} c="blue">
-                  Sentiment Hound
-                </Text>
-              </Group>
-            )}
+            {logo || <Logo size={40} showText={true} />}
           </Box>
 
           {/* Main Navigation */}

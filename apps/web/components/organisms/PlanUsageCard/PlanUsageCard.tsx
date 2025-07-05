@@ -123,10 +123,10 @@ const PlanUsageCard: React.FC<PlanUsageCardProps> = ({
           Plan & Usage
         </Text>
 
-        {/* Current Plan Section */}
+        {/* Current Plan Row */}
         <Group justify="space-between" align="center">
           <Text size="sm" fw={500}>
-            Current Plan:
+            Current Plan
           </Text>
           <Badge
             variant="light"
@@ -143,16 +143,30 @@ const PlanUsageCard: React.FC<PlanUsageCardProps> = ({
           </Badge>
         </Group>
 
-        {/* Token Usage Section */}
-        <Stack gap="xs">
-          <TokenUsageProgress
-            totalTokens={totalTokens}
-            usedTokens={currentUsage}
-            periodEnd={periodEnd}
-            showDetails={showDetails}
-            label="One-Time Token Allowance"
-          />
-        </Stack>
+        {/* Token Allowance Row */}
+        <Group justify="space-between" align="center">
+          <Text size="sm" fw={500}>
+            One-Time Token Allowance
+          </Text>
+          <Text size="sm">{totalTokens.toLocaleString()}</Text>
+        </Group>
+
+        {/* Tokens Used Row */}
+        <Group justify="space-between" align="center">
+          <Text size="sm" fw={500}>
+            Tokens Used
+          </Text>
+          <Text size="sm">{currentUsage.toLocaleString()}</Text>
+        </Group>
+
+        {/* Token Usage Progress Bar */}
+        <TokenUsageProgress
+          totalTokens={totalTokens}
+          usedTokens={currentUsage}
+          periodEnd={periodEnd}
+          showDetails={false}
+          label=""
+        />
       </Stack>
     </Card>
   );

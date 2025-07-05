@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, Text, Stack } from "@mantine/core";
+import { Card, Text, Stack, Group, Divider } from "@mantine/core";
 import DangerZone from "../../molecules/DangerZone/DangerZone";
 import classes from "./AccountManagementCard.module.css";
 
@@ -14,6 +14,12 @@ export interface AccountManagementCardProps {
   disabled?: boolean;
   /** Custom class name */
   className?: string;
+  /** User email address */
+  userEmail?: string;
+  /** User ID */
+  userId?: string;
+  /** User creation date */
+  userCreatedAt?: Date;
 }
 
 const AccountManagementCard: React.FC<AccountManagementCardProps> = ({
@@ -21,6 +27,9 @@ const AccountManagementCard: React.FC<AccountManagementCardProps> = ({
   isLoading = false,
   disabled = false,
   className,
+  userEmail,
+  userId,
+  userCreatedAt,
 }) => {
   return (
     <Card
@@ -35,8 +44,51 @@ const AccountManagementCard: React.FC<AccountManagementCardProps> = ({
           Account Management
         </Text>
 
-        {/* Future account management features could go here */}
-        {/* For now, we only have the danger zone */}
+        {/* Profile Section */}
+        <Stack gap="md">
+          <Text size="lg" fw={600}>
+            Profile
+          </Text>
+
+          {/* Email Row */}
+          {userEmail && (
+            <Group justify="space-between" align="center">
+              <Text size="sm" fw={500}>
+                Email
+              </Text>
+              <Text size="sm">{userEmail}</Text>
+            </Group>
+          )}
+
+          {/* User ID Row */}
+          {userId && (
+            <Group justify="space-between" align="center">
+              <Text size="sm" fw={500}>
+                User ID
+              </Text>
+              <Text size="sm">{userId}</Text>
+            </Group>
+          )}
+
+          {/* Member Since Row */}
+          {userCreatedAt && (
+            <Group justify="space-between" align="center">
+              <Text size="sm" fw={500}>
+                Member Since
+              </Text>
+              <Text size="sm">
+                {new Intl.DateTimeFormat("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }).format(userCreatedAt)}
+              </Text>
+            </Group>
+          )}
+        </Stack>
+
+        {/* Divider */}
+        <Divider />
 
         {/* Danger Zone - positioned at bottom with margin-top for generous spacing */}
         <div className={classes.dangerZoneContainer}>
