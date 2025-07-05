@@ -1,5 +1,40 @@
 # Sentiment Analysis Platform - Developer Guide
 
+
+
+
+## 2. Critical Development Workflows
+
+- **Initial Setup**: Run `pnpm install` to install all dependencies across the monorepo.
+- **Running the App**: Use `pnpm run dev` to start all services, including the frontend, backend, and database (via `docker-compose`).
+- **Database Migrations & Client Generation**:
+    - After changing `packages/database/prisma/schema.prisma`, you **must** run `pnpm turbo db:generate` to update the Prisma client.
+    - To create and apply migrations, use `pnpm turbo db:migrate`.
+
+## 3. Key Coding Patterns & Conventions
+
+- **Service Layer (`packages/services`)**: To avoid duplicating logic, most business operations are abstracted into services in this package. For example, instead of `apps/web` accessing the database directly to create a post, it should call a function from a service like `@repo/services/posts`.
+
+- **Next.js Server Actions**: The frontend (`apps/web`) heavily uses **Server Actions** for mutations and data fetching. These are located in `apps/web/actions/`. Prefer using server actions over creating traditional API handlers for form submissions and client-side data mutations.
+
+- **Prisma Client Usage**: Always import the Prisma client from `@repo/database` when you need to interact with the database from within the `packages/services` or `apps/server`.
+
+- **Environment Variables**: Each app (`web`, `server`) has its own `.env` file for configuration (e.g., `apps/web/.env.local`). These are critical for database connections and API keys.
+
+## 4. Common Tasks
+
+- **Adding a Feature**:
+    1.  **Schema**: If database changes are needed, modify `packages/database/prisma/schema.prisma` first.
+    2.  **Generate**: Run `pnpm turbo db:generate`.
+    3.  **Service**: Implement the core business logic in a new or existing file within `packages/services/src/`.
+    4.  **Backend**: If an API endpoint is needed, add a controller in `apps/server` that calls the new service.
+    5.  **Frontend**: Create UI components in `apps/web/components/` and use Server Actions in `apps/web/actions/` to call the backend or services.
+
+- **Debugging**:
+    - **Type Errors**: Often solved by running `pnpm turbo db:generate`.
+    - **Build Errors**: Try clearing the cache with `rm -rf .turbo` and `find . -name "node_modules" -type d -prune -exec rm -rf '{}' +`, then run `pnpm install`.
+
+
 ## Project Overview
 
 This is a **Sentiment Analysis Platform** (codenamed "Sentiment Hound") built as a monorepo using **pnpm** and **Turborepo**. The platform analyzes sentiment from social media platforms (YouTube, Reddit) and provides insights through a web dashboard.
@@ -26,6 +61,7 @@ This is a **Sentiment Analysis Platform** (codenamed "Sentiment Hound") built as
 - **`packages/services`**: Shared business logic and services
 - **`packages/eslint-config`**: Shared ESLint configurations
 - **`packages/typescript-config`**: Shared TypeScript configurations
+- **`packages/scripts`**: Shared scripts for common tasks (e.g., generating invitation codes, managing early access signups)
 
 ## Development Setup
 
@@ -48,24 +84,11 @@ pnpm run dev
 ```
 
 ### Environment Variables
-Create `.env` files in relevant apps:
+The `.env` files in relevant apps:
 
 **apps/server/.env**:
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/sentiment-hound?schema=public"
-```
-
 **apps/web/.env.local**:
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/sentiment-hound?schema=public"
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-here
 
-# OAuth providers
-REDDIT_CLIENT_ID=your_reddit_client_id
-REDDIT_CLIENT_SECRET=your_reddit_client_secret
-REDDIT_USER_AGENT=your_app_name:version (by /u/yourusername)
-```
 
 ## Database Management
 
@@ -87,15 +110,6 @@ pnpm turbo db:seed
 pnpm turbo db:reset
 ```
 
-### Database Schema Overview
-- **Users**: Authentication, plans, feature flags, token usage
-- **Integrations**: OAuth connections to social platforms
-- **Posts**: Social media posts being tracked
-- **Mentions**: Individual comments/mentions with sentiment analysis
-- **Tasks/SubTasks**: Background job processing system
-- **Plans**: Subscription tiers with feature limits
-- **Competitors**: Competitor tracking functionality
-- **InvitationTokens**: Early access invitation system
 
 ## Code Organization
 
@@ -224,28 +238,8 @@ node test-spam-detection-integration.js
 node test-feature-entitlement.js
 ```
 
-### Testing Guidelines
-- Write unit tests for business logic
-- Use integration tests for API endpoints
-- Test OAuth flows thoroughly
-- Validate database constraints
 
-## Deployment
 
-### Production Environment
-- Use Railway for hosting
-- Set `DATABASE_URL` to production PostgreSQL
-- Configure `NEXTAUTH_URL` to production domain
-- Set up proper OAuth redirect URLs
-
-### Database Deployment
-```bash
-# Deploy migrations
-pnpm --filter @repo/db deploy
-
-# Seed production data
-pnpm --filter @repo/db db:seed:build
-```
 
 ### Build Process
 ```bash
@@ -256,15 +250,6 @@ pnpm build
 pnpm --filter web build
 ```
 
-## Monitoring and Analytics
-
-### Key Metrics to Track
-- User signup and activation rates
-- Sentiment analysis processing times
-- API response times and error rates
-- Database query performance
-- OAuth integration success rates
-- Plan upgrade/downgrade patterns
 
 ### Error Handling
 - Use structured logging throughout the application
@@ -282,7 +267,6 @@ pnpm --filter web build
 
 ### Data Protection
 - Encrypt sensitive data at rest
-- Use HTTPS in production
 - Implement proper session management
 - Follow GDPR compliance for user data
 
@@ -294,41 +278,7 @@ pnpm --filter web build
 
 ## Common Tasks
 
-### Adding a New Social Media Provider
-1. Create provider entry in database
-2. Add OAuth configuration
-3. Implement provider-specific service in `packages/services/src/`
-4. Add API endpoints for authentication
-5. Create UI components for integration setup
-6. Add background job processors for data fetching
 
-### Adding a New Plan Feature
-1. Update Plan model with new feature flag
-2. Add feature validation in relevant services
-3. Update plan seeding data
-4. Add UI components for feature display
-5. Implement usage tracking if needed
-
-### Debugging Common Issues
-- **Database connection**: Check `DATABASE_URL` and PostgreSQL status
-- **OAuth failures**: Verify client IDs, secrets, and redirect URLs
-- **Build errors**: Clear `.turbo` cache and `node_modules`
-- **Type errors**: Run `pnpm turbo db:generate` to update Prisma types
-- **Background jobs**: Check queue status and error logs
-
-## Scripts and Utilities
-
-### Database Scripts
-- `scripts/generate-invitation-code.js` - Create invitation codes
-- `scripts/view-early-access-signups.js` - View signup data
-- `scripts/clear-early-access-signups.js` - Clear test data
-- `scripts/manage-feature-flags.js` - Manage user feature flags
-
-### Development Scripts
-- `pnpm dev` - Start all services
-- `pnpm build` - Build all applications
-- `pnpm lint` - Lint all code
-- `pnpm format` - Format all code
 
 ## Troubleshooting
 
