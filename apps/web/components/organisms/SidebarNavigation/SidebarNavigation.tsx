@@ -10,7 +10,6 @@ import {
   IconLogout,
 } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
-import { Logo } from "@/components/atoms/Logo/Logo";
 import NavigationLink from "../../molecules/NavigationLink/NavigationLink";
 import classes from "./SidebarNavigation.module.css";
 
@@ -21,15 +20,12 @@ export interface SidebarNavigationProps {
   onLogoutClick?: () => void;
   /** Whether to show logout confirmation modal */
   showLogoutConfirmation?: boolean;
-  /** Custom logo component */
-  logo?: React.ReactNode;
 }
 
 const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
   currentPath,
   onLogoutClick,
   showLogoutConfirmation = true,
-  logo,
 }) => {
   const pathname = usePathname();
   const activePath = currentPath || pathname;
@@ -85,11 +81,6 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
     <>
       <Box className={classes.sidebar}>
         <Stack gap={0} className={classes.navigationContainer}>
-          {/* Logo Section */}
-          <Box className={classes.logoSection}>
-            {logo || <Logo size={40} showText={true} />}
-          </Box>
-
           {/* Main Navigation */}
           <Box className={classes.navigationSection}>
             <Stack gap="xs">
