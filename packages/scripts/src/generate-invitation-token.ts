@@ -7,72 +7,102 @@
  *   pnpm --filter @repo/scripts gen-token --plan=developer --expires-in-days=30
  */
 
+// This script was moved from packages/database/scripts/generate-token.mjs and refactored for the scripts package.
+// It generates invitation tokens for user sign-up flows.
+
 import { PrismaClient } from "@repo/db";
-import { invitationTokenService } from "@repo/services";
-import process from "node:process";
 
 const prisma = new PrismaClient();
 
-interface TokenOptions {
-  expiresInDays?: number;
+function generateSecureToken() {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const tokenLength = 32;
+  let token = "";
+  for (let i = 0; i < tokenLength; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    token += characters.charAt(randomIndex);
+  }
+  return token;
 }
 
-async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-
-  // Parse options
-  const options: TokenOptions = {};
-  let planName = "developer"; // Default plan
-
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (typeof arg === "string" && arg.startsWith("--plan=")) {
-      planName = arg.split("=")[1] ?? "developer";
-    } else if (
-      typeof arg === "string" &&
-      arg.startsWith("--expires-in-days=")
-    ) {
-      options.expiresInDays = parseInt(arg.split("=")[1] ?? "", 10);
-    }
-  }
-
+async function generateInvitationToken(
+  planName = "Developer",
+  expiresInDays = 7
+) {
   try {
-    // Find the plan (case-insensitive search)
-    const plans = await prisma.plan.findMany({ select: { id: true, name: true, description: true } });
-    const plan = plans.find(p => p.name.toLowerCase() === planName.toLowerCase());
-
+    console.log("🔧 Generating Invitation Token\n");
+    const plan = await prisma.plan.findUnique({ where: { name: planName } });
     if (!plan) {
-      console.error(`Error: Plan "${planName}" not found.`);
+      console.error(`❌ Error: Plan "${planName}" not found.`);
       console.error("Available plans:");
+      const plans = await prisma.plan.findMany({ select: { name: true } });
       plans.forEach((p) => console.error(`  - ${p.name}`));
       process.exit(1);
     }
-
-    // Generate the invitation token
-    const result = await invitationTokenService.generateToken(plan.id, options);
-
-    if (result.success) {
-      console.log(`✅ Successfully generated invitation token`);
-      console.log(`   Token: ${result.token}`);
-      console.log(`   Plan: ${plan.name} (${plan.description})`);
-      if (options.expiresInDays)
-        console.log(`   Expires in: ${options.expiresInDays} days`);
-      console.log("");
-      console.log("Share this link with the invited user:");
-      console.log(`https://sentimenthound.com/sign-up?token=${result.token}`);
-    } else {
-      console.error(`❌ Failed to generate invitation token: ${result.error}`);
-      process.exit(1);
-    }
-  } catch (error) {
-    console.error(
-      "❌ Error generating invitation token:",
-      error instanceof Error ? error.message : String(error)
+    const tokenValue = generateSecureToken();
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+    const token = await prisma.invitationToken.create({
+      data: {
+        token: tokenValue,
+        planToAssignId: plan.id,
+        expiresAt,
+        status: "PENDING",
+      },
+    });
+    console.log(`✅ Successfully generated invitation token`);
+    console.log(`   Token: ${token.token}`);
+    console.log(`   Plan: ${plan.name} (${plan.description})`);
+    console.log(`   Expires: ${expiresAt.toLocaleDateString()}`);
+    console.log("");
+    console.log("🔗 Test URLs:");
+    console.log(`   Local: http://localhost:3000/sign-up?token=${token.token}`);
+    console.log(
+      `   Production: https://sentimenthound.com/sign-up?token=${token.token}`
     );
+    console.log("");
+    return token.token;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "message" in error) {
+      console.error(
+        "❌ Error generating invitation token:",
+        (error as any).message
+      );
+    } else {
+      console.error("❌ Error generating invitation token:", error);
+    }
+    if (error && typeof error === "object" && "code" in error) {
+      if ((error as any).code === "P1001") {
+        console.error("💡 Database connection failed. Make sure:");
+        console.error("   1. PostgreSQL is running: docker-compose up -d");
+        console.error("   2. DATABASE_URL is set correctly in .env");
+      } else if ((error as any).code === "P2002") {
+        console.error("💡 Token collision occurred. Please try again.");
+      }
+    }
     process.exit(1);
   } finally {
     await prisma.$disconnect();
   }
 }
 
-main().catch(console.error);
+// Parse command line arguments
+const args = process.argv.slice(2);
+let planName = 'Developer';
+let expiresInDays = 7;
+for (let i = 0; i < args.length; i++) {
+  const arg = args[i];
+  if (typeof arg === 'string' && arg.startsWith('--plan=')) {
+    const planArg = arg.split('=')[1];
+    if (planArg) planName = planArg;
+  } else if (typeof arg === 'string' && arg.startsWith('--expires-in-days=')) {
+    const daysArg = arg.split('=')[1];
+    if (daysArg) expiresInDays = parseInt(daysArg);
+  }
+}
+
+// Run the script
+(async () => {
+  await generateInvitationToken(planName, expiresInDays);
+})();

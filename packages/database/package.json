@@ -17,15 +17,15 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
     "db:deploy": "prisma migrate deploy",
-    "db:seed": "ts-node --project tsconfig.seed.json src/seed.ts",
-    "db:seed:build": "node ./dist/seed.js",
-    "db:seed:dev": "pnpm build && pnpm db:seed:build",
+    "db:seed": "pnpm --filter @repo/scripts db-seed",
+    "db:seed:build": "pnpm --filter @repo/scripts db-seed",
+    "db:seed:dev": "pnpm --filter @repo/scripts db-seed",
     "db:reset": "prisma db push --force-reset --accept-data-loss",
     "deploy": "./scripts/deploy.sh",
     "generate-token": "node scripts/generate-token.js"
   },
   "prisma": {
-    "seed": "ts-node --project tsconfig.seed.json src/seed.ts"
+    "seed": "pnpm --filter @repo/scripts db-seed"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

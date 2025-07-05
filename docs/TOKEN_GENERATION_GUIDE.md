@@ -9,14 +9,14 @@ We've successfully set up token generation using the pnpm workspace context. Her
 ### **Generate a Real Invitation Token**
 ```bash
 # Method 1: Using pnpm filter (recommended)
-pnpm --filter @repo/db exec node scripts/generate-token.mjs --plan=Developer
+pnpm --filter @repo/scripts gen-token --plan=Developer
 
 # Method 2: Using the npm script
-pnpm --filter @repo/db generate-token --plan=Developer
+pnpm --filter @repo/scripts gen-token --plan=Developer
 
-# Method 3: Run from database package directory
-cd packages/database
-node scripts/generate-token.js --plan=Developer
+# Method 3: Run from scripts package directory
+cd packages/scripts
+pnpm gen-token --plan=Developer
 ```
 
 ### **Available Plans**
@@ -28,10 +28,10 @@ node scripts/generate-token.js --plan=Developer
 ### **Token Expiration Options**
 ```bash
 # Token expires in 1 day
-pnpm --filter @repo/db generate-token --plan=Developer --expires-in-days=1
+pnpm --filter @repo/scripts gen-token --plan=Developer --expires-in-days=1
 
 # Token expires in 30 days
-pnpm --filter @repo/db generate-token --plan=Developer --expires-in-days=30
+pnpm --filter @repo/scripts gen-token --plan=Developer --expires-in-days=30
 ```
 
 ## 📋 Complete Testing Workflow
@@ -48,7 +48,7 @@ pnpm turbo db:seed
 
 ### **Step 3: Generate Token**
 ```bash
-pnpm --filter @repo/db generate-token --plan=Developer
+pnpm --filter @repo/scripts gen-token --plan=Developer
 ```
 
 **Example Output:**
@@ -122,7 +122,7 @@ cat packages/database/.env
 pnpm turbo db:seed
 
 # Check available plans
-pnpm --filter @repo/db generate-token --plan=InvalidPlan
+pnpm --filter @repo/scripts gen-token --plan=InvalidPlan
 # This will list available plans
 ```
 
@@ -144,7 +144,7 @@ grep SIGNUPS_REQUIRE_INVITATION apps/web/.env
 ### **1. Valid Token Test**
 ```bash
 # Generate token
-pnpm --filter @repo/db generate-token --plan=Developer
+pnpm --filter @repo/scripts gen-token --plan=Developer
 
 # Use generated URL
 # Fill form: test@example.com, password123
@@ -163,7 +163,7 @@ http://localhost:3000/sign-up?token=invalid123
 ### **3. Expired Token Test**
 ```bash
 # Generate token that expires immediately
-pnpm --filter @repo/db generate-token --plan=Developer --expires-in-days=0
+pnpm --filter @repo/scripts gen-token --plan=Developer --expires-in-days=0
 
 # Wait a moment, then use token
 # Expected: "token has expired" error

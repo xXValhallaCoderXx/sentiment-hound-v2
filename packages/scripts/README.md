@@ -133,33 +133,19 @@ pnpm --filter @repo/scripts gen-token --plan=pro --expires-in-days=30
 # Generate a starter token
 pnpm --filter @repo/scripts gen-token --plan=starter
 
-# Test if a token is valid
-pnpm --filter @repo/scripts test-token --token=VIUYYncAkY9mq1asLZ8tyaM8LxojuprL
-
-# List all pending tokens
-pnpm --filter @repo/scripts list-tokens --status=pending
-
-# List all developer plan tokens
-pnpm --filter @repo/scripts list-tokens --plan=developer
 ```
 
-## Testing the Sign-up Flow
+### Database Seed Script
 
-1. **Generate an invitation token:**
-   ```bash
-   pnpm --filter @repo/scripts gen-token --plan=developer
-   ```
+Seeds the database with initial data for development or testing.
 
-2. **Copy the generated sign-up URL and open it in your browser**
+**Usage:**
 
-3. **Fill out the sign-up form** - the invitation token should be pre-filled and locked
+```bash
+pnpm --filter @repo/scripts db-seed
+```
 
-4. **Complete the registration process**
-
-5. **Verify the token status changed to "USED":**
-   ```bash
-   pnpm --filter @repo/scripts list-tokens --status=used
-   ```
+This command will run the seed script and populate the database with the default data set. Make sure your environment variables (e.g., `DATABASE_URL`) are set correctly in `.env`.
 
 ## Development
 
