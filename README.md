@@ -64,24 +64,10 @@ This monorepo is managed using `pnpm` and `Turborepo`. It consists of the follow
     ```
     This will start a PostgreSQL server on port `5432` with the database named `sentiment-hound` and credentials `postgres/postgres`.
 
-2.  **Run Development Servers:**
-    Once the database is running, you can start all the applications (frontend, backend, and sentiment analysis service if configured) in development mode using Turborepo:
-    ```bash
-    pnpm run dev
-    ```
-    This command, defined in the root `package.json`, will typically:
-    *   Run database migrations/generations (as per `turbo.json` dependencies like `db:generate`).
-    *   Start the Next.js frontend (usually on `http://localhost:3000`).
-    *   Start the NestJS backend server (usually on `http://localhost:3001` or similar, check its configuration).
-    *   Start the Python sentiment analysis service (port needs to be configured, e.g., `8000`).
-
-    Refer to the individual README files in `apps/web`, `apps/server`, and `apps/sentiment-analysis-service` for specific port numbers and to confirm they are part of the `turbo dev` pipeline.
-
 ## Development Workflow
 
 ### Two-Terminal Development Setup
-
-For optimal development experience with hot-reloading of shared packages, use this **two-terminal workflow**:
+- For optimal development experience with hot-reloading of shared packages, use this **two-terminal workflow**:
 
 #### Terminal 1: Package Watcher (The Builder)
 Start the package watcher to automatically rebuild shared packages when their source files change:
@@ -120,40 +106,24 @@ pnpm run dev
 3. **Terminal 2** sees the updated build output and triggers application hot-reload
 4. **Your browser/app** automatically refreshes with the new changes
 
-### Benefits
 
-- ✅ **Instant feedback**: Changes to shared packages appear immediately in your applications
-- ✅ **No manual restarts**: No more `Ctrl+C` and `pnpm run dev` cycles
-- ✅ **Type safety**: TypeScript compilation happens in real-time with error reporting
-- ✅ **Optimized builds**: Only changed packages are rebuilt
-- ✅ **Standard workflow**: Works consistently across all development environments
 
-### Troubleshooting
 
-If hot-reloading isn't working:
-
-1. **Check both terminals are running**: Both watch and dev commands should be active
-2. **Verify file changes are detected**: Terminal 1 should show "File change detected" messages
-3. **Check for TypeScript errors**: Fix any compilation errors shown in Terminal 1
-4. **Restart if needed**: Kill both terminals and restart the two-terminal workflow
 
 ## Development
 
 ### Common Scripts
+- The following scripts are available at the root of the monorepo:
 
-The following scripts are available at the root of the monorepo:
-
-*   **`pnpm run dev`**: Starts all applications in development mode.
-*   **`pnpm run build`**: Builds all applications and packages for production.
-*   **`pnpm run lint`**: Lints the codebase across all packages.
-*   **`pnpm run format`**: Formats the code using Prettier.
+    *   **`pnpm run lint`**: Lints the codebase across all packages.
+    *   **`pnpm run format`**: Formats the code using Prettier.
 
 ### Database Management
+- The `turbo.json` file defines several scripts for database management, which are typically run via `pnpm turbo db:<command>`. Examples:
 
-The `turbo.json` file defines several scripts for database management, which are typically run via `pnpm turbo db:<command>`. Examples:
-*   `pnpm turbo db:generate`: Generates Prisma client based on schema changes.
-*   `pnpm turbo db:migrate`: Runs database migrations.
-*   `pnpm turbo db:seed`: Seeds the database with initial data.
+    *   `pnpm turbo db:generate`: Generates Prisma client based on schema changes.
+    *   `pnpm turbo db:migrate`: Runs database migrations.
+    *   `pnpm turbo db:seed`: Seeds the database with initial data.
 
 For **production deployments**, see the comprehensive [Database Deployment Guide](./packages/database/DEPLOYMENT.md) which covers:
 - Automated migration and seeding process
@@ -161,7 +131,6 @@ For **production deployments**, see the comprehensive [Database Deployment Guide
 - Production deployment best practices
 - Troubleshooting and recovery procedures
 
-Refer to `turbo.json` and `packages/database/package.json` (if it exists and has scripts) for more details on database-related commands.
 
 ## Shared Packages
 
@@ -180,17 +149,3 @@ For more detailed information on each specific application or service, including
 *   [apps/server/README.md](./apps/server/README.md)
 *   [apps/sentiment-analysis-service/README.md](./apps/sentiment-analysis-service/README.md)
 
-
-
-# Railway Environment Variables Required
-
-# Database
-
-DATABASE_URL=${{Postgres.DATABASE_URL}}
-
-# NextAuth (if using authentication)
-
-NEXTAUTH_SECRET=your-nextauth-secret-here
-NEXTAUTH_URL=${{RAILWAY_PUBLIC_DOMAIN}}
-
-# Add any other environment variables your app needs
