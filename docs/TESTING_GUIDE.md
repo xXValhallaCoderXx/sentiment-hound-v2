@@ -56,6 +56,8 @@ pnpm run test:packages
   - Core Integration: 3/7 tests passing (4 edge-case failures)
 - **`apps/web`**: 2/2 tests passing ✅
 
+_Status verified: January 2025 - Run tests to get current status_
+
 ### ⚠️ Known Issues
 
 - **`apps/server`**: Tests are incorrectly written for core service instead of NestJS wrapper
