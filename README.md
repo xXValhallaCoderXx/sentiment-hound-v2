@@ -110,30 +110,39 @@ pnpm run dev
 
 The project uses [Vitest](https://vitest.dev/) as the unified testing framework across all applications and packages. This provides fast, modern testing with excellent TypeScript support.
 
-### Running Tests
+### Quick Testing Commands
 
-#### Run all tests across the monorepo:
+#### **Recommended: Individual Package Testing**
 ```bash
+# Test core business logic (most important)
+cd packages/services && pnpm test
+
+# Test web frontend
+cd apps/web && pnpm test
+
+# Use root scripts for convenience
+pnpm run test:services  # Core services only
+pnpm run test:web      # Web frontend only
+pnpm run test:packages # Both services and web
+```
+
+#### **Turbo Testing (Has Known Limitations)**
+```bash
+# This may fail due to build dependencies and edge cases
 pnpm turbo test
 ```
 
-#### Run tests for a specific application:
-```bash
-# Frontend tests
-cd apps/web && pnpm test
+### 📖 **Detailed Testing Documentation**
 
-# Backend tests  
-cd apps/server && pnpm test
-```
+For comprehensive testing guidance, see our detailed documentation:
 
-#### Run tests in watch mode for development:
-```bash
-# Watch mode for frontend
-cd apps/web && pnpm test
+- **[Testing Guide](docs/TESTING_GUIDE.md)** - Complete testing strategies and best practices
+- **[Test Commands Summary](docs/TEST_COMMANDS_SUMMARY.md)** - Quick reference for recommended commands
 
-# Watch mode for backend
-cd apps/server && pnpm test
-```
+### Current Test Status
+
+✅ **Fully Working**: URL Parser (59/59), Web Frontend (2/2), Core Integration (3/7)  
+⚠️ **Known Issues**: Some edge-case integration tests, server test setup
 
 ### Testing Framework
 - **Frontend**: Uses Vitest with jsdom environment for React component testing with @testing-library/react

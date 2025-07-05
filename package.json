@@ -9,7 +9,12 @@
     "script:gen-token": "pnpm --filter @repo/scripts gen-token",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "db:deploy": "pnpm --filter @repo/db deploy"
+    "db:deploy": "pnpm --filter @repo/db deploy",
+    "test": "turbo test",
+    "test:packages": "pnpm run --parallel --filter @repo/services --filter web test",
+    "test:services": "pnpm --filter @repo/services test",
+    "test:web": "pnpm --filter web test",
+    "test:watch": "pnpm --filter @repo/services test:watch"
   },
   "devDependencies": {
     "@types/node": "^24.0.7",
