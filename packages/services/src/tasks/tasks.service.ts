@@ -8,6 +8,14 @@ import {
   PrismaClient,
 } from "@repo/db";
 import { subtaskService } from "..";
+import { urlParserService } from "..";
+import { integrationsService } from "..";
+import {
+  Provider,
+  ParseResult,
+  InvalidUrlError,
+  UnsupportedProviderError,
+} from "../url-parser";
 
 export class CoreTaskService {
   private model: Prisma.TaskDelegate;
@@ -85,25 +93,146 @@ export class CoreTaskService {
     taskType?: TaskType;
     extraData?: any;
   }): Promise<Task> {
-    // Create the task first
     console.log("Sub Task Type: ", taskType);
     console.log("Sub Task integrationId: ", integrationId);
     console.log("Sub Task userId: ", userId);
     console.log("Sub Task extraData: ", extraData);
+
+    // Check if URL is provided in extraData for URL-driven task creation
+    let parsedProvider: Provider | null = null;
+    let normalizedUrl: string | null = null;
+    let urlMetadata: any = null;
+
+    if (extraData?.url) {
+      try {
+        console.log(
+          "URL detected in extraData, attempting to parse:",
+          extraData.url
+        );
+        const parseResult: ParseResult = urlParserService.parse(extraData.url);
+        parsedProvider = parseResult.provider;
+        normalizedUrl = parseResult.url;
+        urlMetadata = parseResult.metadata;
+
+        console.log("URL parsed successfully:", {
+          provider: parsedProvider,
+          normalizedUrl,
+          metadata: urlMetadata,
+        });
+
+        // Update extraData with normalized URL for downstream processors
+        extraData = {
+          ...extraData,
+          url: normalizedUrl,
+          originalUrl: extraData.url,
+          metadata: urlMetadata,
+        };
+      } catch (error) {
+        console.error("URL parsing failed:", error);
+
+        // If URL parsing fails but integrationId is provided, continue with fallback
+        if (!integrationId) {
+          // Create task and mark as failed if no fallback integration
+          const failedTask = await this.model.create({
+            data: {
+              type: taskType || TaskType.OTHER,
+              integrationId: integrationId || 0, // Use 0 as fallback
+              userId,
+              status: TaskStatus.FAILED,
+            },
+          });
+
+          console.error(
+            `Task ${failedTask.id} marked as FAILED: URL parsing failed and no fallback integration provided`
+          );
+          throw new Error(
+            `URL parsing failed: ${error instanceof Error ? error.message : "Unknown error"}`
+          );
+        }
+
+        console.log(
+          "URL parsing failed, falling back to integration-based approach"
+        );
+      }
+    }
+
+    // Create the task first
     const task = await this.model.create({
       data: {
         type: taskType || TaskType.OTHER,
         integrationId,
         userId,
-
         status: TaskStatus.PENDING,
       },
     });
-    const integration = await prisma.integration.findUnique({
-      where: { id: integrationId },
-      include: { provider: true },
-    });
+
+    // Enhanced integration lookup: Use provider-based lookup if we have a parsed provider
+    let integration: any = null;
+
+    if (parsedProvider) {
+      console.log(
+        `Looking up integration for parsed provider: ${parsedProvider}`
+      );
+      try {
+        integration = await integrationsService.getUserIntegrationByName(
+          userId,
+          parsedProvider
+        );
+
+        if (!integration) {
+          console.error(
+            `No integration found for provider ${parsedProvider} and user ${userId}`
+          );
+
+          // Mark task as failed if no integration found for detected provider
+          await this.model.update({
+            where: { id: task.id },
+            data: { status: TaskStatus.FAILED },
+          });
+
+          throw new Error(
+            `No integration found for ${parsedProvider}. Please connect your ${parsedProvider} account first.`
+          );
+        }
+
+        console.log(`Found integration for ${parsedProvider}:`, integration.id);
+
+        // Update the task with the correct integrationId if it was different
+        if (integration.id !== integrationId) {
+          await this.model.update({
+            where: { id: task.id },
+            data: { integrationId: integration.id },
+          });
+          console.log(
+            `Updated task integration from ${integrationId} to ${integration.id}`
+          );
+        }
+      } catch (error) {
+        console.error("Provider-based integration lookup failed:", error);
+        throw error;
+      }
+    } else {
+      // Fallback to original integration lookup by ID
+      console.log(`Using fallback integration lookup for ID: ${integrationId}`);
+      integration = await prisma.integration.findUnique({
+        where: { id: integrationId },
+        include: { provider: true },
+      });
+
+      if (!integration) {
+        console.error(`No integration found with ID ${integrationId}`);
+
+        await this.model.update({
+          where: { id: task.id },
+          data: { status: TaskStatus.FAILED },
+        });
+
+        throw new Error(`Integration with ID ${integrationId} not found.`);
+      }
+    }
+
     console.log("Sub Task CREATED: ", task);
+    console.log("Integration found: ", integration);
     // Create appropriate jobs based on task type
     if (task.id) {
       switch (taskType) {
@@ -124,7 +253,10 @@ export class CoreTaskService {
             });
 
             // Create spam detection subtask if user has the feature
-            if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            if (
+              this.planService &&
+              (await this.planService.hasFeature(userId, "spam_detection"))
+            ) {
               await subtaskService.createSubTask({
                 taskId: task.id,
                 type: SubTaskType.DETECT_SPAM,
@@ -133,8 +265,16 @@ export class CoreTaskService {
             }
           }
 
-          if (integration?.provider.name === "youtube") {
-            // Full sync needs both fetching and analyzing
+          // URL-driven approach: Use parsed provider if available, otherwise fall back to integration provider
+          const effectiveProvider =
+            parsedProvider || integration?.provider.name;
+          console.log(
+            "Effective provider for task creation:",
+            effectiveProvider
+          );
+
+          if (effectiveProvider === "youtube") {
+            console.log("Creating YouTube-specific subtasks");
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
@@ -147,7 +287,10 @@ export class CoreTaskService {
             });
 
             // Create spam detection subtask if user has the feature
-            if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+            if (
+              this.planService &&
+              (await this.planService.hasFeature(userId, "spam_detection"))
+            ) {
               await subtaskService.createSubTask({
                 taskId: task.id,
                 type: SubTaskType.DETECT_SPAM,
@@ -173,7 +316,10 @@ export class CoreTaskService {
           });
 
           // Create spam detection subtask if user has the feature
-          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+          if (
+            this.planService &&
+            (await this.planService.hasFeature(userId, "spam_detection"))
+          ) {
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.DETECT_SPAM,
@@ -210,7 +356,10 @@ export class CoreTaskService {
           });
 
           // Create spam detection subtask if user has the feature
-          if (this.planService && await this.planService.hasFeature(userId, 'spam_detection')) {
+          if (
+            this.planService &&
+            (await this.planService.hasFeature(userId, "spam_detection"))
+          ) {
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.DETECT_SPAM,

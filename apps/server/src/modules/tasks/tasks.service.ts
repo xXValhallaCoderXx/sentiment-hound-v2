@@ -1,18 +1,23 @@
 import { Injectable } from '@nestjs/common';
-// import { CoreTaskService, TaskRepository } from '@repo/services';
+import { taskService } from '@repo/services';
+import type { TaskType } from '@repo/db';
 
 @Injectable()
 export class TaskService {
-  // private coreService: CoreTaskService;
-
-  // constructor(private readonly repository: TaskRepository) {
-  //   this.coreService = new CoreTaskService(repository);
-  // }
-
   async getTask() {
     // Add NestJS-specific logic here (e.g., logging, events)
-    // const task = await this.coreService.getTask(id);
     return 'task';
+  }
+
+  async createTask(data: {
+    userId: string;
+    integrationId: number;
+    taskType?: TaskType;
+    extraData?: any;
+  }) {
+    // NestJS wrapper for core task service
+    // Add NestJS-specific logic here (e.g., logging, events, validation)
+    return await taskService.createTask(data);
   }
 
   // Add other methods as needed

@@ -11,13 +11,17 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "services:build": "tsc --project tsconfig.build.json",
-    "dev:watch": "tsc --project tsconfig.build.json --watch"
+    "dev:watch": "tsc --project tsconfig.build.json --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@repo/db": "workspace:*"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.13.8"
+    "@repo/vitest-config": "workspace:*",
+    "@types/node": "^22.13.8",
+    "vitest": "^3.2.4"
   }
 }

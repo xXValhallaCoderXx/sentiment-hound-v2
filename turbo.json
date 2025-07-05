@@ -61,12 +61,14 @@
       "outputs": ["dist/**"]
     },
     "test": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "db:generate"],
       "inputs": [
         "src/**/*.ts",
         "src/**/*.tsx",
         "**/*.test.ts",
         "**/*.test.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
         "vitest.config.ts",
         "vitest.setup.ts"
       ],

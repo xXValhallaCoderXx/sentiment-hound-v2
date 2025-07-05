@@ -26,6 +26,7 @@ import { CoreDashboardService } from "./dashboard/dashboard.service";
 import { InvitationTokenService } from "./invitation-tokens";
 import { PromoCodeService } from "./promo-codes";
 import { EarlyAccessService } from "./early-access/early-access.service";
+import { UrlParserService } from "./url-parser";
 
 export * from "./posts/post.interface";
 export * from "./dashboard/dashboard.service";
@@ -69,6 +70,7 @@ export const dashboardService = new CoreDashboardService(mentionRepository);
 export const invitationTokenService = new InvitationTokenService(prisma);
 export const promoCodeService = new PromoCodeService(prisma);
 export const earlyAccessService = new EarlyAccessService();
+export const urlParserService = new UrlParserService();
 
 // Set up circular dependencies
 integrationsService.setPlanService(planService);
