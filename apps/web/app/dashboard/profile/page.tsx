@@ -68,15 +68,13 @@ const ProfilePage = async () => {
   };
 
   return (
-    <DashboardLayout>
-      <ProfileContent
-        planData={planData}
-        tokenUsage={tokenUsage}
-        userEmail={user.email || undefined}
-        userId={user.id}
-        userCreatedAt={user.createdAt}
-      />
-    </DashboardLayout>
+    <ProfileContent
+      planData={planData}
+      tokenUsage={tokenUsage}
+      userEmail={user.email || undefined}
+      userId={user.id}
+      userCreatedAt={user.createdAt}
+    />
   );
 };
 
