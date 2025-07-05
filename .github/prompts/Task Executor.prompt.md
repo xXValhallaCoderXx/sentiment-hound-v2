@@ -1,6 +1,5 @@
 ---
-description: "Task Processor"
-tools: ["codebase", "fetch", "findTestFiles", "githubRepo", "search", "usages"]
+mode: agent
 ---
 
 # Task List Management

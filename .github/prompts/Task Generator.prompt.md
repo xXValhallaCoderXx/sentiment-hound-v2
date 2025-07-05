@@ -1,6 +1,5 @@
 ---
-description: "Description of the custom chat mode."
-tools: ["codebase", "fetch", "findTestFiles", "githubRepo", "search", "usages"]
+mode: edit
 ---
 
 # Rule: Generating a Task List from a PRD
