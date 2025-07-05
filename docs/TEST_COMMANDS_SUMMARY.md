@@ -61,9 +61,11 @@ pnpm turbo test
 
 ### ✅ Fully Working Tests
 
-- **URL Parser Service**: 59/59 tests passing (comprehensive coverage)
-- **Web Frontend**: 2/2 tests passing
-- **Core Integration Tests**: 3/7 tests passing (main scenarios work)
+- **URL Parser Service**: Comprehensive test coverage with all core functionality passing
+- **Web Frontend**: All tests passing
+- **Core Integration Tests**: Main scenarios working (some edge cases need improvement)
+
+_Run `cd packages/services && pnpm test` for current status_
 
 ### ⚠️ Known Test Failures
 
