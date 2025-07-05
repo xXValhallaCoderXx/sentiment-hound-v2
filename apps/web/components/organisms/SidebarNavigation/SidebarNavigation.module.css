@@ -1,0 +1,142 @@
+/* SidebarNavigation.module.css - Sidebar styling with Card background and scroll behavior */
+
+.sidebar {
+  height: 100%;
+  width: 100%;
+  background-color: var(--mantine-color-body);
+  border-right: 1px solid var(--mantine-color-gray-3);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigationContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.logoSection {
+  border-bottom: 1px solid var(--mantine-color-gray-3);
+  margin-bottom: var(--mantine-spacing-md);
+  flex-shrink: 0;
+}
+
+.navigationSection {
+  padding: 0 var(--mantine-spacing-sm);
+  margin-bottom: var(--mantine-spacing-lg);
+  flex-shrink: 0;
+}
+
+.navigationSection:last-child {
+  margin-top: auto;
+  padding-top: var(--mantine-spacing-md);
+  border-top: 1px solid var(--mantine-color-gray-3);
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+/* Card background styling */
+.sidebar {
+  background-color: var(--mantine-color-white);
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+/* Custom scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: var(--mantine-color-gray-1);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--mantine-color-gray-4);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--mantine-color-gray-5);
+}
+
+/* Firefox scrollbar styling */
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mantine-color-gray-4) var(--mantine-color-gray-1);
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background-color: var(--mantine-color-dark-8);
+    border-right-color: var(--mantine-color-dark-5);
+  }
+
+  .logoSection {
+    border-bottom-color: var(--mantine-color-dark-5);
+  }
+
+  .navigationSection:last-child {
+    border-top-color: var(--mantine-color-dark-5);
+  }
+
+  .sidebar::-webkit-scrollbar-track {
+    background: var(--mantine-color-dark-6);
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background: var(--mantine-color-dark-4);
+  }
+
+  .sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--mantine-color-dark-3);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: var(--mantine-color-white);
+    box-shadow: var(--mantine-shadow-xl);
+  }
+
+  .logoSection {
+    padding-top: 60px; /* Account for mobile header */
+  }
+}
+
+/* Focus management for accessibility */
+.sidebar:focus-within {
+  outline: none;
+}
+
+/* Smooth transitions */
+.navigationSection {
+  transition: all 0.2s ease;
+}
+
+/* Logo section styling */
+.logoSection {
+  padding: var(--mantine-spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 60px;
+}
+
+/* Section group labels */
+.navigationSection .mantine-Text-root[data-size="xs"] {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  color: var(--mantine-color-gray-6);
+  margin-bottom: var(--mantine-spacing-xs);
+}

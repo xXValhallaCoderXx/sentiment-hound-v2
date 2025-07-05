@@ -1,0 +1,45 @@
+/* PlanUsageCard CSS Module */
+
+.card {
+  background: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-gray-3);
+  transition: box-shadow 0.15s ease;
+}
+
+.card:hover {
+  box-shadow: var(--mantine-shadow-sm);
+}
+
+/* Spacing adjustments for different content types */
+.card .mantine-Group-root {
+  /* Consistent group spacing */
+  width: 100%;
+}
+
+.card .mantine-Badge-root {
+  /* Badge specific adjustments */
+  font-weight: 500;
+}
+
+.card .mantine-Alert-root {
+  /* Error alert styling */
+  border-radius: var(--mantine-radius-sm);
+}
+
+/* Progress section spacing */
+.progressSection {
+  border-top: 1px solid var(--mantine-color-gray-2);
+  padding-top: var(--mantine-spacing-md);
+  margin-top: var(--mantine-spacing-xs);
+}
+
+/* Responsive adjustments */
+@media (max-width: 48em) {
+  .card {
+    padding: var(--mantine-spacing-md);
+  }
+
+  .card .mantine-Text-root[data-size="lg"] {
+    font-size: var(--mantine-font-size-md);
+  }
+}
