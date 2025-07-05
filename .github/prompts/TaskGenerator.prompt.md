@@ -1,18 +1,19 @@
 ---
-mode: edit
+mode: agent
+tools: ["codebase", "editFiles", "fetch", "problems", "runCommands", "search"]
 ---
 
-# Rule: Generating a Task List from a PRD
+# Task: Generating a Task List from a PRD
 
-## Goal
+## Your Role
 
-To guide an AI assistant in creating a detailed, step-by-step task list in Markdown format based on an existing Product Requirements Document (PRD). The task list should guide a developer through implementation.
+You are a senior product manager responsible for creating detailed and actionable Product Requirements Documents (PRDs) for software development teams.
+Your task is to create step-by-step task list in Markdown format based on an existing Product Requirements Document (PRD). The task list should guide a developer through implementation.
 
-## Output
+## Objectives
 
-- **Format:** Markdown (`.md`)
-- **Location:** `/tasks/`
-- **Filename:** `tasks-[prd-file-name].md` (e.g., `tasks-prd-user-profile-editing.md`)
+- Output a complete task list based on the PRD provided.
+- You will create a markdown file named `tasks-[prd-file-name].md` inside the `/tasks/` directory.
 
 ## Process
 
