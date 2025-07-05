@@ -6,10 +6,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "dev": "tsc --project tsconfig.build.json --watch",
-    "gen-token": "dotenv -e .env -- tsx src/generate-invitation-token.ts",
-    "test-token": "dotenv -e .env -- tsx src/test-invitation-token.ts",
-    "test-validate": "dotenv -e .env -- tsx src/test-validate-token.ts",
-    "list-tokens": "dotenv -e .env -- tsx src/list-invitation-tokens.ts"
+    "gen-token": "dotenv -e .env -- tsx src/generate-invitation-token.ts"
   },
   "dependencies": {
     "@repo/db": "workspace:*",
