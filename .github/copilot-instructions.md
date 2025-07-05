@@ -11,6 +11,7 @@ This is a **Sentiment Analysis Platform** in a Turborepo monorepo. It analyzes s
 * **Backend**: NestJS
 * **Database**: PostgreSQL with Prisma
 * **Sentiment Service**: Python FastAPI
+* **Github Repo**: sentiment-hound-v2
 
 ---
 
