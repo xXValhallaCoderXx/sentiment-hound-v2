@@ -2,16 +2,7 @@
 
 
 
-
-## 2. Critical Development Workflows
-
-- **Initial Setup**: Run `pnpm install` to install all dependencies across the monorepo.
-- **Running the App**: Use `pnpm run dev` to start all services, including the frontend, backend, and database (via `docker-compose`).
-- **Database Migrations & Client Generation**:
-    - After changing `packages/database/prisma/schema.prisma`, you **must** run `pnpm turbo db:generate` to update the Prisma client.
-    - To create and apply migrations, use `pnpm turbo db:migrate`.
-
-## 3. Key Coding Patterns & Conventions
+## 1. Key Coding Patterns & Conventions
 
 - **Service Layer (`packages/services`)**: To avoid duplicating logic, most business operations are abstracted into services in this package. For example, instead of `apps/web` accessing the database directly to create a post, it should call a function from a service like `@repo/services/posts`.
 
@@ -21,7 +12,7 @@
 
 - **Environment Variables**: Each app (`web`, `server`) has its own `.env` file for configuration (e.g., `apps/web/.env.local`). These are critical for database connections and API keys.
 
-## 4. Common Tasks
+## 2. Common Tasks
 
 - **Adding a Feature**:
     1.  **Schema**: If database changes are needed, modify `packages/database/prisma/schema.prisma` first.
