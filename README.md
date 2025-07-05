@@ -106,6 +106,50 @@ pnpm run dev
 3. **Terminal 2** sees the updated build output and triggers application hot-reload
 4. **Your browser/app** automatically refreshes with the new changes
 
+## Testing
+
+The project uses [Vitest](https://vitest.dev/) as the unified testing framework across all applications and packages. This provides fast, modern testing with excellent TypeScript support.
+
+### Running Tests
+
+#### Run all tests across the monorepo:
+```bash
+pnpm turbo test
+```
+
+#### Run tests for a specific application:
+```bash
+# Frontend tests
+cd apps/web && pnpm test
+
+# Backend tests  
+cd apps/server && pnpm test
+```
+
+#### Run tests in watch mode for development:
+```bash
+# Watch mode for frontend
+cd apps/web && pnpm test
+
+# Watch mode for backend
+cd apps/server && pnpm test
+```
+
+### Testing Framework
+- **Frontend**: Uses Vitest with jsdom environment for React component testing with @testing-library/react
+- **Backend**: Uses Vitest with node environment for NestJS service and module testing
+- **Shared Configuration**: All applications extend a shared Vitest configuration from `@repo/vitest-config`
+
+### Test File Organization
+- Test files are co-located with source files using `.test.ts` or `.test.tsx` extensions
+- Example: `page.tsx` → `page.test.tsx`, `service.ts` → `service.test.ts`
+
+### Key Testing Features
+- Fast test execution with Vitest's native ES modules support
+- Path alias resolution (e.g., `@/components` in frontend tests)
+- Proper mocking capabilities for dependencies and modules
+- Integration with Turbo's caching system for optimal performance
+
 
 
 
