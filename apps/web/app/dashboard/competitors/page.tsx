@@ -1,8 +1,7 @@
 import { auth } from "@/lib/next-auth.lib";
-import { Box, Text, Flex, Stack } from "@mantine/core";
+import { Box, Text, Flex, Stack, Title } from "@mantine/core";
 import { planService } from "@repo/services";
 import NoData from "@/components/molecules/NoData";
-import PageLayout from "@/components/templates/PageLayout";
 import CompetitorCardsWrapper from "./components/CompetitorCardsWrapper";
 import AddCompetitorForm from "./components/AddCompetitorForm";
 import CompetitorChart from "./components/CompetitorChart";
@@ -13,14 +12,19 @@ const CompetitorsPage = async () => {
 
   if (!session?.user?.id) {
     return (
-      <PageLayout
-        title="Competitors"
-        description="Track and analyze your competitors' sentiment"
-      >
-        <Box p="xl" ta="center">
-          <Text>You must be logged in to view this page</Text>
-        </Box>
-      </PageLayout>
+      <Box p={{ base: 12, sm: 16, md: 24 }}>
+        <Stack gap={24}>
+          <Title order={1} fw={600}>
+            Competitors
+          </Title>
+          <Text c="dimmed">
+            Track and analyze your competitors&apos; sentiment
+          </Text>
+          <Box p="xl" ta="center">
+            <Text>You must be logged in to view this page</Text>
+          </Box>
+        </Stack>
+      </Box>
     );
   }
 
@@ -29,17 +33,22 @@ const CompetitorsPage = async () => {
     
     if (!userPlan) {
       return (
-        <PageLayout
-          title="Competitors"
-          description="Track and analyze your competitors' sentiment"
-        >
-          <Flex align="center" justify="center">
-            <NoData
-              title="No Plan Found"
-              description="Please upgrade to access competitor analysis"
-            />
-          </Flex>
-        </PageLayout>
+        <Box p={{ base: 12, sm: 16, md: 24 }}>
+          <Stack gap={24}>
+            <Title order={1} fw={600}>
+              Competitors
+            </Title>
+            <Text c="dimmed">
+              Track and analyze your competitors&apos; sentiment
+            </Text>
+            <Flex align="center" justify="center">
+              <NoData
+                title="No Plan Found"
+                description="Please upgrade to access competitor analysis"
+              />
+            </Flex>
+          </Stack>
+        </Box>
       );
     }
 
@@ -49,17 +58,22 @@ const CompetitorsPage = async () => {
 
     if (!hasAccess) {
       return (
-        <PageLayout
-          title="Competitors"
-          description="Track and analyze your competitors' sentiment"
-        >
-          <Flex align="center" justify="center">
-            <NoData
-              title="Upgrade Required"
-              description="Competitor analysis is available on paid plans"
-            />
-          </Flex>
-        </PageLayout>
+        <Box p={{ base: 12, sm: 16, md: 24 }}>
+          <Stack gap={24}>
+            <Title order={1} fw={600}>
+              Competitors
+            </Title>
+            <Text c="dimmed">
+              Track and analyze your competitors&apos; sentiment
+            </Text>
+            <Flex align="center" justify="center">
+              <NoData
+                title="Upgrade Required"
+                description="Competitor analysis is available on paid plans"
+              />
+            </Flex>
+          </Stack>
+        </Box>
       );
     }
 
@@ -68,49 +82,66 @@ const CompetitorsPage = async () => {
 
     if (isTrialUser) {
       return (
-        <PageLayout
-          title="Competitors"
-          description="Track and analyze your competitors' sentiment across multiple platforms"
-        >
-          <Box className="px-4">
-            <Stack gap={24}>
-              <TrialCompetitorDemo />
-            </Stack>
-          </Box>
-        </PageLayout>
+        <Box p={{ base: 12, sm: 16, md: 24 }}>
+          <Stack gap={24}>
+            <Title order={1} fw={600}>
+              Competitors
+            </Title>
+            <Text c="dimmed">
+              Track and analyze your competitors&apos; sentiment across multiple
+              platforms
+            </Text>
+            <Box className="px-4">
+              <Stack gap={24}>
+                <TrialCompetitorDemo />
+              </Stack>
+            </Box>
+          </Stack>
+        </Box>
       );
     }
 
     return (
-      <PageLayout
-        title="Competitors"
-        description="Track and analyze your competitors' sentiment across multiple platforms"
-      >
-        <Box className="px-4">
-          <Stack gap={24}>
-            {/* Add Competitor Form */}
-            <AddCompetitorForm userId={session.user.id} />
-            
-            {/* Competitor Cards */}
-            <CompetitorCardsWrapper userId={session.user.id} />
-            
-            {/* Competitor Analysis Chart */}
-            <CompetitorChart userId={session.user.id} />
-          </Stack>
-        </Box>
-      </PageLayout>
+      <Box p={{ base: 12, sm: 16, md: 24 }}>
+        <Stack gap={24}>
+          <Title order={1} fw={600}>
+            Competitors
+          </Title>
+          <Text c="dimmed">
+            Track and analyze your competitors&apos; sentiment across multiple
+            platforms
+          </Text>
+          <Box className="px-4">
+            <Stack gap={24}>
+              {/* Add Competitor Form */}
+              <AddCompetitorForm userId={session.user.id} />
+
+              {/* Competitor Cards */}
+              <CompetitorCardsWrapper userId={session.user.id} />
+
+              {/* Competitor Analysis Chart */}
+              <CompetitorChart userId={session.user.id} />
+            </Stack>
+          </Box>
+        </Stack>
+      </Box>
     );
   } catch (error) {
     console.error("Error loading competitors page:", error);
     return (
-      <PageLayout
-        title="Competitors"
-        description="Track and analyze your competitors' sentiment"
-      >
-        <Box p="xl" ta="center">
-          <Text color="red">An error occurred while loading data</Text>
-        </Box>
-      </PageLayout>
+      <Box p={{ base: 12, sm: 16, md: 24 }}>
+        <Stack gap={24}>
+          <Title order={1} fw={600}>
+            Competitors
+          </Title>
+          <Text c="dimmed">
+            Track and analyze your competitors&apos; sentiment
+          </Text>
+          <Box p="xl" ta="center">
+            <Text color="red">An error occurred while loading data</Text>
+          </Box>
+        </Stack>
+      </Box>
     );
   }
 };

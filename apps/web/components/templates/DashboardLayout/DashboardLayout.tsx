@@ -19,6 +19,8 @@ import { InvitationTokenHandler } from "../../InvitationTokenHandler";
 import SidebarNavigation from "../../organisms/SidebarNavigation/SidebarNavigation";
 import LogoutConfirmationModal from "../../molecules/LogoutConfirmationModal/LogoutConfirmationModal";
 import { logoutUser } from "../../../actions/account.actions";
+import ErrorState from "../../molecules/ErrorState";
+import ListLoadingSkeleton from "../../molecules/ListLoadingSkeleton";
 import classes from "./DashboardLayout.module.css";
 
 export interface DashboardLayoutProps {
@@ -32,6 +34,25 @@ export interface DashboardLayoutProps {
   headerComponent?: React.ReactNode;
   /** Additional CSS classes */
   className?: string;
+  /** Error state configuration */
+  error?: {
+    title?: string;
+    message?: string;
+    onRetry?: () => void;
+  };
+  /** Loading state configuration */
+  loading?: {
+    /** Show loading state */
+    isLoading?: boolean;
+    /** Number of skeleton items to display */
+    itemCount?: number;
+    /** Layout type for skeleton */
+    layout?: "grid" | "list";
+    /** Show page title skeleton */
+    showTitle?: boolean;
+    /** Show action button skeleton */
+    showActionButton?: boolean;
+  };
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
@@ -40,6 +61,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   hideSidebar = false,
   headerComponent,
   className,
+  error,
+  loading,
 }) => {
   const [opened, { toggle, close }] = useDisclosure();
   const [
@@ -49,6 +72,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [isLoggingOut, setIsLoggingOut] = React.useState(false);
   const isMobile = useMediaQuery("(max-width: 1024px)");
   const pathname = usePathname();
+
+  // Auto-close mobile drawer on navigation
+  React.useEffect(() => {
+    if (isMobile && opened) {
+      close();
+    }
+  }, [pathname, isMobile, opened, close]);
 
   // Handle logout confirmation
   const handleLogoutRequest = () => {
@@ -76,6 +106,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   return (
     <OnboardingWrapper>
       <InvitationTokenHandler />
+
+      {/* Living Canvas Background */}
+      <div className={classes.livingCanvasBackground}>
+        <div className={classes.glow1}></div>
+        <div className={classes.glow2}></div>
+        <div className={classes.glow3}></div>
+      </div>
+
       <AppShell
         header={{ height: 60 }}
         navbar={
@@ -136,7 +174,23 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         <AppShellMain className={classes.main}>
           <Box className={classes.content}>
             <Notifications position="top-right" />
-            {children}
+            {error ? (
+              <ErrorState
+                title={error.title}
+                message={error.message}
+                onRetry={error.onRetry}
+                showRetry={!!error.onRetry}
+              />
+            ) : loading?.isLoading ? (
+              <ListLoadingSkeleton
+                itemCount={loading.itemCount}
+                layout={loading.layout}
+                showTitle={loading.showTitle}
+                showActionButton={loading.showActionButton}
+              />
+            ) : (
+              children
+            )}
           </Box>
         </AppShellMain>
       </AppShell>

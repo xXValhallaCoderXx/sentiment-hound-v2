@@ -45,7 +45,7 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
             Cancel
           </Button>
           <Button
-            color="blue"
+            color="primary"
             leftSection={<IconLogout size={16} />}
             onClick={onConfirm}
             loading={isLoading}

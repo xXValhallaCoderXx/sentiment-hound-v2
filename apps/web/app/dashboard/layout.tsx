@@ -2,7 +2,7 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/next-auth.lib";
-import DashboardLayout from "@/components/templates/DashboardLayout";
+import DashboardLayout from "@/components/templates/DashboardLayout/DashboardLayout";
 
 const AuthenticatedLayout = async ({
   children,
