@@ -12,6 +12,41 @@ This monorepo is managed using `pnpm` and `Turborepo`. It consists of the follow
 *   **`packages/database`**: A shared package managing database schemas (using [Prisma](https://www.prisma.io/)) and providing a database client.
 *   **`packages/services`**: A shared library containing common business logic and services utilized by other applications in the monorepo.
 
+## Quick Start
+
+### 🚀 Automated Setup (Recommended)
+
+For the fastest setup of the entire development environment (JavaScript + Python):
+
+```bash
+# 1. Run the full installation script
+./scripts/install.sh
+# or alternatively:
+pnpm run install:full
+
+# 2. Start all services (Turborepo + Python sentiment service)
+./scripts/dev.sh
+# or alternatively:
+pnpm run dev:full
+```
+
+**Services will be available at:**
+- 📱 Web App: http://localhost:3000
+- 🔧 API Server: http://localhost:4000
+- 🧠 Sentiment Analysis: http://localhost:8000
+- 📚 Sentiment Analysis Docs: http://localhost:8000/docs
+
+### 🔧 Individual Service Management
+
+```bash
+# Start only JavaScript services (Turborepo)
+pnpm run dev
+
+# Start only Python sentiment analysis service
+cd apps/sentiment-analysis-service
+./dev.sh
+```
+
 ## Getting Started
 
 ### Prerequisites
