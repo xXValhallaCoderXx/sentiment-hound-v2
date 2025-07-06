@@ -23,9 +23,15 @@
 - `src/modules/jobs/jobs.service.ts` - **Processor registry**: Routes jobs to handlers
 - `src/modules/jobs/processors/content-fetch.processor.ts` - Social media content retrieval
 - `src/modules/jobs/processors/sentiment-analysis.processor.ts` - ML analysis integration
-- `src/modules/jobs/processors/post-fetch.processor.ts` - Individual post processing
+- `src/modules/jobs/processors/post-fetch.processor.ts` - **Template implementation**: Individual post processing using ExecutionContext pattern
 - `src/modules/jobs/processors/reddit-fetch-processor.ts` - Reddit-specific logic
 - `src/modules/jobs/processors/export-*.processor.ts` - Data export pipeline (fetch/format/generate)
+
+## ExecutionContext Pattern Files (July 2025)
+- `@repo/services/src/jobs/execution-context.interface.ts` - **Core interface**: ExecutionContext and TokenSource definitions
+- `@repo/services/src/jobs/execution-context.builder.ts` - **Builder function**: Authentication resolution and context creation
+- `@repo/services/src/jobs/execution-context.builder.test.ts` - Comprehensive test suite for builder logic
+- `src/modules/jobs/processors/post-fetch.processor.test.ts` - Template processor test implementation
 
 ## Job Types
 Key `SubTaskType` enum values processed:

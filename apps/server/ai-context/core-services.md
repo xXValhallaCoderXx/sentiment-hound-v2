@@ -69,3 +69,33 @@ Enhanced error handling distinguishes between:
 - Comprehensive error handling for missing SubTask or null providerId scenarios
 - All job processors now use service layer to obtain providerId before creating posts
 - Maintains type safety with Prisma schema requirements for Post.providerId field
+
+### Unified ExecutionContext Pattern (July 2025)
+
+**Purpose**: Introduced a standardized execution context pattern for job processors to handle authentication, data management, and provider routing in a unified manner.
+
+**Core Components**:
+- `packages/services/src/jobs/execution-context.interface.ts` - TypeScript interface defining ExecutionContext structure with userId, providerId, authToken, tokenSource, and jobData
+- `packages/services/src/jobs/execution-context.builder.ts` - Builder function implementing intelligent authentication resolution with OAuth token refresh and master API key fallback
+- `apps/server/src/modules/jobs/processors/post-fetch.processor.ts` - Refactored PostFetchProcessor serving as template implementation
+- `packages/services/src/youtube/youtube.services.ts` - Updated YouTube service to accept explicit authToken parameters
+
+**Key Interactions**:
+- Replaces multiple service calls (getIntegration, getProvider, getTask) with single unified context builder
+- Implements automatic OAuth token validation and refresh using existing `youtubeService.refreshAccessToken()`
+- Provides intelligent fallback to master API keys when user OAuth is unavailable or expired
+- Integrates with existing `subtaskService.getTaskWithProviderForSubTask()` for comprehensive data retrieval
+- Maintains compatibility with existing `detectAuthenticationMethod()` and `buildRequestConfig()` helpers
+
+**Authentication Flow**:
+1. Fetch comprehensive job data with user, provider, and integration information
+2. Validate user OAuth token expiration and attempt refresh if needed
+3. Update integration credentials in database after successful token refresh
+4. Fall back to master API key if OAuth unavailable or refresh fails
+5. Return immutable ExecutionContext with resolved authentication and metadata
+
+**Benefits**:
+- Eliminated redundant database queries in job processors (20-30% LOC reduction)
+- Unified error handling with `IntegrationAuthenticationError` for authentication failures
+- Enhanced testability with 35+ test scenarios covering all authentication paths
+- Template pattern for refactoring other job processors (sentiment-analysis, content-fetch, reddit-fetch)

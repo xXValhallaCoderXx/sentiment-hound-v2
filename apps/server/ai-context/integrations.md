@@ -102,3 +102,37 @@ const content = await fetchContentWithAuth(providerId, authMode, job.data);
 - Enhanced dependency on `@repo/services` for provider resolution
 - Provider service integration for platform-specific processing
 - URL parser service for content source detection
+
+### ExecutionContext Authentication Pattern (July 2025)
+
+**Purpose**: Unified authentication management for job processors with intelligent OAuth token handling and master API key fallback.
+
+**Core Components**:
+- `ExecutionContext` interface providing immutable authentication context for job operations
+- `buildExecutionContext()` function centralizing authentication resolution logic
+- Enhanced YouTube service integration with explicit token parameters
+- Automated OAuth token refresh and integration credential updates
+
+**Key Interactions**:
+- Integrates with existing `integrationsService.getIntegrationUserIntegrationByProviderId()` for user OAuth lookup
+- Uses `youtubeService.refreshAccessToken()` for automatic token renewal when expired
+- Updates integration credentials via `integrationsService.updateIntegrationAuthCredentials()`
+- Falls back to `process.env.YOUTUBE_MASTER_ACCESS_TOKEN` when user OAuth unavailable
+- Maintains compatibility with existing `detectAuthenticationMethod()` and `buildRequestConfig()` helpers
+
+**Authentication Flow**:
+1. **Token Resolution**: Fetch user integration and validate OAuth token expiration
+2. **Automatic Refresh**: Attempt token refresh for expired OAuth credentials
+3. **Credential Persistence**: Update database with refreshed tokens
+4. **Master Fallback**: Use environment-configured master API key as last resort
+5. **Error Handling**: Throw `IntegrationAuthenticationError` for complete authentication failures
+
+**Token Source Management**:
+- `TokenSource.USER_OAUTH` - User-connected integration with valid OAuth token
+- `TokenSource.MASTER_API_KEY` - Environment-configured master token for public access
+- Explicit token source tracking for proper API request configuration
+
+**External Service Compatibility**:
+- YouTube Data API v3 with both OAuth and API key authentication methods
+- Automatic detection of authentication method for proper header/parameter configuration
+- Seamless integration with existing platform service patterns
