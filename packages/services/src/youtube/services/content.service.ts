@@ -315,9 +315,8 @@ export class YoutubeContentService {
   }
 
   async fetchSingleYoutubeVideo(
-    userId: string,
-    videoUrl: string,
-    token?: string
+    authToken: string,
+    videoUrl: string
   ): Promise<IFetchAllYoutubePostsResponse | null> {
     // Extract video ID from URL
     const videoId = this.extractVideoIdFromUrl(videoUrl);
@@ -325,54 +324,9 @@ export class YoutubeContentService {
       throw new Error("Invalid YouTube video URL");
     }
 
-    let requestConfig: { url: string; headers: any };
-
-    if (token) {
-      // Use provided token with new authentication logic
-      const baseVideoUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}`;
-      requestConfig = this.buildRequestConfig(token, baseVideoUrl);
-    } else {
-      // Fall back to user integration (existing behavior)
-      const youtubeIntegration =
-        await integrationsService.getUserIntegrationByName(userId, "youtube");
-
-      if (!youtubeIntegration) {
-        throw new Error("YouTube integration not found for user");
-      }
-
-      // Check token and refresh if needed
-      const accessTokenExpiryDate = new Date(
-        youtubeIntegration.refreshTokenExpiresAt
-      );
-      const currentTime = new Date();
-      let currentAccessToken = youtubeIntegration.accessToken;
-
-      if (accessTokenExpiryDate < currentTime) {
-        console.log("ACCESS TOKEN EXPIRED");
-        const refreshToken = await youtubeService.refreshAccessToken(
-          youtubeIntegration?.refreshToken
-        );
-        console.log("NEW TOKEN: ", refreshToken);
-
-        await integrationsService.updateIntegrationAuthCredentials({
-          userId,
-          providerId: youtubeIntegration.providerId,
-          accessToken: refreshToken.accessToken,
-          refreshToken: refreshToken.refreshToken,
-          accessTokenExpiry: refreshToken.expiresAt,
-        });
-
-        currentAccessToken = refreshToken.accessToken;
-        console.log("REFRESH DONE");
-      }
-
-      requestConfig = {
-        url: `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}`,
-        headers: {
-          Authorization: `Bearer ${currentAccessToken}`,
-        }
-      };
-    }
+    // Build request configuration using provided auth token
+    const baseVideoUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}`;
+    const requestConfig = this.buildRequestConfig(authToken, baseVideoUrl);
 
     // Get video details
     try {
@@ -424,15 +378,8 @@ export class YoutubeContentService {
 
       // Fetch comments for the video
       console.log(`Fetching comments for video ${videoId}...`);
-      let comments: any[];
-      
-      if (token) {
-        // Use the token-based comment fetching
-        comments = await this.fetchVideoComments(videoId, undefined, 100, token);
-      } else {
-        // Use the existing header-based comment fetching
-        comments = await this.fetchVideoComments(videoId, requestConfig.headers);
-      }
+      // Use the provided authToken for comment fetching
+      const comments = await this.fetchVideoComments(videoId, undefined, 100, authToken);
       
       console.log(`Fetched ${comments.length} comments for video ${videoId}`);
 

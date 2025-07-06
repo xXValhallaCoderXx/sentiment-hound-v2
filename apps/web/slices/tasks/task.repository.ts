@@ -4,13 +4,12 @@ export class TaskRepository {
   private tasks: Task[] = [
     {
       id: 1,
-
+      providerId: 1, // YouTube provider ID
       errorMessage: "Task not found",
       integrationId: 1,
       status: TaskStatus.FAILED,
       type: TaskType.FULL_SYNC,
       userId: "1",
-
       createdAt: new Date(),
       updatedAt: new Date(),
     },

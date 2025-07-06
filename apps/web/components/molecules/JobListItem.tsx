@@ -52,7 +52,7 @@ interface JobListItemProps {
         image: string;
         name: string;
       };
-    };
+    } | null;
     subTasks: { type: string; subTaskMentions: { status: string }[] }[];
   };
 }
@@ -60,6 +60,11 @@ interface JobListItemProps {
 const JobListItem = ({ post }: JobListItemProps) => {
   console.log("POST", post);
   const progress = calculateProgress(post.subTasks);
+
+  // Handle jobs without integrations (master API key jobs)
+  const provider = post.integration?.provider;
+  const providerName = provider?.name ?? "Public Access";
+  const providerImage = provider?.image ?? "main-logo.png";
 
   const estimatedTime = post.updatedAt.getTime() - post.createdAt.getTime();
   const durationInMinutes = Math.ceil(estimatedTime / 60000);
@@ -72,14 +77,12 @@ const JobListItem = ({ post }: JobListItemProps) => {
               alt="provider-logo"
               height={32}
               width={32}
-              src={`/images/logos/${post?.integration?.provider?.image}`}
+              src={`/images/logos/${providerImage}`}
             />
             <Stack gap={0}>
               <Text size="lg" fw={600}>
                 {JOB_TYPE_MAP[post?.type as keyof typeof JOB_TYPE_MAP]} for{" "}
-                <span className="capitalize">
-                  {post?.integration?.provider?.name}
-                </span>
+                <span className="capitalize">{providerName}</span>
               </Text>
               <Flex gap={8} align="center">
                 <Text mt={4} size="sm">

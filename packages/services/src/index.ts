@@ -34,6 +34,9 @@ export * from "./invitation-codes"; // For backward compatibility
 export * from "./invitation-tokens";
 export * from "./promo-codes";
 export * from "./plans/plans.types";
+export * from "./jobs/execution-context.interface";
+export * from "./jobs/execution-context.builder";
+export * from "./integrations/integrations.errors";
 
 // Create singleton instances of repositories
 const queueRepository = new QueueRepository(prisma);
