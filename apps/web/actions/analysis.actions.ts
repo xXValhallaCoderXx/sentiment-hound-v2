@@ -155,14 +155,7 @@ export async function startAnalysis(
         }),
       };
     }
-    return {
-      data: null,
-      error: createErrorResponse({
-        message: "Not implemented yet",
-        code: "NOT_IMPLEMENTED",
-        statusCode: 500,
-      }),
-    };
+    // Remove this entire unreachable return statement
   } catch (error) {
     return {
       data: null,
