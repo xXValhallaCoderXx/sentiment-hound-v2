@@ -4,6 +4,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:full": "./scripts/dev.sh",
+    "install:full": "./scripts/install.sh",
     "watch": "turbo watch services:build db:build",
     "watch:packages": "pnpm run --parallel --filter @repo/services --filter @repo/db dev:watch",
     "script:gen-token": "pnpm --filter @repo/scripts gen-token",

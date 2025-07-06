@@ -45,6 +45,11 @@ packages/database/generated/client
 
 __pycache__
 env310
+venv/
+*.pyc
+*.pyo
+*.pyd
+.Python
 checkpoints
 checkpoints.json
 Aspect Term Extraction and Polarity Classification.FAST_LCF_ATEPC.result.json
