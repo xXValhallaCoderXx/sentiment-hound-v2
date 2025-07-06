@@ -1,5 +1,13 @@
 # Authentication Architecture
 
+## Table of Contents
+1. [Overview](#overview)
+2. [Authentication Modes](#authentication-modes)
+3. [ExecutionContext Authentication Pattern](#executioncontext-authentication-pattern-july-2025)
+4. [Platform-Specific Authentication](#platform-specific-authentication)
+5. [Error Handling](#error-handling)
+6. [Security Considerations](#security-considerations)
+
 ## Overview
 The server handles authentication primarily for job processing operations, supporting both user OAuth integrations and master API key access for platform data retrieval.
 
@@ -138,3 +146,31 @@ const config = buildRequestConfig(authToken, authMethod, baseUrl);
 - Added IntegrationAuthenticationError for invalid userId validation failures
 - All authentication flows now maintain userId as string throughout the process
 - Database foreign key constraints properly satisfied with string CUID values
+
+### SentimentAnalysisProcessor Authentication Refactor (July 2025)
+
+**Purpose**: Enhanced sentiment analysis job processor with unified ExecutionContext authentication pattern supporting dual authentication modes and eliminating integration lookup errors.
+
+**Core Components**:
+- `SentimentAnalysisProcessor.process()` - Implements ExecutionContext pattern
+- Conditional authentication logic based on `context.integrationId` presence
+- Enhanced logging for authentication method transparency
+- Standardized error handling for authentication failures
+
+**Authentication Flow**:
+1. **Context Building**: Use `buildExecutionContext(job.id, job.data)` instead of direct integration lookup
+2. **OAuth Scenario**: When `context.integrationId` is present, filter mentions by integration
+3. **Master API Key Scenario**: When `context.integrationId` is null, filter by `userId + providerId`
+4. **Transparent Logging**: Log authentication method for operational transparency
+5. **Error Boundary**: Catch `IntegrationAuthenticationError` and fail job gracefully
+
+**Security Enhancements**:
+- Authentication tokens never logged in any log messages
+- Proper error message formatting: `Failed to build ExecutionContext for SubTask {job.id}: [reason]`
+- Success logging format: `Built context for SubTask {job.id}: { userId, providerName, authMethod, integrationId }`
+
+**Key Interactions**:
+- **ExecutionContext Builder**: Central authentication resolution
+- **SubTask Service**: Job failure marking with authentication errors
+- **Database**: Conditional querying based on authentication context
+- **Logging System**: Structured authentication method logging

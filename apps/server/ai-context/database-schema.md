@@ -94,3 +94,45 @@
 - `remoteId` field continues to serve as unique identifier per platform
 - Foreign key relationships in analysis models reference `Mention.id` correctly
 - All mention creation flows simplified without redundant field assignments
+
+### SentimentAnalysisProcessor Database Transaction Pattern (July 2025)
+
+**Purpose**: Implemented atomic database operations in sentiment analysis processor to ensure data consistency between mention queries and SubTaskMention creation.
+
+**Core Components**:
+- Transactional mention querying with conditional where clauses
+- Atomic SubTaskMention creation with `skipDuplicates` behavior
+- Error handling for transaction failures
+- Conditional query logic supporting dual authentication modes
+
+**Transaction Implementation**:
+```typescript
+const { pendingComments } = await prisma.$transaction(async (tx) => {
+  const pendingComments = await tx.mention.findMany({
+    where: whereClause, // OAuth: integrationId, Master: userId+providerId
+  });
+
+  await tx.subTaskMention.createMany({
+    data: pendingComments.map((comment) => ({
+      subTaskId: job.id,
+      mentionId: comment.id,
+      status: 'PENDING',
+    })),
+    skipDuplicates: true,
+  });
+
+  return { pendingComments };
+});
+```
+
+**Data Consistency Benefits**:
+- Ensures mentions and SubTaskMentions are created atomically
+- Prevents race conditions in concurrent job processing
+- Maintains `skipDuplicates` behavior for idempotent operations
+- Provides rollback capability for partial failures
+
+**Key Interactions**:
+- **Mention Table**: Conditional querying based on authentication context
+- **SubTaskMention Table**: Bulk creation with duplicate prevention
+- **Job Processing**: Atomic data preparation for sentiment analysis
+- **Error Handling**: Transaction rollback on database failures

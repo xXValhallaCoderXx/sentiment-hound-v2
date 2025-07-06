@@ -51,6 +51,85 @@ constructor(private prisma: PrismaClient) {
 
 ```typescript
 @Injectable()
+export class ExampleProcessor {
+  async process(job: Job): Promise<void> {
+    try {
+      // 1. Extract job data
+      const { userId, providerId, url } = job.data;
+      
+      // 2. Process core logic
+      await this.executeBusinessLogic(job.data);
+      
+      // 3. Mark job complete
+      await subtaskService.markSubTaskAsCompleted(job.id);
+    } catch (error) {
+      // 4. Handle errors gracefully
+      await subtaskService.markSubTaskAsFailed(String(job.id), error.message);
+    }
+  }
+}
+```
+
+### Unified ExecutionContext Pattern for Job Processors (July 2025)
+
+**Purpose**: Standardized authentication pattern across all job processors using ExecutionContext for consistent dual-authentication support.
+
+**Core Pattern Implementation**:
+```typescript
+/**
+ * Unified job processor authentication pattern
+ */
+async process(job: Job): Promise<void> {
+  try {
+    // Step 1: Build unified execution context
+    const context: ExecutionContext = await buildExecutionContext(job.id, job.data);
+    
+    // Step 2: Log authentication method
+    this.logger.log(`Built context for SubTask ${job.id}: { userId, providerName, authMethod, integrationId }`);
+    
+    // Step 3: Conditional logic based on authentication
+    const whereClause = context.integrationId 
+      ? { /* OAuth filtering */ }
+      : { /* Master API key filtering */ };
+    
+    // Step 4: Database operations with transactions
+    await prisma.$transaction(async (tx) => {
+      // Atomic operations here
+    });
+    
+  } catch (error) {
+    if (error instanceof IntegrationAuthenticationError) {
+      this.logger.error(`Failed to build ExecutionContext for SubTask ${job.id}: ${error.message}`);
+      await subtaskService.markSubTaskAsFailed(String(job.id), error.message);
+      return;
+    }
+    // Handle other errors
+  }
+}
+```
+
+**Adopted by Processors**:
+- ✅ `PostFetchProcessor` - Original implementation
+- ✅ `SentimentAnalysisProcessor` - July 2025 refactor
+- 🔄 Additional processors to be migrated
+
+**Key Benefits**:
+- **Consistency**: Standardized authentication across all processors
+- **Reliability**: Robust error handling with proper job failure marking
+- **Flexibility**: Supports both OAuth and master API key scenarios
+- **Transparency**: Structured logging for operational visibility
+- **Security**: No authentication tokens in logs
+
+**Testing Pattern**:
+- Comprehensive Vitest test suites with mocked dependencies
+- OAuth and master API key scenario coverage
+- Error handling and transaction testing
+- Authentication failure boundary validation
+
+## Authentication Patterns
+
+```typescript
+@Injectable()
 export class MyProcessor {
   async process(job: Job): Promise<void> {
     try {
@@ -175,6 +254,62 @@ interface ExecutionContext {
 ```
 
 **Template Implementation**: PostFetchProcessor serves as the reference implementation for this pattern, ready for replication across other job processors (sentiment-analysis, content-fetch, reddit-fetch).
+
+### Unified ExecutionContext Pattern for Job Processors (July 2025)
+
+**Purpose**: Standardized authentication pattern across all job processors using ExecutionContext for consistent dual-authentication support.
+
+**Core Pattern Implementation**:
+```typescript
+/**
+ * Unified job processor authentication pattern
+ */
+async process(job: Job): Promise<void> {
+  try {
+    // Step 1: Build unified execution context
+    const context: ExecutionContext = await buildExecutionContext(job.id, job.data);
+    
+    // Step 2: Log authentication method
+    this.logger.log(`Built context for SubTask ${job.id}: { userId, providerName, authMethod, integrationId }`);
+    
+    // Step 3: Conditional logic based on authentication
+    const whereClause = context.integrationId 
+      ? { /* OAuth filtering */ }
+      : { /* Master API key filtering */ };
+    
+    // Step 4: Database operations with transactions
+    await prisma.$transaction(async (tx) => {
+      // Atomic operations here
+    });
+    
+  } catch (error) {
+    if (error instanceof IntegrationAuthenticationError) {
+      this.logger.error(`Failed to build ExecutionContext for SubTask ${job.id}: ${error.message}`);
+      await subtaskService.markSubTaskAsFailed(String(job.id), error.message);
+      return;
+    }
+    // Handle other errors
+  }
+}
+```
+
+**Adopted by Processors**:
+- ✅ `PostFetchProcessor` - Original implementation
+- ✅ `SentimentAnalysisProcessor` - July 2025 refactor
+- 🔄 Additional processors to be migrated
+
+**Key Benefits**:
+- **Consistency**: Standardized authentication across all processors
+- **Reliability**: Robust error handling with proper job failure marking
+- **Flexibility**: Supports both OAuth and master API key scenarios
+- **Transparency**: Structured logging for operational visibility
+- **Security**: No authentication tokens in logs
+
+**Testing Pattern**:
+- Comprehensive Vitest test suites with mocked dependencies
+- OAuth and master API key scenario coverage
+- Error handling and transaction testing
+- Authentication failure boundary validation
 
 ### Explicit Authentication Method Pattern (July 2025)
 **Deterministic authentication specification pattern eliminating heuristic detection**:

@@ -172,3 +172,27 @@ Enhanced error handling distinguishes between:
 - **Simplified Data Flow**: Mention creation now relies solely on auto-generated primary key and platform-specific `remoteId`
 - **Maintainability**: Fewer fields to manage and validate during comment/mention processing
 - **Type Safety**: Prisma client auto-generation ensures compile-time validation of schema changes
+
+### SentimentAnalysisProcessor ExecutionContext Refactor (July 2025)
+
+**Purpose**: Migrated sentiment analysis job processor to use the unified ExecutionContext pattern, eliminating direct integration service calls and implementing robust dual-authentication support.
+
+**Core Components**:
+- `SentimentAnalysisProcessor.process()` - Refactored with ExecutionContext pattern
+- `sentiment-analysis.processor.test.ts` - Comprehensive Vitest test suite (10 tests)
+- Database transaction pattern for mention queries and SubTaskMention creation
+- Conditional query logic supporting both OAuth and master API key scenarios
+
+**Key Architectural Improvements**:
+- **Unified Authentication**: Replaced `integrationsService.getIntegration()` with `buildExecutionContext()`
+- **Conditional Data Querying**: OAuth uses `context.integrationId`, master API key uses `context.userId + context.providerId`
+- **Transaction Safety**: Wrapped mention `findMany` and `subTaskMention.createMany` in `prisma.$transaction()`
+- **Enhanced Error Handling**: Standardized `IntegrationAuthenticationError` handling with proper logging
+- **Preserved Core Logic**: Maintained 25-comment batch processing and FastAPI integration unchanged
+
+**Key Interactions**:
+- **ExecutionContext Builder**: `buildExecutionContext()` for unified authentication resolution
+- **Mention Service**: `updateMentionSentiment()` for sentiment data persistence
+- **SubTask Service**: `markSubTaskAsCompleted()` and `markSubTaskAsFailed()` for job lifecycle
+- **Sentiment Analysis API**: External FastAPI service at `http://localhost:8000/analyze`
+- **Database Transactions**: Atomic operations for data consistency
