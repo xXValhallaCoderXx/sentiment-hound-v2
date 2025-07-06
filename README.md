@@ -48,6 +48,12 @@ This monorepo is managed using `pnpm` and `Turborepo`. It consists of the follow
         # NextAuth Configuration (required for OAuth callbacks)
         NEXTAUTH_URL=http://localhost:3000
         ```
+    *   For analysis service master tokens (fallback when users don't have connected accounts), add the following to your environment files:
+        ```env
+        # Master Access Tokens for Analysis Fallback
+        YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_master_token
+        REDDIT_MASTER_ACCESS_TOKEN=your_reddit_master_token
+        ```
         To obtain Reddit OAuth credentials:
         1. Go to [Reddit App Preferences](https://www.reddit.com/prefs/apps)
         2. Click "Create App" or "Create Another App"
@@ -204,3 +210,89 @@ For more detailed information on each specific application or service, including
 
 ## Agent Files
 - `.agent.md`: Rovodev
+
+## API Reference
+
+### Analysis Server Action
+
+The platform provides a robust server action for starting sentiment analysis tasks with intelligent token fallback logic.
+
+#### `startAnalysis(postUrl: string)`
+
+**Purpose**: Initiates sentiment analysis for social media content from supported platforms.
+
+**Parameters**:
+- `postUrl` (string): The URL of the content to analyze (YouTube videos or Reddit posts)
+
+**Returns**: `Promise<ActionResponse<{ taskId: number; status: string }>>`
+
+**Features**:
+- ✅ **Provider Detection**: Automatically detects and validates URLs from YouTube and Reddit
+- ✅ **Intelligent Token Selection**: Uses user's connected integrations first, falls back to master tokens
+- ✅ **Comprehensive Error Handling**: Provides detailed error codes and user-friendly messages
+- ✅ **Authentication Required**: Ensures only authenticated users can start analyses
+- ✅ **Database Integration**: Creates tasks and subtasks for background processing
+
+**Usage Example**:
+
+```typescript
+import { startAnalysis } from '@/actions/analysis.actions';
+
+// In a React component or server action
+const handleAnalyze = async (url: string) => {
+  const result = await startAnalysis(url);
+  
+  if (result.error) {
+    console.error('Analysis failed:', result.error.error);
+    // Handle different error types
+    switch (result.error.code) {
+      case 'UNAUTHORIZED':
+        // Redirect to login
+        break;
+      case 'URL_INVALID':
+        // Show URL validation message
+        break;
+      case 'AUTH_UNAVAILABLE':
+        // Show service unavailable message
+        break;
+    }
+  } else {
+    console.log('Analysis started:', result.data);
+    // result.data = { taskId: 123, status: 'PENDING' }
+  }
+};
+```
+
+**Error Codes**:
+- `UNAUTHORIZED` (401): User not authenticated
+- `URL_INVALID` (400): Invalid or unsupported URL format
+- `AUTH_UNAVAILABLE` (403): No valid tokens available for the provider
+- `INTEGRATION_INACTIVE` (403): User's integration is inactive
+- `DATABASE_ERROR` (500): Database operation failed
+
+**Frontend Component Example**:
+
+```typescript
+import AnalyzeButton from '@/components/atoms/AnalyzeButton';
+
+// Use the pre-built component
+<AnalyzeButton 
+  onAnalysisStarted={(taskId) => console.log('Started:', taskId)}
+  placeholder="Enter YouTube or Reddit URL..."
+  compact={false}
+/>
+
+// Or use in compact mode
+<AnalyzeButton compact />
+```
+
+**Required Environment Variables**:
+For master token fallback when users don't have connected accounts:
+```env
+YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_api_key
+REDDIT_MASTER_ACCESS_TOKEN=your_reddit_oauth_token
+```
+
+**Supported URL Formats**:
+- **YouTube**: `youtube.com/watch?v=`, `youtu.be/`, `m.youtube.com/watch?v=`, `youtube.com/embed/`
+- **Reddit**: `reddit.com/r/subreddit/comments/`, `old.reddit.com/r/subreddit/comments/`
