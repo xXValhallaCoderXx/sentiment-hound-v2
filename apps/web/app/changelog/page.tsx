@@ -32,6 +32,59 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: "v0.3.0",
+    date: "2025-07-07",
+    title: "The Dashboard Arrives & Engine Upgrades",
+    description:
+      "The first version of the core application is now functional! This major update includes the first look at your dashboard and significant improvements to our analysis engine for faster, more reliable results.",
+    changes: [
+      {
+        type: "added",
+        items: [
+          "The 'My Analyses' Dashboard: Your new home base to see a list of all your submitted posts and their sentiment scores at a glance.",
+          "The 'Analyze New Post' Page: A dedicated, focused page to submit new public URLs for analysis.",
+        ],
+      },
+      {
+        type: "improved",
+        items: [
+          "A More Reliable Backend: We've re-engineered our analysis pipeline, making it smarter and more robust. This means fewer failed jobs and more consistent results for you.",
+          "Smarter Data Fetching: Improved how we connect to platforms like YouTube, ensuring a stable and reliable connection for every analysis.",
+        ],
+      },
+      {
+        type: "fixed",
+        items: [
+          "Squashed a critical bug that could cause an analysis to fail immediately after being submitted. Your jobs are now much more likely to complete successfully.",
+          "Improved Data Integrity: Fixed an issue that could prevent some comments from being saved, ensuring your analysis is more complete and accurate.",
+        ],
+      },
+    ],
+  },
+  {
+    version: "v0.2.0",
+    date: "2025-07-04",
+    title: "Declaring Independence from Bad UI",
+    description:
+      "We spent the holiday week declaring our independence from inconsistent layouts. This update introduces a major overhaul to the application's core structure for a more cohesive experience.",
+    changes: [
+      {
+        type: "improved",
+        items: [
+          "Unified App Experience: Introduced a new, consistent 'App Shell' with a persistent sidebar for seamless navigation.",
+          "A Simpler, Cleaner Settings Page: Completely redesigned the Settings page, removing clutter and focusing on the core actions for the alpha.",
+        ],
+      },
+      {
+        type: "fixed",
+        items: [
+          "Polished Page Layouts: Fine-tuned spacing and alignment across the app, ensuring content is perfectly centered and has room to breathe.",
+          "Fixed a small bug where logging out could sometimes show two confirmation pop-ups. Now there's just one!",
+        ],
+      },
+    ],
+  },
+  {
     version: "v0.0.1",
     date: "2025-06-29",
     title: "Website & Brand Identity Refinements",
