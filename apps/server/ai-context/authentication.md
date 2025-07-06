@@ -123,3 +123,18 @@ const config = buildRequestConfig(authToken, authMethod, baseUrl);
 - User OAuth provides access to user's connected platforms only
 - Master API keys limited to public endpoints and content
 - No cross-user data access possible through authentication system
+
+### ExecutionContext Type Safety (July 2025)
+
+**Purpose**: Enhanced type safety and validation for ExecutionContext userId field to prevent database constraint violations.
+
+**Core Components**:
+- `ExecutionContext.userId` field now strongly typed as string (CUID format)
+- `validateExecutionContext()` function with runtime string validation
+- Comprehensive test suite preventing regression of type conversion bugs
+
+**Key Interactions**:
+- Eliminated Number() conversions that caused CUID-to-NaN conversion issues
+- Added IntegrationAuthenticationError for invalid userId validation failures
+- All authentication flows now maintain userId as string throughout the process
+- Database foreign key constraints properly satisfied with string CUID values

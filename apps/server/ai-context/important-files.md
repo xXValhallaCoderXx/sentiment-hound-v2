@@ -31,6 +31,7 @@
 - `@repo/services/src/jobs/execution-context.interface.ts` - **Core interface**: ExecutionContext and TokenSource definitions
 - `@repo/services/src/jobs/execution-context.builder.ts` - **Builder function**: Authentication resolution and context creation
 - `@repo/services/src/jobs/execution-context.builder.test.ts` - Comprehensive test suite for builder logic
+- `@repo/services/src/jobs/execution-context.validation.test.ts` - **Type safety tests**: Regression prevention for userId validation
 - `src/modules/jobs/processors/post-fetch.processor.test.ts` - Template processor test implementation
 
 ## Job Types

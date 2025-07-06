@@ -117,7 +117,7 @@ describe('buildExecutionContext', () => {
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: 456,
+        userId: '456',
         providerId: 1,
         providerName: 'YouTube',
         authToken: 'valid_access_token',
@@ -167,7 +167,7 @@ describe('buildExecutionContext', () => {
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: 456,
+        userId: '456',
         providerId: 1,
         providerName: 'YouTube',
         authToken: 'new_access_token',
@@ -208,7 +208,7 @@ describe('buildExecutionContext', () => {
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: 456,
+        userId: '456',
         providerId: 1,
         providerName: 'YouTube',
         authToken: 'master_api_token',
@@ -240,7 +240,7 @@ describe('buildExecutionContext', () => {
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: 456,
+        userId: '456',
         providerId: 1,
         providerName: 'YouTube',
         authToken: 'master_api_token',

@@ -125,7 +125,7 @@ describe('PostFetchProcessor', () => {
       it('should successfully process video with OAuth authentication', async () => {
         // Arrange
         const mockContext: ExecutionContext = {
-          userId: 456,
+          userId: '456',
           providerId: 1,
           providerName: 'YouTube',
           authToken: 'oauth_access_token_123',
@@ -199,7 +199,7 @@ describe('PostFetchProcessor', () => {
       it('should successfully process video with master API key fallback', async () => {
         // Arrange
         const mockContext: ExecutionContext = {
-          userId: 456,
+          userId: '456',
           providerId: 1,
           providerName: 'YouTube',
           authToken: 'AIzaSyC_master_api_key_123',
@@ -282,7 +282,7 @@ describe('PostFetchProcessor', () => {
       it('should throw error for unsupported providers', async () => {
         // Arrange
         const mockContext: ExecutionContext = {
-          userId: 456,
+          userId: '456',
           providerId: 2,
           providerName: 'TikTok', // Unsupported provider
           authToken: 'tiktok_token_123',
@@ -322,7 +322,7 @@ describe('PostFetchProcessor', () => {
         };
 
         const mockContext: ExecutionContext = {
-          userId: 456,
+          userId: '456',
           providerId: 1,
           providerName: 'YouTube',
           authToken: 'oauth_token_123',
@@ -353,7 +353,7 @@ describe('PostFetchProcessor', () => {
       it('should handle YouTube API failures gracefully', async () => {
         // Arrange
         const mockContext: ExecutionContext = {
-          userId: 456,
+          userId: '456',
           providerId: 1,
           providerName: 'YouTube',
           authToken: 'oauth_token_123',
@@ -385,7 +385,7 @@ describe('PostFetchProcessor', () => {
       it('should handle post creation failures', async () => {
         // Arrange
         const mockContext: ExecutionContext = {
-          userId: 456,
+          userId: '456',
           providerId: 1,
           providerName: 'YouTube',
           authToken: 'oauth_token_123',
@@ -421,7 +421,7 @@ describe('PostFetchProcessor', () => {
       it('should use correct IDs from ExecutionContext throughout the flow', async () => {
         // Arrange
         const mockContext: ExecutionContext = {
-          userId: 999, // Different from jobData to ensure context is used
+          userId: '999', // Different from jobData to ensure context is used
           providerId: 3,
           providerName: 'YouTube',
           authToken: 'test_token',

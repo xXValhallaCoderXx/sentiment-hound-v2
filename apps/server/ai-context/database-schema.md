@@ -49,6 +49,21 @@
 - Provider resolution from URL parsing or integration lookup
 - Background processors use appropriate authentication based on integration presence
 
+### ExecutionContext Foreign Key Type Safety (July 2025)
+
+**Purpose**: Fixed critical bug where userId foreign key values were converted to NaN, causing database constraint violations.
+
+**Core Components**:
+- All userId fields maintain CUID string format throughout application flow
+- ExecutionContext builder validates userId as non-empty string before database operations
+- Comprehensive test coverage prevents regression of type conversion issues
+
+**Key Interactions**:
+- Post creation operations properly reference User.id with string CUID values
+- Task and subtask creation maintain valid foreign key relationships
+- Authentication context preserves userId type integrity across service boundaries
+- Database foreign key constraints consistently satisfied with proper CUID values
+
 ### Post Model ProviderId Requirement Enforcement (July 2025)
 
 **Purpose**: Database schema refactor enforcing Post.providerId as a required field to ensure proper provider relationship tracking.
