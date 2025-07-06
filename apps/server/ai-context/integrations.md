@@ -141,3 +141,33 @@ const content = await fetchContentWithAuth(providerId, authMode, job.data);
 - YouTube Data API v3 with both OAuth and API key authentication methods
 - Automatic detection of authentication method for proper header/parameter configuration
 - Seamless integration with existing platform service patterns
+
+### YouTube Service Authentication Architecture Overhaul (July 2025)
+
+**Purpose**: Complete modernization of YouTube integration authentication to eliminate heuristic detection and implement explicit authentication method specification throughout the integration layer.
+
+**Core Components**:
+- YouTube Content Service with explicit authentication method parameters
+- Refactored service integration patterns for deterministic authentication behavior
+- Environment variable standardization from `YOUTUBE_MASTER_ACCESS_TOKEN` to `YOUTUBE_MASTER_API_KEY`
+- Enhanced ExecutionContext with immutable `authMethod` property
+- Complete removal of heuristic `detectAuthenticationMethod()` logic
+
+**Integration Flow Changes**:
+- **ExecutionContext Creation**: Authentication method explicitly determined during context building based on token source
+- **Service Method Calls**: All YouTube service methods now require explicit `authMethod: 'OAUTH' | 'API_KEY'` parameters
+- **Request Configuration**: Dynamic authentication handling based on explicit method rather than token format analysis
+- **Error Context**: Authentication method included in all error messages and logs for improved debugging
+
+**External Service Integration**:
+- **YouTube Data API v3**: Explicit OAuth (Authorization header) vs API key (URL parameter) request configuration
+- **Authentication Method Forwarding**: Job processors pass ExecutionContext authentication method to service calls
+- **Token Source Mapping**: `TokenSource.USER_OAUTH` → `'OAUTH'`, `TokenSource.MASTER_API_KEY` → `'API_KEY'`
+- **Service Layer Consistency**: Authentication method specification maintained throughout entire call chain
+
+**Migration Benefits**:
+- **Reliability**: Elimination of authentication failures caused by token format misdetection
+- **Debugging**: Clear authentication method context in integration error scenarios
+- **Maintainability**: Explicit authentication flows improve code comprehension and maintenance
+- **Testing**: Deterministic authentication behavior enables comprehensive test coverage
+- **Production Stability**: Consistent authentication method handling reduces integration failures

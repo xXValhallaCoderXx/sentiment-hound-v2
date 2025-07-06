@@ -99,3 +99,33 @@ Enhanced error handling distinguishes between:
 - Unified error handling with `IntegrationAuthenticationError` for authentication failures
 - Enhanced testability with 35+ test scenarios covering all authentication paths
 - Template pattern for refactoring other job processors (sentiment-analysis, content-fetch, reddit-fetch)
+
+### YouTube Content Service Authentication Modernization (July 2025)
+
+**Purpose**: Major architectural refactoring of YouTube content service to eliminate heuristic authentication detection and implement explicit authentication method specification throughout the service layer.
+
+**Core Components**:
+- `YoutubeContentService` - Refactored with explicit authentication method parameters
+- `YoutubeService` wrapper - Updated to forward explicit authentication methods
+- `PostFetchProcessor` - Enhanced to use ExecutionContext authentication method
+- `ExecutionContext` interface - Extended with readonly `authMethod` property
+- Environment configuration - Standardized YouTube master API key variable naming
+
+**Key Service Changes**:
+- **Method Signature Updates**: All YouTube service methods now require explicit `authMethod: 'OAUTH' | 'API_KEY'` parameters
+- **Request Configuration**: `buildRequestConfig()` method accepts explicit authentication method instead of detecting from token format
+- **Heuristic Removal**: Complete elimination of `detectAuthenticationMethod()` function and all token format analysis
+- **Error Context**: Authentication method included in error messages and debugging logs
+- **Test Coverage**: Comprehensive test updates to validate explicit authentication flows
+
+**Service Integration Impact**:
+- Job processors extract `authMethod` from ExecutionContext and pass explicitly to YouTube services
+- Authentication method determination moved to ExecutionContext creation phase
+- Service layer now operates with deterministic authentication behavior
+- Cross-service authentication calls maintain explicit method specification throughout call chain
+
+**Architectural Benefits**:
+- **Reliability**: Eliminates authentication failures caused by token format misdetection
+- **Maintainability**: Clear authentication method flow throughout service architecture
+- **Debugging**: Explicit authentication method context in all error scenarios
+- **Testing**: Predictable authentication behavior enables robust test scenarios

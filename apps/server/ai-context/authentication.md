@@ -62,6 +62,38 @@ const config = buildRequestConfig(authToken, authMethod, baseUrl);
 // OAuth: Authorization header | API Key: URL parameter
 ```
 
+### Explicit Authentication Method Refactoring (July 2025)
+
+**Purpose**: Elimination of heuristic authentication detection in favor of explicit authentication method specification throughout the YouTube content service layer, ensuring deterministic and robust authentication behavior.
+
+**Core Components**:
+- `ExecutionContext` interface extended with `authMethod: 'OAUTH' | 'API_KEY'` property
+- `buildExecutionContext()` function enhanced to explicitly determine authentication method based on token source
+- `YoutubeContentService.buildRequestConfig()` refactored to accept explicit authentication method parameter
+- Complete removal of `detectAuthenticationMethod()` heuristic function
+- Environment variable migration from `YOUTUBE_MASTER_ACCESS_TOKEN` to `YOUTUBE_MASTER_API_KEY`
+
+**Key Interactions**:
+- `ExecutionContext.authMethod` property provides explicit authentication specification
+- `TokenSource.USER_OAUTH` maps deterministically to `authMethod: 'OAUTH'`
+- `TokenSource.MASTER_API_KEY` maps deterministically to `authMethod: 'API_KEY'`
+- YouTube service methods (`fetchSingleYoutubeVideo`, `fetchVideoDetails`, `fetchVideoComments`) updated to accept explicit `authMethod` parameters
+- Job processors pass `context.authMethod` explicitly to YouTube service calls
+- Authentication method logged for debugging and monitoring
+
+**Architecture Benefits**:
+- **Deterministic Behavior**: No more unreliable token format analysis or heuristic detection
+- **Explicit Configuration**: Authentication method determined at ExecutionContext creation and passed throughout call chain
+- **Robust Error Handling**: Clear authentication method context in error messages and logs
+- **Test Reliability**: Authentication tests no longer depend on token format assumptions
+- **Production Stability**: Eliminates authentication failures caused by heuristic misdetection
+
+**Migration Impact**:
+- All YouTube API authentication now uses explicit method specification
+- Environment variables standardized with consistent naming convention
+- Test suites updated to validate explicit authentication flow
+- Documentation updated to reflect deterministic authentication approach
+
 ## Error Handling
 
 ### Authentication Error Types

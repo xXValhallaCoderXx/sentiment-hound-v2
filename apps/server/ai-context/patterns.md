@@ -176,6 +176,86 @@ interface ExecutionContext {
 
 **Template Implementation**: PostFetchProcessor serves as the reference implementation for this pattern, ready for replication across other job processors (sentiment-analysis, content-fetch, reddit-fetch).
 
+### Explicit Authentication Method Pattern (July 2025)
+**Deterministic authentication specification pattern eliminating heuristic detection**:
+
+```typescript
+@Injectable()
+export class ExplicitAuthProcessor {
+  async process(job: Job): Promise<void> {
+    // 1. Build execution context with explicit auth method
+    const context = await buildExecutionContext(job.id, job.data);
+    
+    // 2. Extract explicit authentication method from context
+    const { authToken, authMethod } = context; // authMethod: 'OAUTH' | 'API_KEY'
+    
+    // 3. Pass explicit authentication to service calls
+    const result = await youtubeService.fetchSingleYoutubeVideo(
+      authToken,
+      authMethod, // <- Explicit method specification
+      job.data.url
+    );
+    
+    // 4. Log authentication method for debugging
+    this.logger.log(`Processing with ${authMethod} authentication`, 'ExplicitAuthProcessor');
+  }
+}
+```
+
+**Service Layer Implementation**:
+```typescript
+// YouTube Content Service with explicit authentication
+class YoutubeContentService {
+  async fetchSingleYoutubeVideo(
+    authToken: string,
+    authMethod: 'OAUTH' | 'API_KEY', // <- Explicit parameter
+    videoUrl: string
+  ): Promise<VideoData> {
+    // Build request configuration based on explicit method
+    const requestConfig = this.buildRequestConfig(authToken, authMethod, baseUrl);
+    
+    // OAuth: Authorization header | API Key: URL parameter
+    return await this.makeRequest(requestConfig);
+  }
+  
+  private buildRequestConfig(
+    token: string,
+    authMethod: 'OAUTH' | 'API_KEY',
+    baseUrl: string
+  ): RequestConfig {
+    if (authMethod === 'OAUTH') {
+      return {
+        url: baseUrl,
+        headers: { Authorization: `Bearer ${token}` }
+      };
+    } else {
+      const separator = baseUrl.includes('?') ? '&' : '?';
+      return {
+        url: `${baseUrl}${separator}key=${encodeURIComponent(token)}`,
+        headers: {}
+      };
+    }
+  }
+}
+```
+
+**Pattern Benefits**:
+- **Deterministic Behavior**: No token format analysis or heuristic detection
+- **Explicit Configuration**: Authentication method determined once at ExecutionContext creation
+- **Robust Error Context**: Authentication method included in all error messages
+- **Test Reliability**: Predictable authentication behavior in test scenarios
+- **Production Stability**: Eliminates authentication failures from format misdetection
+- **Code Clarity**: Explicit method parameters improve code readability and maintenance
+
+**Token Source Mapping**:
+```typescript
+// ExecutionContext builder determines authentication method explicitly
+const authMethod = tokenSource === TokenSource.USER_OAUTH ? 'OAUTH' : 'API_KEY';
+
+// Method flows explicitly through entire call chain
+context.authMethod → processor → service → buildRequestConfig
+```
+
 ## Configuration and Error Handling
 
 ### Error Handling
