@@ -105,17 +105,17 @@
   - [x] 8.6 Confirm foreign key constraints are properly enforced
   - [x] 8.7 Test that new records can be created with null `integrationId` but valid `providerId`
 
-- [ ] **9.0 Write Comprehensive Tests**
+- [x] **9.0 Write Comprehensive Tests**
 
-  - [ ] 9.1 Create unit tests for updated task service in `packages/services/src/tasks/tasks.service.test.ts`
-  - [ ] 9.2 Test API key authentication scenario (null `integrationId`, valid `providerId`)
-  - [ ] 9.3 Test user integration scenario (valid `integrationId` and `providerId`)
-  - [ ] 9.4 Test provider resolution from URL parsing
-  - [ ] 9.5 Test error handling for unknown providers
-  - [ ] 9.6 Create unit tests for updated post service in `packages/services/src/posts/posts.service.test.ts`
-  - [ ] 9.7 Test post creation with optional `integrationId` and required `providerId`
-  - [ ] 9.8 Create unit tests for updated mention service in `packages/services/src/mentions/mentions.service.test.ts`
-  - [ ] 9.9 Test mention creation with optional `providerId`
+  - [x] 9.1 Create unit tests for updated task service in `packages/services/src/tasks/tasks.service.test.ts`
+  - [x] 9.2 Test API key authentication scenario (null `integrationId`, valid `providerId`)
+  - [x] 9.3 Test user integration scenario (valid `integrationId` and `providerId`)
+  - [x] 9.4 Test provider resolution from URL parsing
+  - [x] 9.5 Test error handling for unknown providers
+  - [x] 9.6 Create unit tests for updated post service in `packages/services/src/posts/posts.service.test.ts`
+  - [x] 9.7 Test post creation with optional `integrationId` and required `providerId`
+  - [x] 9.8 Create unit tests for updated mention service in `packages/services/src/mentions/mentions.service.test.ts`
+  - [x] 9.9 Test mention creation with optional `providerId`
 
 - [ ] **10.0 Validation and Quality Assurance**
   - [ ] 10.1 Run full test suite to ensure no regressions: `pnpm test`
