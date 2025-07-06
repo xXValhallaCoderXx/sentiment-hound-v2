@@ -35,6 +35,31 @@ export class MyProcessor {
 }
 ```
 
+## Provider-Aware Processing Pattern (July 2025)
+**Enhanced job processing with provider context**:
+
+```typescript
+@Injectable()
+export class ContentFetchProcessor {
+  async process(job: Job): Promise<void> {
+    const { providerId, integrationId, url } = job.data;
+    
+    // Determine authentication strategy
+    const authMode = integrationId ? 'oauth' : 'api_key';
+    
+    // Provider-specific content fetching
+    const content = await this.fetchByProvider(providerId, authMode, job.data);
+    
+    // Update task with provider context
+    await coreTaskService.updateTask(job.data.taskId, {
+      status: 'COMPLETED',
+      providerId,
+      content
+    });
+  }
+}
+```
+
 ## Module Structure
 **Standard NestJS module pattern**:
 
@@ -62,3 +87,12 @@ export class FeatureModule {}
 - **Services**: Injected via constructor
 - **Repositories**: Through service layer
 - **External APIs**: As configurable providers
+
+## Service Injection Pattern
+**Consistent dependency injection for testability**:
+
+```typescript
+constructor(private prisma: PrismaClient) {
+  this.model = this.prisma.task; // Use injected instance
+}
+```

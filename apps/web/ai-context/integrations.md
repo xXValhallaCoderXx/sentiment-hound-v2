@@ -19,6 +19,33 @@ Key services used by web app:
 - `dashboardService` - Analytics aggregation
 - `postService` - Social media post handling
 
+## Service Layer Enhancements
+
+### Provider-Aware Service Integration (July 2025)
+
+**Purpose**: Enhanced service layer integration to support direct provider relationships and flexible authentication modes.
+
+**Core Components**:
+- Services now accept `providerId` parameters for direct platform targeting
+- URL parser service integration for automatic provider detection
+- Enhanced provider service with case-insensitive lookups and caching
+
+**Key Interactions**:
+- Server actions resolve provider information before service calls
+- Services handle both OAuth integration IDs and direct provider IDs
+- Backward compatibility maintained for existing integration-based flows
+
+```typescript
+// Enhanced service usage pattern
+const provider = await urlParserService.parse(url);
+const task = await taskService.createTask({
+  userId,
+  providerId: providerRecord.id,
+  integrationId: integration?.id || null, // Optional for API key mode
+  extraData: { url, token }
+});
+```
+
 ## Database (`@repo/db`)
 **Single Prisma client** for all database operations:
 
