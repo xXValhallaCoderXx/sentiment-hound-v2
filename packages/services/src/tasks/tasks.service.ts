@@ -23,7 +23,7 @@ export class CoreTaskService {
   private planService: any; // Import type later to avoid circular dependencies
 
   constructor(private prisma: PrismaClient) {
-    this.model = prisma.task;
+    this.model = this.prisma.task;
   }
 
   setPlanService(planService: any) {
@@ -163,7 +163,7 @@ export class CoreTaskService {
     // If we still don't have a providerId, try to resolve from integrationId
     if (!resolvedProviderId && integrationId) {
       try {
-        const integration = await prisma.integration.findUnique({
+        const integration = await this.prisma.integration.findUnique({
           where: { id: integrationId },
           include: { provider: true },
         });
@@ -263,7 +263,7 @@ export class CoreTaskService {
     } else if (integrationId && integrationId !== 0) {
       // Fallback to original integration lookup by ID
       console.log(`Using fallback integration lookup for ID: ${integrationId}`);
-      integration = await prisma.integration.findUnique({
+      integration = await this.prisma.integration.findUnique({
         where: { id: integrationId },
         include: { provider: true },
       });
