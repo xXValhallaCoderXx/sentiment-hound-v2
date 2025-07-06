@@ -10,6 +10,20 @@ import { subtaskService, youtubeService, integrationsService } from '../index';
 import { IntegrationAuthenticationError } from '../integrations/integrations.errors';
 
 /**
+ * Validates that the ExecutionContext has a valid userId
+ * @param context - The ExecutionContext to validate
+ * @param jobId - The job ID for error messaging
+ * @throws IntegrationAuthenticationError if userId is invalid
+ */
+function validateExecutionContext(context: ExecutionContext, jobId: number): void {
+  if (typeof context.userId !== 'string' || context.userId.length === 0) {
+    throw new IntegrationAuthenticationError(
+      `Critical Error: ExecutionContext was built with an invalid userId for SubTask ${jobId}`
+    );
+  }
+}
+
+/**
  * Builds a complete ExecutionContext for job processing operations.
  * 
  * This function implements the unified authentication strategy:
@@ -72,8 +86,8 @@ export async function buildExecutionContext(
           });
           
           // Return context with refreshed OAuth token
-          return {
-            userId: Number(user.id),
+          const context = {
+            userId: user.id,
             providerId: provider.id,
             providerName: provider.name,
             authToken: refreshedToken.accessToken,
@@ -81,15 +95,18 @@ export async function buildExecutionContext(
             integrationId: updatedIntegration.id,
             tokenSource: TokenSource.USER_OAUTH,
             authMethod: 'OAUTH',
-          };
+          } as ExecutionContext;
+          
+          validateExecutionContext(context, jobId);
+          return context;
         } catch (refreshError) {
           console.error(`Failed to refresh OAuth token for user ${user.id}:`, refreshError);
           // Continue to master token fallback if refresh fails
         }
       } else if (userIntegration.accessToken && tokenExpiry > now) {
         // Token is still valid, use it directly without refresh
-        return {
-          userId: Number(user.id),
+        const context = {
+          userId: user.id,
           providerId: provider.id,
           providerName: provider.name,
           authToken: userIntegration.accessToken,
@@ -97,7 +114,10 @@ export async function buildExecutionContext(
           integrationId: userIntegration.id,
           tokenSource: TokenSource.USER_OAUTH,
           authMethod: 'OAUTH',
-        };
+        } as ExecutionContext;
+        
+        validateExecutionContext(context, jobId);
+        return context;
       }
     }
 
@@ -113,8 +133,8 @@ export async function buildExecutionContext(
     console.log(`Using master API key for job ${jobId} (user ${user.id}, provider ${provider.name})`);
     
     // Return context with master API key (no integrationId since it's not user-specific)
-    return {
-      userId: Number(user.id),
+    const context = {
+      userId: user.id,
       providerId: provider.id,
       providerName: provider.name,
       authToken: masterToken,
@@ -122,7 +142,10 @@ export async function buildExecutionContext(
       integrationId: null, // Master token is not tied to a specific integration
       tokenSource: TokenSource.MASTER_API_KEY,
       authMethod: 'API_KEY',
-    };
+    } as ExecutionContext;
+    
+    validateExecutionContext(context, jobId);
+    return context;
 
   } catch (error) {
     if (error instanceof IntegrationAuthenticationError) {

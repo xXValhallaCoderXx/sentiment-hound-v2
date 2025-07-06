@@ -41,6 +41,21 @@ Enhanced error handling distinguishes between:
 
 ## Service Evolution
 
+### ExecutionContext userId Type Fix (July 2025)
+
+**Purpose**: Fixed critical type bug where userId was incorrectly converted from CUID string to number, causing foreign key constraint violations and job failures.
+
+**Core Components**:
+- `packages/services/src/jobs/execution-context.interface.ts` - Updated userId type from number to string
+- `packages/services/src/jobs/execution-context.builder.ts` - Removed Number() conversions and added validation
+- `packages/services/src/jobs/execution-context.validation.test.ts` - New validation test suite
+
+**Key Interactions**:
+- ExecutionContext builder now maintains userId as string CUID throughout authentication flow
+- Added validateExecutionContext() function with runtime string validation
+- IntegrationAuthenticationError thrown for invalid userId values
+- All job processors now receive properly typed ExecutionContext with string userId
+
 ### Provider Decoupling for Queue Processing (July 2025)
 
 **Purpose**: Enhanced services to support background job processing with flexible authentication modes.

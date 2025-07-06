@@ -164,7 +164,7 @@ export class UnifiedJobProcessor {
 **ExecutionContext Interface**:
 ```typescript
 interface ExecutionContext {
-  readonly userId: number;
+  readonly userId: string; // CUID string identifier
   readonly providerId: number;
   readonly providerName: string;
   readonly authToken: string;
@@ -255,6 +255,32 @@ const authMethod = tokenSource === TokenSource.USER_OAUTH ? 'OAUTH' : 'API_KEY';
 // Method flows explicitly through entire call chain
 context.authMethod → processor → service → buildRequestConfig
 ```
+
+### ExecutionContext Type Safety Pattern (July 2025)
+**Runtime validation pattern ensuring userId integrity throughout job processing flow**:
+
+```typescript
+// ExecutionContext builder validates userId before returning
+function validateExecutionContext(context: ExecutionContext): void {
+  if (typeof context.userId !== 'string' || context.userId.trim().length === 0) {
+    throw new IntegrationAuthenticationError(
+      `Critical Error: ExecutionContext was built with an invalid userId for SubTask`
+    );
+  }
+}
+
+// Applied at all ExecutionContext creation points
+const context = { userId: user.id, ... }; // No Number() conversion
+validateExecutionContext(context);
+return context;
+```
+
+**Pattern Benefits**:
+- **Type Safety**: Compile-time and runtime protection against userId type conversion
+- **Foreign Key Integrity**: Ensures valid CUID strings for database foreign key relationships
+- **Error Prevention**: Eliminates NaN values from Number() conversions on CUID strings
+- **Test Coverage**: Comprehensive validation test suite prevents regression
+- **Database Consistency**: Maintains proper foreign key constraints across all operations
 
 ## Configuration and Error Handling
 

@@ -25,10 +25,10 @@ export enum TokenSource {
  */
 export interface ExecutionContext {
   /** 
-   * The ID of the user who owns this job/task
+   * The ID of the user who owns this job/task (CUID string)
    * Used for data association and permission checks
    */
-  readonly userId: number;
+  readonly userId: string;
 
   /** 
    * The ID of the provider (e.g., YouTube, Twitter) 
