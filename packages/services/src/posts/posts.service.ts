@@ -43,11 +43,9 @@ export class CorePostService {
       userId,
     };
 
-    // Add provider filter if specified
+    // Add provider filter if specified (direct provider relationship)
     if (providerId) {
-      whereClause.integration = {
-        providerId,
-      };
+      whereClause.providerId = providerId;
     }
 
     // Add integration filter if specified
@@ -100,6 +98,9 @@ export class CorePostService {
         provider: true,
       },
     };
+    
+    // Include direct provider relationship
+    includeOptions.provider = true;
 
     // Get posts with pagination
     const [posts, totalCount] = await Promise.all([
@@ -203,9 +204,7 @@ export class CorePostService {
     return this.repository.findMany({
       where: {
         userId,
-        integration: {
-          providerId,
-        },
+        providerId,
       },
       include: {
         mentions: true,
@@ -342,19 +341,27 @@ export class CorePostService {
   }
 
   async createUserPost(data: ICreatePost): Promise<Post> {
-    const { userId, title } = data;
+    const { userId, title, providerId } = data;
+    
+    const postData: any = {
+      userId,
+      title,
+      providerId,
+      commentCount: data?.commentCount || 0,
+      description: data?.description || "",
+      publishedAt: data?.publishedAt || new Date(),
+      imageUrl: data?.imageUrl || "",
+      postUrl: data?.postUrl || "",
+      remoteId: data?.remoteId || "",
+    };
+
+    // Only include integrationId if it's provided
+    if (data.integrationId) {
+      postData.integrationId = data.integrationId;
+    }
+
     return this.repository.create({
-      data: {
-        userId,
-        title,
-        commentCount: data?.commentCount || 0,
-        description: data?.description || "",
-        publishedAt: data?.publishedAt || new Date(),
-        imageUrl: data?.imageUrl || "",
-        postUrl: data?.postUrl || "",
-        remoteId: data?.remoteId || "",
-        integrationId: data?.integrationId || 0,
-      },
+      data: postData,
     });
   }
 
