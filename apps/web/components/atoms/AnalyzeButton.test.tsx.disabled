@@ -1,0 +1,430 @@
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { MantineProvider } from "@mantine/core";
+import AnalyzeButton from "./AnalyzeButton";
+import { ActionResponse } from "@/lib/types";
+
+// Mock the startAnalysis action to avoid next-auth imports
+vi.mock("@/actions/analysis.actions", () => ({
+  startAnalysis: vi.fn(),
+}));
+
+type AnalysisResult = { taskId: number; status: string };
+
+// Import the mocked function
+const { startAnalysis: mockStartAnalysis } = await import(
+  "@/actions/analysis.actions"
+);
+
+// Mock Tabler icons to avoid issues in test environment
+vi.mock("@tabler/icons-react", () => ({
+  IconAnalyze: () => <div data-testid="icon-analyze" />,
+  IconCheck: () => <div data-testid="icon-check" />,
+  IconAlertCircle: () => <div data-testid="icon-alert" />,
+}));
+
+// Wrapper component to provide Mantine theme
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <MantineProvider>{children}</MantineProvider>
+);
+
+describe("AnalyzeButton", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should render the default component layout", () => {
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    expect(screen.getByText("Start Content Analysis")).toBeInTheDocument();
+    expect(
+      screen.getByText("Analyze sentiment from YouTube videos or Reddit posts")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Enter YouTube or Reddit URL to analyze...")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /start analysis/i })
+    ).toBeInTheDocument();
+  });
+
+  it("should render in compact mode when compact prop is true", () => {
+    render(
+      <TestWrapper>
+        <AnalyzeButton compact />
+      </TestWrapper>
+    );
+
+    // Should not have the title and description in compact mode
+    expect(
+      screen.queryByText("Start Content Analysis")
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        "Analyze sentiment from YouTube videos or Reddit posts"
+      )
+    ).not.toBeInTheDocument();
+
+    // But should still have the input and button
+    expect(
+      screen.getByPlaceholderText("Enter YouTube or Reddit URL to analyze...")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /analyze/i })
+    ).toBeInTheDocument();
+  });
+
+  it("should use custom placeholder when provided", () => {
+    const customPlaceholder = "Custom placeholder text";
+    render(
+      <TestWrapper>
+        <AnalyzeButton placeholder={customPlaceholder} />
+      </TestWrapper>
+    );
+
+    expect(screen.getByPlaceholderText(customPlaceholder)).toBeInTheDocument();
+  });
+
+  it("should show validation error for empty URL", async () => {
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const button = screen.getByRole("button", { name: /start analysis/i });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByText("Please enter a valid URL")).toBeInTheDocument();
+    });
+
+    expect(mockStartAnalysis).not.toHaveBeenCalled();
+  });
+
+  it("should call startAnalysis with trimmed URL when analyze button is clicked", async () => {
+    const mockResponse = {
+      data: { taskId: 123, status: "PENDING" },
+      error: null,
+    };
+    mockStartAnalysis.mockResolvedValue(mockResponse);
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+    const button = screen.getByRole("button", { name: /start analysis/i });
+
+    fireEvent.change(input, {
+      target: { value: "  https://youtube.com/watch?v=abc  " },
+    });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(mockStartAnalysis).toHaveBeenCalledWith(
+        "https://youtube.com/watch?v=abc"
+      );
+    });
+  });
+
+  it("should handle Enter key press to trigger analysis", async () => {
+    const mockResponse = {
+      data: { taskId: 456, status: "PENDING" },
+      error: null,
+    };
+    mockStartAnalysis.mockResolvedValue(mockResponse);
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+
+    fireEvent.change(input, { target: { value: "https://reddit.com/r/test" } });
+    fireEvent.keyPress(input, { key: "Enter", code: "Enter" });
+
+    await waitFor(() => {
+      expect(mockStartAnalysis).toHaveBeenCalledWith(
+        "https://reddit.com/r/test"
+      );
+    });
+  });
+
+  it("should show success message when analysis starts successfully", async () => {
+    const mockResponse = {
+      data: { taskId: 789, status: "PENDING" },
+      error: null,
+    };
+    mockStartAnalysis.mockResolvedValue(mockResponse);
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+    const button = screen.getByRole("button", { name: /start analysis/i });
+
+    fireEvent.change(input, {
+      target: { value: "https://youtube.com/watch?v=xyz" },
+    });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Analysis Started Successfully")
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Task ID: 789 • Status: PENDING")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should call onAnalysisStarted callback when analysis succeeds", async () => {
+    const mockOnAnalysisStarted = vi.fn();
+    const mockResponse = {
+      data: { taskId: 111, status: "PENDING" },
+      error: null,
+    };
+    mockStartAnalysis.mockResolvedValue(mockResponse);
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton onAnalysisStarted={mockOnAnalysisStarted} />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+    const button = screen.getByRole("button", { name: /start analysis/i });
+
+    fireEvent.change(input, {
+      target: { value: "https://youtube.com/watch?v=test" },
+    });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(mockOnAnalysisStarted).toHaveBeenCalledWith(111);
+    });
+  });
+
+  it("should clear input field after successful analysis", async () => {
+    const mockResponse = {
+      data: { taskId: 222, status: "PENDING" },
+      error: null,
+    };
+    mockStartAnalysis.mockResolvedValue(mockResponse);
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+    const button = screen.getByRole("button", { name: /start analysis/i });
+
+    fireEvent.change(input, {
+      target: { value: "https://youtube.com/watch?v=clear" },
+    });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Analysis Started Successfully")
+      ).toBeInTheDocument();
+    });
+
+    expect(input).toHaveValue("");
+  });
+
+  it("should show loading state when analysis is in progress", async () => {
+    let resolveAnalysis: (value: ActionResponse<AnalysisResult>) => void;
+    const analysisPromise = new Promise<ActionResponse<AnalysisResult>>(
+      (resolve) => {
+        resolveAnalysis = resolve;
+      }
+    );
+    mockStartAnalysis.mockReturnValue(analysisPromise);
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+    const button = screen.getByRole("button", { name: /start analysis/i });
+
+    fireEvent.change(input, {
+      target: { value: "https://youtube.com/watch?v=loading" },
+    });
+    fireEvent.click(button);
+
+    // Check loading state
+    expect(screen.getByText("Starting Analysis...")).toBeInTheDocument();
+    expect(input).toBeDisabled();
+
+    // Resolve the promise and check that loading state is cleared
+    resolveAnalysis!({ data: { taskId: 333, status: "PENDING" }, error: null });
+
+    await waitFor(() => {
+      expect(screen.getByText("Start Analysis")).toBeInTheDocument();
+    });
+    expect(input).not.toBeDisabled();
+  });
+
+  it("should display appropriate error messages for different error codes", async () => {
+    const errorTestCases = [
+      {
+        code: "UNAUTHORIZED",
+        expectedMessage: "Please sign in to analyze content.",
+      },
+      {
+        code: "URL_INVALID",
+        expectedMessage: "Please enter a valid YouTube or Reddit URL.",
+      },
+      {
+        code: "AUTH_UNAVAILABLE",
+        expectedMessage:
+          "Analysis for this platform is temporarily unavailable. Please try again later.",
+      },
+      {
+        code: "INTEGRATION_INACTIVE",
+        expectedMessage:
+          "Your integration is inactive. Please reconnect your account in settings.",
+      },
+      {
+        code: "DATABASE_ERROR",
+        expectedMessage:
+          "Service temporarily unavailable. Please try again in a few moments.",
+      },
+      {
+        code: "UNKNOWN_CODE",
+        expectedMessage: "Custom error message",
+      },
+    ];
+
+    for (const testCase of errorTestCases) {
+      const mockResponse = {
+        data: null,
+        error: {
+          error: "Custom error message",
+          code: testCase.code,
+          status: 400,
+        },
+      };
+      mockStartAnalysis.mockResolvedValue(mockResponse);
+
+      const { rerender } = render(
+        <TestWrapper>
+          <AnalyzeButton />
+        </TestWrapper>
+      );
+
+      const input = screen.getByPlaceholderText(
+        "Enter YouTube or Reddit URL to analyze..."
+      );
+      const button = screen.getByRole("button", { name: /start analysis/i });
+
+      fireEvent.change(input, { target: { value: "https://test.com" } });
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByText(testCase.expectedMessage)).toBeInTheDocument();
+      });
+
+      // Clean up for next iteration
+      rerender(
+        <TestWrapper>
+          <AnalyzeButton />
+        </TestWrapper>
+      );
+    }
+  });
+
+  it("should handle unexpected errors during analysis", async () => {
+    mockStartAnalysis.mockRejectedValue(new Error("Network error"));
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+    const button = screen.getByRole("button", { name: /start analysis/i });
+
+    fireEvent.change(input, {
+      target: { value: "https://youtube.com/watch?v=error" },
+    });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("An unexpected error occurred. Please try again.")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should not trigger analysis on Enter key when loading", async () => {
+    let resolveAnalysis: (value: ActionResponse<AnalysisResult>) => void;
+    const analysisPromise = new Promise<ActionResponse<AnalysisResult>>(
+      (resolve) => {
+        resolveAnalysis = resolve;
+      }
+    );
+    mockStartAnalysis.mockReturnValue(analysisPromise);
+
+    render(
+      <TestWrapper>
+        <AnalyzeButton />
+      </TestWrapper>
+    );
+
+    const input = screen.getByPlaceholderText(
+      "Enter YouTube or Reddit URL to analyze..."
+    );
+
+    fireEvent.change(input, { target: { value: "https://test.com" } });
+    fireEvent.click(screen.getByRole("button", { name: /start analysis/i }));
+
+    // Component should be in loading state
+    expect(screen.getByText("Starting Analysis...")).toBeInTheDocument();
+
+    // Clear mocks to verify Enter key doesn't trigger another call
+    vi.clearAllMocks();
+
+    // Try to trigger analysis with Enter key while loading
+    fireEvent.keyPress(input, { key: "Enter", code: "Enter" });
+
+    // Should not call startAnalysis again
+    expect(mockStartAnalysis).not.toHaveBeenCalled();
+
+    // Clean up
+    resolveAnalysis!({ data: { taskId: 444, status: "PENDING" }, error: null });
+  });
+});

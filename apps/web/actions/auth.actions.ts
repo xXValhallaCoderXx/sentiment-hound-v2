@@ -2,7 +2,7 @@
 
 import { signIn } from "@/lib/next-auth.lib";
 import { prisma } from "@repo/db";
-import { invitationCodeService, PlanName } from "@repo/services";
+import { invitationTokenService, PlanName } from "@repo/services";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -12,7 +12,7 @@ const signUpSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
   name: z.string().nullable().optional(),
-  invitationCode: z.string().nullable().optional(),
+  invitationToken: z.string().nullable().optional(),
 });
 
 const signInSchema = z.object({
@@ -28,58 +28,80 @@ export async function handleGoogleSignIn() {
   await signIn("google");
 }
 
-export async function handleGoogleSignInWithCode(invitationCode?: string) {
-  // Store invitation code in localStorage before redirect
-  if (invitationCode && typeof window !== "undefined") {
-    localStorage.setItem("pendingInvitationCode", invitationCode);
+export async function handleGoogleSignInWithToken(invitationToken?: string) {
+  // Store invitation token in localStorage before redirect
+  if (invitationToken && typeof window !== "undefined") {
+    localStorage.setItem("pendingInvitationToken", invitationToken);
   }
   await signIn("google");
 }
 
 export async function handleEmailSignUp(prevState: any, formData: FormData) {
   try {
+    // Step A: Read Form Data
     const rawData = {
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       name: formData.get("name") as string,
-      invitationCode: formData.get("invitationCode") as string,
+      invitationToken: formData.get("invitationToken") as string,
     };
-    console.log("Raw sign up data:", rawData);
+    
     const validatedData = signUpSchema.parse(rawData);
-    console.log("Validated sign up data:", validatedData);
 
-    // Check if user already exists
+    // Step B: Conditional Token Validation (The Feature Flag)
+    const requiresInvitation = process.env.SIGNUPS_REQUIRE_INVITATION === 'true';
+    let planId: number | undefined;
+
+    // Validate invitation token if provided
+    if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
+      // Check if token exists and is valid without consuming it
+      const tokenCheck = await prisma.invitationToken.findUnique({
+        where: { token: validatedData.invitationToken.trim() },
+        include: { planToAssign: true },
+      });
+
+      if (!tokenCheck) {
+        return {
+          error: "Invalid invitation token.",
+        };
+      }
+
+      if (tokenCheck.status === "USED") {
+        return {
+          error: "This invitation token has already been used.",
+        };
+      }
+
+      if (tokenCheck.status === "EXPIRED" || 
+          (tokenCheck.expiresAt && new Date() > tokenCheck.expiresAt)) {
+        return {
+          error: "This invitation token has expired.",
+        };
+      }
+
+      planId = tokenCheck.planToAssignId;
+    } else if (requiresInvitation) {
+      // When flag is true, invitation token is mandatory
+      return {
+        error: "A valid invitation token is required.",
+      };
+    }
+
+    // Step C: User Existence Check
     const existingUser = await prisma.user.findUnique({
       where: { email: validatedData.email },
     });
-    console.log("Existing user:", existingUser);
+    
     if (existingUser) {
       return {
         error: "An account with this email already exists. Please sign in.",
       };
     }
 
-    // Validate invitation code if provided
-    let planId: number | undefined;
-    if (
-      validatedData.invitationCode &&
-      validatedData.invitationCode.trim() !== ""
-    ) {
-      const codeValidation = await invitationCodeService.validateCode(
-        validatedData.invitationCode
-      );
-      if (!codeValidation.isValid) {
-        return {
-          error: codeValidation.error || "Invalid invitation code",
-        };
-      }
-      planId = codeValidation.planId;
-    }
-
-    // Hash password
+    // Step D: Password Hashing
     const hashedPassword = await bcrypt.hash(validatedData.password, 12);
-    console.log("Hashed password:", hashedPassword);
-    // Get default plan (trial) if no invitation code provided
+
+    // Get default plan (trial) if no plan was assigned from invitation token
     if (!planId) {
       const trialPlan = await prisma.plan.findUnique({
         where: { name: PlanName.TRIAL },
@@ -87,8 +109,8 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       planId = trialPlan?.id;
     }
 
-    // Create user
-    await prisma.user.create({
+    // Step E: User Creation
+    const user = await prisma.user.create({
       data: {
         email: validatedData.email,
         password: hashedPassword,
@@ -97,33 +119,38 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       },
     });
 
-    // Redeem invitation code if provided
-    if (
-      validatedData.invitationCode &&
-      validatedData.invitationCode.trim() !== ""
-    ) {
-      await invitationCodeService.redeemCode(validatedData.invitationCode);
+    // Consume the invitation token now that we have a real user ID
+    if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
+      await prisma.invitationToken.update({
+        where: { token: validatedData.invitationToken.trim() },
+        data: {
+          status: "USED",
+          redeemedAt: new Date(),
+          redeemedByUserId: user.id
+        }
+      });
     }
 
-    // Sign in the user
+    // Step F: Post-Creation Sign-In
     const result = await signIn("credentials", {
       email: validatedData.email,
       password: validatedData.password,
       redirect: false,
     });
-    console.log("Sign in result:", result);
+    
     if (result?.error) {
       return {
-        error:
-          "Failed to sign in after registration. Please try signing in manually.",
+        error: "Failed to sign in after registration. Please try signing in manually.",
       };
     }
 
-    // Redirect on success
-    redirect("/dashboard");
-    return { success: true };
+    // Return success without redirecting - let the client handle the redirect
+    return { 
+      success: true, 
+      message: "Account created successfully! Redirecting to dashboard...",
+      redirectTo: "/dashboard"
+    };
   } catch (error) {
-    console.error("Sign up error:", error);
     if (error instanceof z.ZodError) {
       return {
         error: error.errors[0]?.message || "Validation failed",
@@ -144,6 +171,12 @@ export async function handleEmailSignIn(prevState: any, formData: FormData) {
       password: formData.get("password") as string,
     };
 
+    console.log("� Sign-in attempt:", {
+      email: rawData.email,
+      hasPassword: !!rawData.password,
+      passwordLength: rawData.password?.length || 0,
+    });
+
     const validatedData = signInSchema.parse(rawData);
 
     const result = await signIn("credentials", {
@@ -152,15 +185,24 @@ export async function handleEmailSignIn(prevState: any, formData: FormData) {
       redirect: false,
     });
 
+    console.log("🔑 SignIn result:", {
+      error: result?.error,
+      ok: result?.ok,
+      status: result?.status,
+      url: result?.url,
+    });
+
     if (result?.error) {
       return {
         error: "Invalid email or password",
       };
     }
 
-    // Redirect on success
-    redirect("/dashboard");
-    return { success: true };
+    // Return success and let the client handle the redirect
+    return {
+      success: true,
+      redirectTo: "/dashboard",
+    };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {

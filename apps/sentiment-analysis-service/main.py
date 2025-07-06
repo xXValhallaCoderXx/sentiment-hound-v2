@@ -80,7 +80,7 @@ def analyze(request: SentimentRequest) -> List[Dict[str, Any]]:
         # Process each chunk for general sentiment
         general_sentiments = []
         for chunk in text_chunks:
-            chunk_sentiment = general_sentiment_pipeline(chunk)[0]
+            chunk_sentiment = general_sentiment_pipeline(chunk)[0] # type: ignore
             general_sentiments.append(chunk_sentiment)
 
         # Combine general sentiments - take the one with highest confidence

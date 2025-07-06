@@ -1,6 +1,7 @@
 import { YoutubeAuthService } from "./auth.service";
 import { integrationsService } from "../..";
 import { youtubeService } from "../youtube.services";
+import { AuthenticationMethod, YoutubeAuthConfig } from "../youtube.types";
 
 interface IYoutubeDetailsResponse {
   kind: string;
@@ -98,12 +99,13 @@ export class YoutubeContentService {
 
     const videoIds = videos.map((video) => video.id);
     console.log("VIDEOS: ", videoIds);
-    const videoDetails = await this.fetchVideoDetails(videoIds, headers);
+    // Since this method uses OAuth headers, we can determine the auth method
+    const videoDetails = await this.fetchVideoDetails(videoIds, currentAccessToken, 'OAUTH');
     console.log("VIDEO DETAILS: ", videoDetails);
 
     // Add this line to fetch comments
     console.log("Fetching comments for videos...");
-    const videoComments = await this.fetchCommentsForVideos(videoIds, headers);
+    const videoComments = await this.fetchCommentsForVideos(videoIds, currentAccessToken, 'OAUTH');
     console.log("Comments fetched successfully");
 
     return videos.map((video) => ({
@@ -159,16 +161,33 @@ export class YoutubeContentService {
     return videos;
   }
 
-  async fetchVideoDetails(videoIds: string[], headers: any) {
+  async fetchVideoDetails(videoIds: string[], authToken: string, authMethod: 'OAUTH' | 'API_KEY') {
     if (videoIds.length === 0) return [];
 
-    const videoDetailsResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds.join(",")}`,
-      { headers }
-    );
+    // Build request configuration using explicit authentication
+    const baseUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds.join(",")}`;
+    const requestConfig = this.buildRequestConfig(authToken, authMethod, baseUrl);
+
+    const videoDetailsResponse = await fetch(requestConfig.url, { 
+      headers: requestConfig.headers 
+    });
 
     if (!videoDetailsResponse.ok) {
-      throw new Error("Failed to fetch video details");
+      // Check for quota exceeded error
+      if (videoDetailsResponse.status === 403) {
+        const errorData = await videoDetailsResponse.json().catch(() => ({}));
+        const errorMessage = errorData?.error?.message || '';
+        
+        if (errorMessage.toLowerCase().includes('quota') || 
+            errorMessage.toLowerCase().includes('exceeded')) {
+          throw new Error(`YouTube API quota has been exceeded. Please try again later or contact support if this persists.`);
+        }
+        
+        // Other 403 errors (permission issues)
+        throw new Error(`Access denied to YouTube API. Please check your authentication credentials.`);
+      }
+      
+      throw new Error(`Failed to fetch video details: ${videoDetailsResponse.statusText}`);
     }
 
     const videoDetailsData: IYoutubeDetailsResponse =
@@ -182,31 +201,56 @@ export class YoutubeContentService {
     }, {});
   }
 
-  async fetchCommentsForVideos(videoIds: string[], headers: any) {
+  async fetchCommentsForVideos(videoIds: string[], authToken: string, authMethod: 'OAUTH' | 'API_KEY') {
     const allComments: Record<string, any[]> = {};
 
     for (const videoId of videoIds) {
-      const comments = await this.fetchVideoComments(videoId, headers);
+      const comments = await this.fetchVideoComments(videoId, authToken, authMethod);
       allComments[videoId] = comments;
     }
 
     return allComments;
   }
 
-  async fetchVideoComments(videoId: string, headers: any, maxResults = 100) {
+  async fetchVideoComments(
+    videoId: string, 
+    authToken: string,
+    authMethod: 'OAUTH' | 'API_KEY',
+    maxResults = 100
+  ) {
     let comments: any[] = [];
     let nextPageToken = "";
 
+    // Build request configuration using explicit authentication
+    const baseUrl = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=${maxResults}`;
+    let requestConfig = this.buildRequestConfig(authToken, authMethod, baseUrl);
+
     try {
       do {
-        const commentsResponse = await fetch(
-          `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=${maxResults}&pageToken=${nextPageToken}`,
-          { headers }
-        );
+        // Update URL with pagination token if needed
+        let currentUrl = requestConfig.url;
+        if (nextPageToken) {
+          const separator = currentUrl.includes('?') ? '&' : '?';
+          currentUrl = `${currentUrl}${separator}pageToken=${nextPageToken}`;
+        }
+
+        const commentsResponse = await fetch(currentUrl, { 
+          headers: requestConfig.headers 
+        });
 
         if (!commentsResponse.ok) {
           // Comments might be disabled for this video
           if (commentsResponse.status === 403) {
+            const errorData = await commentsResponse.json().catch(() => ({}));
+            const errorMessage = errorData?.error?.message || '';
+            
+            // Check for quota exceeded specifically
+            if (errorMessage.toLowerCase().includes('quota') || 
+                errorMessage.toLowerCase().includes('exceeded')) {
+              throw new Error(`YouTube API quota has been exceeded. Please try again later or contact support if this persists.`);
+            }
+            
+            // Regular 403 might just mean comments are disabled
             console.log(`Comments might be disabled for video: ${videoId}`);
             return [];
           }
@@ -246,61 +290,42 @@ export class YoutubeContentService {
   }
 
   async fetchSingleYoutubeVideo(
-    userId: string,
+    authToken: string,
+    authMethod: 'OAUTH' | 'API_KEY',
     videoUrl: string
   ): Promise<IFetchAllYoutubePostsResponse | null> {
-    const youtubeIntegration =
-      await integrationsService.getUserIntegrationByName(userId, "youtube");
-
-    if (!youtubeIntegration) {
-      throw new Error("YouTube integration not found for user");
-    }
-
     // Extract video ID from URL
     const videoId = this.extractVideoIdFromUrl(videoUrl);
     if (!videoId) {
       throw new Error("Invalid YouTube video URL");
     }
 
-    // Check token and refresh if needed
-    const accessTokenExpiryDate = new Date(
-      youtubeIntegration.refreshTokenExpiresAt
-    );
-    const currentTime = new Date();
-    let currentAccessToken = youtubeIntegration.accessToken;
-
-    if (accessTokenExpiryDate < currentTime) {
-      console.log("ACCESS TOKEN EXPIRED");
-      const refreshToken = await youtubeService.refreshAccessToken(
-        youtubeIntegration?.refreshToken
-      );
-      console.log("NEW TOKEN: ", refreshToken);
-
-      await integrationsService.updateIntegrationAuthCredentials({
-        userId,
-        providerId: youtubeIntegration.providerId,
-        accessToken: refreshToken.accessToken,
-        refreshToken: refreshToken.refreshToken,
-        accessTokenExpiry: refreshToken.expiresAt,
-      });
-
-      currentAccessToken = refreshToken.accessToken;
-      console.log("REFRESH DONE");
-    }
-
-    const headers = {
-      Authorization: `Bearer ${currentAccessToken}`,
-    };
+    // Build request configuration using provided auth token
+    const baseVideoUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}`;
+    const requestConfig = this.buildRequestConfig(authToken, authMethod, baseVideoUrl);
 
     // Get video details
     try {
       // Fetch video data
-      const videoResponse = await fetch(
-        `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}`,
-        { headers }
-      );
+      const videoResponse = await fetch(requestConfig.url, { 
+        headers: requestConfig.headers 
+      });
 
       if (!videoResponse.ok) {
+        // Check for quota exceeded error
+        if (videoResponse.status === 403) {
+          const errorData = await videoResponse.json().catch(() => ({}));
+          const errorMessage = errorData?.error?.message || '';
+          
+          if (errorMessage.toLowerCase().includes('quota') || 
+              errorMessage.toLowerCase().includes('exceeded')) {
+            throw new Error(`YouTube API quota has been exceeded. Please try again later or contact support if this persists.`);
+          }
+          
+          // Other 403 errors
+          throw new Error(`Access denied to YouTube video. The video may be private or restricted.`);
+        }
+        
         throw new Error(
           `Failed to fetch video data: ${videoResponse.statusText}`
         );
@@ -329,7 +354,9 @@ export class YoutubeContentService {
 
       // Fetch comments for the video
       console.log(`Fetching comments for video ${videoId}...`);
-      const comments = await this.fetchVideoComments(videoId, headers);
+      // Use the provided authToken for comment fetching
+      const comments = await this.fetchVideoComments(videoId, authToken, authMethod, 100);
+      
       console.log(`Fetched ${comments.length} comments for video ${videoId}`);
 
       // Add comments to the video object
@@ -366,6 +393,45 @@ export class YoutubeContentService {
     }
 
     return videoId;
+  }
+
+
+
+  /**
+   * Builds the appropriate request configuration based on explicit authentication method.
+   * 
+   * For OAuth tokens:
+   * - Adds Authorization: Bearer header
+   * - Returns original URL unchanged
+   * 
+   * For API keys:
+   * - Appends key parameter to URL query string
+   * - Handles existing query parameters correctly
+   * - URL-encodes the API key for safety
+   * - Returns empty headers object
+   * 
+   * @param token The authentication token (OAuth or API key)
+   * @param authMethod The explicit authentication method to use
+   * @param baseUrl The base URL for the API request
+   * @returns Object containing the final URL and headers for the HTTP request
+   */
+  private buildRequestConfig(token: string, authMethod: 'OAUTH' | 'API_KEY', baseUrl: string): { url: string; headers: any } {
+    if (authMethod === 'OAUTH') {
+      // OAuth: use Authorization header
+      return {
+        url: baseUrl,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      };
+    } else {
+      // API Key: append to URL parameters
+      const separator = baseUrl.includes('?') ? '&' : '?';
+      return {
+        url: `${baseUrl}${separator}key=${encodeURIComponent(token)}`,
+        headers: {}
+      };
+    }
   }
 }
 

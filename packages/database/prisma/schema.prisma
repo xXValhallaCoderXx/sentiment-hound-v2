@@ -33,6 +33,7 @@ model User {
   featureFlags    Json?            // Manual feature overrides (e.g., {"spam_detection": true})
   tokenUsageThisPeriod Int         @default(0)  // Current period token usage
   currentPeriodEnd     DateTime?               // When current billing period ends
+  invitationToken InvitationToken?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 }
@@ -100,6 +101,9 @@ model Provider {
   description     String?
   integrations    Integration[]
   trackedKeywords TrackedKeyword[]
+  posts           Post[]
+  tasks           Task[]
+  mentions        Mention[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @default(now())
 }
@@ -116,11 +120,16 @@ model Post {
   commentCount  Int
   userId        String
   user          User        @relation(fields: [userId], references: [id])
-  integrationId Int
-  integration   Integration @relation(fields: [integrationId], references: [id])
+  integrationId Int?
+  integration   Integration? @relation(fields: [integrationId], references: [id])
+  providerId    Int
+  provider      Provider    @relation(fields: [providerId], references: [id])
   mentions      Mention[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId, providerId])
+  @@index([providerId, createdAt])
 }
 
 model Mention {
@@ -130,7 +139,6 @@ model Mention {
   content         String
   sentiment       String?
   score           String?
-  mentionId       Int
   sentimentStatus SentimentStatus @default(PENDING)
   sourceUrl       String? // e.g. permalink or video URL
   author          String? // username or channel name
@@ -141,6 +149,9 @@ model Mention {
 
   trackedKeywordId Int?
   trackedKeyword   TrackedKeyword? @relation(fields: [trackedKeywordId], references: [id], onDelete: Cascade)
+
+  providerId Int?
+  provider   Provider? @relation(fields: [providerId], references: [id])
 
   aspectAnalyses AspectAnalysis[]
   subTaskMention SubTaskMention[]
@@ -170,10 +181,15 @@ model Task {
   userId        String
   user          User        @relation(fields: [userId], references: [id])
   subTasks      SubTask[]
-  integrationId Int
-  integration   Integration @relation(fields: [integrationId], references: [id])
+  integrationId Int?
+  integration   Integration? @relation(fields: [integrationId], references: [id])
+  providerId    Int
+  provider      Provider    @relation(fields: [providerId], references: [id])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId, providerId])
+  @@index([providerId, createdAt])
 }
 
 model SubTask {
@@ -220,19 +236,15 @@ model Plan {
   isActive         Boolean     @default(true)
   displayOrder     Int         @default(0)     // For UI ordering
   users            User[]
-  invitationCodes  InvitationCode[]
+  invitationTokens InvitationToken[]
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @default(now())
 }
 
-model InvitationCode {
+model PromoCode {
   id            String    @id @default(cuid())
   code          String    @unique // The code itself, e.g., "EARLY-ADOPTER"
   isActive      Boolean   @default(true)
-
-  // MVP: For granting plan access
-  planId        Int?      
-  plan          Plan?     @relation(fields: [planId], references: [id])
 
   // FUTURE: For discounts on paid plans
   discountType  String?   // e.g., 'PERCENT', 'FIXED_AMOUNT'
@@ -245,6 +257,25 @@ model InvitationCode {
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+}
+
+enum InvitationStatus {
+  PENDING
+  USED
+  EXPIRED
+}
+
+model InvitationToken {
+  id              String           @id @default(cuid())
+  token           String           @unique
+  expiresAt       DateTime
+  status          InvitationStatus @default(PENDING)
+  planToAssignId  Int
+  planToAssign    Plan             @relation(fields: [planToAssignId], references: [id])
+  redeemedAt      DateTime?
+  redeemedByUserId String?          @unique
+  redeemedByUser  User?            @relation(fields: [redeemedByUserId], references: [id])
+  createdAt       DateTime         @default(now())
 }
 
 model Queue {

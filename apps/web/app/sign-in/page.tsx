@@ -1,10 +1,20 @@
 "use client";
 
-import { useState, useActionState, useTransition } from "react";
-import { Container, Grid, Stack, Anchor, Text, Divider, Group, Alert } from "@mantine/core";
+import { useState, useActionState, useTransition, useEffect } from "react";
+import {
+  Container,
+  Grid,
+  Stack,
+  Anchor,
+  Text,
+  Divider,
+  Group,
+  Alert,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconInfoCircle } from "@tabler/icons-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Actions
 import { handleEmailSignIn, handleGoogleSignIn } from "@/actions/auth.actions";
@@ -30,10 +40,11 @@ interface SignInFormData {
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
-  
+  const router = useRouter();
+
   // Form state for server actions
   const [signInState, signInAction] = useActionState(handleEmailSignIn, null);
-  
+
   // Form handling with Mantine form
   const form = useForm<SignInFormData>({
     mode: "uncontrolled",
@@ -42,10 +53,18 @@ export default function SignInPage() {
       password: "",
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Please enter a valid email address"),
+      email: (value) =>
+        /^\S+@\S+$/.test(value) ? null : "Please enter a valid email address",
       password: (value) => (value.length < 1 ? "Password is required" : null),
     },
   });
+
+  // Handle redirect after successful sign-in
+  useEffect(() => {
+    if (signInState?.success && signInState?.redirectTo) {
+      router.push(signInState.redirectTo);
+    }
+  }, [signInState, router]);
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
@@ -96,11 +115,13 @@ export default function SignInPage() {
                 <Stack gap="xl">
                   {/* Logo */}
                   <Logo size={40} href="/" showText={true} />
-                  
+
                   {/* Headlines */}
                   <div>
                     <CardTitle mb="xs">Welcome Back</CardTitle>
-                    <DimmedText>Enter your credentials to access your dashboard.</DimmedText>
+                    <DimmedText>
+                      Enter your credentials to access your dashboard.
+                    </DimmedText>
                   </div>
 
                   {/* Error Alert */}
@@ -135,9 +156,9 @@ export default function SignInPage() {
 
                       {/* Forgot Password Link */}
                       <Group justify="flex-end">
-                        <Anchor 
-                          component={Link} 
-                          href="/forgot-password" 
+                        <Anchor
+                          component={Link}
+                          href="/forgot-password"
                           size="sm"
                           c="primary"
                           fw={500}
@@ -153,9 +174,8 @@ export default function SignInPage() {
                         size="md"
                         loading={isPending}
                         variant="filled"
-                        disabled={true}
                       >
-                        Log In (Coming Soon)
+                        Log In
                       </Button>
                     </Stack>
                   </form>
@@ -168,14 +188,13 @@ export default function SignInPage() {
                     provider="google"
                     onClick={handleGoogleLogin}
                     loading={isLoading}
-                    disabled={true}
                   />
 
                   {/* Sign Up Link */}
                   <Text ta="center" size="sm" c="dimmed">
                     Don&apos;t have an account?{" "}
-                    <Anchor 
-                      component={Link} 
+                    <Anchor
+                      component={Link}
                       href="/#early-access"
                       c="primary"
                       fw={500}

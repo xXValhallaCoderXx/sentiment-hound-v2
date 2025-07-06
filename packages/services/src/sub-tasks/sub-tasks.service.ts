@@ -1,4 +1,11 @@
-import { SubTask, SubTaskStatus, SubTaskType, Task, User } from "@repo/db";
+import {
+  SubTask,
+  SubTaskStatus,
+  SubTaskType,
+  Task,
+  User,
+  Provider,
+} from "@repo/db";
 import { SubTaskRepository } from "./sub-tasks.repository";
 
 export class CoreSubTaskService {
@@ -60,6 +67,38 @@ export class CoreSubTaskService {
   async getUserForSubTask(id: number): Promise<User> {
     const job = await this.getSubTaskWithUser(id);
     return job.task.user;
+  }
+
+  async getTaskWithProviderForSubTask(
+    id: number
+  ): Promise<SubTask & { task: Task & { user: User; provider: Provider } }> {
+    const job = await this.repository.findById(id, {
+      include: {
+        task: {
+          include: {
+            user: true,
+            provider: true,
+          },
+        },
+      },
+    });
+
+    if (!job) {
+      throw new Error("SubTask not found");
+    }
+
+    if (!job.task.providerId) {
+      throw new Error(
+        "Critical system error: Task missing required providerId"
+      );
+    }
+
+    return job;
+  }
+
+  async getProviderIdForSubTask(id: number): Promise<number> {
+    const jobWithTask = await this.getTaskWithProviderForSubTask(id);
+    return jobWithTask.task.providerId;
   }
 
   async markSubTaskAsFailed(jobId: string, error: string): Promise<SubTask> {

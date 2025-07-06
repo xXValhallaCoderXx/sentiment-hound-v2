@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/next-auth.lib";
-import { invitationCodeService } from "@repo/services";
+import { invitationTokenService } from "@repo/services";
 import { prisma } from "@repo/db";
 
 export async function POST(req: NextRequest) {
@@ -11,20 +11,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { invitationCode } = await req.json();
+    const { invitationToken } = await req.json();
     
-    if (!invitationCode) {
-      return NextResponse.json({ error: "Invitation code is required" }, { status: 400 });
+    if (!invitationToken) {
+      return NextResponse.json({ error: "Invitation token is required" }, { status: 400 });
     }
 
-    // Validate the code
-    const validation = await invitationCodeService.validateCode(invitationCode);
-    
-    if (!validation.isValid) {
-      return NextResponse.json({ error: validation.error }, { status: 400 });
-    }
-
-    // Check if user already has a plan assigned by invitation code
+    // Check if user already has a plan assigned by invitation token
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: { plan: true }
@@ -41,28 +34,28 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    // Redeem the code and update user plan
-    const redemption = await invitationCodeService.redeemCode(invitationCode);
+    // Consume the token and update user plan
+    const result = await invitationTokenService.consumeInvitationToken(invitationToken, session.user.id);
     
-    if (!redemption.success) {
-      return NextResponse.json({ error: redemption.error }, { status: 400 });
+    if (!result.isValid) {
+      return NextResponse.json({ error: result.error }, { status: 400 });
     }
 
     // Update user with new plan
-    if (redemption.planId) {
+    if (result.planId) {
       await prisma.user.update({
         where: { id: session.user.id },
-        data: { planId: redemption.planId }
+        data: { planId: result.planId }
       });
     }
 
     return NextResponse.json({ 
       success: true, 
-      message: "Invitation code applied successfully" 
+      message: "Invitation token applied successfully" 
     });
 
   } catch (error) {
-    console.error("Error applying invitation code:", error);
+    console.error("Error applying invitation token:", error);
     return NextResponse.json({ 
       error: "Internal server error" 
     }, { status: 500 });

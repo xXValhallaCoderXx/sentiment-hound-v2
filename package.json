@@ -1,18 +1,31 @@
 {
-  "name": "hello-world",
+  "name": "sentiment-hound",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "dev:watch": "turbo dev services:watch",
+    "dev:full": "./scripts/dev.sh",
+    "install:full": "./scripts/install.sh",
+    "watch": "turbo watch services:build db:build",
+    "watch:packages": "pnpm run --parallel --filter @repo/services --filter @repo/db dev:watch",
+    "script:gen-token": "pnpm --filter @repo/scripts gen-token",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "db:deploy": "pnpm --filter @repo/db deploy"
+    "db:deploy": "pnpm --filter @repo/db deploy",
+    "test": "turbo test",
+    "test:packages": "pnpm run --parallel --filter @repo/services --filter web test",
+    "test:services": "pnpm --filter @repo/services test",
+    "test:web": "pnpm --filter web test",
+    "test:watch": "pnpm --filter @repo/services test:watch"
   },
   "devDependencies": {
+    "@types/node": "^24.0.7",
+    "dotenv-cli": "^8.0.0",
     "prettier": "^3.5.0",
-    "turbo": "^2.4.2",
-    "typescript": "5.7.3"
+    "tsx": "^4.20.3",
+    "turbo": "^2.5.4",
+    "typescript": "5.7.3",
+    "vitest": "^3.2.4"
   },
   "packageManager": "pnpm@8.6.11",
   "engines": {

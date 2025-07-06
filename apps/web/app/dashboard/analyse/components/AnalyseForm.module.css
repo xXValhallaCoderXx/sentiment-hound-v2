@@ -1,0 +1,87 @@
+/* AnalyseForm.module.css - Styles for the AnalyseForm component */
+
+.card {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  /* Responsive padding handled via CSS for better control */
+  --mantine-card-padding: var(--mantine-spacing-lg);
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-md);
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  font-size: rem(32px);
+  font-weight: 700;
+  margin-bottom: var(--mantine-spacing-xs);
+}
+
+.subtitle {
+  color: var(--mantine-color-dimmed);
+  font-size: var(--mantine-font-size-sm);
+  margin-bottom: var(--mantine-spacing-lg);
+}
+
+.inputField input {
+  font-size: 16px; /* Prevents zoom on iOS */
+  padding: var(--mantine-spacing-md);
+}
+
+.submitButton {
+  min-height: 48px; /* Touch-friendly size (minimum 44px + padding) */
+  font-weight: 600;
+  font-size: var(--mantine-font-size-md);
+}
+
+.errorMessage {
+  color: var(--mantine-color-error);
+  font-size: var(--mantine-font-size-sm);
+  margin-top: var(--mantine-spacing-xs);
+}
+
+/* Screen reader only helper text */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 48em) {
+  .card {
+    margin: 0;
+    border-radius: 0;
+    --mantine-card-padding: var(--mantine-spacing-md);
+  }
+  
+  .title {
+    font-size: rem(24px);
+  }
+  
+  .inputField input {
+    font-size: 16px; /* Maintain size to prevent zoom */
+  }
+  
+  .submitButton {
+    min-height: 48px; /* Ensure touch-friendly size on mobile */
+  }
+}
+
+@media (min-width: 62em) {
+  .card {
+    --mantine-card-padding: var(--mantine-spacing-xl);
+  }
+}

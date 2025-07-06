@@ -1,0 +1,48 @@
+/* AccountManagementCard CSS Module */
+
+.card {
+  background: var(--mantine-color-body);
+  border: 1px solid var(--mantine-color-gray-3);
+  transition: box-shadow 0.15s ease;
+  /* Generous margin-top spacing below Plan & Usage module */
+  margin-top: var(--mantine-spacing-xl);
+}
+
+.card:hover {
+  box-shadow: var(--mantine-shadow-sm);
+}
+
+/* Danger Zone container with generous spacing */
+.dangerZoneContainer {
+  margin-top: var(--mantine-spacing-lg);
+  /* Additional visual separation before danger zone */
+  padding-top: var(--mantine-spacing-md);
+}
+
+/* Ensure proper spacing hierarchy */
+.card .mantine-Text-root[data-size="lg"] {
+  /* Ensure title has proper weight and spacing */
+  line-height: 1.4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 48em) {
+  .card {
+    margin-top: var(--mantine-spacing-lg);
+    padding: var(--mantine-spacing-md);
+  }
+
+  .dangerZoneContainer {
+    margin-top: var(--mantine-spacing-md);
+    padding-top: var(--mantine-spacing-sm);
+  }
+
+  .card .mantine-Text-root[data-size="lg"] {
+    font-size: var(--mantine-font-size-md);
+  }
+}
+
+/* Dark theme adjustments */
+:global([data-mantine-color-scheme="dark"]) .card {
+  border-color: var(--mantine-color-dark-4);
+}

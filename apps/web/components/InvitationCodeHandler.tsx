@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 import { notifications } from "@mantine/notifications";
-import { 
-  getInvitationCodeFromStorage, 
-  clearInvitationCodeFromStorage 
+import {
+  getInvitationTokenFromStorage,
+  clearInvitationTokenFromStorage,
 } from "@/lib/invitation-code.utils";
 
 export function InvitationCodeHandler() {
   useEffect(() => {
     const handlePendingInvitationCode = async () => {
-      const pendingCode = getInvitationCodeFromStorage();
-      
+      const pendingCode = getInvitationTokenFromStorage();
+
       if (pendingCode) {
         try {
           const response = await fetch("/api/invitation-codes/apply", {
@@ -27,7 +27,8 @@ export function InvitationCodeHandler() {
           if (response.ok) {
             notifications.show({
               title: "Invitation code applied!",
-              message: "You've been upgraded to the Developer Plan. Welcome to the beta!",
+              message:
+                "You've been upgraded to the Developer Plan. Welcome to the beta!",
               color: "green",
             });
           } else {
@@ -46,7 +47,7 @@ export function InvitationCodeHandler() {
           });
         } finally {
           // Clear the code from storage regardless of success/failure
-          clearInvitationCodeFromStorage();
+          clearInvitationTokenFromStorage();
         }
       }
     };

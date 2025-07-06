@@ -1,0 +1,62 @@
+/* AnalysisCard component styles */
+
+.card {
+  border: 1px solid var(--mantine-color-gray-3);
+  border-bottom: 1px solid var(--mantine-color-gray-4);
+  transition: background-color 0.2s ease;
+}
+
+.card:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Dark mode hover state */
+[data-mantine-color-scheme="dark"] .card:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.title {
+  /* Enable text truncation for long titles */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.metricGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 60px;
+}
+
+/* Responsive design breakpoints */
+
+/* Mobile styles (<768px) */
+@media (max-width: 767px) {
+  .card {
+    padding: var(--mantine-spacing-sm);
+  }
+  
+  .metricGroup {
+    min-width: 50px;
+  }
+}
+
+/* Tablet styles (768px-1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .card {
+    padding: var(--mantine-spacing-md);
+  }
+}
+
+/* Desktop styles (>1024px) */
+@media (min-width: 1025px) {
+  .card {
+    padding: var(--mantine-spacing-md);
+  }
+  
+  .metricGroup {
+    min-width: 70px;
+  }
+}

@@ -4,6 +4,7 @@ export { default as TrendCards } from "./TrendCharts";
 export { default as AspectSection } from "./AspectSection";
 export { default as RecentMentions } from "./RecentMentions";
 export { default as Notifications } from "./Notifications";
+export { default as AnalyzeButton } from "./AnalyzeButton";
 
 // New dashboard components
 export { default as OverallSentimentScore } from "./OverallSentimentScore";

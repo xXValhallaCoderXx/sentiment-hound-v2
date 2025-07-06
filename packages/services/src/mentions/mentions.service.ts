@@ -2,12 +2,18 @@ import { Mention, SentimentStatus, Prisma, prisma } from "@repo/db";
 import { MentionRepository } from "./mentions.repository";
 
 type CommentWithRelations = Mention & {
-  post: {
-    integration: {
+  post?: {
+    provider: {
+      name: string;
+    };
+    integration?: {
       provider: {
         name: string;
       };
     };
+  };
+  provider?: {
+    name: string;
   };
   aspectAnalyses: Array<{
     aspect: string;
@@ -70,24 +76,49 @@ export class CoreMentionService {
     const skip = (page - 1) * pageSize;
 
     // Construct the where clause for filtering
-    const whereClause = {
+    const whereClause: any = {
       post: {
         userId,
-        integration: providerId
-          ? {
-              providerId,
-            }
-          : undefined,
       },
-      sentiment: sentiment ? sentiment : undefined,
-      aspectAnalyses: aspect
-        ? {
-            some: {
-              aspect,
-            },
-          }
-        : undefined,
     };
+
+    // Handle provider filtering - support both direct and integration-based provider relationships
+    if (providerId) {
+      whereClause.OR = [
+        // Direct provider relationship on post
+        {
+          post: {
+            userId,
+            providerId,
+          },
+        },
+        // Fallback to integration provider relationship
+        {
+          post: {
+            userId,
+            integration: {
+              providerId,
+            },
+          },
+        },
+      ];
+      // Remove the base post.userId constraint since it's in the OR conditions
+      delete whereClause.post;
+    }
+
+    // Add sentiment filter
+    if (sentiment) {
+      whereClause.sentiment = sentiment;
+    }
+
+    // Add aspect filter
+    if (aspect) {
+      whereClause.aspectAnalyses = {
+        some: {
+          aspect,
+        },
+      };
+    }
 
     // Get comments with pagination
     const [comments, totalCount] = await Promise.all([
@@ -96,13 +127,15 @@ export class CoreMentionService {
         include: {
           post: {
             include: {
+              provider: true, // Direct provider relationship
               integration: {
                 include: {
-                  provider: true,
+                  provider: true, // Fallback to integration provider
                 },
               },
             },
           },
+          provider: true, // Direct provider relationship on mention
           aspectAnalyses: true,
         },
         skip,
@@ -119,17 +152,35 @@ export class CoreMentionService {
 
     // Format the comments
     const formattedComments = (comments as CommentWithRelations[]).map(
-      (comment) => ({
-        id: comment.id,
-        content: comment.content,
-        sentiment: comment.sentiment,
-        provider: comment.post?.integration.provider.name,
-        createdAt: comment.createdAt?.toISOString(),
-        aspects: comment.aspectAnalyses?.map((aspect: any) => ({
-          aspect: aspect.aspect,
-          sentiment: aspect.sentiment,
-        })),
-      })
+      (comment) => {
+        // Determine provider name with fallback logic
+        let providerName = "unknown";
+        
+        // First try direct mention provider relationship
+        if (comment.provider?.name) {
+          providerName = comment.provider.name;
+        }
+        // Then try direct post provider relationship
+        else if (comment.post?.provider?.name) {
+          providerName = comment.post.provider.name;
+        }
+        // Finally fallback to integration provider relationship
+        else if (comment.post?.integration?.provider?.name) {
+          providerName = comment.post.integration.provider.name;
+        }
+
+        return {
+          id: comment.id,
+          content: comment.content,
+          sentiment: comment.sentiment,
+          provider: providerName,
+          createdAt: comment.createdAt?.toISOString(),
+          aspects: comment.aspectAnalyses?.map((aspect: any) => ({
+            aspect: aspect.aspect,
+            sentiment: aspect.sentiment,
+          })) || [],
+        };
+      }
     );
 
     return {

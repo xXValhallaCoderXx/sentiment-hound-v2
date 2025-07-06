@@ -1,10 +1,8 @@
 import { auth } from "@/lib/next-auth.lib";
-import PageLayout from "@/components/templates/PageLayout";
-import { Card, Flex, Box, Title, Stack, Text } from "@mantine/core";
-import ProfileCard from "./components/ProfileCard";
-import Plans from "./components/Plans";
-import TokenUsageCard from "./components/TokenUsageCard";
+import DashboardLayout from "@/components/templates/DashboardLayout/DashboardLayout";
+import { Text } from "@mantine/core";
 import { prisma } from "@repo/db";
+import ProfileContent from "./components/ProfileContent";
 
 const ProfilePage = async () => {
   const session = await auth();
@@ -12,12 +10,13 @@ const ProfilePage = async () => {
 
   if (!userId) {
     return (
-      <PageLayout title="Profile" description="User profile page">
+      <DashboardLayout>
         <Text>User not authenticated.</Text>
-      </PageLayout>
+      </DashboardLayout>
     );
   }
 
+  // Fetch user data with plan and usage information
   const user = await prisma.user.findUnique({
     where: {
       id: String(userId),
@@ -26,40 +25,56 @@ const ProfilePage = async () => {
       plan: true,
     },
   });
-  console.log("User data:", user);
+
+  if (!user) {
+    return (
+      <DashboardLayout>
+        <Text>User data not available.</Text>
+      </DashboardLayout>
+    );
+  }
+
+  // Prepare plan data for PlanUsageCard
+  const planData = user.plan
+    ? {
+        id: user.plan.id,
+        name: user.plan.name,
+        description: user.plan.description || "",
+        price: user.plan.price ? Number(user.plan.price) : 0,
+        yearlyPrice: user.plan.yearlyPrice
+          ? Number(user.plan.yearlyPrice)
+          : undefined,
+        billingInterval: user.plan.billingInterval,
+        maxIntegrations: user.plan.maxIntegrations,
+        maxTrackedKeywords: user.plan.maxTrackedKeywords,
+        maxCompetitors: user.plan.maxCompetitors,
+        monthlyTokenAllowance: user.plan.monthlyTokenAllowance,
+        features: user.plan.features,
+        isActive: user.plan.isActive,
+        displayOrder: user.plan.displayOrder,
+      }
+    : undefined;
+
+  // Prepare token usage data
+  const tokenUsage = {
+    current: user.tokenUsageThisPeriod,
+    limit: user.plan?.monthlyTokenAllowance || 10000,
+    periodEnd: user.currentPeriodEnd,
+    isOverage:
+      user.tokenUsageThisPeriod > (user.plan?.monthlyTokenAllowance || 10000),
+    percentage: user.plan?.monthlyTokenAllowance
+      ? (user.tokenUsageThisPeriod / user.plan.monthlyTokenAllowance) * 100
+      : 0,
+  };
+
   return (
-    <PageLayout title="Profile" description="User profile page">
-      <Stack gap={16}>
-        <Flex gap={16}>
-          <Flex w="33%">
-            <Card withBorder w="100%">
-              <Title ml={4} mb={4} order={3}>
-                Plan
-              </Title>
-              {user ? (
-                <ProfileCard user={user} />
-              ) : (
-                <Text>User data not available.</Text>
-              )}
-            </Card>
-          </Flex>
-          <Flex w="33%">
-            <TokenUsageCard userId={userId} />
-          </Flex>
-          <Flex w="33%">
-            <Card withBorder w="100%">
-              <Title order={4}>Billing and Payment</Title>
-            </Card>
-          </Flex>
-        </Flex>
-      </Stack>
-      {user && user.planId ? (
-        <Box mt={24}>
-          <Title order={3}>Subscription Details</Title>
-          <Plans userPlanId={String(user.planId)} />
-        </Box>
-      ) : null}
-    </PageLayout>
+    <ProfileContent
+      planData={planData}
+      tokenUsage={tokenUsage}
+      userEmail={user.email || undefined}
+      userId={user.id}
+      userCreatedAt={user.createdAt}
+    />
   );
 };
 

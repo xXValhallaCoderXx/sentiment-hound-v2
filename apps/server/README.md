@@ -45,17 +45,89 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
-## Test
+# Sentiment Analysis Platform - Backend API
+
+This is the NestJS backend API for the Sentiment Analysis Platform, providing REST API endpoints and business logic coordination.
+
+## Description
+
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository, configured for the sentiment analysis monorepo with shared packages and services.
+
+## Installation
 
 ```bash
-# unit tests
-$ pnpm run test
+$ pnpm install
+```
 
-# e2e tests
-$ pnpm run test:e2e
+## Running the app
 
-# test coverage
-$ pnpm run test:cov
+```bash
+# development
+$ pnpm run start
+
+# watch mode (recommended for development)
+$ pnpm run start:dev
+
+# production mode
+$ pnpm run start:prod
+```
+
+## Testing
+
+This application uses [Vitest](https://vitest.dev/) with node environment for NestJS service and module testing.
+
+### Running Tests
+
+```bash
+# Run tests once
+$ pnpm test
+
+# Run tests in watch mode (recommended for development)
+$ pnpm test
+
+# Run tests from the monorepo root
+$ pnpm turbo test --filter=server
+```
+
+### Testing Setup
+- **Framework**: Vitest with node environment for server-side testing
+- **NestJS Testing**: Uses @nestjs/testing utilities for dependency injection and module testing
+- **Mocking**: Vitest's `vi` utility for mocking dependencies and external services
+- **Configuration**: Extends shared Vitest configuration from `@repo/vitest-config`
+
+### Test File Organization
+- Test files are co-located with source files using `.test.ts` extension
+- Example: `tasks.service.ts` → `tasks.service.test.ts`
+- Test configuration: `vitest.config.ts`
+
+### Writing Tests
+Tests should follow NestJS testing best practices:
+- Use `@nestjs/testing` for creating test modules and dependency injection
+- Mock external dependencies (database, external APIs, shared services)
+- Test business logic and service interactions
+- Use Vitest's `describe`, `it`, `expect`, and `vi` utilities
+
+### Example Test Pattern
+```typescript
+import { Test, TestingModule } from '@nestjs/testing';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { YourService } from './your.service';
+
+describe('YourService', () => {
+  let service: YourService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [YourService],
+    }).compile();
+
+    service = module.get<YourService>(YourService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});
 ```
 
 ## Support

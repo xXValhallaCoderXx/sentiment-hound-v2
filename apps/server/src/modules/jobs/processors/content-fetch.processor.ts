@@ -16,73 +16,84 @@ export class ContentFetchProcessor {
   async process(job: Job): Promise<void> {
     this.logger.log(`Processing FETCH_CONTENT job id=${job.id}`);
 
-    const integration = await integrationsService.getIntegration(
-      job.data.integrationId,
-    );
-    const provider = await providerService.getProvider(
-      String(integration.providerId),
-    );
+    try {
+      // Get providerId from the parent task
+      const task = await subtaskService.getTaskWithProviderForSubTask(job.id);
+      const providerId = task.task.providerId;
 
-    if (provider.name !== 'youtube') {
-      this.logger.warn(`Provider '${provider.name}' is not supported`);
-      return;
-    }
+      const integration = await integrationsService.getIntegration(
+        job.data.integrationId,
+      );
+      const provider = await providerService.getProvider(
+        String(integration.providerId),
+      );
 
-    const user = await subtaskService.getUserForSubTask(job.id);
-    if (!user) {
-      this.logger.warn(`No user found for subtask ${job.id}`);
-      return;
-    }
+      if (provider.name !== 'youtube') {
+        this.logger.warn(`Provider '${provider.name}' is not supported`);
+        return;
+      }
 
-    const youtubePosts = await youtubeService.fetchAllYoutubePosts(user.id);
+      const user = await subtaskService.getUserForSubTask(job.id);
+      if (!user) {
+        this.logger.warn(`No user found for subtask ${job.id}`);
+        return;
+      }
 
-    const posts = youtubePosts.map((video) => ({
-      userId: user.id,
-      title: video.title,
-      commentCount: Number(video.statistics?.commentCount),
-      description: video.description,
-      publishedAt: new Date(video.publishedAt),
-      imageUrl: video.thumbnail,
-      postUrl: video.id,
-      remoteId: video.id,
-      integrationId: integration.id,
-    }));
+      const youtubePosts = await youtubeService.fetchAllYoutubePosts(user.id);
 
-    // Create posts and keep a map of remoteId => postId
-    await postService.createUserPosts(posts);
-    const createdPosts = await postService.findPostsBasedOnRemoteIds(
-      posts.map((p) => p.remoteId),
-    );
-    const postMap = new Map(createdPosts.map((p) => [p.remoteId, p.id]));
-
-    // Flatten comments and attach correct postId
-    const mentions = youtubePosts.flatMap((video) => {
-      const postId = postMap.get(video.id);
-      if (!postId) return [];
-
-      return video.comments.map((comment) => ({
-        commentId: comment.id,
-
-        content: comment.textOriginal,
-        post: { connect: { id: postId } }, // <== THIS is the key fix
+      const posts = youtubePosts.map((video) => ({
+        userId: user.id,
+        title: video.title,
+        commentCount: Number(video.statistics?.commentCount),
+        description: video.description,
+        publishedAt: new Date(video.publishedAt),
+        imageUrl: video.thumbnail,
+        postUrl: video.id,
+        remoteId: video.id,
+        integrationId: integration.id,
+        providerId: providerId,
       }));
-    });
 
-    await Promise.all(
-      mentions.map((mention) =>
-        mentionService.createMention({
-          data: {
-            content: mention.content,
-            remoteId: mention.commentId,
-            mentionId: Number(mention.commentId),
-            sourceType: 'YOUTUBE',
-            post: mention.post,
-          },
-        }),
-      ),
-    );
+      // Create posts and keep a map of remoteId => postId
+      await postService.createUserPosts(posts);
+      const createdPosts = await postService.findPostsBasedOnRemoteIds(
+        posts.map((p) => p.remoteId),
+      );
+      const postMap = new Map(createdPosts.map((p) => [p.remoteId, p.id]));
 
-    await subtaskService.markSubTaskAsCompleted(job.id);
-    this.logger.log(`Finished FETCH_CONTENT job id=${job.id}`);
+      // Flatten comments and attach correct postId
+      const mentions = youtubePosts.flatMap((video) => {
+        const postId = postMap.get(video.id);
+        if (!postId) return [];
+
+        return video.comments.map((comment) => ({
+          commentId: comment.id,
+
+          content: comment.textOriginal,
+          post: { connect: { id: postId } }, // <== THIS is the key fix
+        }));
+      });
+
+      await Promise.all(
+        mentions.map((mention) =>
+          mentionService.createMention({
+            data: {
+              content: mention.content,
+              remoteId: mention.commentId,
+              sourceType: 'YOUTUBE',
+              post: mention.post,
+            },
+          }),
+        ),
+      );
+
+      await subtaskService.markSubTaskAsCompleted(job.id);
+      this.logger.log(`Finished FETCH_CONTENT job id=${job.id}`);
+    } catch (error) {
+      this.logger.error(
+        `Error processing FETCH_CONTENT job id=${job.id}: ${error.message}`,
+      );
+      await subtaskService.markSubTaskAsFailed(String(job.id), error.message);
+    }
   }
 }
