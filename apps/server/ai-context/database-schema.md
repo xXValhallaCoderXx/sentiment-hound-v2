@@ -9,7 +9,7 @@
 
 ### Content Models
 - **`Post`** - Social media posts/videos with sentiment analysis results
-  - Foreign keys: `userId`, `providerId`, `integrationId?` (optional)
+  - Foreign keys: `userId`, `providerId` **(required starting July 2025)**, `integrationId?` (optional)
 - **`Mention`** - Comments/mentions within posts
   - Foreign keys: `postId`, `providerId?` (optional)
 - **`Task`** - Analysis job tracking
@@ -48,3 +48,18 @@
 - Queue jobs process both OAuth and API key authentication modes
 - Provider resolution from URL parsing or integration lookup
 - Background processors use appropriate authentication based on integration presence
+
+### Post Model ProviderId Requirement Enforcement (July 2025)
+
+**Purpose**: Database schema refactor enforcing Post.providerId as a required field to ensure proper provider relationship tracking.
+
+**Core Components**:
+- Updated Prisma schema making `providerId` non-optional on Post model
+- Modified job processors to retrieve and include providerId in all post creation
+- Enhanced SubTask service to facilitate providerId retrieval from parent Task relationships
+
+**Key Interactions**:
+- TypeScript compilation enforces providerId presence in all PostCreateManyInput objects
+- Job processors use `subtaskService.getTaskWithProviderForSubTask()` to obtain providerId
+- Repository layer maintains type safety with Prisma-generated types
+- All post creation workflows now guarantee provider relationship integrity

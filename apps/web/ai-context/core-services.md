@@ -59,3 +59,17 @@ constructor(private prisma: PrismaClient) {
 - URL parser integration for automatic provider detection
 - Fallback logic from integration ID to provider ID resolution
 - Comprehensive error handling for unsupported providers
+
+### SubTask Service Enhancement for Provider Relations (July 2025)
+
+**Purpose**: Enhanced SubTask service to support retrieving Task with Provider information for job processors requiring providerId in post creation.
+
+**Core Components**:
+- `packages/services/src/sub-tasks/sub-tasks.service.ts` - Enhanced CoreSubTaskService
+- Job processors using new service methods for providerId retrieval
+
+**Key Interactions**:
+- New `getTaskWithProviderForSubTask(id)` method retrieves SubTask with nested Task and Provider relationships
+- Helper `getProviderIdForSubTask(id)` method extracts providerId for post creation
+- Comprehensive error handling for missing SubTask or null providerId scenarios
+- Ensures type safety with Prisma schema requirements for Post.providerId field

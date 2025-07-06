@@ -94,3 +94,51 @@ pnpm build:prod
 - **Processor Failures**: Review error logs and retry logic
 - **API Errors**: NestJS built-in logging
 - **Service Integration**: Debug through `@repo/services`
+
+### Job Processor ProviderId Pattern (July 2025)
+
+**Purpose**: Standardized pattern for job processors to retrieve and include providerId in post creation operations.
+
+**Core Components**:
+- Enhanced SubTask service with provider relationship retrieval
+- Updated job processor template requiring providerId handling
+- Consistent error handling for missing Task or Provider relationships
+
+**Standard Implementation Pattern**:
+```typescript
+async process(job: Job): Promise<void> {
+  try {
+    // 1. Get providerId from parent task
+    const task = await subtaskService.getTaskWithProviderForSubTask(job.id);
+    const providerId = task.task.providerId;
+
+    // 2. Process content with provider context
+    const posts = await processContent(/* parameters */);
+
+    // 3. Include providerId in all post creation
+    await postService.createUserPosts(posts.map(post => ({
+      ...post,
+      providerId: providerId,
+    })));
+
+    // 4. Update SubTask status
+    await prisma.subTask.update({
+      where: { id: job.id },
+      data: { status: 'COMPLETED' },
+    });
+  } catch (error) {
+    // Handle error and mark SubTask as failed
+    await prisma.subTask.update({
+      where: { id: job.id },
+      data: { status: 'FAILED' },
+    });
+    throw error;
+  }
+}
+```
+
+**Key Interactions**:
+- All job processors follow this pattern for consistent providerId handling
+- Service layer abstracts Task-Provider relationship complexity
+- TypeScript enforcement ensures no post creation without providerId
+- Comprehensive error handling maintains job processing reliability

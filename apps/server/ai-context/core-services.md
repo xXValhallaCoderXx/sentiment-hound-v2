@@ -54,3 +54,18 @@ Enhanced error handling distinguishes between:
 - Job processors resolve authentication mode from integration presence
 - Provider service caching improves queue job performance
 - Comprehensive error handling for async processing scenarios
+
+### SubTask Service Enhancement for Provider Relations (July 2025)
+
+**Purpose**: Enhanced SubTask service to support retrieving Task with Provider information for job processors requiring providerId in post creation.
+
+**Core Components**:
+- `packages/services/src/sub-tasks/sub-tasks.service.ts` - Enhanced CoreSubTaskService
+- `apps/server/src/modules/jobs/processors/*` - Updated job processors using new service methods
+
+**Key Interactions**:
+- New `getTaskWithProviderForSubTask(id)` method retrieves SubTask with nested Task and Provider relationships
+- Helper `getProviderIdForSubTask(id)` method extracts providerId for post creation
+- Comprehensive error handling for missing SubTask or null providerId scenarios
+- All job processors now use service layer to obtain providerId before creating posts
+- Maintains type safety with Prisma schema requirements for Post.providerId field
