@@ -78,3 +78,19 @@
 - Job processors use `subtaskService.getTaskWithProviderForSubTask()` to obtain providerId
 - Repository layer maintains type safety with Prisma-generated types
 - All post creation workflows now guarantee provider relationship integrity
+
+### Mention Model Simplification (July 2025)
+
+**Purpose**: Removed redundant `mentionId` field to eliminate technical debt and improve schema clarity.
+
+**Core Components**:
+- Removed `mentionId Int` field from Mention model in `packages/database/prisma/schema.prisma`
+- Updated job processors: `post-fetch.processor.ts`, `content-fetch.processor.ts`, `reddit-fetch-processor.ts`
+- Verified foreign key integrity in `AspectAnalysis` and `SubTaskMention` models
+- Applied Prisma migration: `remove-mention-id-field`
+
+**Key Interactions**:
+- Mention records now rely solely on auto-generated `id` primary key
+- `remoteId` field continues to serve as unique identifier per platform
+- Foreign key relationships in analysis models reference `Mention.id` correctly
+- All mention creation flows simplified without redundant field assignments

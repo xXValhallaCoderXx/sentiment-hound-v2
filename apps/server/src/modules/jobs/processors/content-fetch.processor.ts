@@ -80,7 +80,6 @@ export class ContentFetchProcessor {
             data: {
               content: mention.content,
               remoteId: mention.commentId,
-              mentionId: Number(mention.commentId),
               sourceType: 'YOUTUBE',
               post: mention.post,
             },

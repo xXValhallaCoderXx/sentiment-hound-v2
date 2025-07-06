@@ -142,3 +142,24 @@ async process(job: Job): Promise<void> {
 - Service layer abstracts Task-Provider relationship complexity
 - TypeScript enforcement ensures no post creation without providerId
 - Comprehensive error handling maintains job processing reliability
+
+## Schema Change Workflow
+
+### Database Schema Updates
+1. **Update Schema**: Modify `packages/database/prisma/schema.prisma`
+2. **Generate Migration**: `pnpm --filter @repo/db db:migrate --name descriptive-name`
+3. **Regenerate Types**: `pnpm turbo db:generate`
+4. **Verify Build**: `pnpm turbo build --filter=@repo/db`
+
+### Code Updates After Schema Changes
+1. **Update Processors**: Remove/add field assignments in job processors
+2. **Update Services**: Verify service methods work with new types (often automatic)
+3. **Update Tests**: Fix test mocks and fixtures if needed
+4. **Update Documentation**: Add entries to ai-context files
+
+### Migration Validation Checklist
+- [ ] Prisma migration file created and reviewed
+- [ ] TypeScript compilation succeeds across all packages
+- [ ] All tests pass (`pnpm turbo test`)
+- [ ] Development environment starts successfully
+- [ ] Foreign key relationships verified in database

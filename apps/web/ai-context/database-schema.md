@@ -49,3 +49,19 @@
 - Provider resolution from URL parsing or integration lookup
 - Dual authentication support: OAuth tokens vs API keys
 - Backward compatible queries for existing user integrations
+
+### Mention Model Schema Cleanup (July 2025)
+
+**Purpose**: Removed redundant `mentionId` field to simplify schema and eliminate technical debt in mention creation flows.
+
+**Core Components**:
+- Removed `mentionId Int` field from Mention model in Prisma schema
+- Applied `remove-mention-id-field` migration with zero downtime
+- Verified foreign key integrity in AspectAnalysis and SubTaskMention models
+- Updated all mention creation logic across frontend and backend processors
+
+**Key Interactions**:
+- Mention identification now relies solely on auto-generated `id` primary key
+- `remoteId` field maintains platform-specific unique identifiers (comment IDs, etc.)
+- AspectAnalysis and SubTaskMention foreign key relationships preserved
+- Simplified data objects in mention creation Server Actions and API endpoints

@@ -139,7 +139,6 @@ model Mention {
   content         String
   sentiment       String?
   score           String?
-  mentionId       Int
   sentimentStatus SentimentStatus @default(PENDING)
   sourceUrl       String? // e.g. permalink or video URL
   author          String? // username or channel name

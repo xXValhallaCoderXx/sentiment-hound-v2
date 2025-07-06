@@ -157,7 +157,6 @@ export class PostFetchProcessor {
             data: {
               content: comment.content,
               remoteId: comment.mentionId,
-              mentionId: Number(comment.mentionId),
               sourceType: 'YOUTUBE',
               post: { connect: { id: createdPost[0].id } },
             },

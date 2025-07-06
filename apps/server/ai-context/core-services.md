@@ -2,7 +2,7 @@
 
 ## Service Layer Architecture (`@repo/services`)
 
-### Queue-Related Services
+### Queue & Task Management Services
 - **`QueueService`** - Job distribution and monitoring
 - **`CoreTaskService`** - Task lifecycle and provider resolution
 - **`SubTaskService`** - Granular processing units
@@ -12,12 +12,17 @@
 - **`MentionService`** - Comment and mention handling
 - **`ContentFetchService`** - Platform-specific content retrieval
 
-### Platform Services
+### Platform Integration Services
 - **`ProvidersService`** - Social media platform management
 - **`IntegrationsService`** - User OAuth connection handling
 - **`UrlParserService`** - URL analysis and provider detection
 
-## Service Integration in Queue Processing
+### Authentication & Context Services
+- **`ExecutionContextBuilder`** - Unified job authentication and metadata resolution
+- **`YoutubeContentService`** - Platform-specific content operations with explicit auth
+- **`YoutubeService`** - Wrapper service for authentication method forwarding
+
+## Service Integration Patterns
 
 ### Provider Resolution in Jobs
 Queue processors use enhanced services for provider-aware processing:
@@ -144,3 +149,26 @@ Enhanced error handling distinguishes between:
 - **Maintainability**: Clear authentication method flow throughout service architecture
 - **Debugging**: Explicit authentication method context in all error scenarios
 - **Testing**: Predictable authentication behavior enables robust test scenarios
+
+### Mention Creation Schema Optimization (July 2025)
+
+**Purpose**: Streamlined mention creation across all job processors by removing redundant `mentionId` field and simplifying data flow.
+
+**Core Components**:
+- `packages/services/src/mentions/mentions.service.ts` - Automatically compatible with updated Prisma types
+- `packages/services/src/mentions/mentions.repository.ts` - No code changes required due to Prisma auto-generation
+- `apps/server/src/modules/jobs/processors/post-fetch.processor.ts` - Removed `mentionId` assignment from YouTube comment creation
+- `apps/server/src/modules/jobs/processors/content-fetch.processor.ts` - Removed `mentionId` assignment from mention creation
+- `apps/server/src/modules/jobs/processors/reddit-fetch-processor.ts` - Removed `mentionId` hash calculation logic
+
+**Service Layer Impact**:
+- **MentionService.createMention()**: Simplified data object creation without redundant field mapping
+- **Repository Layer**: Automatic compatibility through Prisma type generation eliminates manual updates
+- **Job Processors**: Reduced complexity in mention creation flows across YouTube, Reddit, and content fetch processors
+- **Foreign Key Relations**: AspectAnalysis and SubTaskMention models continue to reference Mention.id correctly
+
+**Processing Benefits**:
+- **Reduced Technical Debt**: Eliminated duplicate identifier fields that served no functional purpose
+- **Simplified Data Flow**: Mention creation now relies solely on auto-generated primary key and platform-specific `remoteId`
+- **Maintainability**: Fewer fields to manage and validate during comment/mention processing
+- **Type Safety**: Prisma client auto-generation ensures compile-time validation of schema changes
