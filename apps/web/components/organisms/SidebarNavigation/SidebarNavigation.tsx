@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Box, Stack, Text } from "@mantine/core";
 import {
   IconHome,
+  IconSearch,
   IconSettings,
   IconUser,
   IconLogout,
@@ -36,6 +37,11 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
       href: "/dashboard",
       icon: IconHome,
       label: "Dashboard",
+    },
+    {
+      href: "/dashboard/analyse",
+      icon: IconSearch,
+      label: "Analyse",
     },
   ];
 

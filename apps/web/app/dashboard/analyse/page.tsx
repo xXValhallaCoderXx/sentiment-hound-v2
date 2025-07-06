@@ -1,82 +1,41 @@
 import { auth } from "@/lib/next-auth.lib";
-import { Box, Title, Text, Group, Flex, Stack } from "@mantine/core";
-import { integrationsService, providerService } from "@repo/services";
-import NoData from "@/components/molecules/NoData";
-import YoutubeUrlForm from "./components/YoutubeUrlForm";
-import RedditJobButton from "./components/RedditJobButton";
+import { Box, Container, Stack, Title, Text } from "@mantine/core";
+import AnalyseForm from "./components/AnalyseForm";
 
-const AnalysePage = async ({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) => {
+const AnalysePage = async () => {
   const session = await auth();
-  await searchParams; // status and type are not used, but searchParams might be needed later
 
+  // Authentication check
   if (!session?.user?.id) {
     return (
-      <Box p="xl" ta="center">
-        <Text>You must be logged in to view this page</Text>
-      </Box>
+      <Container size="sm" py="xl">
+        <Box ta="center">
+          <Text size="lg" c="dimmed">
+            You must be logged in to view this page
+          </Text>
+        </Box>
+      </Container>
     );
   }
 
-  try {
-    const integrations = await integrationsService.getUserIntegrations(
-      session.user.id
-    );
+  return (
+    <Container size="sm" py="xl">
+      <Stack gap="xl" align="center">
+        {/* Page Header */}
+        <Box ta="center">
+          <Title order={1} mb="sm">
+            Analyze Content
+          </Title>
+          <Text size="lg" c="dimmed" maw={600} mx="auto">
+            Submit a URL from YouTube or other supported platforms to analyze sentiment and engagement
+          </Text>
+        </Box>
 
-    const providers = await providerService.getProviderByName("youtube");
-    const redditProvider = await providerService.getProviderByName("reddit");
-    const redditIntegration = integrations.find(
-      (integration) => integration.providerId === redditProvider.id
-    );
-
-    const youtubeIntegration = integrations.find(
-      (integration) => integration.providerId === providers.id
-    );
-
-    if (integrations.length < 1) {
-      return (
-        <Flex align="center" justify="center">
-          <NoData
-            title="No Integrations Found"
-            description="Please integrate a social media account"
-          />
-        </Flex>
-      );
-    }
-
-    return (
-      <Box p="xl">
-        <Group mb="lg">
-          <div>
-            <Title order={2}>Analyse Content</Title>
-            <Text color="dimmed">
-              View your content and decide which you want to sync
-            </Text>
-          </div>
-        </Group>
-        <Stack gap={16}>
-          <YoutubeUrlForm integration={String(youtubeIntegration?.id)} />
-          <Stack>
-            <Title order={3}>Reddit</Title>
-            <RedditJobButton
-              integration={String(redditIntegration?.id)}
-              userId={session.user.id}
-            />
-          </Stack>
-        </Stack>
-      </Box>
-    );
-  } catch (error) {
-    console.error("Error loading jobs page:", error);
-    return (
-      <Box p="xl" ta="center">
-        <Text color="red">An error occurred while loading data</Text>
-      </Box>
-    );
-  }
+        {/* Main Form - No event handlers passed from server component */}
+        <AnalyseForm />
+      </Stack>
+    </Container>
+  );
 };
 
 export default AnalysePage;
