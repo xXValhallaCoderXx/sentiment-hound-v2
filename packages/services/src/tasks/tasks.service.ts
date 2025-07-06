@@ -460,6 +460,71 @@ export class CoreTaskService {
   ): Promise<Task[]> {
     return this.model.findMany({ where: { userId, ...filters } });
   }
+
+  // New method specifically for analysis dashboard with required relations
+  async getUserAnalysisTasksWithData(
+    userId: string, 
+    filters?: { status?: TaskStatus; page?: number; pageSize?: number }
+  ) {
+    const page = filters?.page || 1;
+    const pageSize = filters?.pageSize || 10;
+    const skip = (page - 1) * pageSize;
+
+    // Get tasks with all the related data we need for analysis display
+    const [tasks, totalCount] = await Promise.all([
+      this.model.findMany({
+        where: {
+          userId,
+          type: TaskType.ANALYZE_POST,
+          ...(filters?.status && { status: filters.status }),
+        },
+        include: {
+          provider: true,
+          subTasks: {
+            include: {
+              subTaskMentions: {
+                include: {
+                  mention: {
+                    include: {
+                      post: {
+                        select: {
+                          id: true,
+                          title: true,
+                          postUrl: true,
+                          commentCount: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip,
+        take: pageSize,
+      }),
+      // Get total count for pagination
+      this.model.count({
+        where: {
+          userId,
+          type: TaskType.ANALYZE_POST,
+          ...(filters?.status && { status: filters.status }),
+        },
+      }),
+    ]);
+
+    return {
+      tasks,
+      total: totalCount,
+      page,
+      pageSize,
+      totalPages: Math.ceil(totalCount / pageSize),
+    };
+  }
 }
 
 // import {
