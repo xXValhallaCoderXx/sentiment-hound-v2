@@ -48,11 +48,14 @@ This monorepo is managed using `pnpm` and `Turborepo`. It consists of the follow
         # NextAuth Configuration (required for OAuth callbacks)
         NEXTAUTH_URL=http://localhost:3000
         ```
-    *   For analysis service master tokens (fallback when users don't have connected accounts), add the following to your environment files:
+    *   For analysis service API access (fallback when users don't have connected accounts), add the following to your environment files:
         ```env
-        # Master Access Tokens for Analysis Fallback
-        YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_master_token
+        # API Keys for Analysis Fallback (Recommended)
+        YOUTUBE_API_KEY=your_youtube_api_key
         REDDIT_MASTER_ACCESS_TOKEN=your_reddit_master_token
+        
+        # Legacy Master Token (Deprecated - will be replaced by YOUTUBE_API_KEY)
+        YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_master_token
         ```
         To obtain Reddit OAuth credentials:
         1. Go to [Reddit App Preferences](https://www.reddit.com/prefs/apps)
@@ -287,10 +290,13 @@ import AnalyzeButton from '@/components/atoms/AnalyzeButton';
 ```
 
 **Required Environment Variables**:
-For master token fallback when users don't have connected accounts:
+For API access fallback when users don't have connected accounts:
 ```env
-YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_api_key
+YOUTUBE_API_KEY=your_youtube_api_key
 REDDIT_MASTER_ACCESS_TOKEN=your_reddit_oauth_token
+
+# Legacy (deprecated - use YOUTUBE_API_KEY instead)
+YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_master_token
 ```
 
 **Supported URL Formats**:

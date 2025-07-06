@@ -12,8 +12,13 @@ import { TaskType } from "@repo/db";
 /**
  * Initiates sentiment analysis for a social media post with intelligent token fallback logic.
  *
- * This server action detects the provider from the URL, selects the appropriate authentication
- * token (user integration or master token fallback), and creates analysis tasks in the database.
+ * This server action detects the provider from the URL and uses a hierarchical authentication approach:
+ * 1. User integration tokens (OAuth) - if available and active
+ * 2. API key authentication - for providers supporting it (e.g. YouTube)
+ * 3. Master token fallback - for legacy provider support (e.g. Reddit)
+ *
+ * The authentication method selection ensures maximum compatibility while providing
+ * seamless service for users without connected accounts.
  *
  * @param postUrl - The URL of the social media post to analyze (YouTube, Reddit, etc.)
  * @returns Promise resolving to ActionResponse with task ID and status, or error details
@@ -82,21 +87,30 @@ export async function startAnalysis(
       } else {
         if (userIntegration && !userIntegration.isActive) {
           console.log(
-            `User integration found but inactive for provider: ${provider}, falling back to master token`
+            `User integration found but inactive for provider: ${provider}, falling back to API credentials`
           );
         }
 
-        // Fallback to master token
-        const masterTokenKey = `${provider.toUpperCase()}_MASTER_ACCESS_TOKEN`;
-        const masterToken = process.env[masterTokenKey];
-
-        if (masterToken) {
+        // Fallback hierarchy: try API key first, then master token
+        const providerUpper = provider.toUpperCase();
+        const apiKeyVar = `${providerUpper}_API_KEY`;
+        const masterTokenVar = `${providerUpper}_MASTER_ACCESS_TOKEN`;
+        
+        const apiKey = process.env[apiKeyVar];
+        const masterToken = process.env[masterTokenVar];
+        
+        if (apiKey) {
+          tokenToUse = apiKey;
+          console.log(
+            `Authentication method: API key authentication for provider: ${provider}`
+          );
+        } else if (masterToken) {
           tokenToUse = masterToken;
           console.log(
-            `Token selection: master token selected for provider: ${provider}`
+            `Authentication method: master token authentication for provider: ${provider}`
           );
         } else {
-          console.error(`No master token available for provider: ${provider}`);
+          console.error(`No API key or master token available for provider: ${provider}`);
           throw new Error(`No token available for provider: ${provider}`);
         }
       }

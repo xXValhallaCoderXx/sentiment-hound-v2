@@ -27,6 +27,8 @@ describe("startAnalysis - Basic Functionality Tests", () => {
     // Reset environment variables
     delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
     delete process.env.REDDIT_MASTER_ACCESS_TOKEN;
+    delete process.env.YOUTUBE_API_KEY;
+    delete process.env.REDDIT_API_KEY;
   });
 
   it("should be a function", () => {
