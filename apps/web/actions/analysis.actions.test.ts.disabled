@@ -1,0 +1,337 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { startAnalysis } from "./analysis.actions";
+import {
+  taskService,
+  integrationsService,
+  urlParserService,
+} from "@repo/services";
+import { TaskType, TaskStatus } from "@repo/db";
+
+// Mock all external dependencies
+vi.mock("@/lib/next-auth.lib", () => ({
+  auth: vi.fn(),
+}));
+vi.mock("@repo/services");
+
+// Import mocked modules
+const { auth: mockAuth } = await import("@/lib/next-auth.lib");
+const mockTaskService = vi.mocked(taskService);
+const mockIntegrationsService = vi.mocked(integrationsService);
+const mockUrlParserService = vi.mocked(urlParserService);
+
+describe("startAnalysis", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset environment variables
+    delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+    delete process.env.REDDIT_MASTER_ACCESS_TOKEN;
+  });
+
+  it("should successfully start analysis with user integration token", async () => {
+    // Arrange
+    const mockSession = { user: { id: "user123" } };
+    const mockParseResult = {
+      provider: "youtube" as const,
+      url: "https://youtube.com/watch?v=abc123",
+    };
+    const mockIntegration = {
+      id: 1,
+      accessToken: "user-token",
+      isActive: true,
+      accountId: "account123",
+      refreshToken: "refresh-token",
+      refreshTokenExpiresAt: new Date(),
+      userId: "user123",
+      providerId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const mockTask = {
+      id: 456,
+      status: TaskStatus.PENDING,
+      userId: "user123",
+      type: TaskType.ANALYZE_POST,
+      errorMessage: null,
+      integrationId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    mockAuth.mockResolvedValue(mockSession);
+    mockUrlParserService.parse.mockReturnValue(mockParseResult);
+    mockIntegrationsService.getUserIntegrationByName.mockResolvedValue(
+      mockIntegration
+    );
+    mockTaskService.createTask.mockResolvedValue(mockTask);
+
+    // Act
+    const result = await startAnalysis("https://youtube.com/watch?v=abc123");
+
+    // Assert
+    expect(result).toEqual({
+      data: { taskId: 456, status: "PENDING" },
+      error: null,
+    });
+    expect(mockUrlParserService.parse).toHaveBeenCalledWith(
+      "https://youtube.com/watch?v=abc123"
+    );
+    expect(
+      mockIntegrationsService.getUserIntegrationByName
+    ).toHaveBeenCalledWith("user123", "youtube");
+    expect(mockTaskService.createTask).toHaveBeenCalledWith({
+      integrationId: 1,
+      taskType: TaskType.ANALYZE_POST,
+      userId: "user123",
+      extraData: {
+        url: "https://youtube.com/watch?v=abc123",
+        token: "user-token",
+      },
+    });
+  });
+
+  it("should successfully start analysis with master token fallback", async () => {
+    // Arrange
+    process.env.YOUTUBE_MASTER_ACCESS_TOKEN = "master-token-123";
+    const mockSession = { user: { id: "user123" } };
+    const mockParseResult = {
+      provider: "youtube" as const,
+      url: "https://youtube.com/watch?v=abc123",
+    };
+    const mockTask = {
+      id: 789,
+      status: TaskStatus.PENDING,
+      userId: "user123",
+      type: TaskType.ANALYZE_POST,
+      errorMessage: null,
+      integrationId: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    mockAuth.mockResolvedValue(mockSession);
+    mockUrlParserService.parse.mockReturnValue(mockParseResult);
+    mockIntegrationsService.getUserIntegrationByName.mockResolvedValue(null);
+    mockTaskService.createTask.mockResolvedValue(mockTask);
+
+    // Act
+    const result = await startAnalysis("https://youtube.com/watch?v=abc123");
+
+    // Assert
+    expect(result).toEqual({
+      data: { taskId: 789, status: "PENDING" },
+      error: null,
+    });
+    expect(
+      mockIntegrationsService.getUserIntegrationByName
+    ).toHaveBeenCalledWith("user123", "youtube");
+    expect(mockTaskService.createTask).toHaveBeenCalledWith({
+      integrationId: 0,
+      taskType: TaskType.ANALYZE_POST,
+      userId: "user123",
+      extraData: {
+        url: "https://youtube.com/watch?v=abc123",
+        token: "master-token-123",
+      },
+    });
+  });
+
+  it("should return error for unauthenticated user", async () => {
+    // Arrange
+    mockAuth.mockResolvedValue(null);
+
+    // Act
+    const result = await startAnalysis("https://youtube.com/watch?v=abc123");
+
+    // Assert
+    expect(result).toEqual({
+      data: null,
+      error: {
+        error: "User not authenticated",
+        code: "UNAUTHORIZED",
+        status: 401,
+      },
+    });
+    expect(mockUrlParserService.parse).not.toHaveBeenCalled();
+  });
+
+  it("should return error for invalid URL", async () => {
+    // Arrange
+    const mockSession = { user: { id: "user123" } };
+    mockAuth.mockResolvedValue(mockSession);
+    mockUrlParserService.parse.mockImplementation(() => {
+      throw new Error("Invalid URL");
+    });
+
+    // Act
+    const result = await startAnalysis("invalid-url");
+
+    // Assert
+    expect(result).toEqual({
+      data: null,
+      error: {
+        error: "Unsupported or invalid URL",
+        code: "URL_INVALID",
+        status: 400,
+      },
+    });
+  });
+
+  it("should return error when no integration and no master token available", async () => {
+    // Arrange
+    const mockSession = { user: { id: "user123" } };
+    const mockParseResult = {
+      provider: "youtube" as const,
+      url: "https://youtube.com/watch?v=abc123",
+    };
+
+    mockAuth.mockResolvedValue(mockSession);
+    mockUrlParserService.parse.mockReturnValue(mockParseResult);
+    mockIntegrationsService.getUserIntegrationByName.mockResolvedValue(null);
+    // No master token set in environment
+
+    // Act
+    const result = await startAnalysis("https://youtube.com/watch?v=abc123");
+
+    // Assert
+    expect(result).toEqual({
+      data: null,
+      error: {
+        error: "Analysis for this provider is not available at this time",
+        code: "AUTH_UNAVAILABLE",
+        status: 403,
+      },
+    });
+    expect(mockTaskService.createTask).not.toHaveBeenCalled();
+  });
+
+  it("should fallback to master token when user integration is inactive", async () => {
+    // Arrange
+    process.env.REDDIT_MASTER_ACCESS_TOKEN = "master-reddit-token";
+    const mockSession = { user: { id: "user123" } };
+    const mockParseResult = {
+      provider: "reddit" as const,
+      url: "https://reddit.com/r/test/comments/123",
+    };
+    const mockIntegration = {
+      id: 2,
+      accessToken: "user-token",
+      isActive: false, // Inactive integration
+      accountId: "account456",
+      refreshToken: "refresh-token",
+      refreshTokenExpiresAt: new Date(),
+      userId: "user123",
+      providerId: 2,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const mockTask = {
+      id: 999,
+      status: TaskStatus.PENDING,
+      userId: "user123",
+      type: TaskType.ANALYZE_POST,
+      errorMessage: null,
+      integrationId: 0, // Using master token
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    mockAuth.mockResolvedValue(mockSession);
+    mockUrlParserService.parse.mockReturnValue(mockParseResult);
+    mockIntegrationsService.getUserIntegrationByName.mockResolvedValue(
+      mockIntegration
+    );
+    mockTaskService.createTask.mockResolvedValue(mockTask);
+
+    // Act
+    const result = await startAnalysis(
+      "https://reddit.com/r/test/comments/123"
+    );
+
+    // Assert
+    expect(result).toEqual({
+      data: { taskId: 999, status: "PENDING" },
+      error: null,
+    });
+    expect(mockTaskService.createTask).toHaveBeenCalledWith({
+      integrationId: 0,
+      taskType: TaskType.ANALYZE_POST,
+      userId: "user123",
+      extraData: {
+        url: "https://reddit.com/r/test/comments/123",
+        token: "master-reddit-token",
+      },
+    });
+  });
+
+  it("should handle database errors during task creation", async () => {
+    // Arrange
+    const mockSession = { user: { id: "user123" } };
+    const mockParseResult = {
+      provider: "youtube" as const,
+      url: "https://youtube.com/watch?v=abc123",
+    };
+    const mockIntegration = {
+      id: 1,
+      accessToken: "user-token",
+      isActive: true,
+      accountId: "account123",
+      refreshToken: "refresh-token",
+      refreshTokenExpiresAt: new Date(),
+      userId: "user123",
+      providerId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    mockAuth.mockResolvedValue(mockSession);
+    mockUrlParserService.parse.mockReturnValue(mockParseResult);
+    mockIntegrationsService.getUserIntegrationByName.mockResolvedValue(
+      mockIntegration
+    );
+    mockTaskService.createTask.mockRejectedValue(
+      new Error("Database connection failed")
+    );
+
+    // Act
+    const result = await startAnalysis("https://youtube.com/watch?v=abc123");
+
+    // Assert
+    expect(result).toEqual({
+      data: null,
+      error: {
+        error: "Failed to create analysis task. Please try again.",
+        code: "DATABASE_ERROR",
+        status: 500,
+      },
+    });
+  });
+
+  it("should return correct error codes for each scenario", async () => {
+    // Test UNAUTHORIZED error code
+    mockAuth.mockResolvedValue(null);
+    let result = await startAnalysis("https://youtube.com/watch?v=abc123");
+    expect(result.error?.code).toBe("UNAUTHORIZED");
+    expect(result.error?.status).toBe(401);
+
+    // Test URL_INVALID error code
+    const mockSession = { user: { id: "user123" } };
+    mockAuth.mockResolvedValue(mockSession);
+    mockUrlParserService.parse.mockImplementation(() => {
+      throw new Error("Invalid URL");
+    });
+    result = await startAnalysis("invalid-url");
+    expect(result.error?.code).toBe("URL_INVALID");
+    expect(result.error?.status).toBe(400);
+
+    // Test AUTH_UNAVAILABLE error code
+    mockUrlParserService.parse.mockReturnValue({
+      provider: "youtube" as const,
+      url: "https://youtube.com/watch?v=abc123",
+    });
+    mockIntegrationsService.getUserIntegrationByName.mockResolvedValue(null);
+    delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+    result = await startAnalysis("https://youtube.com/watch?v=abc123");
+    expect(result.error?.code).toBe("AUTH_UNAVAILABLE");
+    expect(result.error?.status).toBe(403);
+  });
+});
