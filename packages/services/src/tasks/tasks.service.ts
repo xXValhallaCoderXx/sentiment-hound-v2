@@ -10,6 +10,7 @@ import {
 import { subtaskService } from "..";
 import { urlParserService } from "..";
 import { integrationsService } from "..";
+import { providerService } from "..";
 import {
   Provider,
   ParseResult,
@@ -22,7 +23,7 @@ export class CoreTaskService {
   private planService: any; // Import type later to avoid circular dependencies
 
   constructor(private prisma: PrismaClient) {
-    this.model = prisma.task;
+    this.model = this.prisma.task;
   }
 
   setPlanService(planService: any) {
@@ -84,17 +85,20 @@ export class CoreTaskService {
 
   async createTask({
     integrationId,
+    providerId,
     taskType,
     userId,
     extraData,
   }: {
     userId: string;
-    integrationId: number;
+    integrationId?: number | null;
+    providerId?: number | null;
     taskType?: TaskType;
     extraData?: any;
   }): Promise<Task> {
     console.log("Sub Task Type: ", taskType);
     console.log("Sub Task integrationId: ", integrationId);
+    console.log("Sub Task providerId: ", providerId);
     console.log("Sub Task userId: ", userId);
     console.log("Sub Task extraData: ", extraData);
 
@@ -102,6 +106,7 @@ export class CoreTaskService {
     let parsedProvider: Provider | null = null;
     let normalizedUrl: string | null = null;
     let urlMetadata: any = null;
+    let resolvedProviderId: number | null = providerId || null;
 
     if (extraData?.url) {
       try {
@@ -120,6 +125,18 @@ export class CoreTaskService {
           metadata: urlMetadata,
         });
 
+        // Resolve provider ID from parsed provider name if not already provided
+        if (!resolvedProviderId && parsedProvider) {
+          try {
+            const providerRecord = await providerService.getProviderByName(parsedProvider);
+            resolvedProviderId = providerRecord.id;
+            console.log(`Resolved provider ID ${resolvedProviderId} for provider ${parsedProvider}`);
+          } catch (error) {
+            console.error(`Failed to resolve provider ID for ${parsedProvider}:`, error);
+            throw new Error(`Unsupported provider: ${parsedProvider}`);
+          }
+        }
+
         // Update extraData with normalized URL for downstream processors
         extraData = {
           ...extraData,
@@ -132,19 +149,6 @@ export class CoreTaskService {
 
         // If URL parsing fails but integrationId is provided, continue with fallback
         if (!integrationId) {
-          // Create task and mark as failed if no fallback integration
-          const failedTask = await this.model.create({
-            data: {
-              type: taskType || TaskType.OTHER,
-              integrationId: integrationId || 0, // Use 0 as fallback
-              userId,
-              status: TaskStatus.FAILED,
-            },
-          });
-
-          console.error(
-            `Task ${failedTask.id} marked as FAILED: URL parsing failed and no fallback integration provided`
-          );
           throw new Error(
             `URL parsing failed: ${error instanceof Error ? error.message : "Unknown error"}`
           );
@@ -156,20 +160,65 @@ export class CoreTaskService {
       }
     }
 
-    // Create the task first
+    // If we still don't have a providerId, try to resolve from integrationId
+    if (!resolvedProviderId && integrationId) {
+      try {
+        const integration = await this.prisma.integration.findUnique({
+          where: { id: integrationId },
+          include: { provider: true },
+        });
+        
+        if (integration) {
+          resolvedProviderId = integration.providerId;
+          console.log(`Resolved provider ID ${resolvedProviderId} from integration ${integrationId}`);
+        }
+      } catch (error) {
+        console.error("Failed to resolve provider from integration:", error);
+      }
+    }
+
+    // Validate that we have a providerId
+    if (!resolvedProviderId) {
+      throw new Error("Provider ID is required. Unable to resolve provider from URL or integration.");
+    }
+
+    // Create the task first - handle API key authentication (integrationId = 0 or null) by omitting the field
+    const taskData: any = {
+      type: taskType || TaskType.OTHER,
+      userId,
+      providerId: resolvedProviderId,
+      status: TaskStatus.PENDING,
+    };
+
+    // Only set integrationId if it's provided and not 0 (API key auth)
+    if (integrationId && integrationId !== 0) {
+      taskData.integrationId = integrationId;
+    }
+
     const task = await this.model.create({
-      data: {
-        type: taskType || TaskType.OTHER,
-        integrationId,
-        userId,
-        status: TaskStatus.PENDING,
-      },
+      data: taskData,
     });
 
     // Enhanced integration lookup: Use provider-based lookup if we have a parsed provider
     let integration: any = null;
 
-    if (parsedProvider) {
+    // Check if we're using API key/master token authentication (integrationId = 0 or null with token in extraData)
+    const isApiKeyAuth = (!integrationId || integrationId === 0) && extraData?.token;
+
+    if (isApiKeyAuth) {
+      console.log(
+        `API key/master token authentication detected for provider: ${parsedProvider}. Skipping database integration lookup.`
+      );
+      // Create a mock integration object for compatibility with downstream code
+      integration = {
+        id: 0,
+        provider: {
+          name: parsedProvider || "unknown",
+        },
+        accessToken: extraData.token,
+        isActive: true,
+      };
+    } else if (parsedProvider) {
       console.log(
         `Looking up integration for parsed provider: ${parsedProvider}`
       );
@@ -211,10 +260,10 @@ export class CoreTaskService {
         console.error("Provider-based integration lookup failed:", error);
         throw error;
       }
-    } else {
+    } else if (integrationId && integrationId !== 0) {
       // Fallback to original integration lookup by ID
       console.log(`Using fallback integration lookup for ID: ${integrationId}`);
-      integration = await prisma.integration.findUnique({
+      integration = await this.prisma.integration.findUnique({
         where: { id: integrationId },
         include: { provider: true },
       });
@@ -243,13 +292,13 @@ export class CoreTaskService {
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.FETCH_REDDIT_KEYWORD_MENTIONS,
-              data: { integrationId, ...extraData },
+              data: { integrationId: integration.id, ...extraData },
             });
 
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
-              data: { integrationId },
+              data: { integrationId: integration.id },
             });
 
             // Create spam detection subtask if user has the feature
@@ -260,7 +309,7 @@ export class CoreTaskService {
               await subtaskService.createSubTask({
                 taskId: task.id,
                 type: SubTaskType.DETECT_SPAM,
-                data: { integrationId },
+                data: { integrationId: integration.id },
               });
             }
           }
@@ -278,12 +327,12 @@ export class CoreTaskService {
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.FETCH_INDIVIDUAL_POST_CONTNENT,
-              data: { integrationId, ...extraData },
+              data: { integrationId: integration?.id || 0, ...extraData },
             });
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
-              data: { integrationId },
+              data: { integrationId: integration?.id || 0 },
             });
 
             // Create spam detection subtask if user has the feature
@@ -294,7 +343,7 @@ export class CoreTaskService {
               await subtaskService.createSubTask({
                 taskId: task.id,
                 type: SubTaskType.DETECT_SPAM,
-                data: { integrationId },
+                data: { integrationId: integration?.id || 0 },
               });
             }
           }
@@ -307,12 +356,12 @@ export class CoreTaskService {
           await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
-            data: { integrationId },
+            data: { integrationId: integration?.id || 0 },
           });
           await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
-            data: { integrationId },
+            data: { integrationId: integration?.id || 0 },
           });
 
           // Create spam detection subtask if user has the feature
@@ -323,7 +372,7 @@ export class CoreTaskService {
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.DETECT_SPAM,
-              data: { integrationId },
+              data: { integrationId: integration?.id || 0 },
             });
           }
 
@@ -335,8 +384,7 @@ export class CoreTaskService {
           await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
-
-            data: { integrationId },
+            data: { integrationId: integration?.id || 0 },
           });
 
           break;
@@ -347,12 +395,12 @@ export class CoreTaskService {
           await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.FETCH_CONTENT,
-            data: { integrationId },
+            data: { integrationId: integration?.id || 0 },
           });
           await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.ANALYZE_CONTENT_SENTIMENT,
-            data: { integrationId },
+            data: { integrationId: integration?.id || 0 },
           });
 
           // Create spam detection subtask if user has the feature
@@ -363,7 +411,7 @@ export class CoreTaskService {
             await subtaskService.createSubTask({
               taskId: task.id,
               type: SubTaskType.DETECT_SPAM,
-              data: { integrationId },
+              data: { integrationId: integration?.id || 0 },
             });
           }
           break;
@@ -374,7 +422,7 @@ export class CoreTaskService {
           await subtaskService.createSubTask({
             taskId: task.id,
             type: SubTaskType.EXPORT_FETCH_DATA,
-            data: { integrationId, ...extraData },
+            data: { integrationId: integration?.id || 0, ...extraData },
           });
           await subtaskService.createSubTask({
             taskId: task.id,

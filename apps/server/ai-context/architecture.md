@@ -48,3 +48,22 @@
 - **Background Workers** - Long-running analysis tasks
 - **Export Generation** - Data export pipeline
 - **API Gateway** - REST endpoints for web app
+
+## Service Layer Integration
+
+### Provider Decoupling Architecture (July 2025)
+
+**Purpose**: Enhanced server to support dual authentication modes - OAuth integrations and direct API key access for public content analysis.
+
+**Core Components**:
+- Task queue processors updated for provider-based content fetching
+- Job data structures include both `providerId` and optional `integrationId`  
+- Background workers handle API key authentication flows
+
+**Key Interactions**:
+- Queue jobs resolve provider information before content fetching
+- Processors use appropriate authentication method based on integration presence
+- Error handling distinguishes between OAuth failures and API key issues
+
+## Architecture Evolution
+The server maintains its queue-based processing pattern while adding flexibility for different authentication modes. This enables analysis of public content without requiring user platform connections.

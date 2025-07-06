@@ -46,9 +46,9 @@ const AnalyseForm: React.FC<AnalyseFormProps> = React.memo(({
     try {
       actions.setLoading(true);
       actions.resetError();
-
+      console.log("Submitting analysis for URL:", state.url);
       const result = await startAnalysis(state.url);
-      
+      console.log("Analysis result:", result);
       if (result.error) {
         const errorMessage = result.error.error || 'An error occurred while starting analysis';
         actions.setError(errorMessage);

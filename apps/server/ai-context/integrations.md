@@ -78,3 +78,27 @@ Web App Server Action
 - **Service Errors**: Bubbled up from `@repo/services`
 - **API Errors**: Standard HTTP status codes
 - **External API Failures**: Graceful degradation
+
+## Enhanced Service Integration
+
+### Provider-Based Processing (July 2025)
+
+**Purpose**: Updated server processors to handle provider-based content fetching with flexible authentication modes.
+
+**Core Components**:
+- Job processors enhanced to resolve provider information from task data
+- Authentication strategy selection based on integration presence
+- Enhanced error handling for provider resolution failures
+
+**Key Interactions**:
+```typescript
+// Enhanced processor pattern
+const { providerId, integrationId } = job.data;
+const authMode = integrationId ? 'oauth' : 'api_key';
+const content = await fetchContentWithAuth(providerId, authMode, job.data);
+```
+
+### Service Layer Dependencies
+- Enhanced dependency on `@repo/services` for provider resolution
+- Provider service integration for platform-specific processing
+- URL parser service for content source detection

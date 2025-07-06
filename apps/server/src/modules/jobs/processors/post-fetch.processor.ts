@@ -36,9 +36,14 @@ export class PostFetchProcessor {
     // TODO - Make this constant
     if (provider.name === 'youtube') {
       console.log('Fetching content from Youtube');
-      const user = await subtaskService.getUserForSubTask(job.id);
-
+      
       try {
+        // Get providerId from the parent task
+        const task = await subtaskService.getTaskWithProviderForSubTask(job.id);
+        const providerId = task.task.providerId;
+
+        const user = await subtaskService.getUserForSubTask(job.id);
+
         // Fetch single video data
         const result = await youtubeService.fetchSingleYoutubeVideo(
           user?.id,
@@ -60,6 +65,7 @@ export class PostFetchProcessor {
           postUrl: videoUrl,
           remoteId: result.id,
           integrationId: integration.id,
+          providerId: providerId,
         };
 
         // Prepare comments data

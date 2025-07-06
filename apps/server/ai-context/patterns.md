@@ -1,6 +1,8 @@
 # Key Development Patterns
 
-## Service Layer Integration
+## Core Architecture Patterns
+
+### Service Layer Integration
 **Always use services from `@repo/services`**:
 
 ```typescript
@@ -10,7 +12,37 @@ import { taskService as coreTaskService } from '@repo/services';
 const task = await coreTaskService.createTask({...});
 ```
 
-## Job Processor Pattern
+### Module Structure
+**Standard NestJS module pattern**:
+
+```typescript
+@Module({
+  imports: [/* Dependencies */],
+  controllers: [/* REST endpoints */], 
+  providers: [/* Services and processors */],
+  exports: [/* Public services */],
+})
+export class FeatureModule {}
+```
+
+### Dependency Injection
+- **Services**: Injected via constructor
+- **Repositories**: Through service layer
+- **External APIs**: As configurable providers
+
+### Service Injection Pattern
+**Consistent dependency injection for testability**:
+
+```typescript
+constructor(private prisma: PrismaClient) {
+  this.model = this.prisma.task; // Use injected instance
+}
+```
+
+## Job Processing Patterns
+## Job Processing Patterns
+
+### Basic Job Processor Pattern
 **Structured async job handling**:
 
 ```typescript
@@ -35,30 +67,39 @@ export class MyProcessor {
 }
 ```
 
-## Module Structure
-**Standard NestJS module pattern**:
+### Provider-Aware Processing Pattern (July 2025)
+**Enhanced job processing with provider context**:
 
 ```typescript
-@Module({
-  imports: [/* Dependencies */],
-  controllers: [/* REST endpoints */], 
-  providers: [/* Services and processors */],
-  exports: [/* Public services */],
-})
-export class FeatureModule {}
+@Injectable()
+export class ContentFetchProcessor {
+  async process(job: Job): Promise<void> {
+    const { providerId, integrationId, url } = job.data;
+    
+    // Determine authentication strategy
+    const authMode = integrationId ? 'oauth' : 'api_key';
+    
+    // Provider-specific content fetching
+    const content = await this.fetchByProvider(providerId, authMode, job.data);
+    
+    // Update task with provider context
+    await coreTaskService.updateTask(job.data.taskId, {
+      status: 'COMPLETED',
+      providerId,
+      content
+    });
+  }
+}
 ```
 
-## Error Handling
+## Configuration and Error Handling
+
+### Error Handling
 - **Job Failures**: Caught and logged with retry logic
 - **API Errors**: NestJS exception filters
 - **Service Errors**: Propagated from `@repo/services`
 
-## Configuration
+### Configuration
 - **Environment Variables**: Via `ConfigModule.forRoot()`
 - **Service URLs**: External microservice endpoints
 - **Queue Settings**: Redis/Bull configuration
-
-## Dependency Injection
-- **Services**: Injected via constructor
-- **Repositories**: Through service layer
-- **External APIs**: As configurable providers

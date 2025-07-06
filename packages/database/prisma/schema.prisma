@@ -101,6 +101,9 @@ model Provider {
   description     String?
   integrations    Integration[]
   trackedKeywords TrackedKeyword[]
+  posts           Post[]
+  tasks           Task[]
+  mentions        Mention[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @default(now())
 }
@@ -117,11 +120,16 @@ model Post {
   commentCount  Int
   userId        String
   user          User        @relation(fields: [userId], references: [id])
-  integrationId Int
-  integration   Integration @relation(fields: [integrationId], references: [id])
+  integrationId Int?
+  integration   Integration? @relation(fields: [integrationId], references: [id])
+  providerId    Int
+  provider      Provider    @relation(fields: [providerId], references: [id])
   mentions      Mention[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId, providerId])
+  @@index([providerId, createdAt])
 }
 
 model Mention {
@@ -142,6 +150,9 @@ model Mention {
 
   trackedKeywordId Int?
   trackedKeyword   TrackedKeyword? @relation(fields: [trackedKeywordId], references: [id], onDelete: Cascade)
+
+  providerId Int?
+  provider   Provider? @relation(fields: [providerId], references: [id])
 
   aspectAnalyses AspectAnalysis[]
   subTaskMention SubTaskMention[]
@@ -171,10 +182,15 @@ model Task {
   userId        String
   user          User        @relation(fields: [userId], references: [id])
   subTasks      SubTask[]
-  integrationId Int
-  integration   Integration @relation(fields: [integrationId], references: [id])
+  integrationId Int?
+  integration   Integration? @relation(fields: [integrationId], references: [id])
+  providerId    Int
+  provider      Provider    @relation(fields: [providerId], references: [id])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+
+  @@index([userId, providerId])
+  @@index([providerId, createdAt])
 }
 
 model SubTask {

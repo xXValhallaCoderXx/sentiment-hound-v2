@@ -10,7 +10,8 @@ export interface ICreatePost {
   imageUrl: string;
   postUrl: string;
   remoteId: string;
-  integrationId: number;
+  providerId: number;
+  integrationId?: number;
 }
 
 export interface PostWithComments extends Post {
