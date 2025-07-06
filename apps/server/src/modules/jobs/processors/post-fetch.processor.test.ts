@@ -1,6 +1,6 @@
 /**
  * Unit Tests for Refactored PostFetchProcessor
- * 
+ *
  * Tests the refactored processor using the unified ExecutionContext pattern,
  * covering authentication scenarios, error handling, and data flow validation.
  */
@@ -11,7 +11,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { PostFetchProcessor } from './post-fetch.processor';
 import { Job } from '../jobs.service';
 import { SubTaskType } from '@repo/db';
-import { ExecutionContext, TokenSource, IntegrationAuthenticationError } from '@repo/services';
+import {
+  ExecutionContext,
+  TokenSource,
+  IntegrationAuthenticationError,
+} from '@repo/services';
 
 // Mock services to avoid circular dependency issues
 vi.mock('@repo/services', () => ({
@@ -128,25 +132,36 @@ describe('PostFetchProcessor', () => {
           jobData: mockJob.data,
           integrationId: 789,
           tokenSource: TokenSource.USER_OAUTH,
+          authMethod: 'OAUTH',
         };
 
         (buildExecutionContext as any).mockResolvedValue(mockContext);
-        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(mockYouTubeVideoResult);
+        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(
+          mockYouTubeVideoResult,
+        );
         (postService.createUserPosts as any).mockResolvedValue(undefined);
-        (postService.findPostsBasedOnRemoteIds as any).mockResolvedValue(mockCreatedPost);
+        (postService.findPostsBasedOnRemoteIds as any).mockResolvedValue(
+          mockCreatedPost,
+        );
         (mentionService.createMention as any).mockResolvedValue(undefined);
-        (subtaskService.markSubTaskAsCompleted as any).mockResolvedValue(undefined);
+        (subtaskService.markSubTaskAsCompleted as any).mockResolvedValue(
+          undefined,
+        );
 
         // Act
         await processor.process(mockJob);
 
         // Assert - ExecutionContext building
-        expect(buildExecutionContext).toHaveBeenCalledWith(mockJobId, mockJob.data);
+        expect(buildExecutionContext).toHaveBeenCalledWith(
+          mockJobId,
+          mockJob.data,
+        );
 
         // Assert - YouTube API call with OAuth token
         expect(youtubeService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           'oauth_access_token_123',
-          'https://youtube.com/watch?v=test123'
+          'OAUTH',
+          'https://youtube.com/watch?v=test123',
         );
 
         // Assert - Post creation with correct ExecutionContext IDs
@@ -173,7 +188,9 @@ describe('PostFetchProcessor', () => {
         });
 
         // Assert - Job completion
-        expect(subtaskService.markSubTaskAsCompleted).toHaveBeenCalledWith(mockJobId);
+        expect(subtaskService.markSubTaskAsCompleted).toHaveBeenCalledWith(
+          mockJobId,
+        );
         expect(subtaskService.markSubTaskAsFailed).not.toHaveBeenCalled();
       });
     });
@@ -189,14 +206,21 @@ describe('PostFetchProcessor', () => {
           jobData: mockJob.data,
           integrationId: null, // No user integration
           tokenSource: TokenSource.MASTER_API_KEY,
+          authMethod: 'API_KEY',
         };
 
         (buildExecutionContext as any).mockResolvedValue(mockContext);
-        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(mockYouTubeVideoResult);
+        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(
+          mockYouTubeVideoResult,
+        );
         (postService.createUserPosts as any).mockResolvedValue(undefined);
-        (postService.findPostsBasedOnRemoteIds as any).mockResolvedValue(mockCreatedPost);
+        (postService.findPostsBasedOnRemoteIds as any).mockResolvedValue(
+          mockCreatedPost,
+        );
         (mentionService.createMention as any).mockResolvedValue(undefined);
-        (subtaskService.markSubTaskAsCompleted as any).mockResolvedValue(undefined);
+        (subtaskService.markSubTaskAsCompleted as any).mockResolvedValue(
+          undefined,
+        );
 
         // Act
         await processor.process(mockJob);
@@ -204,7 +228,8 @@ describe('PostFetchProcessor', () => {
         // Assert - YouTube API call with master API key
         expect(youtubeService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           'AIzaSyC_master_api_key_123',
-          'https://youtube.com/watch?v=test123'
+          'API_KEY',
+          'https://youtube.com/watch?v=test123',
         );
 
         // Assert - Post creation with null integrationId
@@ -218,7 +243,9 @@ describe('PostFetchProcessor', () => {
         ]);
 
         // Assert - Successful completion
-        expect(subtaskService.markSubTaskAsCompleted).toHaveBeenCalledWith(mockJobId);
+        expect(subtaskService.markSubTaskAsCompleted).toHaveBeenCalledWith(
+          mockJobId,
+        );
       });
     });
 
@@ -226,19 +253,22 @@ describe('PostFetchProcessor', () => {
       it('should handle authentication failure gracefully', async () => {
         // Arrange
         const authError = new IntegrationAuthenticationError(
-          'No valid authentication method available for job 123'
+          'No valid authentication method available for job 123',
         );
-        
+
         (buildExecutionContext as any).mockRejectedValue(authError);
 
         // Act
         await processor.process(mockJob);
 
         // Assert - Error handling
-        expect(buildExecutionContext).toHaveBeenCalledWith(mockJobId, mockJob.data);
+        expect(buildExecutionContext).toHaveBeenCalledWith(
+          mockJobId,
+          mockJob.data,
+        );
         expect(subtaskService.markSubTaskAsFailed).toHaveBeenCalledWith(
           String(mockJobId),
-          'Authentication failed: No valid authentication method available for job 123'
+          'Authentication failed: No valid authentication method available for job 123',
         );
 
         // Assert - No further processing
@@ -259,6 +289,7 @@ describe('PostFetchProcessor', () => {
           jobData: mockJob.data,
           integrationId: 789,
           tokenSource: TokenSource.USER_OAUTH,
+          authMethod: 'OAUTH',
         };
 
         (buildExecutionContext as any).mockResolvedValue(mockContext);
@@ -269,7 +300,7 @@ describe('PostFetchProcessor', () => {
         // Assert - Provider validation
         expect(subtaskService.markSubTaskAsFailed).toHaveBeenCalledWith(
           String(mockJobId),
-          'Provider TikTok not supported'
+          'Provider TikTok not supported',
         );
 
         // Assert - No YouTube processing
@@ -298,6 +329,7 @@ describe('PostFetchProcessor', () => {
           jobData: jobWithoutUrl.data,
           integrationId: 789,
           tokenSource: TokenSource.USER_OAUTH,
+          authMethod: 'OAUTH',
         };
 
         (buildExecutionContext as any).mockResolvedValue(mockContext);
@@ -308,7 +340,7 @@ describe('PostFetchProcessor', () => {
         // Assert - URL validation
         expect(subtaskService.markSubTaskAsFailed).toHaveBeenCalledWith(
           String(mockJobId),
-          'No video URL provided'
+          'No video URL provided',
         );
 
         // Assert - No further processing
@@ -328,6 +360,7 @@ describe('PostFetchProcessor', () => {
           jobData: mockJob.data,
           integrationId: 789,
           tokenSource: TokenSource.USER_OAUTH,
+          authMethod: 'OAUTH',
         };
 
         (buildExecutionContext as any).mockResolvedValue(mockContext);
@@ -339,7 +372,7 @@ describe('PostFetchProcessor', () => {
         // Assert - Error handling for YouTube failure
         expect(subtaskService.markSubTaskAsFailed).toHaveBeenCalledWith(
           String(mockJobId),
-          expect.stringContaining('Processing failed:')
+          expect.stringContaining('Processing failed:'),
         );
 
         // Assert - No database operations
@@ -359,10 +392,13 @@ describe('PostFetchProcessor', () => {
           jobData: mockJob.data,
           integrationId: 789,
           tokenSource: TokenSource.USER_OAUTH,
+          authMethod: 'OAUTH',
         };
 
         (buildExecutionContext as any).mockResolvedValue(mockContext);
-        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(mockYouTubeVideoResult);
+        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(
+          mockYouTubeVideoResult,
+        );
         (postService.createUserPosts as any).mockResolvedValue(undefined);
         (postService.findPostsBasedOnRemoteIds as any).mockResolvedValue([]); // No post found
 
@@ -372,7 +408,7 @@ describe('PostFetchProcessor', () => {
         // Assert - Error handling for post creation failure
         expect(subtaskService.markSubTaskAsFailed).toHaveBeenCalledWith(
           String(mockJobId),
-          expect.stringContaining('Processing failed:')
+          expect.stringContaining('Processing failed:'),
         );
 
         // Assert - No comment creation
@@ -385,30 +421,38 @@ describe('PostFetchProcessor', () => {
       it('should use correct IDs from ExecutionContext throughout the flow', async () => {
         // Arrange
         const mockContext: ExecutionContext = {
-          userId: 999,  // Different from jobData to ensure context is used
+          userId: 999, // Different from jobData to ensure context is used
           providerId: 3,
           providerName: 'YouTube',
           authToken: 'test_token',
           jobData: mockJob.data,
           integrationId: 888,
           tokenSource: TokenSource.USER_OAUTH,
+          authMethod: 'OAUTH',
         };
 
         (buildExecutionContext as any).mockResolvedValue(mockContext);
-        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(mockYouTubeVideoResult);
+        (youtubeService.fetchSingleYoutubeVideo as any).mockResolvedValue(
+          mockYouTubeVideoResult,
+        );
         (postService.createUserPosts as any).mockResolvedValue(undefined);
-        (postService.findPostsBasedOnRemoteIds as any).mockResolvedValue(mockCreatedPost);
+        (postService.findPostsBasedOnRemoteIds as any).mockResolvedValue(
+          mockCreatedPost,
+        );
         (mentionService.createMention as any).mockResolvedValue(undefined);
-        (subtaskService.markSubTaskAsCompleted as any).mockResolvedValue(undefined);
+        (subtaskService.markSubTaskAsCompleted as any).mockResolvedValue(
+          undefined,
+        );
 
         // Act
         await processor.process(mockJob);
 
         // Assert - All IDs come from ExecutionContext
-        const postCreationCall = (postService.createUserPosts as any).mock.calls[0][0][0];
-        expect(postCreationCall.userId).toBe('999');  // From context, not job data
-        expect(postCreationCall.providerId).toBe(3);  // From context
-        expect(postCreationCall.integrationId).toBe(888);  // From context
+        const postCreationCall = (postService.createUserPosts as any).mock
+          .calls[0][0][0];
+        expect(postCreationCall.userId).toBe('999'); // From context, not job data
+        expect(postCreationCall.providerId).toBe(3); // From context
+        expect(postCreationCall.integrationId).toBe(888); // From context
 
         // Assert - Comment count handling
         expect(postCreationCall.commentCount).toBe(5);

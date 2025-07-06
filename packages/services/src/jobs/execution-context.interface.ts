@@ -65,6 +65,12 @@ export interface ExecutionContext {
    * Used for proper API request configuration
    */
   readonly tokenSource: TokenSource;
+
+  /** 
+   * Explicit authentication method for API requests
+   * Eliminates heuristic-based detection and ensures deterministic behavior
+   */
+  readonly authMethod: 'OAUTH' | 'API_KEY';
 }
 
 /**

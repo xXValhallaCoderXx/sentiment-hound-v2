@@ -99,12 +99,13 @@ export class YoutubeContentService {
 
     const videoIds = videos.map((video) => video.id);
     console.log("VIDEOS: ", videoIds);
-    const videoDetails = await this.fetchVideoDetails(videoIds, headers);
+    // Since this method uses OAuth headers, we can determine the auth method
+    const videoDetails = await this.fetchVideoDetails(videoIds, currentAccessToken, 'OAUTH');
     console.log("VIDEO DETAILS: ", videoDetails);
 
     // Add this line to fetch comments
     console.log("Fetching comments for videos...");
-    const videoComments = await this.fetchCommentsForVideos(videoIds, headers);
+    const videoComments = await this.fetchCommentsForVideos(videoIds, currentAccessToken, 'OAUTH');
     console.log("Comments fetched successfully");
 
     return videos.map((video) => ({
@@ -160,25 +161,12 @@ export class YoutubeContentService {
     return videos;
   }
 
-  async fetchVideoDetails(videoIds: string[], headers?: any, token?: string) {
+  async fetchVideoDetails(videoIds: string[], authToken: string, authMethod: 'OAUTH' | 'API_KEY') {
     if (videoIds.length === 0) return [];
 
-    // Determine request configuration
-    let requestConfig: { url: string; headers: any };
-    
-    if (token) {
-      // Use token-based authentication
-      const baseUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds.join(",")}`;
-      requestConfig = this.buildRequestConfig(token, baseUrl);
-    } else if (headers) {
-      // Use existing headers approach
-      requestConfig = {
-        url: `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds.join(",")}`,
-        headers: headers
-      };
-    } else {
-      throw new Error("Either headers or token must be provided for authentication");
-    }
+    // Build request configuration using explicit authentication
+    const baseUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds.join(",")}`;
+    const requestConfig = this.buildRequestConfig(authToken, authMethod, baseUrl);
 
     const videoDetailsResponse = await fetch(requestConfig.url, { 
       headers: requestConfig.headers 
@@ -213,11 +201,11 @@ export class YoutubeContentService {
     }, {});
   }
 
-  async fetchCommentsForVideos(videoIds: string[], headers: any) {
+  async fetchCommentsForVideos(videoIds: string[], authToken: string, authMethod: 'OAUTH' | 'API_KEY') {
     const allComments: Record<string, any[]> = {};
 
     for (const videoId of videoIds) {
-      const comments = await this.fetchVideoComments(videoId, headers);
+      const comments = await this.fetchVideoComments(videoId, authToken, authMethod);
       allComments[videoId] = comments;
     }
 
@@ -226,29 +214,16 @@ export class YoutubeContentService {
 
   async fetchVideoComments(
     videoId: string, 
-    headers?: any, 
-    maxResults = 100,
-    token?: string
+    authToken: string,
+    authMethod: 'OAUTH' | 'API_KEY',
+    maxResults = 100
   ) {
     let comments: any[] = [];
     let nextPageToken = "";
 
-    // Determine request configuration
-    let requestConfig: { url: string; headers: any };
-    
-    if (token) {
-      // Use token-based authentication
-      const baseUrl = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=${maxResults}`;
-      requestConfig = this.buildRequestConfig(token, baseUrl);
-    } else if (headers) {
-      // Use existing headers approach
-      requestConfig = {
-        url: `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=${maxResults}`,
-        headers: headers
-      };
-    } else {
-      throw new Error("Either headers or token must be provided for authentication");
-    }
+    // Build request configuration using explicit authentication
+    const baseUrl = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=${maxResults}`;
+    let requestConfig = this.buildRequestConfig(authToken, authMethod, baseUrl);
 
     try {
       do {
@@ -316,6 +291,7 @@ export class YoutubeContentService {
 
   async fetchSingleYoutubeVideo(
     authToken: string,
+    authMethod: 'OAUTH' | 'API_KEY',
     videoUrl: string
   ): Promise<IFetchAllYoutubePostsResponse | null> {
     // Extract video ID from URL
@@ -326,7 +302,7 @@ export class YoutubeContentService {
 
     // Build request configuration using provided auth token
     const baseVideoUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}`;
-    const requestConfig = this.buildRequestConfig(authToken, baseVideoUrl);
+    const requestConfig = this.buildRequestConfig(authToken, authMethod, baseVideoUrl);
 
     // Get video details
     try {
@@ -379,7 +355,7 @@ export class YoutubeContentService {
       // Fetch comments for the video
       console.log(`Fetching comments for video ${videoId}...`);
       // Use the provided authToken for comment fetching
-      const comments = await this.fetchVideoComments(videoId, undefined, 100, authToken);
+      const comments = await this.fetchVideoComments(videoId, authToken, authMethod, 100);
       
       console.log(`Fetched ${comments.length} comments for video ${videoId}`);
 
@@ -419,40 +395,10 @@ export class YoutubeContentService {
     return videoId;
   }
 
-  /**
-   * Detects the authentication method based on token format and characteristics.
-   * 
-   * Uses heuristics to distinguish between OAuth tokens and API keys:
-   * - OAuth tokens: typically longer (80+ chars), contain dots or dashes (JWT-like format)
-   * - API keys: shorter (20-50 chars), alphanumeric with limited special characters
-   * 
-   * Defaults to API key for ambiguous cases to ensure broader compatibility
-   * with public API endpoints.
-   * 
-   * @param token The authentication token to analyze
-   * @returns The detected authentication method (OAUTH or API_KEY)
-   */
-  private detectAuthenticationMethod(token: string): AuthenticationMethod {
-    // OAuth tokens are typically longer (often 100+ characters) and contain dots/dashes
-    // Google API keys are typically 39 characters and alphanumeric with some special chars
-    if (token.length > 80 || token.includes('.') || token.includes('-')) {
-      console.log('YouTube authentication: using OAuth token');
-      return AuthenticationMethod.OAUTH;
-    }
-    
-    // If token is shorter and appears to be an API key format, assume API key
-    if (token.length >= 20 && token.length <= 50) {
-      console.log('YouTube authentication: using API key');
-      return AuthenticationMethod.API_KEY;
-    }
-    
-    // Default to API key for ambiguous cases (safer for public APIs)
-    console.log('YouTube authentication: defaulting to API key for ambiguous token format');
-    return AuthenticationMethod.API_KEY;
-  }
+
 
   /**
-   * Builds the appropriate request configuration based on authentication method.
+   * Builds the appropriate request configuration based on explicit authentication method.
    * 
    * For OAuth tokens:
    * - Adds Authorization: Bearer header
@@ -465,13 +411,12 @@ export class YoutubeContentService {
    * - Returns empty headers object
    * 
    * @param token The authentication token (OAuth or API key)
+   * @param authMethod The explicit authentication method to use
    * @param baseUrl The base URL for the API request
    * @returns Object containing the final URL and headers for the HTTP request
    */
-  private buildRequestConfig(token: string, baseUrl: string): { url: string; headers: any } {
-    const method = this.detectAuthenticationMethod(token);
-    
-    if (method === AuthenticationMethod.OAUTH) {
+  private buildRequestConfig(token: string, authMethod: 'OAUTH' | 'API_KEY', baseUrl: string): { url: string; headers: any } {
+    if (authMethod === 'OAUTH') {
       // OAuth: use Authorization header
       return {
         url: baseUrl,

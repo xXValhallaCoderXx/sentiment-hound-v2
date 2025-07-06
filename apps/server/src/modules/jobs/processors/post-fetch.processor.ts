@@ -12,10 +12,10 @@ import {
 
 /**
  * PostFetchProcessor - Unified Job Processor for Individual Post Fetching
- * 
+ *
  * This processor handles fetching individual posts/videos from social media platforms
  * using the unified ExecutionContext pattern for authentication and data management.
- * 
+ *
  * Key features:
  * - Unified authentication (OAuth tokens with master API key fallback)
  * - Provider-agnostic processing with provider-specific implementations
@@ -28,29 +28,30 @@ export class PostFetchProcessor {
 
   /**
    * Process a FETCH_INDIVIDUAL_POST_CONTENT job
-   * 
+   *
    * This method implements the unified execution context pattern:
    * 1. Build execution context with authentication resolution
    * 2. Route to provider-specific processing logic
    * 3. Create posts and associated comments in the database
    * 4. Handle errors gracefully with appropriate logging
-   * 
+   *
    * @param job - The job to process containing job ID and data payload
    * @returns Promise that resolves when processing is complete
    * @throws Will mark job as failed if processing encounters errors
    */
   async process(job: Job): Promise<void> {
     this.logger.log(`Processing FETCH INDIVIDUAL POST job id=${job.id}`);
-    
+
     try {
       // Step 1: Build unified execution context with authentication resolution
       // This handles OAuth token validation, refresh, and master API key fallback
       const context = await buildExecutionContext(job.id, job.data);
-      
+
       this.logger.log(
         `Built execution context for job ${job.id}: ` +
           `provider=${context.providerName}, ` +
           `userId=${context.userId}, ` +
+          `authMethod=${context.authMethod}, ` +
           `tokenSource=${context.tokenSource}${context.integrationId ? `, integrationId=${context.integrationId}` : ''}`,
       );
 
@@ -112,6 +113,7 @@ export class PostFetchProcessor {
       // Fetch single video data using the authenticated token from context
       const result = await youtubeService.fetchSingleYoutubeVideo(
         context.authToken,
+        context.authMethod,
         videoUrl,
       );
 

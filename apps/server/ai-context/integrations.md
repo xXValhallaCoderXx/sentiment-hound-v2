@@ -4,7 +4,12 @@
 **Primary business logic integration**:
 
 ```typescript
-import { 
+im**Key Interactions**:
+- Integrates with existing `integrationsService.getIntegrationUserIntegrationByProviderId()` for user OAuth lookup
+- Uses `youtubeService.refreshAccessToken()` for automatic token renewal when expired
+- Updates integration credentials via `integrationsService.updateIntegrationAuthCredentials()`
+- Falls back to `process.env.YOUTUBE_MASTER_API_KEY` when user OAuth unavailable
+- Provides explicit authentication method determination based on token source for deterministic behavior 
   taskService as coreTaskService,
   queueService,
   userService 
@@ -117,8 +122,8 @@ const content = await fetchContentWithAuth(providerId, authMode, job.data);
 - Integrates with existing `integrationsService.getIntegrationUserIntegrationByProviderId()` for user OAuth lookup
 - Uses `youtubeService.refreshAccessToken()` for automatic token renewal when expired
 - Updates integration credentials via `integrationsService.updateIntegrationAuthCredentials()`
-- Falls back to `process.env.YOUTUBE_MASTER_ACCESS_TOKEN` when user OAuth unavailable
-- Maintains compatibility with existing `detectAuthenticationMethod()` and `buildRequestConfig()` helpers
+- Falls back to `process.env.YOUTUBE_MASTER_API_KEY` when user OAuth unavailable
+- Uses explicit authentication method specification throughout the YouTube content service
 
 **Authentication Flow**:
 1. **Token Resolution**: Fetch user integration and validate OAuth token expiration

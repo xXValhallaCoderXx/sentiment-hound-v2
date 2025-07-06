@@ -1,7 +1,16 @@
 /**
  * Unit Tests for ExecutionContext Builder
  * 
- * Tests all authentication scenarios including user OAuth, token refresh, 
+ * Tests all authentication scenarios including user OAuth      expect(result).toEqual<ExecutionContext>({
+        userId: 456,
+        providerId: 1,
+        providerName: 'YouTube',
+        authToken: 'valid_access_token',
+        jobData: mockJobData,
+        integrationId: 999,
+        tokenSource: TokenSource.USER_OAUTH,
+        authMethod: 'OAUTH',
+      });efresh, 
  * master API key fallback, and error conditions.
  */
 
@@ -115,6 +124,7 @@ describe('buildExecutionContext', () => {
         jobData: mockJobData,
         integrationId: 789,
         tokenSource: TokenSource.USER_OAUTH,
+        authMethod: 'OAUTH',
       });
 
       // Verify that token refresh was not called since token is valid
@@ -164,6 +174,7 @@ describe('buildExecutionContext', () => {
         jobData: mockJobData,
         integrationId: 999,
         tokenSource: TokenSource.USER_OAUTH,
+        authMethod: 'OAUTH',
       });
 
       // Verify the refresh flow was called correctly
@@ -185,7 +196,7 @@ describe('buildExecutionContext', () => {
       };
 
       // Set environment variable for master token
-      process.env.YOUTUBE_MASTER_ACCESS_TOKEN = 'master_api_token';
+      process.env.YOUTUBE_MASTER_API_KEY = 'master_api_token';
 
       vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
         .mockResolvedValue(expiredIntegration);
@@ -204,6 +215,7 @@ describe('buildExecutionContext', () => {
         jobData: mockJobData,
         integrationId: null,
         tokenSource: TokenSource.MASTER_API_KEY,
+        authMethod: 'API_KEY',
       });
 
       // Verify refresh was attempted but update was not called due to failure
@@ -211,14 +223,14 @@ describe('buildExecutionContext', () => {
       expect(integrationsService.updateIntegrationAuthCredentials).not.toHaveBeenCalled();
 
       // Clean up
-      delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+      delete process.env.YOUTUBE_MASTER_API_KEY;
     });
   });
 
   describe('Missing user integration scenario', () => {
     it('should use master token when user has no integration', async () => {
       // Arrange
-      process.env.YOUTUBE_MASTER_ACCESS_TOKEN = 'master_api_token';
+      process.env.YOUTUBE_MASTER_API_KEY = 'master_api_token';
 
       vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
         .mockResolvedValue(null);
@@ -235,6 +247,7 @@ describe('buildExecutionContext', () => {
         jobData: mockJobData,
         integrationId: null,
         tokenSource: TokenSource.MASTER_API_KEY,
+        authMethod: 'API_KEY',
       });
 
       // Verify no token operations were attempted
@@ -242,14 +255,14 @@ describe('buildExecutionContext', () => {
       expect(integrationsService.updateIntegrationAuthCredentials).not.toHaveBeenCalled();
 
       // Clean up
-      delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+      delete process.env.YOUTUBE_MASTER_API_KEY;
     });
   });
 
   describe('Complete authentication failure scenario', () => {
     it('should throw IntegrationAuthenticationError when no authentication method available', async () => {
       // Arrange
-      delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+      delete process.env.YOUTUBE_MASTER_API_KEY;
 
       vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
         .mockResolvedValue(null);
@@ -308,7 +321,7 @@ describe('buildExecutionContext', () => {
         refreshTokenExpiresAt: new Date(Date.now() + 3600000), // Not expired
       };
 
-      process.env.YOUTUBE_MASTER_ACCESS_TOKEN = 'master_fallback_token';
+      process.env.YOUTUBE_MASTER_API_KEY = 'master_fallback_token';
 
       vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
         .mockResolvedValue(integrationWithoutToken);
@@ -321,12 +334,12 @@ describe('buildExecutionContext', () => {
       expect(result.tokenSource).toBe(TokenSource.MASTER_API_KEY);
 
       // Clean up
-      delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+      delete process.env.YOUTUBE_MASTER_API_KEY;
     });
 
     it('should handle integration service throwing error (not null return)', async () => {
       // Arrange
-      process.env.YOUTUBE_MASTER_ACCESS_TOKEN = 'master_api_token';
+      process.env.YOUTUBE_MASTER_API_KEY = 'master_api_token';
 
       vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
         .mockRejectedValue(new Error('Database connection error'));
@@ -339,7 +352,7 @@ describe('buildExecutionContext', () => {
       expect(result.tokenSource).toBe(TokenSource.MASTER_API_KEY);
 
       // Clean up
-      delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+      delete process.env.YOUTUBE_MASTER_API_KEY;
     });
   });
 });

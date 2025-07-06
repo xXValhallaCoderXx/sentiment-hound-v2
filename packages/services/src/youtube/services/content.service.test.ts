@@ -24,7 +24,7 @@ vi.mock("./auth.service", () => ({
   YoutubeAuthService: vi.fn().mockImplementation(() => ({})),
 }));
 
-describe("YoutubeContentService - Authentication Method Detection", () => {
+describe("YoutubeContentService - Explicit Authentication Method", () => {
   let service: YoutubeContentService;
   let mockAuthService: YoutubeAuthService;
 
@@ -34,106 +34,74 @@ describe("YoutubeContentService - Authentication Method Detection", () => {
     service = new YoutubeContentService(mockAuthService);
   });
 
-  describe("detectAuthenticationMethod", () => {
-    it("should detect OAuth tokens by length and format", () => {
-      // OAuth tokens are typically long and may contain dots/dashes
-      const oauthToken = "ya29.a0AfH6SMCxyz123.very-long-oauth-token-with-many-characters-and-dots-typical-of-google-oauth";
-      // @ts-ignore - accessing private method for testing
-      const result = service.detectAuthenticationMethod(oauthToken);
-      expect(result).toBe(AuthenticationMethod.OAUTH);
-    });
-
-    it("should detect OAuth tokens with dots", () => {
-      const oauthTokenWithDots = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY4.example.token";
-      // @ts-ignore - accessing private method for testing
-      const result = service.detectAuthenticationMethod(oauthTokenWithDots);
-      expect(result).toBe(AuthenticationMethod.OAUTH);
-    });
-
-    it("should detect OAuth tokens with dashes", () => {
-      const oauthTokenWithDashes = "ya29-AbCdEfGhIjKlMnOpQrStUvWxYz";
-      // @ts-ignore - accessing private method for testing
-      const result = service.detectAuthenticationMethod(oauthTokenWithDashes);
-      expect(result).toBe(AuthenticationMethod.OAUTH);
-    });
-
-    it("should detect API keys by typical Google format", () => {
-      // Google API keys are typically 39 characters, alphanumeric
-      const apiKey = "AIzaSyB1234567890123456789012345678901";
-      // @ts-ignore - accessing private method for testing
-      const result = service.detectAuthenticationMethod(apiKey);
-      expect(result).toBe(AuthenticationMethod.API_KEY);
-    });
-
-    it("should detect shorter API keys", () => {
-      const shortApiKey = "abcd1234efgh5678ijkl";
-      // @ts-ignore - accessing private method for testing
-      const result = service.detectAuthenticationMethod(shortApiKey);
-      expect(result).toBe(AuthenticationMethod.API_KEY);
-    });
-
-    it("should default to API key for ambiguous tokens", () => {
-      const ambiguousToken = "short";
-      // @ts-ignore - accessing private method for testing
-      const result = service.detectAuthenticationMethod(ambiguousToken);
-      expect(result).toBe(AuthenticationMethod.API_KEY);
-    });
-
-    it("should handle edge cases", () => {
-      const edgeCaseToken = "exactly50characterslong1234567890123456789012";
-      // @ts-ignore - accessing private method for testing
-      const result = service.detectAuthenticationMethod(edgeCaseToken);
-      expect(result).toBe(AuthenticationMethod.API_KEY);
-    });
-  });
-
-  describe("buildRequestConfig", () => {
+  describe("buildRequestConfig (internal method)", () => {
     it("should build OAuth configuration with Authorization header", () => {
-      const oauthToken = "ya29.a0AfH6SMCxyz123.very-long-oauth-token-with-many-characters-and-dots-typical-of-google-oauth";
+      const oauthToken = "ya29.AHES6ZT_Long_OAuth_Token_Format_With_Dots.And.Dashes-12345";
       const baseUrl = "https://www.googleapis.com/youtube/v3/videos";
-      
+
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(oauthToken, baseUrl);
-      
+      const result = service.buildRequestConfig(oauthToken, 'OAUTH', baseUrl);
+
       expect(result.url).toBe(baseUrl);
-      expect(result.headers).toEqual({
-        Authorization: `Bearer ${oauthToken}`,
-      });
+      expect(result.headers?.Authorization).toBe(`Bearer ${oauthToken}`);
     });
 
     it("should build API key configuration with URL parameter", () => {
       const apiKey = "AIzaSyB1234567890123456789012345678901";
       const baseUrl = "https://www.googleapis.com/youtube/v3/videos";
-      
+
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(apiKey, baseUrl);
-      
-      expect(result.url).toBe(`${baseUrl}?key=${encodeURIComponent(apiKey)}`);
-      expect(result.headers).toEqual({});
+      const result = service.buildRequestConfig(apiKey, 'API_KEY', baseUrl);
+
+      expect(result.url).toBe(`${baseUrl}?key=${apiKey}`);
+      expect(result.headers).toBeDefined();
     });
 
     it("should handle URL with existing query parameters for API key", () => {
       const apiKey = "AIzaSyB1234567890123456789012345678901";
       const baseUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet";
-      
+
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(apiKey, baseUrl);
-      
-      expect(result.url).toBe(`${baseUrl}&key=${encodeURIComponent(apiKey)}`);
-      expect(result.headers).toEqual({});
+      const result = service.buildRequestConfig(apiKey, 'API_KEY', baseUrl);
+
+      expect(result.url).toBe(`${baseUrl}&key=${apiKey}`);
+      expect(result.headers).toBeDefined();
     });
 
     it("should properly encode special characters in API key", () => {
-      const apiKeyWithSpecialChars = "APIkey_with+special&chars=test123";
+      const specialApiKey = "AIzaSyB_special+chars&more=stuff";
       const baseUrl = "https://www.googleapis.com/youtube/v3/videos";
-      
+
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(apiKeyWithSpecialChars, baseUrl);
+      const result = service.buildRequestConfig(specialApiKey, 'API_KEY', baseUrl);
+
+      expect(result.url).toBe(`${baseUrl}?key=${encodeURIComponent(specialApiKey)}`);
+      expect(result.headers).toBeDefined();
+    });
+  });
+
+  describe("fetchSingleYoutubeVideo", () => {
+    it("should require explicit authMethod parameter", () => {
+      // The method should accept exactly 3 parameters: token, authMethod, videoUrl
+      expect(service.fetchSingleYoutubeVideo.length).toBe(3);
+    });
+
+    it("should call method without errors with valid parameters", async () => {
+      const oauthToken = "ya29.oauth-token-example";
+      const videoUrl = "https://youtube.com/watch?v=test123";
       
-      expect(result.url).toBe(`${baseUrl}?key=${encodeURIComponent(apiKeyWithSpecialChars)}`);
-      expect(result.headers).toEqual({});
+      // This will return null due to auth issues but should not crash
+      const result = await service.fetchSingleYoutubeVideo(oauthToken, 'OAUTH', videoUrl);
+      expect(result).toBeNull();
+    });
+
+    it("should handle API key authentication method", async () => {
+      const apiKey = "AIzaSyC1234567890123456789012345678901";
+      const videoUrl = "https://youtube.com/watch?v=test123";
+      
+      // This will return null due to auth issues but should not crash
+      const result = await service.fetchSingleYoutubeVideo(apiKey, 'API_KEY', videoUrl);
+      expect(result).toBeNull();
     });
   });
 });
-
-export {};

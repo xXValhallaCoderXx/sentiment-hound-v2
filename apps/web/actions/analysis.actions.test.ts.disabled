@@ -23,7 +23,7 @@ describe("startAnalysis", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset environment variables
-    delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+    delete process.env.YOUTUBE_MASTER_API_KEY;
     delete process.env.REDDIT_MASTER_ACCESS_TOKEN;
   });
 
@@ -91,7 +91,7 @@ describe("startAnalysis", () => {
 
   it("should successfully start analysis with master token fallback", async () => {
     // Arrange
-    process.env.YOUTUBE_MASTER_ACCESS_TOKEN = "master-token-123";
+    process.env.YOUTUBE_MASTER_API_KEY = "master-token-123";
     const mockSession = { user: { id: "user123" } };
     const mockParseResult = {
       provider: "youtube" as const,
@@ -329,7 +329,7 @@ describe("startAnalysis", () => {
       url: "https://youtube.com/watch?v=abc123",
     });
     mockIntegrationsService.getUserIntegrationByName.mockResolvedValue(null);
-    delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+    delete process.env.YOUTUBE_MASTER_API_KEY;
     result = await startAnalysis("https://youtube.com/watch?v=abc123");
     expect(result.error?.code).toBe("AUTH_UNAVAILABLE");
     expect(result.error?.status).toBe(403);

@@ -54,8 +54,8 @@ This monorepo is managed using `pnpm` and `Turborepo`. It consists of the follow
         YOUTUBE_API_KEY=your_youtube_api_key
         REDDIT_MASTER_ACCESS_TOKEN=your_reddit_master_token
         
-        # Legacy Master Token (Deprecated - will be replaced by YOUTUBE_API_KEY)
-        YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_master_token
+        # YouTube Master API Key for unauthenticated requests
+        YOUTUBE_MASTER_API_KEY=your_youtube_master_api_key
         ```
         To obtain Reddit OAuth credentials:
         1. Go to [Reddit App Preferences](https://www.reddit.com/prefs/apps)
@@ -295,8 +295,8 @@ For API access fallback when users don't have connected accounts:
 YOUTUBE_API_KEY=your_youtube_api_key
 REDDIT_MASTER_ACCESS_TOKEN=your_reddit_oauth_token
 
-# Legacy (deprecated - use YOUTUBE_API_KEY instead)
-YOUTUBE_MASTER_ACCESS_TOKEN=your_youtube_master_token
+# YouTube Master API Key for unauthenticated requests  
+YOUTUBE_MASTER_API_KEY=your_youtube_master_api_key
 ```
 
 **Supported URL Formats**:

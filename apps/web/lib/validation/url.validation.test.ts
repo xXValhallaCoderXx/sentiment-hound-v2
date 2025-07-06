@@ -74,7 +74,7 @@ describe("URL Validation Utilities", () => {
         invalidUrls.forEach((url) => {
           const result = validateUrl(url);
           expect(result.isValid).toBe(false);
-          expect(result.error).toBe("Please enter a valid URL");
+          expect(result.error).toBe("This platform is not yet supported. Currently supporting YouTube.");
         });
       });
     });
@@ -91,15 +91,20 @@ describe("URL Validation Utilities", () => {
         unsupportedUrls.forEach((url) => {
           const result = validateUrl(url);
           expect(result.isValid).toBe(false);
-          expect(result.error).toBe("This platform is not supported yet. Currently supported: YouTube");
+          expect(result.error).toBe("This platform is not yet supported. Currently supporting YouTube.");
         });
       });
     });
 
     describe("malformed URLs", () => {
       it("should reject completely malformed URLs", () => {
+        // Test URLs without proper protocol
+        const result1 = validateUrl("not-a-url");
+        expect(result1.isValid).toBe(false);
+        expect(result1.error).toBe("URL must start with http:// or https://");
+
+        // Test other malformed URLs
         const malformedUrls = [
-          "not-a-url",
           "http://",
           "https://",
           "://missing-protocol.com",
@@ -109,7 +114,8 @@ describe("URL Validation Utilities", () => {
         malformedUrls.forEach((url) => {
           const result = validateUrl(url);
           expect(result.isValid).toBe(false);
-          expect(result.error).toBe("Please enter a valid URL");
+          // These URLs will either fail the protocol check or URL parsing
+          expect(result.error).toMatch(/URL must start with http:\/\/ or https:\/\/|Please enter a valid URL/);
         });
       });
     });
@@ -129,17 +135,23 @@ describe("URL Validation Utilities", () => {
   });
 
   describe("isValidRedditUrl", () => {
-    it("should return false for non-Reddit URLs (Reddit not implemented yet)", () => {
-      expect(isValidRedditUrl("https://reddit.com/r/programming/comments/123/test/")).toBe(false);
+    it("should return true for valid Reddit URLs", () => {
+      expect(isValidRedditUrl("https://reddit.com/r/programming/comments/123/test/")).toBe(true);
+      expect(isValidRedditUrl("https://www.reddit.com/r/programming/comments/abc123/test/")).toBe(true);
+    });
+
+    it("should return false for non-Reddit URLs", () => {
       expect(isValidRedditUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")).toBe(false);
+      expect(isValidRedditUrl("https://vimeo.com/123456")).toBe(false);
+      expect(isValidRedditUrl("not-a-url")).toBe(false);
     });
   });
 
   describe("getUrlValidationErrorMessage", () => {
     it("should return appropriate error messages", () => {
       expect(getUrlValidationErrorMessage("")).toBe("Please enter a URL");
-      expect(getUrlValidationErrorMessage("not-a-url")).toBe("Please enter a valid URL");
-      expect(getUrlValidationErrorMessage("https://vimeo.com/123")).toBe("This platform is not supported yet. Currently supported: YouTube");
+      expect(getUrlValidationErrorMessage("not-a-url")).toBe("URL must start with http:// or https://");
+      expect(getUrlValidationErrorMessage("https://vimeo.com/123")).toBe("This platform is not yet supported. Currently supporting YouTube.");
     });
 
     it("should return default message for valid URLs", () => {
@@ -163,7 +175,7 @@ describe("URL Validation Utilities", () => {
 
       const invalidResult = validateUrlWithDetails("not-a-url");
       expect(invalidResult.isValid).toBe(false);
-      expect(invalidResult.errorType).toBe("invalid");
+      expect(invalidResult.errorType).toBe("malformed");
     });
 
     it("should not include errorType for valid URLs", () => {

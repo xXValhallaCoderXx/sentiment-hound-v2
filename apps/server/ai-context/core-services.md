@@ -85,7 +85,7 @@ Enhanced error handling distinguishes between:
 - Implements automatic OAuth token validation and refresh using existing `youtubeService.refreshAccessToken()`
 - Provides intelligent fallback to master API keys when user OAuth is unavailable or expired
 - Integrates with existing `subtaskService.getTaskWithProviderForSubTask()` for comprehensive data retrieval
-- Maintains compatibility with existing `detectAuthenticationMethod()` and `buildRequestConfig()` helpers
+- Uses explicit authentication method assignment based on token source for deterministic behavior
 
 **Authentication Flow**:
 1. Fetch comprehensive job data with user, provider, and integration information

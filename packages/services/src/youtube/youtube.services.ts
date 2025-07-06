@@ -91,14 +91,15 @@ export class YoutubeService {
    * Fetches a single YouTube video with its comments using explicit authentication
    *
    * This method supports the unified execution context pattern by accepting
-   * an explicit authToken parameter instead of managing authentication internally.
+   * explicit authToken and authMethod parameters instead of managing authentication internally.
    *
    * @param authToken - The authentication token (OAuth or API key) to use for the request
+   * @param authMethod - The explicit authentication method to use ('OAUTH' or 'API_KEY')
    * @param videoUrl - The YouTube video URL to fetch
    * @returns Promise resolving to video data with comments
    */
-  async fetchSingleYoutubeVideo(authToken: string, videoUrl: string) {
-    return this.contentService.fetchSingleYoutubeVideo(authToken, videoUrl);
+  async fetchSingleYoutubeVideo(authToken: string, authMethod: 'OAUTH' | 'API_KEY', videoUrl: string) {
+    return this.contentService.fetchSingleYoutubeVideo(authToken, authMethod, videoUrl);
   }
 }
 

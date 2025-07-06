@@ -80,6 +80,7 @@ export async function buildExecutionContext(
             jobData,
             integrationId: updatedIntegration.id,
             tokenSource: TokenSource.USER_OAUTH,
+            authMethod: 'OAUTH',
           };
         } catch (refreshError) {
           console.error(`Failed to refresh OAuth token for user ${user.id}:`, refreshError);
@@ -95,12 +96,13 @@ export async function buildExecutionContext(
           jobData,
           integrationId: userIntegration.id,
           tokenSource: TokenSource.USER_OAUTH,
+          authMethod: 'OAUTH',
         };
       }
     }
 
     // Step 4: Fall back to master API key as last resort
-    const masterToken = process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+    const masterToken = process.env.YOUTUBE_MASTER_API_KEY;
     if (!masterToken) {
       throw new IntegrationAuthenticationError(
         `No valid authentication method available for job ${jobId}. ` +
@@ -119,6 +121,7 @@ export async function buildExecutionContext(
       jobData,
       integrationId: null, // Master token is not tied to a specific integration
       tokenSource: TokenSource.MASTER_API_KEY,
+      authMethod: 'API_KEY',
     };
 
   } catch (error) {

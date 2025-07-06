@@ -42,24 +42,23 @@ Unified authentication resolution for job processors with intelligent token mana
 - **Integration Service**: `getIntegrationUserIntegrationByProviderId()` for OAuth lookup
 - **YouTube Service**: `refreshAccessToken()` for token renewal
 - **Integration Service**: `updateIntegrationAuthCredentials()` for persistence
-- **Environment Variables**: `process.env.YOUTUBE_MASTER_ACCESS_TOKEN` for fallback
+- **Environment Variables**: `process.env.YOUTUBE_MASTER_API_KEY` for fallback
 
 ## Platform-Specific Authentication
 
 ### YouTube Data API v3
 - **OAuth Scope**: Full access to user's YouTube data and private videos
 - **API Key Access**: Public videos, comments, and channel information
-- **Token Detection**: Automatic method detection based on token format
-- **Request Configuration**: Dynamic header vs. parameter authentication
+- **Explicit Authentication**: Authentication method provided explicitly through ExecutionContext
+- **Request Configuration**: Dynamic header vs. parameter authentication based on explicit method
 
-### Authentication Method Detection
+### Explicit Authentication Method Usage
 ```typescript
-// Automatic detection based on token characteristics
-const authMethod = detectAuthenticationMethod(token);
-// Results in: 'OAUTH' | 'API_KEY'
+// Authentication method provided explicitly from ExecutionContext
+const authMethod = context.authMethod; // 'OAUTH' | 'API_KEY'
 
-// Dynamic request configuration
-const config = buildRequestConfig(authMethod, token);
+// Dynamic request configuration based on explicit method
+const config = buildRequestConfig(authToken, authMethod, baseUrl);
 // OAuth: Authorization header | API Key: URL parameter
 ```
 

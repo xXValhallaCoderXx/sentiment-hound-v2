@@ -68,3 +68,4 @@ pnpm turbo db:generate
 
 # Apply database migrations
 pnpm turbo db:migrate
+```

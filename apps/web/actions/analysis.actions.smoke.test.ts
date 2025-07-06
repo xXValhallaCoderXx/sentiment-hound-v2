@@ -25,7 +25,7 @@ describe("startAnalysis - Basic Functionality Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset environment variables
-    delete process.env.YOUTUBE_MASTER_ACCESS_TOKEN;
+    delete process.env.YOUTUBE_MASTER_API_KEY;
     delete process.env.REDDIT_MASTER_ACCESS_TOKEN;
     delete process.env.YOUTUBE_API_KEY;
     delete process.env.REDDIT_API_KEY;

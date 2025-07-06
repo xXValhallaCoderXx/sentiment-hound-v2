@@ -66,7 +66,7 @@ async function runIntegrationTests() {
 // Check environment variables
 function checkEnvironment() {
     console.log('🔍 Environment Check:');
-    console.log(`YOUTUBE_MASTER_ACCESS_TOKEN: ${process.env.YOUTUBE_MASTER_ACCESS_TOKEN ? '✅ Set' : '❌ Missing'}`);
+    console.log(`YOUTUBE_MASTER_API_KEY: ${process.env.YOUTUBE_MASTER_API_KEY ? '✅ Set' : '❌ Missing'}`);
     console.log(`REDDIT_MASTER_ACCESS_TOKEN: ${process.env.REDDIT_MASTER_ACCESS_TOKEN ? '✅ Set' : '❌ Missing'}`);
     console.log('');
 }

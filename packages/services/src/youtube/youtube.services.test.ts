@@ -83,11 +83,12 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        const result = await youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, mockVideoUrl);
+        const result = await youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, 'OAUTH', mockVideoUrl);
 
         // Assert
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           mockOAuthToken,
+          'OAUTH',
           mockVideoUrl
         );
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledTimes(1);
@@ -100,11 +101,12 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(bearerToken, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(bearerToken, 'OAUTH', mockVideoUrl);
 
         // Assert
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           bearerToken,
+          'OAUTH',
           mockVideoUrl
         );
       });
@@ -116,11 +118,12 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        const result = await youtubeService.fetchSingleYoutubeVideo(mockApiKey, mockVideoUrl);
+        const result = await youtubeService.fetchSingleYoutubeVideo(mockApiKey, 'API_KEY', mockVideoUrl);
 
         // Assert
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           mockApiKey,
+          'API_KEY',
           mockVideoUrl
         );
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledTimes(1);
@@ -133,11 +136,12 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(shortApiKey, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(shortApiKey, 'API_KEY', mockVideoUrl);
 
         // Assert
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           shortApiKey,
+          'API_KEY',
           mockVideoUrl
         );
       });
@@ -149,7 +153,7 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, 'OAUTH', mockVideoUrl);
 
         // Assert - Only the content service method should be called
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledTimes(1);
@@ -164,11 +168,12 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(exactToken, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(exactToken, 'OAUTH', mockVideoUrl);
 
         // Assert - Token should be passed exactly as provided
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           exactToken, // Exact same token, no modifications
+          'OAUTH',
           mockVideoUrl
         );
       });
@@ -182,13 +187,14 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(customToken, customUrl);
+        await youtubeService.fetchSingleYoutubeVideo(customToken, 'OAUTH', customUrl);
 
         // Assert - Verify exact parameter order and values
         const callArgs = mockContentService.fetchSingleYoutubeVideo.mock.calls[0];
         expect(callArgs).toBeDefined();
         expect(callArgs?.[0]).toBe(customToken);
-        expect(callArgs?.[1]).toBe(customUrl);
+        expect(callArgs?.[1]).toBe('OAUTH');
+        expect(callArgs?.[2]).toBe(customUrl);
       });
 
       it('should handle edge case URLs correctly', async () => {
@@ -197,11 +203,12 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(mockApiKey, edgeCaseUrl);
+        await youtubeService.fetchSingleYoutubeVideo(mockApiKey, 'API_KEY', edgeCaseUrl);
 
         // Assert
         expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(
           mockApiKey,
+          'API_KEY',
           edgeCaseUrl
         );
       });
@@ -214,7 +221,7 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockRejectedValue(contentServiceError);
 
         // Act & Assert
-        await expect(youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, mockVideoUrl))
+        await expect(youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, 'OAUTH', mockVideoUrl))
           .rejects.toThrow('YouTube API quota exceeded');
       });
 
@@ -223,7 +230,7 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(null);
 
         // Act
-        const result = await youtubeService.fetchSingleYoutubeVideo(mockApiKey, mockVideoUrl);
+        const result = await youtubeService.fetchSingleYoutubeVideo(mockApiKey, 'API_KEY', mockVideoUrl);
 
         // Assert
         expect(result).toBeNull();
@@ -251,7 +258,7 @@ describe('YoutubeService', () => {
         mockContentService.fetchSingleYoutubeVideo.mockResolvedValue(customResult);
 
         // Act
-        const result = await youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, mockVideoUrl);
+        const result = await youtubeService.fetchSingleYoutubeVideo(mockOAuthToken, 'OAUTH', mockVideoUrl);
 
         // Assert
         expect(result).toEqual(customResult);
@@ -270,7 +277,7 @@ describe('YoutubeService', () => {
     it('should maintain backward compatibility with existing method signature', () => {
       // Verify the method exists with the expected signature
       expect(typeof youtubeService.fetchSingleYoutubeVideo).toBe('function');
-      expect(youtubeService.fetchSingleYoutubeVideo.length).toBe(2); // Should accept exactly 2 parameters
+      expect(youtubeService.fetchSingleYoutubeVideo.length).toBe(3); // Should accept exactly 3 parameters (token, authMethod, url)
     });
   });
   
@@ -290,7 +297,7 @@ describe('YoutubeService', () => {
         });
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(oauthToken, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(oauthToken, 'OAUTH', mockVideoUrl);
 
         // Assert
         expect(capturedRequestConfig.token).toBe(oauthToken);
@@ -310,7 +317,7 @@ describe('YoutubeService', () => {
         });
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(apiKey, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(apiKey, 'API_KEY', mockVideoUrl);
 
         // Assert
         expect(capturedRequestConfig.token).toBe(apiKey);
@@ -319,45 +326,31 @@ describe('YoutubeService', () => {
       });
     });
 
-    describe('Compatibility with existing helper methods', () => {
-      it('should maintain compatibility with detectAuthenticationMethod for OAuth', async () => {
+    describe('Explicit Authentication Method Usage', () => {
+      it('should correctly pass OAuth authentication method to content service', async () => {
         // Arrange
         const oauthToken = 'ya29.Long_OAuth_Token_Format_With_Special.Characters-123456789';
         
-        mockContentService.fetchSingleYoutubeVideo = vi.fn().mockImplementation(async (token, url) => {
-          // Simulate the content service's authentication detection logic
-          const isOAuth = token.length > 80 || token.includes('.') || token.includes('-');
-          
-          // Verify the token would be detected as OAuth
-          expect(isOAuth).toBe(true);
-          return mockVideoResult;
-        });
+        mockContentService.fetchSingleYoutubeVideo = vi.fn().mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(oauthToken, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(oauthToken, 'OAUTH', mockVideoUrl);
 
-        // Assert - Test passes if the mock implementation assertions pass
-        expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(oauthToken, mockVideoUrl);
+        // Assert - Verify explicit authMethod is passed correctly
+        expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(oauthToken, 'OAUTH', mockVideoUrl);
       });
 
-      it('should maintain compatibility with detectAuthenticationMethod for API keys', async () => {
+      it('should correctly pass API key authentication method to content service', async () => {
         // Arrange
         const apiKey = 'AIzaSyC123456789012345678901234567890AB';
         
-        mockContentService.fetchSingleYoutubeVideo = vi.fn().mockImplementation(async (token, url) => {
-          // Simulate the content service's authentication detection logic
-          const isApiKey = token.length >= 20 && token.length <= 50 && !token.includes('.') && !token.includes('-');
-          
-          // Verify the token would be detected as API key
-          expect(isApiKey).toBe(true);
-          return mockVideoResult;
-        });
+        mockContentService.fetchSingleYoutubeVideo = vi.fn().mockResolvedValue(mockVideoResult);
 
         // Act
-        await youtubeService.fetchSingleYoutubeVideo(apiKey, mockVideoUrl);
+        await youtubeService.fetchSingleYoutubeVideo(apiKey, 'API_KEY', mockVideoUrl);
 
-        // Assert - Test passes if the mock implementation assertions pass
-        expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(apiKey, mockVideoUrl);
+        // Assert - Verify explicit authMethod is passed correctly
+        expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(apiKey, 'API_KEY', mockVideoUrl);
       });
 
       it('should maintain compatibility with buildRequestConfig for different token types', async () => {
@@ -387,10 +380,11 @@ describe('YoutubeService', () => {
           });
 
           // Act
-          await youtubeService.fetchSingleYoutubeVideo(testCase.token, mockVideoUrl);
+          const authMethod = testCase.expectedAuthType === 'oauth' ? 'OAUTH' : 'API_KEY';
+          await youtubeService.fetchSingleYoutubeVideo(testCase.token, authMethod, mockVideoUrl);
 
           // Assert
-          expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(testCase.token, mockVideoUrl);
+          expect(mockContentService.fetchSingleYoutubeVideo).toHaveBeenCalledWith(testCase.token, authMethod, mockVideoUrl);
         }
       });
     });
