@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Group, Title, Button } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-// import { getUserAnalyses } from '@/actions/dashboard.actions';
+import { getUserAnalyses } from "@/actions/dashboard.actions";
 import AnalysisCard from '@/components/molecules/AnalysisCard/AnalysisCard';
 import LoadingSpinner from '@/components/atoms/LoadingSpinner/LoadingSpinner';
 import ErrorMessage from '@/components/molecules/ErrorMessage/ErrorMessage';
@@ -21,13 +21,13 @@ const DashboardPage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      // const result = await getUserAnalyses();
+      const result = await getUserAnalyses();
 
-      // if (result.error) {
-      //   setError(result.error.error);
-      // } else {
-      //   setAnalyses(result.data?.analyses || []);
-      // }
+      if (result.error) {
+        setError(result.error.error);
+      } else {
+        setAnalyses(result.data?.analyses || []);
+      }
     } catch {
       setError('Failed to load analyses');
     } finally {
