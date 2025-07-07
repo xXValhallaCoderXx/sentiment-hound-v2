@@ -41,7 +41,7 @@ const changelogData: ChangelogEntry[] = [
       {
         type: "added",
         items: [
-          "The 'My Analyses' Dashboard: Your new home base to see a list of all your submitted posts and their sentiment scores at a glance.",
+          "The Dashboard: Your new home base to see a list of all your submitted posts and their sentiment scores at a glance.",
           "The 'Analyze New Post' Page: A dedicated, focused page to submit new public URLs for analysis.",
         ],
       },
@@ -71,7 +71,7 @@ const changelogData: ChangelogEntry[] = [
       {
         type: "improved",
         items: [
-          "Unified App Experience: Introduced a new, consistent 'App Shell' with a persistent sidebar for seamless navigation.",
+          "Unified App Experience: Introduced a new, consistent layout with a persistent sidebar for seamless navigation.",
           "A Simpler, Cleaner Settings Page: Completely redesigned the Settings page, removing clutter and focusing on the core actions for the alpha.",
         ],
       },

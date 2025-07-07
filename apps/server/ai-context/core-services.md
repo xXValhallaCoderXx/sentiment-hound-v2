@@ -196,3 +196,27 @@ Enhanced error handling distinguishes between:
 - **SubTask Service**: `markSubTaskAsCompleted()` and `markSubTaskAsFailed()` for job lifecycle
 - **Sentiment Analysis API**: External FastAPI service at `http://localhost:8000/analyze`
 - **Database Transactions**: Atomic operations for data consistency
+
+### Enhanced Job Processor Pattern Implementation (July 2025)
+
+**Purpose**: Established template pattern for job processors with unified ExecutionContext authentication, comprehensive error handling, and standardized logging approach.
+
+**Core Components**:
+- `PostFetchProcessor` - Reference implementation with ExecutionContext pattern
+- `SentimentAnalysisProcessor` - Complete refactor following unified pattern
+- Enhanced Vitest test suites with comprehensive authentication scenario coverage
+- Standardized error handling boundaries with proper job failure marking
+
+**Pattern Implementation**:
+- **Step 1**: Build ExecutionContext with automatic authentication resolution
+- **Step 2**: Conditional logic based on `context.integrationId` presence (OAuth vs Master API key)
+- **Step 3**: Database transactions for atomic operations and data consistency
+- **Step 4**: Provider-specific processing using `context.providerName` routing
+- **Step 5**: Structured logging with authentication method transparency
+
+**Key Interactions**:
+- **ExecutionContext Builder**: Single point of authentication resolution for all processors
+- **Provider Service**: Platform-specific routing logic via `context.providerName`
+- **Database Transactions**: Atomic operations with `prisma.$transaction()` for data consistency
+- **Error Boundaries**: `IntegrationAuthenticationError` handling with graceful job failure marking
+- **Logging System**: Structured authentication method logging without token exposure

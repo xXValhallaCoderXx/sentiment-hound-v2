@@ -311,6 +311,91 @@ async process(job: Job): Promise<void> {
 - Error handling and transaction testing
 - Authentication failure boundary validation
 
+### Database Transaction Pattern for Job Processors (July 2025)
+
+**Purpose**: Standardized database transaction approach ensuring atomic operations and data consistency across job processors handling multiple related database operations.
+
+**Core Pattern Implementation**:
+```typescript
+// Atomic transaction pattern for job processors
+async process(job: Job): Promise<void> {
+  const context = await buildExecutionContext(job.id, job.data);
+  
+  // Database transaction ensuring atomicity
+  const { processedData } = await prisma.$transaction(async (tx) => {
+    const dataToProcess = await tx.mention.findMany({
+      where: conditionalWhereClause,
+    });
+
+    await tx.subTaskMention.createMany({
+      data: dataToProcess.map((item) => ({
+        subTaskId: job.id,
+        mentionId: item.id,
+        status: 'PENDING',
+      })),
+      skipDuplicates: true,
+    });
+
+    return { processedData: dataToProcess };
+  });
+  
+  // Process data outside transaction
+  await processBusinessLogic(processedData);
+}
+```
+
+**Key Benefits**:
+- **Atomicity**: Ensures related database operations succeed or fail together
+- **Consistency**: Prevents partial data states during concurrent operations
+- **Isolation**: Protects against race conditions in job processing
+- **Rollback Safety**: Automatic rollback on transaction failures
+
+**Adopted Processors**:
+- ✅ `SentimentAnalysisProcessor` - Atomic mention query and SubTaskMention creation
+- 🔄 Future processors requiring multi-table operations
+
+### Batch Processing Pattern for External APIs (July 2025)
+
+**Purpose**: Standardized approach for processing large datasets through external APIs with configurable batch sizes, error handling, and progress tracking.
+
+**Core Pattern Implementation**:
+```typescript
+class BatchProcessor {
+  private readonly BATCH_SIZE = 25;
+  
+  private chunkArray<T>(array: T[], chunkSize: number): T[][] {
+    const chunks: T[][] = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  }
+  
+  async processBatches(data: any[]): Promise<void> {
+    const batches = this.chunkArray(data, this.BATCH_SIZE);
+    
+    for (let i = 0; i < batches.length; i++) {
+      try {
+        await this.processIndividualBatch(batches[i], i + 1, batches.length);
+      } catch (error) {
+        this.logger.error(`Batch ${i + 1} failed: ${error.message}`);
+        // Continue processing remaining batches
+      }
+    }
+  }
+}
+```
+
+**Key Benefits**:
+- **API Rate Limiting**: Prevents overwhelming external services
+- **Error Isolation**: Batch failures don't stop entire job processing
+- **Progress Tracking**: Clear logging of batch completion status
+- **Resource Management**: Controlled memory usage for large datasets
+
+**Adopted Processors**:
+- ✅ `SentimentAnalysisProcessor` - 25-comment batches for FastAPI sentiment analysis
+- 🔄 Future processors handling large external API operations
+
 ### Explicit Authentication Method Pattern (July 2025)
 **Deterministic authentication specification pattern eliminating heuristic detection**:
 

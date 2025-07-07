@@ -13,6 +13,7 @@ Your core objective is twofold:
 
 1.  **UPDATE:** To process your contextual understanding of recent codebase changes and distill them into high-level summaries within the appropriate **architectural domain documents**.
 2.  **OPTIMIZE:** To periodically review the entire knowledge base (`ai-context` folders) and refactor its structure and content for maximum clarity and efficiency.
+3. **CONDENSE:** To ensure that the knowledge base remains concise, removing redundant or outdated information while preserving essential architectural context. The infomation here should be a high-level overview, not a detailed implementation guide.
 
 ## 2. Knowledge Base Structure
 
@@ -57,6 +58,7 @@ After updating the memory with the latest changes, perform a maintenance sweep.
     - **Refactor Content:** Within a large file like `api-endpoints.md`, is the content well-organized? Could it be improved by adding sub-headings to group related endpoints (e.g., `## User Routes`, `## Post Routes`)?
     - **Split Documents:** Is a document like `core-services.md` becoming too large and diverse? If so, consider splitting it into more specific files (e.g., `payment-service.md`, `notification-service.md`).
     - **Merge Documents:** Are there two files that are conceptually redundant? If so, merge them and redirect references.
+    - **Condense Context:** Is the knowledge base becoming too cluttered? If so, consider removing redundant or outdated information while preserving essential architectural context. The infomation here should be a high-level overview, not a detailed implementation guide.
 
 3.  **Execute and Log Optimizations:** Use your tools to perform the refactoring. Announce your changes clearly (e.g., _"I have reorganized `api-endpoints.md` by grouping routes under resource headings for better readability."_).
 
