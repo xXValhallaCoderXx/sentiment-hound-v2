@@ -73,3 +73,30 @@ constructor(private prisma: PrismaClient) {
 - Helper `getProviderIdForSubTask(id)` method extracts providerId for post creation
 - Comprehensive error handling for missing SubTask or null providerId scenarios
 - Ensures type safety with Prisma schema requirements for Post.providerId field
+
+### ExecutionContext Pattern Integration (July 2025)
+
+**Purpose**: Frontend services now leverage the unified ExecutionContext pattern for consistent job creation and authentication handling when communicating with the server.
+
+**Core Components**:
+- Server Actions enhanced to pass authentication context to NestJS API
+- Job creation flows now include both `providerId` and optional `integrationId`
+- Enhanced error handling for authentication failures from ExecutionContext builder
+
+**Key Interactions**:
+- **Server Actions**: Pass user authentication context to backend job creation
+- **Job Queue Integration**: Frontend-initiated jobs include proper authentication metadata
+- **Provider Resolution**: URL parsing services determine provider context for job creation
+- **Error Boundaries**: Handle `IntegrationAuthenticationError` in frontend error handling
+
+**Authentication Flow Integration**:
+1. **Frontend Job Initiation**: Server Actions determine user context and provider from URL
+2. **Authentication Metadata**: Include `userId`, `providerId`, and optional `integrationId` in job data
+3. **Backend Context Building**: Server processors use ExecutionContext for authentication resolution
+4. **Error Propagation**: Authentication errors bubble up to frontend for user feedback
+
+**Benefits**:
+- **Consistency**: Frontend job creation aligns with backend ExecutionContext requirements
+- **Type Safety**: Proper typing for job data ensures ExecutionContext builder compatibility
+- **Error Handling**: Clear authentication error feedback to users
+- **Integration Support**: Seamless OAuth and master API key scenario handling

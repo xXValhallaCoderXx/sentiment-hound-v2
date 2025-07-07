@@ -174,3 +174,43 @@ const config = buildRequestConfig(authToken, authMethod, baseUrl);
 - **SubTask Service**: Job failure marking with authentication errors
 - **Database**: Conditional querying based on authentication context
 - **Logging System**: Structured authentication method logging
+
+### Job Processor Authentication Template Pattern (July 2025)
+
+**Purpose**: Standardized authentication approach across all job processors ensuring consistent dual-authentication support, comprehensive error handling, and security best practices.
+
+**Template Implementation**:
+```typescript
+async process(job: Job): Promise<void> {
+  try {
+    // Step 1: Build unified execution context
+    const context: ExecutionContext = await buildExecutionContext(job.id, job.data);
+    
+    // Step 2: Log authentication context (no tokens)
+    this.logger.log(`Built context for SubTask ${job.id}: { userId: ${context.userId}, providerName: ${context.providerName}, authMethod: ${context.authMethod}, integrationId: ${context.integrationId} }`);
+    
+    // Step 3: Use authentication context for operations
+    const authData = { token: context.authToken, method: context.authMethod };
+    
+  } catch (error) {
+    if (error instanceof IntegrationAuthenticationError) {
+      this.logger.error(`Failed to build ExecutionContext for SubTask ${job.id}: ${error.message}`);
+      await subtaskService.markSubTaskAsFailed(String(job.id), error.message);
+      return;
+    }
+    // Handle other errors
+  }
+}
+```
+
+**Security Standards**:
+- **Token Protection**: Authentication tokens never appear in logs or error messages
+- **Error Context**: Authentication method and integration ID logged for debugging
+- **Access Control**: Conditional data access based on authentication context
+- **Audit Trail**: Structured logging for authentication method transparency
+
+**Key Interactions**:
+- **ExecutionContext Builder**: Single point of authentication resolution
+- **Error Handling**: Standardized `IntegrationAuthenticationError` boundaries
+- **Logging System**: Security-compliant structured logging approach
+- **Job Management**: Proper failure marking for authentication errors
