@@ -163,3 +163,22 @@ async process(job: Job): Promise<void> {
 - [ ] All tests pass (`pnpm turbo test`)
 - [ ] Development environment starts successfully
 - [ ] Foreign key relationships verified in database
+
+### CI Workflow Implementation (July 2025)
+**Purpose:** Automate the monorepo’s test suite on pull requests to `main` and `develop` using GitHub Actions as a quality gate.
+
+**Core Components:**
+- `.github/workflows/ci.yml` (workflow definition)
+- `actions/checkout@v4` (repository checkout)
+- `actions/setup-node@v4` (Node.js 20.x setup)
+- Corepack commands (`corepack enable` + `corepack prepare pnpm@8.6.11`) to provision PNPM
+- `actions/cache@v3` (caches PNPM store at `~/.pnpm-store`)
+- `pnpm install --frozen-lockfile` (dependency install)
+- `pnpm turbo db:generate` (Prisma client generation)
+- Inline retry loop around `pnpm turbo test` (retry up to 2 attempts)
+
+**Key Interactions:**
+- Invokes the Turborepo `test` task to run Vitest across all packages
+- Ensures Prisma client is generated before test execution
+- Leverages caching to speed up dependency installs
+- Integrates with GitHub branch protection for `main`/`develop` checks
