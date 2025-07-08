@@ -33,7 +33,7 @@ jobs:
       - name: Generate Prisma client
         run: pnpm turbo db:generate
       - name: Run test suite with retry
-        uses: bahmutov/retry@v2
+        uses: bahmutov/retry@v1
         with:
           retry: 1
           command: pnpm turbo test
