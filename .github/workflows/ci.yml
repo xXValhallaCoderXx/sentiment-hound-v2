@@ -1,0 +1,38 @@
+# .github/workflows/ci.yml
+
+name: Sentiment Hound CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    name: Run Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your project's specific Node.js version
+          cache: 'npm' # Or 'yarn'
+
+      - name: Install dependencies
+        run: npm install # Or 'yarn install'
+
+      - name: Run tests
+        run: npm run test # e.g., npm run test:ci
+
+      # Optional but recommended step to ensure the app builds
+      - name: Verify build
+        run: npm run build
