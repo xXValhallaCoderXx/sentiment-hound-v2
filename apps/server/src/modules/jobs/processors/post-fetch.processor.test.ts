@@ -6,7 +6,6 @@
  */
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { Logger } from '@nestjs/common';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { PostFetchProcessor } from './post-fetch.processor';
 import { Job } from '../jobs.service';
