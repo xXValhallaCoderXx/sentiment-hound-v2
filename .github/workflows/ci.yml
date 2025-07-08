@@ -33,7 +33,13 @@ jobs:
       - name: Generate Prisma client
         run: pnpm turbo db:generate
       - name: Run test suite with retry
-        uses: bahmutov/retry@v1
-        with:
-          retry: 1
-          command: pnpm turbo test
+        run: |
+          echo "Running tests with up to 2 attempts..."
+          for attempt in 1 2; do
+            pnpm turbo test && break
+            echo "Attempt $attempt failed. Retrying..."
+            if [ "$attempt" -eq "2" ]; then
+              echo "All attempts failed. Exiting."
+              exit 1
+            fi
+          done
