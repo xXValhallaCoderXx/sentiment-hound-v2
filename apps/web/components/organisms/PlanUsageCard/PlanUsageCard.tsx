@@ -38,7 +38,6 @@ const PlanUsageCard: React.FC<PlanUsageCardProps> = ({
   isLoading = false,
   hasError = false,
   errorMessage = "Unable to load plan and usage data",
-  showDetails = true,
   className,
 }) => {
   // Loading state

@@ -1,9 +1,8 @@
-import { Container, Title, Text, Group, Button, Badge } from "@mantine/core";
+import { Container, Title, Text, Badge } from "@mantine/core";
 import {
   IconPlug,
   IconTarget,
   IconChartLine,
-  IconRocket,
   IconArrowRight,
 } from "@tabler/icons-react";
 import classes from "./HowItWorksSection.module.css";

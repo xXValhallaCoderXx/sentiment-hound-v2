@@ -32,7 +32,7 @@ export default function SignUpForm() {
 
   // Server action state
   const [signUpState, signUpAction] = useActionState(handleEmailSignUp, null);
-  const [isPending, startTransition] = useTransition();
+  const [isPending] = useTransition();
 
   // Get token/code from URL parameters on component mount
   useEffect(() => {
