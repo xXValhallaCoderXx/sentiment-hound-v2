@@ -5,15 +5,11 @@ import {
   Grid,
   GridCol,
   Badge,
-  Progress,
   List,
   ListItem,
 } from "@mantine/core";
 import {
   IconBolt,
-  IconTrendingUp,
-  IconEye,
-  IconChartDots3,
   IconCheck,
 } from "@tabler/icons-react";
 import classes from "./CommandCenterFeature.module.css";

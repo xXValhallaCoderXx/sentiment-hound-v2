@@ -45,6 +45,7 @@
     "@types/node": "^24.0.7",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
+    "@types/three": "^0.178.0",
     "@vitejs/plugin-react": "^4.6.0",
     "eslint": "^9.20.0",
     "jsdom": "^26.1.0",

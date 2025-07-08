@@ -14,7 +14,6 @@ import {
   IconCheck,
   IconX,
   IconAlertTriangle,
-  IconEye,
 } from "@tabler/icons-react";
 import classes from "./SpamDetectionFeature.module.css";
 
