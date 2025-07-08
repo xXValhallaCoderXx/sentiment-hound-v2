@@ -17,10 +17,10 @@ jobs:
         with:
           node-version: "20.x"
           cache: "pnpm"
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8.6.11
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Activate PNPM via Corepack
+        run: corepack prepare pnpm@8.6.11 --activate
       - name: Cache PNPM store
         uses: actions/cache@v3
         with:
