@@ -41,4 +41,5 @@ jobs:
               echo "All attempts failed. Exiting."
               exit 1
             fi
+            sleep 2
           done
