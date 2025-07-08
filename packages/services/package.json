@@ -12,6 +12,7 @@
     "build": "tsc --project tsconfig.build.json",
     "services:build": "tsc --project tsconfig.build.json",
     "dev:watch": "tsc --project tsconfig.build.json --watch",
+    "lint": "eslint 'src/**/*.ts'",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -19,9 +20,11 @@
     "@repo/db": "workspace:*"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "@types/node": "^22.13.8",
+    "eslint": "^9.20.0",
     "vitest": "^3.2.4"
   }
 }

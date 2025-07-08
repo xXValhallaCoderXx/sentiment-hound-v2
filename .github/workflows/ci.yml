@@ -31,6 +31,10 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Generate Prisma client
         run: pnpm turbo db:generate
+      - name: Run Linter
+        run: pnpm turbo lint
+      - name: Check Formatting
+        run: pnpm format:check
       - name: Run test suite with retry
         run: |
           echo "Running tests with up to 2 attempts..."
