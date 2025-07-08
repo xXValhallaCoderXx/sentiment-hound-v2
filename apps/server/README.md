@@ -43,6 +43,8 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
+
+# Note: The production script now runs from `dist/src/main.js` (not `dist/main.js`).
 ```
 
 # Sentiment Analysis Platform - Backend API
@@ -70,6 +72,8 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
+
+# Note: The production script now runs from `dist/src/main.js` (not `dist/main.js`).
 ```
 
 ## Testing

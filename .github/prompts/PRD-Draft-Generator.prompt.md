@@ -31,20 +31,16 @@ Your objective is to analyze a user's initial feature request (`${request}`) and
 
 The generated DRAFT PRD file _must_ contain the following sections in this order:
 
-1.  **`## 1. Overview`**
-
+1.  **Overview**
     - Briefly describe the feature, the problem it solves, and the primary goal.
 
-2.  **`## 2. Assumptions Made`**
-
+2.  **Assumptions Made**
     - **This is a critical section.** Create a bulleted list of assumptions you made to build this draft (e.g., "Assumed this feature is for authenticated users only," "Assumed we will use the existing 'Button' component for the UI").
 
-3.  **`## 3. User Stories`**
-
+3.  **User Stories**
     - Use the format: "As a `[user type]`, I want `[to perform an action]` so that `[I can achieve a benefit]`."
 
-4.  **`## 4. Functional Requirements`**
-
+4.  **Functional Requirements**
     - A numbered list of specific functionalities. For each requirement, provide detailed **Acceptance Criteria**.
     - **Example:**
       - **FR1. User Enters Email Address**
@@ -52,27 +48,21 @@ The generated DRAFT PRD file _must_ contain the following sections in this order
           - Given the user is on the 'Forgot Password' page, when they enter a valid email address and click submit, then the system proceeds to the next step.
           - Given the user enters an invalid email format, when they click submit, then an error message "Please enter a valid email address" is displayed.
 
-5.  **`## 5. Out of Scope (Non-Goals)`**
-
+5.  **Out of Scope (Non-Goals)**
     - Clearly list what this feature will **not** include to prevent scope creep.
 
-6.  **`## 6. Technical Considerations (Optional)`**
-
+6.  **Technical Considerations (Optional)**
     - Mention any known technical constraints, dependencies, or suggested integration points based on your codebase analysis.
 
-7.  **`## 7. Success Metrics`**
-
+7.  **Success Metrics**
     - Suggest 2-3 measurable metrics for success (e.g., "Reduce password-related support tickets by 15%").
-
-8.  **`## 8. Open Questions`**
-    - **This is a critical section.** Create a numbered list of specific questions for the human reviewer to answer in the next step (e.g., "1. What is the desired expiration time for the password reset token?", "2. Which email sending service should be used?").
+8.  **Open Questions**
+    - **This is a critical section.** Create a numbered list of specific questions which you require, to better perform this task, for the human reviewer to answer to help in the next step of finaling the PRD. (e.g., "1. What is the desired expiration time for the password reset token?", "2. Which email sending service should be used?").
 
 ## 5. Final Output Specification
-
 - **Format:** Markdown (`.md`)
 - **Location:** `/tasks/`
 - **Filename:** `prd-draft-[feature-name].md`
 
 ---
-
-**Variable to be used:** `${request}` = The user's initial text input fo
+**Variable to be used:** `${request}` = The user's initial text input
