@@ -25,7 +25,7 @@ interface TokenUsageData {
   percentage: number;
 }
 
-const TokenUsageCard: FC<TokenUsageCardProps> = async ({ userId }) => {
+const TokenUsageCard: FC<TokenUsageCardProps> = async () => {
   const response = await getTokenUsageStatus();
   const tokenData: TokenUsageData = {
     current: response.data?.current || 0,

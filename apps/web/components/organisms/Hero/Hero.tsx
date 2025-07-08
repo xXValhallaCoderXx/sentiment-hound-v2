@@ -3,7 +3,6 @@ import {
   Text,
   Button,
   Group,
-  Box,
   Grid,
   GridCol,
   Title,
