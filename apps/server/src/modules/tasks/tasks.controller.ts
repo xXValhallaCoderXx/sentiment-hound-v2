@@ -12,7 +12,7 @@ export class TaskController {
   async getTask() {
     try {
       return await this.taskService.getTask();
-    } catch (error) {
+    } catch {
       throw new NotFoundException('Task not found');
     }
   }
