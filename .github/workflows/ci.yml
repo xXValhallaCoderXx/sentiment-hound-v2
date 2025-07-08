@@ -1,0 +1,44 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Activate PNPM via Corepack
+        run: corepack prepare pnpm@8.6.11 --activate
+      - name: Cache PNPM store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Generate Prisma client
+        run: pnpm turbo db:generate
+      - name: Run test suite with retry
+        run: |
+          echo "Running tests with up to 2 attempts..."
+          for attempt in 1 2; do
+            pnpm turbo test && break
+            echo "Attempt $attempt failed. Retrying..."
+            if [ "$attempt" -eq "2" ]; then
+              echo "All attempts failed. Exiting."
+              exit 1
+            fi
+          done
