@@ -1,12 +1,23 @@
 "use client";
 
-import { Container, Grid, Stack, Anchor, Text, Divider, Alert } from "@mantine/core";
+import {
+  Container,
+  Grid,
+  Stack,
+  Anchor,
+  Text,
+  Divider,
+  Alert,
+} from "@mantine/core";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useActionState, useTransition } from "react";
 import Link from "next/link";
 
 // Components
-import { CardTitle, DimmedText } from "@/components/atoms/Typography/Typography";
+import {
+  CardTitle,
+  DimmedText,
+} from "@/components/atoms/Typography/Typography";
 import { Logo } from "@/components/atoms/Logo/Logo";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormField } from "@/components/molecules/FormField/FormField";
@@ -16,7 +27,10 @@ import { Card } from "@/components/organisms/Card/Card";
 import { RotatingPillarCard } from "@/components/organisms/RotatingPillarCard/RotatingPillarCard";
 
 // Actions
-import { handleEmailSignUp, handleGoogleSignInWithToken } from "@/actions/auth.actions";
+import {
+  handleEmailSignUp,
+  handleGoogleSignInWithToken,
+} from "@/actions/auth.actions";
 
 // Icons
 import { IconLock, IconAlertCircle, IconCheck } from "@tabler/icons-react";
@@ -105,7 +119,8 @@ export default function SignUpForm() {
                           color="green"
                           variant="light"
                         >
-                          {signUpState.message || "Account created successfully!"}
+                          {signUpState.message ||
+                            "Account created successfully!"}
                         </Alert>
                       )}
 
@@ -146,7 +161,11 @@ export default function SignUpForm() {
                       <FormField
                         type="text"
                         label="Invitation Code"
-                        placeholder={isTokenFromUrl ? "Code from invitation link" : "Enter your invitation code"}
+                        placeholder={
+                          isTokenFromUrl
+                            ? "Code from invitation link"
+                            : "Enter your invitation code"
+                        }
                         name="invitationToken"
                         value={invitationCode}
                         onChange={(e) => {
@@ -155,12 +174,21 @@ export default function SignUpForm() {
                           }
                         }}
                         readOnly={isTokenFromUrl}
-                        rightSection={isTokenFromUrl ? <IconLock size={16} style={{ color: 'var(--mantine-color-gray-6)' }} /> : undefined}
+                        rightSection={
+                          isTokenFromUrl ? (
+                            <IconLock
+                              size={16}
+                              style={{ color: "var(--mantine-color-gray-6)" }}
+                            />
+                          ) : undefined
+                        }
                         styles={{
                           input: {
-                            backgroundColor: isTokenFromUrl ? 'var(--mantine-color-gray-1)' : undefined,
-                            cursor: isTokenFromUrl ? 'not-allowed' : undefined,
-                          }
+                            backgroundColor: isTokenFromUrl
+                              ? "var(--mantine-color-gray-1)"
+                              : undefined,
+                            cursor: isTokenFromUrl ? "not-allowed" : undefined,
+                          },
                         }}
                       />
 
@@ -173,7 +201,9 @@ export default function SignUpForm() {
                         loading={isPending}
                         disabled={signUpState?.success}
                       >
-                        {signUpState?.success ? "Account Created!" : "Create Account"}
+                        {signUpState?.success
+                          ? "Account Created!"
+                          : "Create Account"}
                       </Button>
                     </Stack>
                   </form>

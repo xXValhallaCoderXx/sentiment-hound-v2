@@ -35,21 +35,21 @@ export class InvalidUrlError extends UrlParserError {
   static malformed(url: string): InvalidUrlError {
     return new InvalidUrlError(
       `Malformed URL: ${url}. Please provide a valid URL with proper format (https://example.com).`,
-      url
+      url,
     );
   }
 
   static tooLong(url: string, maxLength: number): InvalidUrlError {
     return new InvalidUrlError(
       `URL exceeds maximum length of ${maxLength} characters: ${url.substring(0, 100)}...`,
-      url
+      url,
     );
   }
 
   static invalidProtocol(url: string): InvalidUrlError {
     return new InvalidUrlError(
       `Invalid protocol. Only HTTP and HTTPS URLs are supported: ${url}`,
-      url
+      url,
     );
   }
 }
@@ -69,7 +69,7 @@ export class UnsupportedProviderError extends UrlParserError {
     return new UnsupportedProviderError(
       `Unsupported provider domain: ${domain}. Currently supported providers: YouTube. URL: ${url}`,
       domain,
-      url
+      url,
     );
   }
 
@@ -82,7 +82,7 @@ export class UnsupportedProviderError extends UrlParserError {
       return new UnsupportedProviderError(
         `Unable to determine provider from URL: ${url}`,
         "unknown",
-        url
+        url,
       );
     }
   }

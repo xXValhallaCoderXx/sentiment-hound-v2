@@ -15,8 +15,9 @@ export function OnboardingWrapper({ children }: OnboardingWrapperProps) {
     const checkOnboardingStatus = async () => {
       try {
         // Check if user has previously dismissed onboarding
-        const isDismissed = localStorage.getItem(ONBOARDING_DISMISSED_KEY) === "true";
-        
+        const isDismissed =
+          localStorage.getItem(ONBOARDING_DISMISSED_KEY) === "true";
+
         if (isDismissed) {
           setIsLoading(false);
           return;

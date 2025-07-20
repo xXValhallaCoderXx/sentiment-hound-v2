@@ -26,7 +26,7 @@ const IntegrationCards = async () => {
   // Handle provider fetch error
   if (providers.error) {
     return (
-      <ErrorState 
+      <ErrorState
         title="Failed to load integrations"
         message="We couldn't load the available integrations. Please try again."
         onRetry={() => window.location.reload()}
@@ -50,7 +50,7 @@ const IntegrationCards = async () => {
   return (
     <Stack>
       {integrationError && (
-        <ErrorState 
+        <ErrorState
           title="Connection status unavailable"
           message="We couldn't check your integration status, but you can still connect new integrations."
           showRetry={false}
@@ -59,7 +59,7 @@ const IntegrationCards = async () => {
       <Grid className="mt-4">
         {providers.data.map((provider) => {
           const isConnected = userIntegrations?.data?.find(
-            (integration) => integration.providerId === provider.id
+            (integration) => integration.providerId === provider.id,
           );
 
           return (

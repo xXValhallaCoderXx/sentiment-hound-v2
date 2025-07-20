@@ -38,18 +38,22 @@ pnpm turbo test --filter=web
 ```
 
 ### Testing Setup
+
 - **Framework**: Vitest with jsdom environment for React component testing
 - **Testing Library**: @testing-library/react for component rendering and queries
 - **Assertions**: @testing-library/jest-dom for DOM-specific matchers
 - **Path Aliases**: Tests support Next.js path aliases (e.g., `@/components`, `@/lib`)
 
 ### Test File Organization
+
 - Test files are co-located with components using `.test.tsx` extension
 - Example: `page.tsx` → `page.test.tsx`
 - Test setup files: `vitest.config.ts` and `vitest.setup.ts`
 
 ### Writing Tests
+
 Tests should follow React Testing Library best practices:
+
 - Test user interactions and behavior, not implementation details
 - Use semantic queries (`getByRole`, `getByLabelText`, etc.)
 - Mock external dependencies and Next.js specific modules as needed

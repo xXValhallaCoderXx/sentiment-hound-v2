@@ -14,9 +14,13 @@ export class TrackedKeywordService {
   }) {
     // Check plan limits if plan service is available
     if (this.planService) {
-      const planCheck = await this.planService.canUserCreateTrackedKeyword(data.userId);
+      const planCheck = await this.planService.canUserCreateTrackedKeyword(
+        data.userId,
+      );
       if (!planCheck.canCreate) {
-        throw new Error(planCheck.reason || "Plan limit exceeded for tracked keywords");
+        throw new Error(
+          planCheck.reason || "Plan limit exceeded for tracked keywords",
+        );
       }
     }
 
@@ -44,7 +48,7 @@ export class TrackedKeywordService {
 
   async updateKeyword(
     id: number,
-    data: Partial<{ keyword: string; isActive: boolean }>
+    data: Partial<{ keyword: string; isActive: boolean }>,
   ) {
     return prisma.trackedKeyword.update({
       where: { id },

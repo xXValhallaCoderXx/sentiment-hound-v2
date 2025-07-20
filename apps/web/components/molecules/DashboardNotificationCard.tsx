@@ -34,11 +34,7 @@ const DashboardNotificationCard: FC<IStatusAlertProps> = ({
 
   // Use semantic theme colors
   const color =
-    type === "success"
-      ? "success"
-      : type === "warning"
-        ? "warning"
-        : "primary"; // Use primary for info
+    type === "success" ? "success" : type === "warning" ? "warning" : "primary"; // Use primary for info
 
   return (
     <Alert
@@ -51,7 +47,12 @@ const DashboardNotificationCard: FC<IStatusAlertProps> = ({
       <Text mb="sm">{message}</Text>
       {buttonLabel && onClick && (
         <Group justify="start">
-          <Button variant="filled" color="secondary" size="xs" onClick={onClick}>
+          <Button
+            variant="filled"
+            color="secondary"
+            size="xs"
+            onClick={onClick}
+          >
             {buttonLabel}
           </Button>
         </Group>

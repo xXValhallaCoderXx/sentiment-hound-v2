@@ -19,7 +19,9 @@ interface PricingCardProps {
 }
 
 const PricingCard = ({ plan }: PricingCardProps) => (
-  <Box className={`${classes.planCard} ${plan.popular ? classes.popularCard : ""}`}>
+  <Box
+    className={`${classes.planCard} ${plan.popular ? classes.popularCard : ""}`}
+  >
     {plan.popular && (
       <Badge className={classes.popularBadge} color="primary.5">
         MOST POPULAR

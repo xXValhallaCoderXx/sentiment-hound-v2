@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Text,
-  Container,
-  Group,
-  Anchor,
-} from "@mantine/core";
+import { Text, Container, Group, Anchor } from "@mantine/core";
 import Image from "next/image";
 import { useSmartNavigation } from "@/lib/navigation.utils";
 import classes from "./footer.module.css";
@@ -49,28 +44,32 @@ export function Footer() {
             <h4 className={classes.columnTitle}>Product</h4>
             <ul className={classes.linksList}>
               <li className={classes.linkItem}>
-                <Anchor 
+                <Anchor
                   className={classes.link}
                   onClick={() => handleLinkClick("/features", "Features")}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 >
                   Features
                 </Anchor>
               </li>
               <li className={classes.linkItem}>
-                <Anchor 
+                <Anchor
                   className={classes.link}
-                  onClick={() => handleLinkClick("/#plans-early-access", "Pricing")}
-                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    handleLinkClick("/#plans-early-access", "Pricing")
+                  }
+                  style={{ cursor: "pointer" }}
                 >
                   Pricing
                 </Anchor>
               </li>
               <li className={classes.linkItem}>
-                <Anchor 
+                <Anchor
                   className={classes.link}
-                  onClick={() => handleLinkClick("/#core-features", "How It Works")}
-                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    handleLinkClick("/#core-features", "How It Works")
+                  }
+                  style={{ cursor: "pointer" }}
                 >
                   How It Works
                 </Anchor>
@@ -79,7 +78,7 @@ export function Footer() {
                 <Anchor
                   className={classes.link}
                   onClick={() => handleLinkClick("/changelog", "Changelog")}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 >
                   Changelog
                 </Anchor>
@@ -92,7 +91,11 @@ export function Footer() {
             <h4 className={classes.columnTitle}>Company</h4>
             <ul className={classes.linksList}>
               <li className={classes.linkItem}>
-                <Anchor href="https://twitter.com" className={classes.link} target="_blank">
+                <Anchor
+                  href="https://twitter.com"
+                  className={classes.link}
+                  target="_blank"
+                >
                   Twitter
                 </Anchor>
               </li>

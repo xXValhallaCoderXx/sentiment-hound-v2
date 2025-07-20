@@ -31,7 +31,7 @@ export class CoreTaskService {
   }
 
   async getTask<T extends Prisma.TaskDefaultArgs>(
-    args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>
+    args: Prisma.SelectSubset<T, Prisma.TaskFindFirstArgs>,
   ): Promise<Prisma.TaskGetPayload<T>> {
     const task = await this.model.findFirst(args);
     if (!task) {
@@ -50,7 +50,7 @@ export class CoreTaskService {
   }
 
   async getAllTasks<T extends Prisma.TaskDefaultArgs>(
-    args?: Prisma.SelectSubset<T, Prisma.TaskFindManyArgs>
+    args?: Prisma.SelectSubset<T, Prisma.TaskFindManyArgs>,
   ): Promise<Prisma.TaskGetPayload<T>[]> {
     const task = await this.model.findMany(args);
     if (!task) {
@@ -112,7 +112,7 @@ export class CoreTaskService {
       try {
         console.log(
           "URL detected in extraData, attempting to parse:",
-          extraData.url
+          extraData.url,
         );
         const parseResult: ParseResult = urlParserService.parse(extraData.url);
         parsedProvider = parseResult.provider;
@@ -128,11 +128,17 @@ export class CoreTaskService {
         // Resolve provider ID from parsed provider name if not already provided
         if (!resolvedProviderId && parsedProvider) {
           try {
-            const providerRecord = await providerService.getProviderByName(parsedProvider);
+            const providerRecord =
+              await providerService.getProviderByName(parsedProvider);
             resolvedProviderId = providerRecord.id;
-            console.log(`Resolved provider ID ${resolvedProviderId} for provider ${parsedProvider}`);
+            console.log(
+              `Resolved provider ID ${resolvedProviderId} for provider ${parsedProvider}`,
+            );
           } catch (error) {
-            console.error(`Failed to resolve provider ID for ${parsedProvider}:`, error);
+            console.error(
+              `Failed to resolve provider ID for ${parsedProvider}:`,
+              error,
+            );
             throw new Error(`Unsupported provider: ${parsedProvider}`);
           }
         }
@@ -150,12 +156,12 @@ export class CoreTaskService {
         // If URL parsing fails but integrationId is provided, continue with fallback
         if (!integrationId) {
           throw new Error(
-            `URL parsing failed: ${error instanceof Error ? error.message : "Unknown error"}`
+            `URL parsing failed: ${error instanceof Error ? error.message : "Unknown error"}`,
           );
         }
 
         console.log(
-          "URL parsing failed, falling back to integration-based approach"
+          "URL parsing failed, falling back to integration-based approach",
         );
       }
     }
@@ -167,10 +173,12 @@ export class CoreTaskService {
           where: { id: integrationId },
           include: { provider: true },
         });
-        
+
         if (integration) {
           resolvedProviderId = integration.providerId;
-          console.log(`Resolved provider ID ${resolvedProviderId} from integration ${integrationId}`);
+          console.log(
+            `Resolved provider ID ${resolvedProviderId} from integration ${integrationId}`,
+          );
         }
       } catch (error) {
         console.error("Failed to resolve provider from integration:", error);
@@ -179,7 +187,9 @@ export class CoreTaskService {
 
     // Validate that we have a providerId
     if (!resolvedProviderId) {
-      throw new Error("Provider ID is required. Unable to resolve provider from URL or integration.");
+      throw new Error(
+        "Provider ID is required. Unable to resolve provider from URL or integration.",
+      );
     }
 
     // Create the task first - handle API key authentication (integrationId = 0 or null) by omitting the field
@@ -203,11 +213,12 @@ export class CoreTaskService {
     let integration: any = null;
 
     // Check if we're using API key/master token authentication (integrationId = 0 or null with token in extraData)
-    const isApiKeyAuth = (!integrationId || integrationId === 0) && extraData?.token;
+    const isApiKeyAuth =
+      (!integrationId || integrationId === 0) && extraData?.token;
 
     if (isApiKeyAuth) {
       console.log(
-        `API key/master token authentication detected for provider: ${parsedProvider}. Skipping database integration lookup.`
+        `API key/master token authentication detected for provider: ${parsedProvider}. Skipping database integration lookup.`,
       );
       // Create a mock integration object for compatibility with downstream code
       integration = {
@@ -220,17 +231,17 @@ export class CoreTaskService {
       };
     } else if (parsedProvider) {
       console.log(
-        `Looking up integration for parsed provider: ${parsedProvider}`
+        `Looking up integration for parsed provider: ${parsedProvider}`,
       );
       try {
         integration = await integrationsService.getUserIntegrationByName(
           userId,
-          parsedProvider
+          parsedProvider,
         );
 
         if (!integration) {
           console.error(
-            `No integration found for provider ${parsedProvider} and user ${userId}`
+            `No integration found for provider ${parsedProvider} and user ${userId}`,
           );
 
           // Mark task as failed if no integration found for detected provider
@@ -240,7 +251,7 @@ export class CoreTaskService {
           });
 
           throw new Error(
-            `No integration found for ${parsedProvider}. Please connect your ${parsedProvider} account first.`
+            `No integration found for ${parsedProvider}. Please connect your ${parsedProvider} account first.`,
           );
         }
 
@@ -253,7 +264,7 @@ export class CoreTaskService {
             data: { integrationId: integration.id },
           });
           console.log(
-            `Updated task integration from ${integrationId} to ${integration.id}`
+            `Updated task integration from ${integrationId} to ${integration.id}`,
           );
         }
       } catch (error) {
@@ -319,7 +330,7 @@ export class CoreTaskService {
             parsedProvider || integration?.provider.name;
           console.log(
             "Effective provider for task creation:",
-            effectiveProvider
+            effectiveProvider,
           );
 
           if (effectiveProvider === "youtube") {
@@ -456,15 +467,15 @@ export class CoreTaskService {
 
   async getFilteredTasks(
     userId: string,
-    filters: { status?: TaskStatus; type?: TaskType }
+    filters: { status?: TaskStatus; type?: TaskType },
   ): Promise<Task[]> {
     return this.model.findMany({ where: { userId, ...filters } });
   }
 
   // New method specifically for analysis dashboard with required relations
   async getUserAnalysisTasksWithData(
-    userId: string, 
-    filters?: { status?: TaskStatus; page?: number; pageSize?: number }
+    userId: string,
+    filters?: { status?: TaskStatus; page?: number; pageSize?: number },
   ) {
     const page = filters?.page || 1;
     const pageSize = filters?.pageSize || 10;
@@ -502,7 +513,7 @@ export class CoreTaskService {
           },
         },
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
         skip,
         take: pageSize,

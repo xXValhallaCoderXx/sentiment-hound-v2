@@ -13,7 +13,7 @@ export class ProviderRepository {
 
   async findById(
     id: string | number,
-    args?: Omit<Prisma.ProviderFindUniqueArgs, "where">
+    args?: Omit<Prisma.ProviderFindUniqueArgs, "where">,
   ): Promise<Provider | null> {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.provider.findUnique({
@@ -24,7 +24,7 @@ export class ProviderRepository {
 
   async findUnique(
     where: Prisma.ProviderWhereUniqueInput,
-    args?: Omit<Prisma.ProviderFindUniqueArgs, "where">
+    args?: Omit<Prisma.ProviderFindUniqueArgs, "where">,
   ): Promise<Provider | null> {
     return this.prisma.provider.findUnique({
       where,
@@ -34,7 +34,7 @@ export class ProviderRepository {
 
   async findFirst(
     where: Prisma.ProviderWhereInput,
-    args?: Omit<Prisma.ProviderFindFirstArgs, "where">
+    args?: Omit<Prisma.ProviderFindFirstArgs, "where">,
   ): Promise<Provider | null> {
     return this.prisma.provider.findFirst({
       where,
@@ -44,7 +44,7 @@ export class ProviderRepository {
 
   async findMany(
     where: Prisma.ProviderWhereInput,
-    args?: Omit<Prisma.ProviderFindManyArgs, "where">
+    args?: Omit<Prisma.ProviderFindManyArgs, "where">,
   ): Promise<Provider[]> {
     return this.prisma.provider.findMany({
       where,
@@ -55,7 +55,7 @@ export class ProviderRepository {
   async update(
     id: string | number,
     data: Prisma.ProviderUpdateInput,
-    args?: Omit<Prisma.ProviderUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.ProviderUpdateArgs, "where" | "data">,
   ): Promise<Provider> {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.provider.update({
@@ -67,7 +67,7 @@ export class ProviderRepository {
 
   async delete(
     id: string | number,
-    args?: Omit<Prisma.ProviderDeleteArgs, "where">
+    args?: Omit<Prisma.ProviderDeleteArgs, "where">,
   ): Promise<Provider> {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.provider.delete({
@@ -78,7 +78,7 @@ export class ProviderRepository {
 
   async count(
     where: Prisma.ProviderWhereInput,
-    args?: Omit<Prisma.ProviderCountArgs, "where">
+    args?: Omit<Prisma.ProviderCountArgs, "where">,
   ): Promise<number> {
     return this.prisma.provider.count({
       where,

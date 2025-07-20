@@ -28,7 +28,7 @@ function generateSecureToken() {
 
 async function generateInvitationToken(
   planName = "Developer",
-  expiresInDays = 7
+  expiresInDays = 7,
 ) {
   try {
     console.log("🔧 Generating Invitation Token\n");
@@ -59,7 +59,7 @@ async function generateInvitationToken(
     console.log("🔗 Test URLs:");
     console.log(`   Local: http://localhost:3000/sign-up?token=${token.token}`);
     console.log(
-      `   Production: https://sentimenthound.com/sign-up?token=${token.token}`
+      `   Production: https://sentimenthound.com/sign-up?token=${token.token}`,
     );
     console.log("");
     return token.token;
@@ -67,7 +67,7 @@ async function generateInvitationToken(
     if (error && typeof error === "object" && "message" in error) {
       console.error(
         "❌ Error generating invitation token:",
-        (error as any).message
+        (error as any).message,
       );
     } else {
       console.error("❌ Error generating invitation token:", error);
@@ -89,15 +89,15 @@ async function generateInvitationToken(
 
 // Parse command line arguments
 const args = process.argv.slice(2);
-let planName = 'Developer';
+let planName = "Developer";
 let expiresInDays = 7;
 for (let i = 0; i < args.length; i++) {
   const arg = args[i];
-  if (typeof arg === 'string' && arg.startsWith('--plan=')) {
-    const planArg = arg.split('=')[1];
+  if (typeof arg === "string" && arg.startsWith("--plan=")) {
+    const planArg = arg.split("=")[1];
     if (planArg) planName = planArg;
-  } else if (typeof arg === 'string' && arg.startsWith('--expires-in-days=')) {
-    const daysArg = arg.split('=')[1];
+  } else if (typeof arg === "string" && arg.startsWith("--expires-in-days=")) {
+    const daysArg = arg.split("=")[1];
     if (daysArg) expiresInDays = parseInt(daysArg);
   }
 }

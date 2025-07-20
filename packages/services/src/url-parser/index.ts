@@ -1,7 +1,5 @@
 export { UrlParserService } from "./url-parser.service";
-export {
-  Provider,
-} from "./url-parser.types";
+export { Provider } from "./url-parser.types";
 export type {
   ParsedUrl,
   ParseResult,

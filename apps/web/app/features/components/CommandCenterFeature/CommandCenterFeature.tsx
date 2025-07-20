@@ -8,10 +8,7 @@ import {
   List,
   ListItem,
 } from "@mantine/core";
-import {
-  IconBolt,
-  IconCheck,
-} from "@tabler/icons-react";
+import { IconBolt, IconCheck } from "@tabler/icons-react";
 import classes from "./CommandCenterFeature.module.css";
 
 const CommandCenterFeature = () => {
@@ -23,7 +20,7 @@ const CommandCenterFeature = () => {
 
   const features = [
     "Real-time sentiment updates",
-    "Advanced keyword filtering", 
+    "Advanced keyword filtering",
     "Historical trend visualization",
   ];
 

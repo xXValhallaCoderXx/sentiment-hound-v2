@@ -20,7 +20,7 @@ export class BaseRepository<ModelName extends PrismaModels> {
 
   constructor(
     protected readonly prisma: PrismaClient,
-    protected readonly modelName: ModelName
+    protected readonly modelName: ModelName,
   ) {
     this.prismaModel = this.prisma[this.modelName];
   }

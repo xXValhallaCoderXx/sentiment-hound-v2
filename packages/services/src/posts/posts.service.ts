@@ -98,7 +98,7 @@ export class CorePostService {
         provider: true,
       },
     };
-    
+
     // Include direct provider relationship
     includeOptions.provider = true;
 
@@ -128,17 +128,17 @@ export class CorePostService {
             else acc.neutral++;
             return acc;
           },
-          { positive: 0, neutral: 0, negative: 0 }
+          { positive: 0, neutral: 0, negative: 0 },
         );
 
         const totalComments = post.comments.length || 1;
         const sentimentPercentages = {
           positive: Math.round(
-            (sentimentCounts.positive / totalComments) * 100
+            (sentimentCounts.positive / totalComments) * 100,
           ),
           neutral: Math.round((sentimentCounts.neutral / totalComments) * 100),
           negative: Math.round(
-            (sentimentCounts.negative / totalComments) * 100
+            (sentimentCounts.negative / totalComments) * 100,
           ),
         };
 
@@ -158,7 +158,7 @@ export class CorePostService {
             positive: {} as Record<string, number>,
             neutral: {} as Record<string, number>,
             negative: {} as Record<string, number>,
-          }
+          },
         );
 
         return {
@@ -199,7 +199,7 @@ export class CorePostService {
 
   async getUserPostsByProvider(
     userId: string,
-    providerId: number
+    providerId: number,
   ): Promise<Post[]> {
     return this.repository.findMany({
       where: {
@@ -260,7 +260,7 @@ export class CorePostService {
           else acc.neutral++;
           return acc;
         },
-        { positive: 0, neutral: 0, negative: 0 }
+        { positive: 0, neutral: 0, negative: 0 },
       );
 
       const totalComments = post.comments.length || 1;
@@ -285,7 +285,7 @@ export class CorePostService {
           positive: {} as Record<string, number>,
           neutral: {} as Record<string, number>,
           negative: {} as Record<string, number>,
-        }
+        },
       );
 
       return {
@@ -326,7 +326,7 @@ export class CorePostService {
   }
   async findByUserId(
     userId: string,
-    args?: Omit<Prisma.PostFindManyArgs, "where">
+    args?: Omit<Prisma.PostFindManyArgs, "where">,
   ): Promise<Post[]> {
     return this.repository.findMany({
       where: {
@@ -342,7 +342,7 @@ export class CorePostService {
 
   async createUserPost(data: ICreatePost): Promise<Post> {
     const { userId, title, providerId } = data;
-    
+
     const postData: any = {
       userId,
       title,

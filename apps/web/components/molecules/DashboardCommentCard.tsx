@@ -9,19 +9,25 @@ interface IDashboardCommentCardProps {
 
 const DashboardCommentCard: FC<IDashboardCommentCardProps> = () => {
   return (
-    <Flex gap={12} direction="column" p={{ base: 12, sm: 16 }} 
-          style={{ 
-            border: "1px solid #e9ecef",
-            borderRadius: "8px", 
-            backgroundColor: "#f8f9fa",
-            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
-          }}>
+    <Flex
+      gap={12}
+      direction="column"
+      p={{ base: 12, sm: 16 }}
+      style={{
+        border: "1px solid #e9ecef",
+        borderRadius: "8px",
+        backgroundColor: "#f8f9fa",
+        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <Group gap="xs" align="center" wrap="wrap">
         <Avatar size="sm" />
-        <Title order={5} fz={{ base: 'sm', sm: 'md' }} fw={600}>
+        <Title order={5} fz={{ base: "sm", sm: "md" }} fw={600}>
           Sara Jonson
         </Title>
-        <Text c="dimmed" size="sm">@sarajon</Text>
+        <Text c="dimmed" size="sm">
+          @sarajon
+        </Text>
         <Text c="dimmed" size="xs" ml="auto">
           2 Hrs ago
         </Text>

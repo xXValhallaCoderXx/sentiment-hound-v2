@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 import { notifications } from "@mantine/notifications";
-import { 
-  getInvitationTokenFromStorage, 
-  clearInvitationTokenFromStorage 
+import {
+  getInvitationTokenFromStorage,
+  clearInvitationTokenFromStorage,
 } from "@/lib/invitation-token.utils";
 
 export function InvitationTokenHandler() {
   useEffect(() => {
     const handlePendingInvitationToken = async () => {
       const pendingToken = getInvitationTokenFromStorage();
-      
+
       if (pendingToken) {
         try {
           const response = await fetch("/api/invitation-codes/apply", {
@@ -27,7 +27,8 @@ export function InvitationTokenHandler() {
           if (response.ok) {
             notifications.show({
               title: "Invitation applied!",
-              message: "You've been upgraded to the Developer Plan. Welcome to the beta!",
+              message:
+                "You've been upgraded to the Developer Plan. Welcome to the beta!",
               color: "green",
             });
           } else {
@@ -53,7 +54,7 @@ export function InvitationTokenHandler() {
 
     // Run after a short delay to ensure the user is properly authenticated
     const timer = setTimeout(handlePendingInvitationToken, 1000);
-    
+
     return () => clearTimeout(timer);
   }, []);
 

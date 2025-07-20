@@ -18,7 +18,7 @@ const initialState: IFormState = {
 const FetchContentButton: FC<ISyncSubmitButtonProps> = ({ name }) => {
   const [state, formAction] = useFormState(
     fetchIntegerationContent,
-    initialState
+    initialState,
   );
 
   useEffect(() => {

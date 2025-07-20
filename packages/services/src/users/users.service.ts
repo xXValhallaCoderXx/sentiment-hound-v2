@@ -16,7 +16,7 @@ export class CoreUserService {
   updateUser(
     id: string,
     data: Prisma.UserUpdateInput,
-    args?: Omit<Prisma.UserUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.UserUpdateArgs, "where" | "data">,
   ): Promise<User> {
     return this.repository.update(id, data, args);
   }

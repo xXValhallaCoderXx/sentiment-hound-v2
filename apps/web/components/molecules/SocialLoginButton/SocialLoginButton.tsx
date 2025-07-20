@@ -18,7 +18,12 @@ const providerConfig = {
   },
 };
 
-export const SocialLoginButton = ({ provider, onClick, loading = false, disabled = false }: SocialLoginButtonProps) => {
+export const SocialLoginButton = ({
+  provider,
+  onClick,
+  loading = false,
+  disabled = false,
+}: SocialLoginButtonProps) => {
   const config = providerConfig[provider];
 
   return (

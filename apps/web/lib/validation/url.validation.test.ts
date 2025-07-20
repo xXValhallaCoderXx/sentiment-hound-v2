@@ -74,7 +74,9 @@ describe("URL Validation Utilities", () => {
         invalidUrls.forEach((url) => {
           const result = validateUrl(url);
           expect(result.isValid).toBe(false);
-          expect(result.error).toBe("This platform is not yet supported. Currently supporting YouTube.");
+          expect(result.error).toBe(
+            "This platform is not yet supported. Currently supporting YouTube.",
+          );
         });
       });
     });
@@ -91,7 +93,9 @@ describe("URL Validation Utilities", () => {
         unsupportedUrls.forEach((url) => {
           const result = validateUrl(url);
           expect(result.isValid).toBe(false);
-          expect(result.error).toBe("This platform is not yet supported. Currently supporting YouTube.");
+          expect(result.error).toBe(
+            "This platform is not yet supported. Currently supporting YouTube.",
+          );
         });
       });
     });
@@ -115,7 +119,9 @@ describe("URL Validation Utilities", () => {
           const result = validateUrl(url);
           expect(result.isValid).toBe(false);
           // These URLs will either fail the protocol check or URL parsing
-          expect(result.error).toMatch(/URL must start with http:\/\/ or https:\/\/|Please enter a valid URL/);
+          expect(result.error).toMatch(
+            /URL must start with http:\/\/ or https:\/\/|Please enter a valid URL/,
+          );
         });
       });
     });
@@ -123,7 +129,9 @@ describe("URL Validation Utilities", () => {
 
   describe("isValidYouTubeUrl", () => {
     it("should return true for valid YouTube URLs", () => {
-      expect(isValidYouTubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")).toBe(true);
+      expect(
+        isValidYouTubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+      ).toBe(true);
       expect(isValidYouTubeUrl("https://youtu.be/dQw4w9WgXcQ")).toBe(true);
     });
 
@@ -136,12 +144,20 @@ describe("URL Validation Utilities", () => {
 
   describe("isValidRedditUrl", () => {
     it("should return true for valid Reddit URLs", () => {
-      expect(isValidRedditUrl("https://reddit.com/r/programming/comments/123/test/")).toBe(true);
-      expect(isValidRedditUrl("https://www.reddit.com/r/programming/comments/abc123/test/")).toBe(true);
+      expect(
+        isValidRedditUrl("https://reddit.com/r/programming/comments/123/test/"),
+      ).toBe(true);
+      expect(
+        isValidRedditUrl(
+          "https://www.reddit.com/r/programming/comments/abc123/test/",
+        ),
+      ).toBe(true);
     });
 
     it("should return false for non-Reddit URLs", () => {
-      expect(isValidRedditUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")).toBe(false);
+      expect(
+        isValidRedditUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+      ).toBe(false);
       expect(isValidRedditUrl("https://vimeo.com/123456")).toBe(false);
       expect(isValidRedditUrl("not-a-url")).toBe(false);
     });
@@ -150,12 +166,20 @@ describe("URL Validation Utilities", () => {
   describe("getUrlValidationErrorMessage", () => {
     it("should return appropriate error messages", () => {
       expect(getUrlValidationErrorMessage("")).toBe("Please enter a URL");
-      expect(getUrlValidationErrorMessage("not-a-url")).toBe("URL must start with http:// or https://");
-      expect(getUrlValidationErrorMessage("https://vimeo.com/123")).toBe("This platform is not yet supported. Currently supporting YouTube.");
+      expect(getUrlValidationErrorMessage("not-a-url")).toBe(
+        "URL must start with http:// or https://",
+      );
+      expect(getUrlValidationErrorMessage("https://vimeo.com/123")).toBe(
+        "This platform is not yet supported. Currently supporting YouTube.",
+      );
     });
 
     it("should return default message for valid URLs", () => {
-      expect(getUrlValidationErrorMessage("https://www.youtube.com/watch?v=dQw4w9WgXcQ")).toBe("Invalid URL");
+      expect(
+        getUrlValidationErrorMessage(
+          "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        ),
+      ).toBe("Invalid URL");
     });
   });
 
@@ -169,7 +193,9 @@ describe("URL Validation Utilities", () => {
       expect(malformedResult.isValid).toBe(false);
       expect(malformedResult.errorType).toBe("malformed");
 
-      const unsupportedResult = validateUrlWithDetails("https://vimeo.com/123456");
+      const unsupportedResult = validateUrlWithDetails(
+        "https://vimeo.com/123456",
+      );
       expect(unsupportedResult.isValid).toBe(false);
       expect(unsupportedResult.errorType).toBe("unsupported");
 
@@ -179,7 +205,9 @@ describe("URL Validation Utilities", () => {
     });
 
     it("should not include errorType for valid URLs", () => {
-      const validResult = validateUrlWithDetails("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+      const validResult = validateUrlWithDetails(
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      );
       expect(validResult.isValid).toBe(true);
       expect(validResult.errorType).toBeUndefined();
     });
@@ -187,14 +215,16 @@ describe("URL Validation Utilities", () => {
 
   describe("edge cases", () => {
     it("should handle URLs with tracking parameters", () => {
-      const urlWithParams = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&utm_source=twitter&feature=share";
+      const urlWithParams =
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ&utm_source=twitter&feature=share";
       const result = validateUrl(urlWithParams);
       expect(result.isValid).toBe(true);
       expect(result.provider).toBe("youtube");
     });
 
     it("should handle URLs with timestamps", () => {
-      const urlWithTimestamp = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=30s";
+      const urlWithTimestamp =
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=30s";
       const result = validateUrl(urlWithTimestamp);
       expect(result.isValid).toBe(true);
       expect(result.provider).toBe("youtube");

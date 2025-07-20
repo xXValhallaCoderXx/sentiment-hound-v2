@@ -36,8 +36,8 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
   const publicPlans =
     allPlans?.filter((plan: Plan) =>
       [PlanName.TRIAL, PlanName.STARTER, PlanName.PRO].includes(
-        plan.name as PlanName
-      )
+        plan.name as PlanName,
+      ),
     ) || [];
 
   const formatPrice = (price?: number) => {
@@ -55,7 +55,9 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
   };
 
   // Get user's current plan for hierarchy comparison
-  const userPlan = allPlans?.find((plan: Plan) => Number(userPlanId) === plan.id);
+  const userPlan = allPlans?.find(
+    (plan: Plan) => Number(userPlanId) === plan.id,
+  );
   const userPlanName = userPlan?.name as PlanName;
   const userPlanHierarchy =
     PLAN_HIERARCHY[userPlanName as keyof typeof PLAN_HIERARCHY] ?? -1;
@@ -171,7 +173,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
           const isUsersPlan = Number(userPlanId) === plan.id;
           const yearlyDiscount = formatYearlyDiscount(
             plan.price ? Number(plan.price) : undefined,
-            plan.yearlyPrice ? Number(plan.yearlyPrice) : undefined
+            plan.yearlyPrice ? Number(plan.yearlyPrice) : undefined,
           );
           const buttonLogic = getPlanButtonLogic(plan);
 

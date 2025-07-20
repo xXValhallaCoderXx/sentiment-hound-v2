@@ -1,6 +1,6 @@
-import React from 'react';
-import { Alert, Center, Stack, Button } from '@mantine/core';
-import { IconAlertCircle, IconRefresh } from '@tabler/icons-react';
+import React from "react";
+import { Alert, Center, Stack, Button } from "@mantine/core";
+import { IconAlertCircle, IconRefresh } from "@tabler/icons-react";
 
 export interface ErrorMessageProps {
   message?: string;
@@ -9,7 +9,7 @@ export interface ErrorMessageProps {
 }
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({
-  message = 'Could not load your analyses. Please refresh the page.',
+  message = "Could not load your analyses. Please refresh the page.",
   onRetry,
   centered = true,
 }) => {
@@ -37,11 +37,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({
   );
 
   if (centered) {
-    return (
-      <Center py="xl">
-        {content}
-      </Center>
-    );
+    return <Center py="xl">{content}</Center>;
   }
 
   return content;

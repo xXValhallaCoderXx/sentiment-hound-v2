@@ -22,7 +22,10 @@ import {
   IconSparkles,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { OnboardingModalProps, OnboardingProvider } from "@/types/onboarding.types";
+import {
+  OnboardingModalProps,
+  OnboardingProvider,
+} from "@/types/onboarding.types";
 import classes from "./OnboardingModal.module.css";
 
 const providers: OnboardingProvider[] = [
@@ -30,7 +33,8 @@ const providers: OnboardingProvider[] = [
     name: "YouTube",
     icon: IconBrandYoutube,
     color: "#FF0000",
-    description: "Analyze comments from your YouTube videos and track audience sentiment",
+    description:
+      "Analyze comments from your YouTube videos and track audience sentiment",
   },
   {
     name: "Reddit",
@@ -91,8 +95,12 @@ export function OnboardingModal({ opened, onClose }: OnboardingModalProps) {
               Welcome to Sentiment Hound! 🎉
             </Title>
             <Text size="lg" ta="center" c="dimmed" maw={400}>
-              You&apos;re starting with our <Text component="span" fw={500} c="blue">Trial Plan</Text> - perfect for exploring sentiment analysis!
-              Connect your first social media account to get started. 📊
+              You&apos;re starting with our{" "}
+              <Text component="span" fw={500} c="blue">
+                Trial Plan
+              </Text>{" "}
+              - perfect for exploring sentiment analysis! Connect your first
+              social media account to get started. 📊
             </Text>
           </Stack>
 
@@ -103,18 +111,31 @@ export function OnboardingModal({ opened, onClose }: OnboardingModalProps) {
                 Your Trial Plan Includes:
               </Title>
               <Text size="sm" c="dimmed">
-                • <Text component="span" fw={500}>1 integration</Text> - Connect one social media account
+                •{" "}
+                <Text component="span" fw={500}>
+                  1 integration
+                </Text>{" "}
+                - Connect one social media account
               </Text>
               <Text size="sm" c="dimmed">
-                • <Text component="span" fw={500}>3 tracked keywords</Text> - Monitor mentions across platforms
+                •{" "}
+                <Text component="span" fw={500}>
+                  3 tracked keywords
+                </Text>{" "}
+                - Monitor mentions across platforms
               </Text>
               <Text size="sm" c="dimmed">
-                • <Text component="span" fw={500}>Basic sentiment analysis</Text> - Get started with insights
+                •{" "}
+                <Text component="span" fw={500}>
+                  Basic sentiment analysis
+                </Text>{" "}
+                - Get started with insights
               </Text>
               <Text size="sm" c="dimmed" mt="xs">
-                Ready to connect your first account? Choose from any of these platforms:
+                Ready to connect your first account? Choose from any of these
+                platforms:
               </Text>
-              
+
               {/* Provider Grid */}
               <Stack gap="xs" mt="sm">
                 {providers.map((provider) => (

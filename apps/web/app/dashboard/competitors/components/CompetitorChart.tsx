@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { 
-  Card, 
-  Title, 
-  Select, 
-  Group, 
-  Text, 
+import {
+  Card,
+  Title,
+  Select,
+  Group,
+  Text,
   Stack,
   Alert,
-  Skeleton
+  Skeleton,
 } from "@mantine/core";
 import { LineChart } from "@mantine/charts";
 import { IconInfoCircle } from "@tabler/icons-react";
@@ -24,7 +24,9 @@ interface CompetitorChartProps {
 }
 
 const CompetitorChart = ({ userId }: CompetitorChartProps) => {
-  const [selectedCompetitor, setSelectedCompetitor] = useState<string | null>(null);
+  const [selectedCompetitor, setSelectedCompetitor] = useState<string | null>(
+    null,
+  );
   const [competitors, setCompetitors] = useState<Competitor[]>([]);
   const [chartData, setChartData] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
         { value: "2", label: "Samsung" },
         { value: "3", label: "Google" },
       ];
-      
+
       setCompetitors(mockCompetitors);
       if (mockCompetitors.length > 0 && mockCompetitors[0]) {
         setSelectedCompetitor(mockCompetitors[0].value);
@@ -79,11 +81,14 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
     for (let i = 0; i < 30; i++) {
       const date = new Date(startDate);
       date.setDate(date.getDate() + i);
-      
+
       data.push({
-        date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        date: date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        }),
         "Your Brand": Math.random() * 2 - 1, // Random between -1 and 1
-        "Competitor": Math.random() * 2 - 1,
+        Competitor: Math.random() * 2 - 1,
       });
     }
 
@@ -107,11 +112,7 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
         <Title order={3} mb="md">
           Sentiment Comparison
         </Title>
-        <Alert 
-          variant="light" 
-          color="blue"
-          icon={<IconInfoCircle size={16} />}
-        >
+        <Alert variant="light" color="blue" icon={<IconInfoCircle size={16} />}>
           Add competitors to see sentiment comparison charts.
         </Alert>
       </Card>
@@ -132,9 +133,9 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
       </Group>
 
       {error && (
-        <Alert 
-          variant="light" 
-          color="red" 
+        <Alert
+          variant="light"
+          color="red"
           mb="md"
           icon={<IconInfoCircle size={16} />}
         >
@@ -143,8 +144,9 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
       )}
 
       <Text size="sm" c="dimmed" mb="lg">
-        Compare your brand&apos;s sentiment against your selected competitor over the last 30 days.
-        Data is collected from YouTube, Reddit, Facebook, Instagram, and other platforms.
+        Compare your brand&apos;s sentiment against your selected competitor
+        over the last 30 days. Data is collected from YouTube, Reddit, Facebook,
+        Instagram, and other platforms.
       </Text>
 
       {chartData.length > 0 && (
@@ -168,11 +170,25 @@ const CompetitorChart = ({ userId }: CompetitorChartProps) => {
 
       <Group justify="space-between" mt="md">
         <Group gap="xs">
-          <div style={{ width: 12, height: 12, backgroundColor: "#228be6", borderRadius: 2 }} />
+          <div
+            style={{
+              width: 12,
+              height: 12,
+              backgroundColor: "#228be6",
+              borderRadius: 2,
+            }}
+          />
           <Text size="sm">Your Brand</Text>
         </Group>
         <Group gap="xs">
-          <div style={{ width: 12, height: 12, backgroundColor: "#fa5252", borderRadius: 2 }} />
+          <div
+            style={{
+              width: 12,
+              height: 12,
+              backgroundColor: "#fa5252",
+              borderRadius: 2,
+            }}
+          />
           <Text size="sm">Competitor</Text>
         </Group>
       </Group>

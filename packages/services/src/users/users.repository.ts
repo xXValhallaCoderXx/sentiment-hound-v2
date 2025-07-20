@@ -48,7 +48,7 @@ export class UserRepository {
 
   async findUnique(
     where: Prisma.UserWhereUniqueInput,
-    args?: Omit<Prisma.UserFindUniqueArgs, "where">
+    args?: Omit<Prisma.UserFindUniqueArgs, "where">,
   ) {
     return this.prisma.user.findUnique({
       where,
@@ -58,7 +58,7 @@ export class UserRepository {
 
   async findFirst(
     where: Prisma.UserWhereInput,
-    args?: Omit<Prisma.UserFindFirstArgs, "where">
+    args?: Omit<Prisma.UserFindFirstArgs, "where">,
   ) {
     return this.prisma.user.findFirst({
       where,
@@ -73,7 +73,7 @@ export class UserRepository {
   async update(
     id: string | number,
     data: Prisma.UserUpdateInput,
-    args?: Omit<Prisma.UserUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.UserUpdateArgs, "where" | "data">,
   ) {
     return this.prisma.user.update({
       where: { id: String(id) },
@@ -84,7 +84,7 @@ export class UserRepository {
 
   async delete(
     id: string | number,
-    args?: Omit<Prisma.UserDeleteArgs, "where">
+    args?: Omit<Prisma.UserDeleteArgs, "where">,
   ) {
     return this.prisma.user.delete({
       where: { id: String(id) },
@@ -94,7 +94,7 @@ export class UserRepository {
 
   async count(
     where: Prisma.UserWhereInput,
-    args?: Omit<Prisma.UserCountArgs, "where">
+    args?: Omit<Prisma.UserCountArgs, "where">,
   ) {
     return this.prisma.user.count({
       where,

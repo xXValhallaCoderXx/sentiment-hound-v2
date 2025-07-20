@@ -22,7 +22,7 @@ export interface IFormState {
 
 export const integrationMenuAction = async (
   prevState: IFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<IFormState> => {
   try {
     // Authenticate user
@@ -100,7 +100,7 @@ export const integrationMenuAction = async (
 
 export const fetchIntegerationContent = async (
   prevState: IFormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<IFormState> => {
   try {
     // Authenticate user

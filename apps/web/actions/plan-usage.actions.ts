@@ -10,22 +10,24 @@ interface PlanUsageStats {
   tokens: { current: number; max: number; periodEnd: Date | null };
 }
 
-export async function getPlanUsageStats(): Promise<ActionResponse<PlanUsageStats>> {
+export async function getPlanUsageStats(): Promise<
+  ActionResponse<PlanUsageStats>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return {
         data: null,
-        error: createErrorResponse(new Error("User not authenticated"))
+        error: createErrorResponse(new Error("User not authenticated")),
       };
     }
 
     const stats = await planService.getPlanUsageStats(session.user.id);
-    
+
     if (!stats) {
       return {
         data: null,
-        error: createErrorResponse(new Error("No plan found for user"))
+        error: createErrorResponse(new Error("No plan found for user")),
       };
     }
 
@@ -73,7 +75,7 @@ export async function checkCanCreateTrackedKeyword(): Promise<
     }
 
     const result = await planService.canUserCreateTrackedKeyword(
-      session.user.id
+      session.user.id,
     );
     return { data: result, error: null };
   } catch (error: any) {
@@ -84,13 +86,15 @@ export async function checkCanCreateTrackedKeyword(): Promise<
   }
 }
 
-export async function getUserPlanFeatures(): Promise<ActionResponse<Record<string, any>>> {
+export async function getUserPlanFeatures(): Promise<
+  ActionResponse<Record<string, any>>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return {
         data: null,
-        error: createErrorResponse(new Error("User not authenticated"))
+        error: createErrorResponse(new Error("User not authenticated")),
       };
     }
 
@@ -104,28 +108,30 @@ export async function getUserPlanFeatures(): Promise<ActionResponse<Record<strin
   }
 }
 
-export async function getTokenUsageStatus(): Promise<ActionResponse<{
-  current: number;
-  limit: number;
-  periodEnd: Date | null;
-  isOverage: boolean;
-  percentage: number;
-}>> {
+export async function getTokenUsageStatus(): Promise<
+  ActionResponse<{
+    current: number;
+    limit: number;
+    periodEnd: Date | null;
+    isOverage: boolean;
+    percentage: number;
+  }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return {
         data: null,
-        error: createErrorResponse(new Error("User not authenticated"))
+        error: createErrorResponse(new Error("User not authenticated")),
       };
     }
 
     const status = await planService.getTokenUsageStatus(session.user.id);
-    
+
     if (!status) {
       return {
         data: null,
-        error: createErrorResponse(new Error("No plan found for user"))
+        error: createErrorResponse(new Error("No plan found for user")),
       };
     }
 
@@ -138,22 +144,27 @@ export async function getTokenUsageStatus(): Promise<ActionResponse<{
   }
 }
 
-export async function trackTokenUsage(tokenCount: number): Promise<ActionResponse<{
-  success: boolean;
-  usage: number;
-  limit: number;
-  isOverage: boolean;
-}>> {
+export async function trackTokenUsage(tokenCount: number): Promise<
+  ActionResponse<{
+    success: boolean;
+    usage: number;
+    limit: number;
+    isOverage: boolean;
+  }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return {
         data: null,
-        error: createErrorResponse(new Error("User not authenticated"))
+        error: createErrorResponse(new Error("User not authenticated")),
       };
     }
 
-    const result = await planService.trackTokenUsage(session.user.id, tokenCount);
+    const result = await planService.trackTokenUsage(
+      session.user.id,
+      tokenCount,
+    );
     return { data: result, error: null };
   } catch (error: any) {
     return {
@@ -163,17 +174,19 @@ export async function trackTokenUsage(tokenCount: number): Promise<ActionRespons
   }
 }
 
-export async function checkUsageNotifications(): Promise<ActionResponse<{
-  shouldNotify: boolean;
-  notificationType: 'warning_80' | 'warning_100' | 'overage' | null;
-  percentage: number;
-}>> {
+export async function checkUsageNotifications(): Promise<
+  ActionResponse<{
+    shouldNotify: boolean;
+    notificationType: "warning_80" | "warning_100" | "overage" | null;
+    percentage: number;
+  }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return {
         data: null,
-        error: createErrorResponse(new Error("User not authenticated"))
+        error: createErrorResponse(new Error("User not authenticated")),
       };
     }
 

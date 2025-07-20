@@ -7,8 +7,6 @@ import {
 } from "@repo/services";
 import { Provider } from "@repo/db";
 
-
-
 export async function getProviders(): Promise<Provider[]> {
   try {
     return await providerService.getAllProviders();
@@ -42,7 +40,7 @@ export async function updateProvider(id: string, data: any): Promise<Provider> {
 }
 
 export async function deleteProvider(
-  id: string
+  id: string,
 ): Promise<{ success: boolean }> {
   try {
     await providerService.deleteProvider(id);

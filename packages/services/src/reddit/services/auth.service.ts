@@ -7,11 +7,14 @@ import {
 export class RedditAuthService {
   private readonly clientId = process.env.REDDIT_CLIENT_ID;
   private readonly clientSecret = process.env.REDDIT_CLIENT_SECRET;
-  private readonly userAgent = process.env.REDDIT_USER_AGENT || "sentiment-hound-v2:1.0.0";
+  private readonly userAgent =
+    process.env.REDDIT_USER_AGENT || "sentiment-hound-v2:1.0.0";
 
   constructor() {
     if (!this.clientId || !this.clientSecret) {
-      console.warn("Reddit OAuth credentials not configured. Please set REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET environment variables.");
+      console.warn(
+        "Reddit OAuth credentials not configured. Please set REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET environment variables.",
+      );
     }
   }
 
@@ -22,18 +25,22 @@ export class RedditAuthService {
     accountId: string;
   }> {
     if (!this.clientId || !this.clientSecret) {
-      throw new Error("Reddit OAuth credentials not configured. Please set REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET environment variables.");
+      throw new Error(
+        "Reddit OAuth credentials not configured. Please set REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET environment variables.",
+      );
     }
 
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
     const redirectUri = `${baseUrl}/api/auth/reddit/callback`;
 
-    const auth = Buffer.from(`${this.clientId}:${this.clientSecret}`).toString('base64');
+    const auth = Buffer.from(`${this.clientId}:${this.clientSecret}`).toString(
+      "base64",
+    );
 
     const response = await fetch("https://www.reddit.com/api/v1/access_token", {
       method: "POST",
       headers: {
-        "Authorization": `Basic ${auth}`,
+        Authorization: `Basic ${auth}`,
         "Content-Type": "application/x-www-form-urlencoded",
         "User-Agent": this.userAgent,
       },
@@ -46,7 +53,9 @@ export class RedditAuthService {
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Reddit OAuth failed: ${response.status} ${response.statusText} - ${errorText}`);
+      throw new Error(
+        `Reddit OAuth failed: ${response.status} ${response.statusText} - ${errorText}`,
+      );
     }
 
     const tokenData: IRedditAuthResponse = await response.json();
@@ -58,14 +67,16 @@ export class RedditAuthService {
     // Get user info to retrieve account ID
     const userResponse = await fetch("https://oauth.reddit.com/api/v1/me", {
       headers: {
-        "Authorization": `Bearer ${tokenData.access_token}`,
+        Authorization: `Bearer ${tokenData.access_token}`,
         "User-Agent": this.userAgent,
       },
     });
 
     if (!userResponse.ok) {
       const errorText = await userResponse.text();
-      throw new Error(`Failed to fetch Reddit user info: ${userResponse.status} ${userResponse.statusText} - ${errorText}`);
+      throw new Error(
+        `Failed to fetch Reddit user info: ${userResponse.status} ${userResponse.statusText} - ${errorText}`,
+      );
     }
 
     const userData = await userResponse.json();
@@ -83,12 +94,14 @@ export class RedditAuthService {
       throw new Error("Reddit does not provide refresh tokens for web apps");
     }
 
-    const auth = Buffer.from(`${this.clientId}:${this.clientSecret}`).toString('base64');
+    const auth = Buffer.from(`${this.clientId}:${this.clientSecret}`).toString(
+      "base64",
+    );
 
     const response = await fetch("https://www.reddit.com/api/v1/access_token", {
       method: "POST",
       headers: {
-        "Authorization": `Basic ${auth}`,
+        Authorization: `Basic ${auth}`,
         "Content-Type": "application/x-www-form-urlencoded",
         "User-Agent": this.userAgent,
       },
@@ -114,12 +127,14 @@ export class RedditAuthService {
   }
 
   async revokeToken(accessToken: string): Promise<boolean> {
-    const auth = Buffer.from(`${this.clientId}:${this.clientSecret}`).toString('base64');
+    const auth = Buffer.from(`${this.clientId}:${this.clientSecret}`).toString(
+      "base64",
+    );
 
     const response = await fetch("https://www.reddit.com/api/v1/revoke_token", {
       method: "POST",
       headers: {
-        "Authorization": `Basic ${auth}`,
+        Authorization: `Basic ${auth}`,
         "Content-Type": "application/x-www-form-urlencoded",
         "User-Agent": this.userAgent,
       },
@@ -134,12 +149,14 @@ export class RedditAuthService {
 
   generateAuthUrl(state: string): string {
     if (!this.clientId) {
-      throw new Error("Reddit client ID not configured. Please set REDDIT_CLIENT_ID environment variable.");
+      throw new Error(
+        "Reddit client ID not configured. Please set REDDIT_CLIENT_ID environment variable.",
+      );
     }
 
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
     const redirectUri = `${baseUrl}/api/auth/reddit/callback`;
-    
+
     const params = new URLSearchParams({
       client_id: this.clientId,
       response_type: "code",

@@ -79,7 +79,7 @@ export async function refreshAccessToken(): Promise<ActionResponse<boolean>> {
 
     const x = await integrationsService.getUserIntegrationByName(
       userId,
-      "youtube"
+      "youtube",
     );
 
     if (!x?.refreshToken) {

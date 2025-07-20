@@ -3,16 +3,16 @@
  * Used by the My Analyses Dashboard components
  */
 
-import { AnalysisData } from '@/types/analysis.types';
+import { AnalysisData } from "@/types/analysis.types";
 
 /**
  * Status badge color mapping using Mantine theme colors
  * Maps analysis status to specific theme color names
  */
-export const STATUS_BADGE_COLOR_MAP: Record<AnalysisData['status'], string> = {
-  PROCESSING: 'warning', // Yellow/amber background for processing status
-  COMPLETED: 'success',  // Green background for completed status
-  FAILED: 'error',       // Red background for failed status
+export const STATUS_BADGE_COLOR_MAP: Record<AnalysisData["status"], string> = {
+  PROCESSING: "warning", // Yellow/amber background for processing status
+  COMPLETED: "success", // Green background for completed status
+  FAILED: "error", // Red background for failed status
 } as const;
 
 /**
@@ -21,13 +21,15 @@ export const STATUS_BADGE_COLOR_MAP: Record<AnalysisData['status'], string> = {
  * @param rawScore - Float between -1.0 and 1.0
  * @returns Formatted positivity percentage string
  */
-export function convertSentimentToPositivityPercentage(rawScore: number): string {
+export function convertSentimentToPositivityPercentage(
+  rawScore: number,
+): string {
   // Clamp the score to ensure it's within valid range
   const clampedScore = Math.max(-1, Math.min(1, rawScore));
-  
+
   // Convert (-1 to 1) range to (0 to 100) percentage
   const percentage = Math.round(((clampedScore + 1) / 2) * 100);
-  
+
   return `${percentage}% Positive`;
 }
 
@@ -40,7 +42,7 @@ export function convertSentimentToPositivityPercentage(rawScore: number): string
 export function sentimentToPercentage(rawScore: number): number {
   // Clamp the score to ensure it's within valid range
   const clampedScore = Math.max(-1, Math.min(1, rawScore));
-  
+
   // Convert (-1 to 1) range to (0 to 100) percentage
   return Math.round(((clampedScore + 1) / 2) * 100);
 }
@@ -51,8 +53,8 @@ export function sentimentToPercentage(rawScore: number): number {
  * @param status - Analysis status from AnalysisData
  * @returns Mantine Badge color string
  */
-export function getStatusBadgeColor(status: AnalysisData['status']): string {
-  return STATUS_BADGE_COLOR_MAP[status] || 'gray';
+export function getStatusBadgeColor(status: AnalysisData["status"]): string {
+  return STATUS_BADGE_COLOR_MAP[status] || "gray";
 }
 
 /**
@@ -60,16 +62,16 @@ export function getStatusBadgeColor(status: AnalysisData['status']): string {
  * @param status - Analysis status from AnalysisData
  * @returns Formatted status label
  */
-export function getStatusLabel(status: AnalysisData['status']): string {
+export function getStatusLabel(status: AnalysisData["status"]): string {
   switch (status) {
-    case 'PROCESSING':
-      return 'Processing';
-    case 'COMPLETED':
-      return 'Completed';
-    case 'FAILED':
-      return 'Failed';
+    case "PROCESSING":
+      return "Processing";
+    case "COMPLETED":
+      return "Completed";
+    case "FAILED":
+      return "Failed";
     default:
-      return 'Unknown';
+      return "Unknown";
   }
 }
 
@@ -80,7 +82,7 @@ export function getStatusLabel(status: AnalysisData['status']): string {
  */
 export function formatCommentCount(count: number): string {
   if (count === 1) {
-    return '1 comment';
+    return "1 comment";
   }
   return `${count.toLocaleString()} comments`;
 }
@@ -90,10 +92,12 @@ export function formatCommentCount(count: number): string {
  * @param rawScore - Float between -1.0 and 1.0
  * @returns Sentiment category
  */
-export function getSentimentCategory(rawScore: number): 'positive' | 'neutral' | 'negative' {
-  if (rawScore > 0.1) return 'positive';
-  if (rawScore < -0.1) return 'negative';
-  return 'neutral';
+export function getSentimentCategory(
+  rawScore: number,
+): "positive" | "neutral" | "negative" {
+  if (rawScore > 0.1) return "positive";
+  if (rawScore < -0.1) return "negative";
+  return "neutral";
 }
 
 /**
@@ -103,14 +107,14 @@ export function getSentimentCategory(rawScore: number): 'positive' | 'neutral' |
  */
 export function getSentimentColor(rawScore: number): string {
   const category = getSentimentCategory(rawScore);
-  
+
   switch (category) {
-    case 'positive':
-      return 'success';
-    case 'negative':
-      return 'error';
-    case 'neutral':
+    case "positive":
+      return "success";
+    case "negative":
+      return "error";
+    case "neutral":
     default:
-      return 'gray';
+      return "gray";
   }
 }

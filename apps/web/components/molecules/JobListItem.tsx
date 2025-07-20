@@ -21,16 +21,16 @@ const JOB_TYPE_MAP = {
 };
 
 function calculateProgress(
-  subTasks: { type: string; subTaskMentions: { status: string }[] }[]
+  subTasks: { type: string; subTaskMentions: { status: string }[] }[],
 ) {
   const analyzeTask = subTasks.find(
-    (st) => st.type === "ANALYZE_CONTENT_SENTIMENT"
+    (st) => st.type === "ANALYZE_CONTENT_SENTIMENT",
   );
   if (!analyzeTask || !analyzeTask.subTaskMentions) return null;
 
   const total = analyzeTask.subTaskMentions.length;
   const completed = analyzeTask.subTaskMentions.filter(
-    (c) => c.status === "COMPLETED"
+    (c) => c.status === "COMPLETED",
   ).length;
 
   return {

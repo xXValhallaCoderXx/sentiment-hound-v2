@@ -17,7 +17,7 @@ export type ActionResponse<T> =
  */
 export function createErrorResponse(
   error: unknown,
-  defaultMessage = "Unknown error occurred"
+  defaultMessage = "Unknown error occurred",
 ): ErrorResponse {
   const errorMessage = error instanceof Error ? error.message : defaultMessage;
   const errorCode = (error as { code?: string })?.code || "UNKNOWN_ERROR";

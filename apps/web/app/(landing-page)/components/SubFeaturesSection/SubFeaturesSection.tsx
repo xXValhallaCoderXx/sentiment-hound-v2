@@ -95,8 +95,8 @@ const SubFeaturesSection = () => {
 
       <Container size={580} p={0}>
         <Text size="lg" className={classes.description} c="dimmed">
-          Enterprise-grade capabilities that are accessible to organizations 
-          of all sizes. Power without complexity.
+          Enterprise-grade capabilities that are accessible to organizations of
+          all sizes. Power without complexity.
         </Text>
       </Container>
 

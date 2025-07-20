@@ -11,32 +11,33 @@ interface SharedNavigationMenuProps {
   ctaButton: React.ReactNode;
 }
 
-const SharedNavigationMenu = ({ links, ctaButton }: SharedNavigationMenuProps) => {
+const SharedNavigationMenu = ({
+  links,
+  ctaButton,
+}: SharedNavigationMenuProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const pathname = usePathname();
   const { handleNavigation } = useSmartNavigation();
 
-  const isPricingPage = pathname === '/pricing';
+  const isPricingPage = pathname === "/pricing";
 
-  const filteredLinks = isPricingPage
-    ? [{ href: '/', label: 'Home' }]
-    : links;
+  const filteredLinks = isPricingPage ? [{ href: "/", label: "Home" }] : links;
 
   const handleLinkClick = (href: string, label: string) => {
     close(); // Close mobile menu
     handleNavigation(href, label);
   };
 
-  const navigationLinks = filteredLinks.map(link => (
-      <Anchor 
-        c="dimmed" 
-        fw={500} 
-        onClick={() => handleLinkClick(link.href, link.label)} 
-        key={link.href}
-        style={{ cursor: 'pointer' }}
-      >
-        {link.label}
-      </Anchor>
+  const navigationLinks = filteredLinks.map((link) => (
+    <Anchor
+      c="dimmed"
+      fw={500}
+      onClick={() => handleLinkClick(link.href, link.label)}
+      key={link.href}
+      style={{ cursor: "pointer" }}
+    >
+      {link.label}
+    </Anchor>
   ));
 
   return (

@@ -1,12 +1,15 @@
-import React from 'react';
-import { Card, Text, Badge, Group, Stack } from '@mantine/core';
-import { sentimentToPercentage, getStatusBadgeColor } from '@/utils/sentimentUtils';
-import classes from './AnalysisCard.module.css';
+import React from "react";
+import { Card, Text, Badge, Group, Stack } from "@mantine/core";
+import {
+  sentimentToPercentage,
+  getStatusBadgeColor,
+} from "@/utils/sentimentUtils";
+import classes from "./AnalysisCard.module.css";
 
 export interface AnalysisCardProps {
   id: string;
   title: string;
-  status: 'PROCESSING' | 'COMPLETED' | 'FAILED';
+  status: "PROCESSING" | "COMPLETED" | "FAILED";
   overallScore: number; // -1.0 to 1.0 sentiment score
   commentCount: number;
   createdAt: Date;
@@ -23,7 +26,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({
 }) => {
   // Convert sentiment score to percentage for display
   const sentimentPercentage = sentimentToPercentage(overallScore);
-  
+
   // Get badge color for status
   const badgeColor = getStatusBadgeColor(status);
 
@@ -34,20 +37,15 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({
       radius="sm"
       withBorder
       onClick={onClick}
-      style={{ cursor: onClick ? 'pointer' : 'default' }}
+      style={{ cursor: onClick ? "pointer" : "default" }}
     >
       <Group justify="space-between" align="flex-start">
         {/* Left content area */}
         <Stack gap="xs" style={{ flex: 1, minWidth: 0 }}>
-          <Text 
-            fw={500} 
-            size="md" 
-            lineClamp={2}
-            className={classes.title}
-          >
+          <Text fw={500} size="md" lineClamp={2} className={classes.title}>
             {title}
           </Text>
-          
+
           <Text size="xs" c="dimmed">
             Created {createdAt.toLocaleDateString()}
           </Text>
@@ -58,7 +56,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({
           <Badge color={badgeColor} variant="light" size="sm">
             {status}
           </Badge>
-          
+
           <Group gap="md" align="center">
             <div className={classes.metricGroup}>
               <Text size="xs" c="dimmed" ta="right">
@@ -68,7 +66,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({
                 {sentimentPercentage}%
               </Text>
             </div>
-            
+
             <div className={classes.metricGroup}>
               <Text size="xs" c="dimmed" ta="right">
                 Comments

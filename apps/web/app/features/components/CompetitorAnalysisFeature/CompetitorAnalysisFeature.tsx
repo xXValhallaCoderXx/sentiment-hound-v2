@@ -8,16 +8,13 @@ import {
   List,
   ListItem,
 } from "@mantine/core";
-import {
-  IconTrendingUp,
-  IconCheck,
-} from "@tabler/icons-react";
+import { IconTrendingUp, IconCheck } from "@tabler/icons-react";
 import classes from "./CompetitorAnalysisFeature.module.css";
 
 const CompetitorAnalysisFeature = () => {
   const features = [
     "Lorem ipsum dolor sit amet",
-    "Consectetur adipiscing elit", 
+    "Consectetur adipiscing elit",
     "Sed do eiusmod tempor incididunt",
   ];
 
@@ -34,9 +31,7 @@ const CompetitorAnalysisFeature = () => {
                 <Text className={classes.placeholderText}>
                   Competitor Analysis Feature
                 </Text>
-                <Text className={classes.placeholderSubtext}>
-                  Coming Soon
-                </Text>
+                <Text className={classes.placeholderSubtext}>Coming Soon</Text>
               </div>
             </div>
           </GridCol>
@@ -59,7 +54,9 @@ const CompetitorAnalysisFeature = () => {
               </Title>
 
               <Text className={classes.subtitle}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris.
               </Text>
 
               <List className={classes.featureList} spacing="sm" mt="lg">

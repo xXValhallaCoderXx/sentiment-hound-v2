@@ -45,7 +45,7 @@ export class CoreSubTaskService {
   }
 
   async getSubTaskWithUser(
-    id: number
+    id: number,
   ): Promise<SubTask & { task: Task & { user: User } }> {
     const job = await this.repository.findById(id, {
       include: {
@@ -70,7 +70,7 @@ export class CoreSubTaskService {
   }
 
   async getTaskWithProviderForSubTask(
-    id: number
+    id: number,
   ): Promise<SubTask & { task: Task & { user: User; provider: Provider } }> {
     const job = await this.repository.findById(id, {
       include: {
@@ -89,7 +89,7 @@ export class CoreSubTaskService {
 
     if (!job.task.providerId) {
       throw new Error(
-        "Critical system error: Task missing required providerId"
+        "Critical system error: Task missing required providerId",
       );
     }
 

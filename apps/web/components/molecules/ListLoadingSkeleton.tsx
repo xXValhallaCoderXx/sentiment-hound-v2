@@ -61,7 +61,9 @@ const ListLoadingSkeleton: FC<ListLoadingSkeletonProps> = ({
                   <Skeleton height={24} width="60%" />
                 </Flex>
                 <Skeleton height={14} width="80%" mb={16} />
-                <Box style={{ borderTop: "1px solid #e9ecef", marginBottom: 16 }} />
+                <Box
+                  style={{ borderTop: "1px solid #e9ecef", marginBottom: 16 }}
+                />
                 <Skeleton height={36} />
               </Card>
             </GridCol>

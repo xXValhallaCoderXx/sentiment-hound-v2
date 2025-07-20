@@ -3,6 +3,7 @@
 ## Adding a New Feature
 
 1. **Database Changes** (if needed):
+
    ```bash
    # In packages/database/
    # Edit prisma/schema.prisma
@@ -11,15 +12,18 @@
    ```
 
 2. **Business Logic**:
+
    - Add service in `@repo/services`
    - Export from `packages/services/src/index.ts`
 
 3. **Server Action**:
+
    - Create in `actions/feature-name.actions.ts`
    - Use `ActionResponse<T>` return type
    - Import services from `@repo/services`
 
 4. **UI Components**:
+
    - Page component in `app/`
    - Feature components in `components/organisms/`
    - Form handling with Mantine + server actions

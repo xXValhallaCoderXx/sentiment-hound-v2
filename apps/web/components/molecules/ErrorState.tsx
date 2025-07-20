@@ -1,6 +1,11 @@
 import { FC } from "react";
 import { Flex, Title, Text, Button, Stack } from "@mantine/core";
-import { IconAlertTriangle, IconWifiOff, IconRefresh, TablerIcon } from "@tabler/icons-react";
+import {
+  IconAlertTriangle,
+  IconWifiOff,
+  IconRefresh,
+  TablerIcon,
+} from "@tabler/icons-react";
 
 interface ErrorStateProps {
   /** Error title */
@@ -27,7 +32,11 @@ const ErrorState: FC<ErrorStateProps> = ({
 }) => {
   return (
     <Flex direction="column" align="center" justify="center" gap="md" py="xl">
-      <IconComponent size={64} color="var(--mantine-color-red-6)" opacity={0.7} />
+      <IconComponent
+        size={64}
+        color="var(--mantine-color-red-6)"
+        opacity={0.7}
+      />
       <Stack gap="xs" align="center">
         <Title order={3} ta="center">
           {title}
@@ -52,7 +61,9 @@ const ErrorState: FC<ErrorStateProps> = ({
 };
 
 // Predefined error state variants for common scenarios
-export const NetworkErrorState: FC<Omit<ErrorStateProps, "icon" | "title" | "message">> = (props) => (
+export const NetworkErrorState: FC<
+  Omit<ErrorStateProps, "icon" | "title" | "message">
+> = (props) => (
   <ErrorState
     {...props}
     icon={IconWifiOff}
@@ -61,7 +72,9 @@ export const NetworkErrorState: FC<Omit<ErrorStateProps, "icon" | "title" | "mes
   />
 );
 
-export const ServerErrorState: FC<Omit<ErrorStateProps, "icon" | "title" | "message">> = (props) => (
+export const ServerErrorState: FC<
+  Omit<ErrorStateProps, "icon" | "title" | "message">
+> = (props) => (
   <ErrorState
     {...props}
     icon={IconAlertTriangle}

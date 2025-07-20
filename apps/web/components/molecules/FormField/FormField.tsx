@@ -1,14 +1,24 @@
 "use client";
 
-import { TextInput, PasswordInput, type TextInputProps, type PasswordInputProps } from "@mantine/core";
+import {
+  TextInput,
+  PasswordInput,
+  type TextInputProps,
+  type PasswordInputProps,
+} from "@mantine/core";
 
-interface FormFieldProps extends Omit<TextInputProps, 'type'> {
+interface FormFieldProps extends Omit<TextInputProps, "type"> {
   type?: "text" | "email" | "password";
   label: string;
   placeholder?: string;
 }
 
-export const FormField = ({ type = "text", label, placeholder, ...props }: FormFieldProps) => {
+export const FormField = ({
+  type = "text",
+  label,
+  placeholder,
+  ...props
+}: FormFieldProps) => {
   if (type === "password") {
     return (
       <PasswordInput

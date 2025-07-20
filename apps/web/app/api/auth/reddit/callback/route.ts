@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     const baseUrl = req.nextUrl.origin;
     const failureUrl = new URL(
       "/dashboard/integrations?success=false&error=oauth_denied",
-      baseUrl
+      baseUrl,
     );
     return NextResponse.redirect(failureUrl);
   }
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     const baseUrl = req.nextUrl.origin;
     const failureUrl = new URL(
       "/dashboard/integrations?success=false&error=no_code",
-      baseUrl
+      baseUrl,
     );
     return NextResponse.redirect(failureUrl);
   }
@@ -51,14 +51,14 @@ export async function GET(req: NextRequest) {
         accountId: integration.accountId,
         userId,
         refreshTokenExpiresAt: new Date(
-          Date.now() + integration.expiresIn * 1000
+          Date.now() + integration.expiresIn * 1000,
         ),
       });
 
       // Construct success URL
       const successUrl = new URL(
         "/dashboard/integrations?success=true",
-        baseUrl
+        baseUrl,
       );
       return NextResponse.redirect(successUrl);
     } catch (error: any) {
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
       // Construct failure URL
       const failureUrl = new URL(
         `/dashboard/integrations?success=false&error=${errorMessage}`,
-        baseUrl
+        baseUrl,
       );
       return NextResponse.redirect(failureUrl);
     }
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
     // Construct failure URL
     const failureUrl = new URL(
       "/dashboard/integrations?success=false&error=no_session",
-      baseUrl
+      baseUrl,
     );
     return NextResponse.redirect(failureUrl);
   }

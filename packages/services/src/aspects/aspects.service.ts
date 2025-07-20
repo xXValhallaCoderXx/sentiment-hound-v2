@@ -18,7 +18,7 @@ export class CoreAspectAnalysisService {
   async createAspectAnalysis(
     commentId: number,
     aspect: string,
-    sentiment: number
+    sentiment: number,
   ): Promise<AspectAnalysis> {
     return this.repository.create({
       data: {
@@ -27,6 +27,5 @@ export class CoreAspectAnalysisService {
         sentiment,
       },
     });
-
   }
 }

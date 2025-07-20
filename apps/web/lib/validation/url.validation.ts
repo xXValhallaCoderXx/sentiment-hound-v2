@@ -16,7 +16,8 @@ export interface UrlValidationResult {
 const URL_PATTERNS = {
   youtube: {
     // Standard youtube.com/watch?v={id} format
-    standard: /^https?:\/\/(?:www\.)?youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
+    standard:
+      /^https?:\/\/(?:www\.)?youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
     // Mobile m.youtube.com/watch?v={id} format
     mobile: /^https?:\/\/m\.youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
     // Short youtu.be/{id} format
@@ -28,7 +29,7 @@ const URL_PATTERNS = {
     // Reddit post patterns (basic client-side validation)
     post: /^https?:\/\/(?:www\.)?reddit\.com\/r\/[^/]+\/comments\/[^/]+/,
     shortLink: /^https?:\/\/redd\.it\/[a-zA-Z0-9]+/,
-  }
+  },
 };
 
 /**
@@ -76,7 +77,8 @@ export function validateUrl(url: string): UrlValidationResult {
   if (!provider) {
     return {
       isValid: false,
-      error: "This platform is not yet supported. Currently supporting YouTube.",
+      error:
+        "This platform is not yet supported. Currently supporting YouTube.",
     };
   }
 
@@ -174,40 +176,40 @@ export function getUrlValidationErrorMessage(url: string): string {
  * @returns Detailed validation result with specific error types
  */
 export function validateUrlWithDetails(url: string): UrlValidationResult & {
-  errorType?: 'empty' | 'malformed' | 'unsupported' | 'invalid';
+  errorType?: "empty" | "malformed" | "unsupported" | "invalid";
 } {
   const baseResult = validateUrl(url);
-  
+
   if (baseResult.isValid) {
     return baseResult;
   }
-  
+
   // Determine error type for more specific handling
   if (!url || !url.trim()) {
     return {
       ...baseResult,
-      errorType: 'empty',
+      errorType: "empty",
     };
   }
-  
+
   if (!url.startsWith("http://") && !url.startsWith("https://")) {
     return {
       ...baseResult,
-      errorType: 'malformed',
+      errorType: "malformed",
     };
   }
-  
+
   // Try to parse to determine if it's unsupported vs invalid
   try {
     new URL(url);
     return {
       ...baseResult,
-      errorType: 'unsupported',
+      errorType: "unsupported",
     };
   } catch {
     return {
       ...baseResult,
-      errorType: 'invalid',
+      errorType: "invalid",
     };
   }
 }

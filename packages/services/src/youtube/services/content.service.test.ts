@@ -36,11 +36,12 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
 
   describe("buildRequestConfig (internal method)", () => {
     it("should build OAuth configuration with Authorization header", () => {
-      const oauthToken = "ya29.AHES6ZT_Long_OAuth_Token_Format_With_Dots.And.Dashes-12345";
+      const oauthToken =
+        "ya29.AHES6ZT_Long_OAuth_Token_Format_With_Dots.And.Dashes-12345";
       const baseUrl = "https://www.googleapis.com/youtube/v3/videos";
 
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(oauthToken, 'OAUTH', baseUrl);
+      const result = service.buildRequestConfig(oauthToken, "OAUTH", baseUrl);
 
       expect(result.url).toBe(baseUrl);
       expect(result.headers?.Authorization).toBe(`Bearer ${oauthToken}`);
@@ -51,7 +52,7 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
       const baseUrl = "https://www.googleapis.com/youtube/v3/videos";
 
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(apiKey, 'API_KEY', baseUrl);
+      const result = service.buildRequestConfig(apiKey, "API_KEY", baseUrl);
 
       expect(result.url).toBe(`${baseUrl}?key=${apiKey}`);
       expect(result.headers).toBeDefined();
@@ -59,10 +60,11 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
 
     it("should handle URL with existing query parameters for API key", () => {
       const apiKey = "AIzaSyB1234567890123456789012345678901";
-      const baseUrl = "https://www.googleapis.com/youtube/v3/videos?part=snippet";
+      const baseUrl =
+        "https://www.googleapis.com/youtube/v3/videos?part=snippet";
 
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(apiKey, 'API_KEY', baseUrl);
+      const result = service.buildRequestConfig(apiKey, "API_KEY", baseUrl);
 
       expect(result.url).toBe(`${baseUrl}&key=${apiKey}`);
       expect(result.headers).toBeDefined();
@@ -73,9 +75,15 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
       const baseUrl = "https://www.googleapis.com/youtube/v3/videos";
 
       // @ts-ignore - accessing private method for testing
-      const result = service.buildRequestConfig(specialApiKey, 'API_KEY', baseUrl);
+      const result = service.buildRequestConfig(
+        specialApiKey,
+        "API_KEY",
+        baseUrl,
+      );
 
-      expect(result.url).toBe(`${baseUrl}?key=${encodeURIComponent(specialApiKey)}`);
+      expect(result.url).toBe(
+        `${baseUrl}?key=${encodeURIComponent(specialApiKey)}`,
+      );
       expect(result.headers).toBeDefined();
     });
   });
@@ -89,18 +97,26 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
     it("should call method without errors with valid parameters", async () => {
       const oauthToken = "ya29.oauth-token-example";
       const videoUrl = "https://youtube.com/watch?v=test123";
-      
+
       // This will return null due to auth issues but should not crash
-      const result = await service.fetchSingleYoutubeVideo(oauthToken, 'OAUTH', videoUrl);
+      const result = await service.fetchSingleYoutubeVideo(
+        oauthToken,
+        "OAUTH",
+        videoUrl,
+      );
       expect(result).toBeNull();
     });
 
     it("should handle API key authentication method", async () => {
       const apiKey = "AIzaSyC1234567890123456789012345678901";
       const videoUrl = "https://youtube.com/watch?v=test123";
-      
+
       // This will return null due to auth issues but should not crash
-      const result = await service.fetchSingleYoutubeVideo(apiKey, 'API_KEY', videoUrl);
+      const result = await service.fetchSingleYoutubeVideo(
+        apiKey,
+        "API_KEY",
+        videoUrl,
+      );
       expect(result).toBeNull();
     });
   });

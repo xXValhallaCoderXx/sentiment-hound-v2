@@ -17,7 +17,7 @@ export class PostRepository {
 
   async findById(
     id: string | number,
-    args?: Omit<Prisma.PostFindUniqueArgs, "where">
+    args?: Omit<Prisma.PostFindUniqueArgs, "where">,
   ) {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.post.findUnique({
@@ -28,7 +28,7 @@ export class PostRepository {
 
   async findUnique(
     where: Prisma.PostWhereUniqueInput,
-    args?: Omit<Prisma.PostFindUniqueArgs, "where">
+    args?: Omit<Prisma.PostFindUniqueArgs, "where">,
   ) {
     return this.prisma.post.findUnique({
       where,
@@ -38,7 +38,7 @@ export class PostRepository {
 
   async findFirst(
     where: Prisma.PostWhereInput,
-    args?: Omit<Prisma.PostFindFirstArgs, "where">
+    args?: Omit<Prisma.PostFindFirstArgs, "where">,
   ) {
     return this.prisma.post.findFirst({
       where,
@@ -53,7 +53,7 @@ export class PostRepository {
   async update(
     id: string | number,
     data: Prisma.PostUpdateInput,
-    args?: Omit<Prisma.PostUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.PostUpdateArgs, "where" | "data">,
   ) {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.post.update({
@@ -65,7 +65,7 @@ export class PostRepository {
 
   async delete(
     id: string | number,
-    args?: Omit<Prisma.PostDeleteArgs, "where">
+    args?: Omit<Prisma.PostDeleteArgs, "where">,
   ) {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.post.delete({
@@ -76,7 +76,7 @@ export class PostRepository {
 
   async count(
     where: Prisma.PostWhereInput,
-    args?: Omit<Prisma.PostCountArgs, "where">
+    args?: Omit<Prisma.PostCountArgs, "where">,
   ) {
     return this.prisma.post.count({
       where,

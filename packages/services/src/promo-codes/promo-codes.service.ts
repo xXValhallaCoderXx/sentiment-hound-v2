@@ -33,13 +33,18 @@ export class PromoCodeService {
       }
 
       if (promoCode.maxUses && promoCode.timesUsed >= promoCode.maxUses) {
-        return { isValid: false, error: "This promo code has reached its usage limit" };
+        return {
+          isValid: false,
+          error: "This promo code has reached its usage limit",
+        };
       }
 
-      return { 
-        isValid: true, 
+      return {
+        isValid: true,
         discountType: promoCode.discountType || undefined,
-        discountValue: promoCode.discountValue ? parseFloat(promoCode.discountValue.toString()) : undefined
+        discountValue: promoCode.discountValue
+          ? parseFloat(promoCode.discountValue.toString())
+          : undefined,
       };
     } catch (error) {
       console.error("Error validating promo code:", error);
@@ -47,9 +52,16 @@ export class PromoCodeService {
     }
   }
 
-  async redeemCode(code: string): Promise<{ success: boolean; discountType?: string; discountValue?: number; error?: string }> {
+  async redeemCode(
+    code: string,
+  ): Promise<{
+    success: boolean;
+    discountType?: string;
+    discountValue?: number;
+    error?: string;
+  }> {
     const validation = await this.validateCode(code);
-    
+
     if (!validation.isValid) {
       return { success: false, error: validation.error };
     }
@@ -61,10 +73,10 @@ export class PromoCodeService {
         data: { timesUsed: { increment: 1 } },
       });
 
-      return { 
-        success: true, 
+      return {
+        success: true,
         discountType: validation.discountType,
-        discountValue: validation.discountValue
+        discountValue: validation.discountValue,
       };
     } catch (error) {
       console.error("Error redeeming promo code:", error);
@@ -79,7 +91,7 @@ export class PromoCodeService {
       expiresAt?: Date;
       discountType?: string;
       discountValue?: number;
-    }
+    },
   ): Promise<{ success: boolean; error?: string }> {
     try {
       await this.prisma.promoCode.create({
@@ -97,11 +109,11 @@ export class PromoCodeService {
       return { success: true };
     } catch (error: any) {
       console.error("Error generating promo code:", error);
-      
+
       if (error.code === "P2002") {
         return { success: false, error: "This promo code already exists" };
       }
-      
+
       return { success: false, error: "Failed to generate code" };
     }
   }

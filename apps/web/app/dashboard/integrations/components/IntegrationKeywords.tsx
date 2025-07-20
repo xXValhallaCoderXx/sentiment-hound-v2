@@ -71,7 +71,7 @@ const IntegrationKeywords = async () => {
     } catch (error) {
       console.error(
         "Error occurred during keyword deletion (from component):",
-        error
+        error,
       );
     }
   }

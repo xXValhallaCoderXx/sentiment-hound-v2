@@ -25,7 +25,7 @@ import { TaskType } from "@repo/db";
  * @returns Promise resolving to ActionResponse with task ID and status, or error details
  */
 export async function startAnalysis(
-  postUrl: string
+  postUrl: string,
 ): Promise<ActionResponse<{ taskId: number; status: string }>> {
   try {
     // Get current session
@@ -55,16 +55,22 @@ export async function startAnalysis(
       normalizedUrl = parseResult.url;
 
       console.log(
-        `URL parsed successfully: provider=${provider}, normalizedUrl=${normalizedUrl}`
+        `URL parsed successfully: provider=${provider}, normalizedUrl=${normalizedUrl}`,
       );
 
       // Resolve provider ID from provider name
       try {
-        const providerRecord = await providerService.getProviderByName(provider);
+        const providerRecord =
+          await providerService.getProviderByName(provider);
         providerId = providerRecord.id;
-        console.log(`Resolved provider ID: ${providerId} for provider: ${provider}`);
+        console.log(
+          `Resolved provider ID: ${providerId} for provider: ${provider}`,
+        );
       } catch (providerError) {
-        console.error(`Failed to resolve provider ID for ${provider}:`, providerError);
+        console.error(
+          `Failed to resolve provider ID for ${provider}:`,
+          providerError,
+        );
         return {
           data: null,
           error: createErrorResponse({
@@ -96,19 +102,19 @@ export async function startAnalysis(
         await integrationsService.getUserIntegrationByName(userId, provider);
 
       console.log(
-        `Integration lookup for user ${userId}, provider ${provider}: ${userIntegration ? "found" : "not found"}`
+        `Integration lookup for user ${userId}, provider ${provider}: ${userIntegration ? "found" : "not found"}`,
       );
 
       // Validate integration exists and is active
       if (userIntegration && userIntegration.isActive) {
         tokenToUse = userIntegration.accessToken;
         console.log(
-          `Token selection: user integration token selected for provider: ${provider}`
+          `Token selection: user integration token selected for provider: ${provider}`,
         );
       } else {
         if (userIntegration && !userIntegration.isActive) {
           console.log(
-            `User integration found but inactive for provider: ${provider}, falling back to API credentials`
+            `User integration found but inactive for provider: ${provider}, falling back to API credentials`,
           );
         }
         console.log("WHAT IS GOOING ON");
@@ -123,16 +129,16 @@ export async function startAnalysis(
         if (apiKey) {
           tokenToUse = apiKey;
           console.log(
-            `Authentication method: API key authentication for provider: ${provider}`
+            `Authentication method: API key authentication for provider: ${provider}`,
           );
         } else if (masterToken) {
           tokenToUse = masterToken;
           console.log(
-            `Authentication method: master token authentication for provider: ${provider}`
+            `Authentication method: master token authentication for provider: ${provider}`,
           );
         } else {
           console.error(
-            `No API key or master token available for provider: ${provider}`
+            `No API key or master token available for provider: ${provider}`,
           );
           throw new Error(`No token available for provider: ${provider}`);
         }
@@ -173,7 +179,7 @@ export async function startAnalysis(
     } catch (tokenError) {
       console.error(
         `Error selecting token for provider ${provider}:`,
-        tokenError
+        tokenError,
       );
       // Handle specific error types
       if (

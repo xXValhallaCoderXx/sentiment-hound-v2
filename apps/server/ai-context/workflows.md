@@ -3,6 +3,7 @@
 ## Adding a New Job Processor
 
 1. **Create Processor**:
+
    ```typescript
    // src/modules/jobs/processors/my-feature.processor.ts
    @Injectable()
@@ -14,6 +15,7 @@
    ```
 
 2. **Register in JobsService**:
+
    ```typescript
    // In jobs.service.ts constructor
    this.processors[SubTaskType.MY_FEATURE] = this.myFeatureProcessor;
@@ -22,18 +24,20 @@
 3. **Add to Module**:
    ```typescript
    // In jobs.module.ts
-   providers: [...existing, MyFeatureProcessor]
+   providers: [...existing, MyFeatureProcessor];
    ```
 
 ## Adding a New API Endpoint
 
 1. **Create DTO** (if needed):
+
    ```typescript
    // DTOs for request validation
    export class CreateMyFeatureDto { ... }
    ```
 
 2. **Add Controller Method**:
+
    ```typescript
    @Post('my-feature')
    async createMyFeature(@Body() dto: CreateMyFeatureDto) {
@@ -100,11 +104,13 @@ pnpm build:prod
 **Purpose**: Standardized pattern for job processors to retrieve and include providerId in post creation operations.
 
 **Core Components**:
+
 - Enhanced SubTask service with provider relationship retrieval
 - Updated job processor template requiring providerId handling
 - Consistent error handling for missing Task or Provider relationships
 
 **Standard Implementation Pattern**:
+
 ```typescript
 async process(job: Job): Promise<void> {
   try {
@@ -138,6 +144,7 @@ async process(job: Job): Promise<void> {
 ```
 
 **Key Interactions**:
+
 - All job processors follow this pattern for consistent providerId handling
 - Service layer abstracts Task-Provider relationship complexity
 - TypeScript enforcement ensures no post creation without providerId
@@ -146,18 +153,21 @@ async process(job: Job): Promise<void> {
 ## Schema Change Workflow
 
 ### Database Schema Updates
+
 1. **Update Schema**: Modify `packages/database/prisma/schema.prisma`
 2. **Generate Migration**: `pnpm --filter @repo/db db:migrate --name descriptive-name`
 3. **Regenerate Types**: `pnpm turbo db:generate`
 4. **Verify Build**: `pnpm turbo build --filter=@repo/db`
 
 ### Code Updates After Schema Changes
+
 1. **Update Processors**: Remove/add field assignments in job processors
 2. **Update Services**: Verify service methods work with new types (often automatic)
 3. **Update Tests**: Fix test mocks and fixtures if needed
 4. **Update Documentation**: Add entries to ai-context files
 
 ### Migration Validation Checklist
+
 - [ ] Prisma migration file created and reviewed
 - [ ] TypeScript compilation succeeds across all packages
 - [ ] All tests pass (`pnpm turbo test`)

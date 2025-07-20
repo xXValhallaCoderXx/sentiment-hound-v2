@@ -1,6 +1,11 @@
 import { FC, ReactNode } from "react";
 import { Flex, Title, Text, Button, Stack } from "@mantine/core";
-import { IconPlus, IconLink, IconMoodEmpty, TablerIcon } from "@tabler/icons-react";
+import {
+  IconPlus,
+  IconLink,
+  IconMoodEmpty,
+  TablerIcon,
+} from "@tabler/icons-react";
 
 interface EmptyStateProps {
   /** Icon to display */
@@ -57,7 +62,9 @@ const EmptyState: FC<EmptyStateProps> = ({
 };
 
 // Predefined empty state variants for common scenarios
-export const IntegrationsEmptyState: FC<Omit<EmptyStateProps, "icon" | "title" | "message" | "ctaText">> = (props) => (
+export const IntegrationsEmptyState: FC<
+  Omit<EmptyStateProps, "icon" | "title" | "message" | "ctaText">
+> = (props) => (
   <EmptyState
     {...props}
     icon={IconLink}
@@ -67,7 +74,9 @@ export const IntegrationsEmptyState: FC<Omit<EmptyStateProps, "icon" | "title" |
   />
 );
 
-export const CompetitorsEmptyState: FC<Omit<EmptyStateProps, "icon" | "title" | "message" | "ctaText">> = (props) => (
+export const CompetitorsEmptyState: FC<
+  Omit<EmptyStateProps, "icon" | "title" | "message" | "ctaText">
+> = (props) => (
   <EmptyState
     {...props}
     icon={IconPlus}

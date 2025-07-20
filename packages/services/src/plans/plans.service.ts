@@ -30,7 +30,7 @@ export class CorePlanService {
   updatePlan(
     id: string | number,
     data: Partial<Plan>,
-    args?: Omit<Prisma.PlanUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.PlanUpdateArgs, "where" | "data">,
   ): Promise<Plan> {
     // Ensure features: null is converted to Prisma.JsonNull for Prisma compatibility
     const patchedData = {
@@ -42,7 +42,7 @@ export class CorePlanService {
 
   findPlanById(
     id: string | number,
-    args?: Omit<Prisma.PlanFindUniqueArgs, "where">
+    args?: Omit<Prisma.PlanFindUniqueArgs, "where">,
   ): Promise<Plan | null> {
     return this.repository.findById(id, args);
   }
@@ -60,7 +60,7 @@ export class CorePlanService {
   }
 
   async canUserCreateIntegration(
-    userId: string
+    userId: string,
   ): Promise<{ canCreate: boolean; reason?: string }> {
     const userPlan = await this.getUserPlan(userId);
 
@@ -82,7 +82,7 @@ export class CorePlanService {
   }
 
   async canUserCreateTrackedKeyword(
-    userId: string
+    userId: string,
   ): Promise<{ canCreate: boolean; reason?: string }> {
     const userPlan = await this.getUserPlan(userId);
 
@@ -104,7 +104,7 @@ export class CorePlanService {
   }
 
   async canUserCreateCompetitor(
-    userId: string
+    userId: string,
   ): Promise<{ canCreate: boolean; reason?: string }> {
     const userPlan = await this.getUserPlan(userId);
 
@@ -112,7 +112,7 @@ export class CorePlanService {
       return { canCreate: false, reason: "No active plan found" };
     }
 
-    const userCompetitorCount = 
+    const userCompetitorCount =
       await this.repository.getUserCompetitorCount(userId);
 
     if (userCompetitorCount >= userPlan.maxCompetitors) {
@@ -143,18 +143,21 @@ export class CorePlanService {
     }
 
     // 1. Check for a manual override first
-    if (user.featureFlags && typeof user.featureFlags === 'object') {
-      const userOverride = (user.featureFlags as Record<string, any>)[featureName];
-      if (typeof userOverride === 'boolean') {
+    if (user.featureFlags && typeof user.featureFlags === "object") {
+      const userOverride = (user.featureFlags as Record<string, any>)[
+        featureName
+      ];
+      if (typeof userOverride === "boolean") {
         return userOverride; // Returns true if enabled, false if disabled
       }
     }
 
     // 2. If no override, fall back to the user's plan
-    const planHasFeature = user.plan?.features && 
-      typeof user.plan.features === 'object' &&
+    const planHasFeature =
+      user.plan?.features &&
+      typeof user.plan.features === "object" &&
       Boolean((user.plan.features as Record<string, any>)[featureName]);
-    
+
     return Boolean(planHasFeature);
   }
 
@@ -170,12 +173,13 @@ export class CorePlanService {
       return null;
     }
 
-    const [integrationCount, keywordCount, competitorCount, tokenUsage] = await Promise.all([
-      this.repository.getUserIntegrationCount(userId),
-      this.repository.getUserTrackedKeywordCount(userId),
-      this.repository.getUserCompetitorCount(userId),
-      this.repository.getUserTokenUsage(userId),
-    ]);
+    const [integrationCount, keywordCount, competitorCount, tokenUsage] =
+      await Promise.all([
+        this.repository.getUserIntegrationCount(userId),
+        this.repository.getUserTrackedKeywordCount(userId),
+        this.repository.getUserCompetitorCount(userId),
+        this.repository.getUserTokenUsage(userId),
+      ]);
 
     return {
       integrations: {
@@ -198,14 +202,17 @@ export class CorePlanService {
     };
   }
 
-  async trackTokenUsage(userId: string, tokenCount: number): Promise<{ 
-    success: boolean; 
-    usage: number; 
-    limit: number; 
+  async trackTokenUsage(
+    userId: string,
+    tokenCount: number,
+  ): Promise<{
+    success: boolean;
+    usage: number;
+    limit: number;
     isOverage: boolean;
   }> {
     const userPlan = await this.getUserPlan(userId);
-    
+
     if (!userPlan) {
       throw new Error("No active plan found for user");
     }
@@ -215,12 +222,12 @@ export class CorePlanService {
 
     // Increment token usage
     await this.repository.incrementTokenUsage(userId, tokenCount);
-    
+
     // Get updated usage
     const updatedUsage = await this.repository.getUserTokenUsage(userId);
     const newUsage = updatedUsage.current;
     const limit = userPlan.monthlyTokenAllowance || 0;
-    
+
     return {
       success: true,
       usage: newUsage,
@@ -237,7 +244,7 @@ export class CorePlanService {
     percentage: number;
   } | null> {
     const userPlan = await this.getUserPlan(userId);
-    
+
     if (!userPlan) {
       return null;
     }
@@ -245,7 +252,7 @@ export class CorePlanService {
     const tokenUsage = await this.repository.getUserTokenUsage(userId);
     const limit = userPlan.monthlyTokenAllowance || 0;
     const current = tokenUsage.current;
-    
+
     return {
       current,
       limit,
@@ -257,13 +264,13 @@ export class CorePlanService {
 
   async checkAndResetBillingCycle(userId: string): Promise<boolean> {
     const tokenUsage = await this.repository.getUserTokenUsage(userId);
-    
+
     if (!tokenUsage.periodEnd) {
       // Initialize billing cycle if not set
       await this.repository.initializeBillingCycle(userId);
       return true;
     }
-    
+
     const now = new Date();
     if (now > tokenUsage.periodEnd) {
       // Reset billing cycle
@@ -272,7 +279,7 @@ export class CorePlanService {
       await this.repository.resetTokenUsage(userId, newPeriodEnd);
       return true;
     }
-    
+
     return false;
   }
 
@@ -288,7 +295,7 @@ export class CorePlanService {
   }> {
     const plan = await this.getUserPlan(userId);
     const tokenStatus = await this.getTokenUsageStatus(userId);
-    
+
     return {
       plan,
       tokenUsage: tokenStatus,
@@ -297,11 +304,11 @@ export class CorePlanService {
 
   async shouldNotifyForUsage(userId: string): Promise<{
     shouldNotify: boolean;
-    notificationType: 'warning_80' | 'warning_100' | 'overage' | null;
+    notificationType: "warning_80" | "warning_100" | "overage" | null;
     percentage: number;
   }> {
     const tokenStatus = await this.getTokenUsageStatus(userId);
-    
+
     if (!tokenStatus) {
       return { shouldNotify: false, notificationType: null, percentage: 0 };
     }
@@ -309,11 +316,15 @@ export class CorePlanService {
     const { percentage, isOverage } = tokenStatus;
 
     if (isOverage) {
-      return { shouldNotify: true, notificationType: 'overage', percentage };
+      return { shouldNotify: true, notificationType: "overage", percentage };
     } else if (percentage >= 100) {
-      return { shouldNotify: true, notificationType: 'warning_100', percentage };
+      return {
+        shouldNotify: true,
+        notificationType: "warning_100",
+        percentage,
+      };
     } else if (percentage >= 80) {
-      return { shouldNotify: true, notificationType: 'warning_80', percentage };
+      return { shouldNotify: true, notificationType: "warning_80", percentage };
     }
 
     return { shouldNotify: false, notificationType: null, percentage };

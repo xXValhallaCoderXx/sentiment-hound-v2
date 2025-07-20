@@ -1,9 +1,5 @@
 import { Suspense } from "react";
-import { 
-  Card, 
-  Title, 
-  Group, 
-} from "@mantine/core";
+import { Card, Title, Group } from "@mantine/core";
 import { competitorService } from "@repo/services";
 import CompetitorCardsClient from "./CompetitorCards";
 import ListLoadingSkeleton from "@/components/molecules/ListLoadingSkeleton";
@@ -23,14 +19,26 @@ interface CompetitorCardsWrapperProps {
   userId: string;
 }
 
-const CompetitorCardsWrapper = async ({ userId }: CompetitorCardsWrapperProps) => {
+const CompetitorCardsWrapper = async ({
+  userId,
+}: CompetitorCardsWrapperProps) => {
   return (
     <Card withBorder p="md">
       <Group justify="space-between" mb="md">
         <Title order={3}>Your Competitors</Title>
       </Group>
-      
-      <Suspense fallback={<ListLoadingSkeleton itemCount={3} layout="grid" gridCols={{ base: 1, sm: 2, lg: 3 }} showTitle={false} showActionButton={false} />}>
+
+      <Suspense
+        fallback={
+          <ListLoadingSkeleton
+            itemCount={3}
+            layout="grid"
+            gridCols={{ base: 1, sm: 2, lg: 3 }}
+            showTitle={false}
+            showActionButton={false}
+          />
+        }
+      >
         <CompetitorCardsList userId={userId} />
       </Suspense>
     </Card>
@@ -48,7 +56,7 @@ const CompetitorCardsList = async ({ userId }: { userId: string }) => {
           competitor.createdAt instanceof Date
             ? competitor.createdAt.toISOString()
             : competitor.createdAt,
-      })
+      }),
     );
 
     return (

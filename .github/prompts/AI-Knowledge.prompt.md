@@ -13,7 +13,7 @@ Your core objective is twofold:
 
 1.  **UPDATE:** To process your contextual understanding of recent codebase changes and distill them into high-level summaries within the appropriate **architectural domain documents**.
 2.  **OPTIMIZE:** To periodically review the entire knowledge base (`ai-context` folders) and refactor its structure and content for maximum clarity and efficiency.
-3. **CONDENSE:** To ensure that the knowledge base remains concise, removing redundant or outdated information while preserving essential architectural context. The infomation here should be a high-level overview, not a detailed implementation guide.
+3.  **CONDENSE:** To ensure that the knowledge base remains concise, removing redundant or outdated information while preserving essential architectural context. The infomation here should be a high-level overview, not a detailed implementation guide.
 
 ## 2. Knowledge Base Structure
 

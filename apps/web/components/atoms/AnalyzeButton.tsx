@@ -49,7 +49,7 @@ export default function AnalyzeButton({
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ActionResponse<AnalysisResult> | null>(
-    null
+    null,
   );
 
   const handleAnalyze = async () => {

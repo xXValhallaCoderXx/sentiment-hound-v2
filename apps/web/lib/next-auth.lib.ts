@@ -60,7 +60,7 @@ const options: NextAuthConfig = {
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password as string,
-          user.password
+          user.password,
         );
 
         console.log("🔑 Password validation:", {

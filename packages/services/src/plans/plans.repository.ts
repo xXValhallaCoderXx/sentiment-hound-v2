@@ -17,7 +17,7 @@ export class PlanRepository {
 
   async findById(
     id: string | number,
-    args?: Omit<Prisma.PlanFindUniqueArgs, "where">
+    args?: Omit<Prisma.PlanFindUniqueArgs, "where">,
   ) {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.plan.findUnique({
@@ -28,7 +28,7 @@ export class PlanRepository {
 
   async findUnique(
     where: Prisma.PlanWhereUniqueInput,
-    args?: Omit<Prisma.PlanFindUniqueArgs, "where">
+    args?: Omit<Prisma.PlanFindUniqueArgs, "where">,
   ) {
     return this.prisma.plan.findUnique({
       where,
@@ -38,7 +38,7 @@ export class PlanRepository {
 
   async findFirst(
     where: Prisma.PlanWhereInput,
-    args?: Omit<Prisma.PlanFindFirstArgs, "where">
+    args?: Omit<Prisma.PlanFindFirstArgs, "where">,
   ) {
     return this.prisma.plan.findFirst({
       where,
@@ -53,7 +53,7 @@ export class PlanRepository {
   async update(
     id: string | number,
     data: Prisma.PlanUpdateInput,
-    args?: Omit<Prisma.PlanUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.PlanUpdateArgs, "where" | "data">,
   ) {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.plan.update({
@@ -65,7 +65,7 @@ export class PlanRepository {
 
   async delete(
     id: string | number,
-    args?: Omit<Prisma.PlanDeleteArgs, "where">
+    args?: Omit<Prisma.PlanDeleteArgs, "where">,
   ) {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.plan.delete({
@@ -76,7 +76,7 @@ export class PlanRepository {
 
   async count(
     where: Prisma.PlanWhereInput,
-    args?: Omit<Prisma.PlanCountArgs, "where">
+    args?: Omit<Prisma.PlanCountArgs, "where">,
   ) {
     return this.prisma.plan.count({
       where,
@@ -108,7 +108,9 @@ export class PlanRepository {
     return 0;
   }
 
-  async getUserTokenUsage(userId: string): Promise<{ current: number; periodEnd: Date | null }> {
+  async getUserTokenUsage(
+    userId: string,
+  ): Promise<{ current: number; periodEnd: Date | null }> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { tokenUsageThisPeriod: true, currentPeriodEnd: true },
