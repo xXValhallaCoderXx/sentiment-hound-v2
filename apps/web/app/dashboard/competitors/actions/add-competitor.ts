@@ -7,7 +7,7 @@ export async function addCompetitor(competitorName: string, userId: string) {
   try {
     // Check if user can create competitors based on their plan
     const canCreate = await planService.canUserCreateCompetitor(userId);
-    
+
     if (!canCreate.canCreate) {
       return {
         success: false,
@@ -26,21 +26,21 @@ export async function addCompetitor(competitorName: string, userId: string) {
     await competitorService.updateCompetitorSentimentDaily(competitor.id);
 
     revalidatePath("/dashboard/competitors");
-    
+
     return {
       success: true,
       competitor,
     };
   } catch (error: unknown) {
     console.error("Error adding competitor:", error);
-    
+
     if (error instanceof Error && error.message.includes("already exists")) {
       return {
         success: false,
         error: "You are already tracking this competitor",
       };
     }
-    
+
     return {
       success: false,
       error: "Failed to add competitor. Please try again.",

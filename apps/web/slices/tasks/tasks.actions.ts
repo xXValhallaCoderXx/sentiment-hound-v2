@@ -12,7 +12,7 @@ export async function getTask(id: string): Promise<string> {
     return "";
   } catch (error) {
     throw new Error(
-      error instanceof Error ? error.message : "Failed to fetch task"
+      error instanceof Error ? error.message : "Failed to fetch task",
     );
   }
 }
@@ -52,7 +52,7 @@ export async function addNewTask(data: FormData): Promise<void> {
     }
   } catch (error) {
     throw new Error(
-      error instanceof Error ? error.message : "Failed to add task"
+      error instanceof Error ? error.message : "Failed to add task",
     );
   }
 }
@@ -92,7 +92,7 @@ export async function addNewTask2(data: IAddTaskDto): Promise<void> {
     }
   } catch (error) {
     throw new Error(
-      error instanceof Error ? error.message : "Failed to add task"
+      error instanceof Error ? error.message : "Failed to add task",
     );
   }
 }

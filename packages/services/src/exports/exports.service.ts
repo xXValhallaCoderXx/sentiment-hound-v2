@@ -2,8 +2,8 @@ import { Prisma, prisma } from "@repo/db";
 import { mentionService, postService } from "..";
 
 export interface ExportOptions {
-  format: 'csv' | 'json';
-  dataType: 'mentions' | 'posts';
+  format: "csv" | "json";
+  dataType: "mentions" | "posts";
   userId: string;
   integrationId?: number;
   providerId?: number;
@@ -30,10 +30,10 @@ export class CoreExportService {
 
     // Fetch data based on type
     switch (dataType) {
-      case 'mentions':
+      case "mentions":
         data = await this.fetchMentionsData(options);
         break;
-      case 'posts':
+      case "posts":
         data = await this.fetchPostsData(options);
         break;
       default:
@@ -48,15 +48,15 @@ export class CoreExportService {
     let fileName: string;
 
     switch (format) {
-      case 'csv':
+      case "csv":
         content = this.formatAsCSV(data, dataType);
-        contentType = 'text/csv';
-        fileName = `${dataType}_export_${new Date().toISOString().split('T')[0]}.csv`;
+        contentType = "text/csv";
+        fileName = `${dataType}_export_${new Date().toISOString().split("T")[0]}.csv`;
         break;
-      case 'json':
+      case "json":
         content = JSON.stringify(data, null, 2);
-        contentType = 'application/json';
-        fileName = `${dataType}_export_${new Date().toISOString().split('T')[0]}.json`;
+        contentType = "application/json";
+        fileName = `${dataType}_export_${new Date().toISOString().split("T")[0]}.json`;
         break;
       default:
         throw new Error(`Unsupported format: ${format}`);
@@ -66,7 +66,7 @@ export class CoreExportService {
       fileName,
       content,
       contentType,
-      recordCount
+      recordCount,
     };
   }
 
@@ -117,7 +117,7 @@ export class CoreExportService {
       where: whereClause,
       include: includeOptions,
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 
@@ -133,7 +133,7 @@ export class CoreExportService {
       postTitle: mention.post?.title,
       postUrl: mention.post?.postUrl,
       createdAt: mention.createdAt,
-      aspectAnalyses: options.includeAspectAnalyses 
+      aspectAnalyses: options.includeAspectAnalyses
         ? mention.aspectAnalyses?.map((aspect: any) => ({
             aspect: aspect.aspect,
             sentiment: aspect.sentiment,
@@ -185,7 +185,7 @@ export class CoreExportService {
           : true,
       },
       orderBy: {
-        publishedAt: 'desc',
+        publishedAt: "desc",
       },
     });
 
@@ -193,12 +193,12 @@ export class CoreExportService {
       const mentionsData = post.mentions || [];
       const sentimentCounts = mentionsData.reduce(
         (acc: any, mention: any) => {
-          if (mention.sentiment === 'POSITIVE') acc.positive++;
-          else if (mention.sentiment === 'NEGATIVE') acc.negative++;
+          if (mention.sentiment === "POSITIVE") acc.positive++;
+          else if (mention.sentiment === "NEGATIVE") acc.negative++;
           else acc.neutral++;
           return acc;
         },
-        { positive: 0, neutral: 0, negative: 0 }
+        { positive: 0, neutral: 0, negative: 0 },
       );
 
       return {
@@ -230,53 +230,58 @@ export class CoreExportService {
   }
 
   private formatAsCSV(data: any[], dataType: string): string {
-    if (data.length === 0) return '';
+    if (data.length === 0) return "";
 
     // Get all unique keys from the data
     const allKeys = new Set<string>();
-    data.forEach(item => {
-      Object.keys(item).forEach(key => {
-        if (typeof item[key] !== 'object' || item[key] === null) {
+    data.forEach((item) => {
+      Object.keys(item).forEach((key) => {
+        if (typeof item[key] !== "object" || item[key] === null) {
           allKeys.add(key);
-        } else if (key === 'sentimentCounts') {
+        } else if (key === "sentimentCounts") {
           // Handle sentiment counts specially
-          allKeys.add('positive_count');
-          allKeys.add('neutral_count');
-          allKeys.add('negative_count');
+          allKeys.add("positive_count");
+          allKeys.add("neutral_count");
+          allKeys.add("negative_count");
         }
       });
     });
 
     const headers = Array.from(allKeys);
-    const csvRows = [headers.join(',')];
+    const csvRows = [headers.join(",")];
 
-    data.forEach(item => {
-      const row = headers.map(header => {
+    data.forEach((item) => {
+      const row = headers.map((header) => {
         let value = item[header];
-        
+
         // Handle special cases
-        if (header === 'positive_count') value = item.sentimentCounts?.positive || 0;
-        else if (header === 'neutral_count') value = item.sentimentCounts?.neutral || 0;
-        else if (header === 'negative_count') value = item.sentimentCounts?.negative || 0;
-        else if (value === null || value === undefined) value = '';
-        else if (typeof value === 'object') value = JSON.stringify(value);
-        else if (typeof value === 'string' && value.includes(',')) {
+        if (header === "positive_count")
+          value = item.sentimentCounts?.positive || 0;
+        else if (header === "neutral_count")
+          value = item.sentimentCounts?.neutral || 0;
+        else if (header === "negative_count")
+          value = item.sentimentCounts?.negative || 0;
+        else if (value === null || value === undefined) value = "";
+        else if (typeof value === "object") value = JSON.stringify(value);
+        else if (typeof value === "string" && value.includes(",")) {
           value = `"${value.replace(/"/g, '""')}"`;
         }
 
         return value;
       });
-      
-      csvRows.push(row.join(','));
+
+      csvRows.push(row.join(","));
     });
 
-    return csvRows.join('\n');
+    return csvRows.join("\n");
   }
 
   async mockFileStorage(fileName: string, content: string): Promise<string> {
     // Mock implementation - in real scenario, this would upload to S3 or similar
-    console.log(`Mock storing file: ${fileName}, size: ${content.length} characters`);
-    
+    console.log(
+      `Mock storing file: ${fileName}, size: ${content.length} characters`,
+    );
+
     // Return a mock download URL
     return `/api/exports/download/${fileName}`;
   }

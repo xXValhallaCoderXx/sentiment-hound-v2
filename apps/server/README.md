@@ -94,24 +94,29 @@ $ pnpm turbo test --filter=server
 ```
 
 ### Testing Setup
+
 - **Framework**: Vitest with node environment for server-side testing
 - **NestJS Testing**: Uses @nestjs/testing utilities for dependency injection and module testing
 - **Mocking**: Vitest's `vi` utility for mocking dependencies and external services
 - **Configuration**: Extends shared Vitest configuration from `@repo/vitest-config`
 
 ### Test File Organization
+
 - Test files are co-located with source files using `.test.ts` extension
 - Example: `tasks.service.ts` → `tasks.service.test.ts`
 - Test configuration: `vitest.config.ts`
 
 ### Writing Tests
+
 Tests should follow NestJS testing best practices:
+
 - Use `@nestjs/testing` for creating test modules and dependency injection
 - Mock external dependencies (database, external APIs, shared services)
 - Test business logic and service interactions
 - Use Vitest's `describe`, `it`, `expect`, and `vi` utilities
 
 ### Example Test Pattern
+
 ```typescript
 import { Test, TestingModule } from '@nestjs/testing';
 import { describe, it, expect, beforeEach } from 'vitest';

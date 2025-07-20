@@ -1,15 +1,15 @@
-import React from 'react';
-import { Loader, Center, Stack, Text } from '@mantine/core';
+import React from "react";
+import { Loader, Center, Stack, Text } from "@mantine/core";
 
 export interface LoadingSpinnerProps {
   message?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   centered?: boolean;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  message = 'Loading...',
-  size = 'md',
+  message = "Loading...",
+  size = "md",
   centered = true,
 }) => {
   const content = (
@@ -24,11 +24,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 
   if (centered) {
-    return (
-      <Center py="xl">
-        {content}
-      </Center>
-    );
+    return <Center py="xl">{content}</Center>;
   }
 
   return content;

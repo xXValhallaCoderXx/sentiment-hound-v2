@@ -45,15 +45,19 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       name: formData.get("name") as string,
       invitationToken: formData.get("invitationToken") as string,
     };
-    
+
     const validatedData = signUpSchema.parse(rawData);
 
     // Step B: Conditional Token Validation (The Feature Flag)
-    const requiresInvitation = process.env.SIGNUPS_REQUIRE_INVITATION === 'true';
+    const requiresInvitation =
+      process.env.SIGNUPS_REQUIRE_INVITATION === "true";
     let planId: number | undefined;
 
     // Validate invitation token if provided
-    if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
+    if (
+      validatedData.invitationToken &&
+      validatedData.invitationToken.trim() !== ""
+    ) {
       // Check if token exists and is valid without consuming it
       const tokenCheck = await prisma.invitationToken.findUnique({
         where: { token: validatedData.invitationToken.trim() },
@@ -72,8 +76,10 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
         };
       }
 
-      if (tokenCheck.status === "EXPIRED" || 
-          (tokenCheck.expiresAt && new Date() > tokenCheck.expiresAt)) {
+      if (
+        tokenCheck.status === "EXPIRED" ||
+        (tokenCheck.expiresAt && new Date() > tokenCheck.expiresAt)
+      ) {
         return {
           error: "This invitation token has expired.",
         };
@@ -91,7 +97,7 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     const existingUser = await prisma.user.findUnique({
       where: { email: validatedData.email },
     });
-    
+
     if (existingUser) {
       return {
         error: "An account with this email already exists. Please sign in.",
@@ -120,14 +126,17 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
     });
 
     // Consume the invitation token now that we have a real user ID
-    if (validatedData.invitationToken && validatedData.invitationToken.trim() !== "") {
+    if (
+      validatedData.invitationToken &&
+      validatedData.invitationToken.trim() !== ""
+    ) {
       await prisma.invitationToken.update({
         where: { token: validatedData.invitationToken.trim() },
         data: {
           status: "USED",
           redeemedAt: new Date(),
-          redeemedByUserId: user.id
-        }
+          redeemedByUserId: user.id,
+        },
       });
     }
 
@@ -137,18 +146,19 @@ export async function handleEmailSignUp(prevState: any, formData: FormData) {
       password: validatedData.password,
       redirect: false,
     });
-    
+
     if (result?.error) {
       return {
-        error: "Failed to sign in after registration. Please try signing in manually.",
+        error:
+          "Failed to sign in after registration. Please try signing in manually.",
       };
     }
 
     // Return success without redirecting - let the client handle the redirect
-    return { 
-      success: true, 
+    return {
+      success: true,
       message: "Account created successfully! Redirecting to dashboard...",
-      redirectTo: "/dashboard"
+      redirectTo: "/dashboard",
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -236,7 +246,8 @@ export async function handleForgotPassword(prevState: any, formData: FormData) {
 
     return {
       success: true,
-      message: "If an account with this email exists, you will receive a password reset link.",
+      message:
+        "If an account with this email exists, you will receive a password reset link.",
     };
   } catch (error) {
     if (error instanceof z.ZodError) {

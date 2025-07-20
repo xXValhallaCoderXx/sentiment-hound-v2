@@ -7,7 +7,7 @@ export class YoutubeProfileService {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     const userInfo: IGetUserProfileResponse = await userInfoResponse.json();

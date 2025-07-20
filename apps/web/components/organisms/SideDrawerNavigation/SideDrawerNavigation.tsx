@@ -88,7 +88,7 @@ const SideDrawerNavigation = () => {
                 <span>{item.label}</span>
               </Link>
             ))}
-          </Box>
+          </Box>,
         );
       } else {
         links.push(
@@ -101,7 +101,7 @@ const SideDrawerNavigation = () => {
             {link.icon && <link.icon className={classes.linkIcon} />}
 
             <span>{link.label}</span>
-          </Link>
+          </Link>,
         );
       }
     }

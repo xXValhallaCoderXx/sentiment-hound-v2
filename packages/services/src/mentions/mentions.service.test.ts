@@ -51,16 +51,15 @@ describe("CoreMentionService", () => {
             provider: { name: "YouTube" },
           },
           provider: { name: "YouTube" },
-          aspectAnalyses: [
-            { aspect: "quality", sentiment: "positive" },
-          ],
+          aspectAnalyses: [{ aspect: "quality", sentiment: "positive" }],
         },
       ];
 
       mockRepository.findMany.mockResolvedValue(mockMentions);
       mockRepository.count.mockResolvedValue(1);
 
-      const result = await mentionService.getUserMentionsWithFilters(filterParams);
+      const result =
+        await mentionService.getUserMentionsWithFilters(filterParams);
 
       // Verify the query uses OR condition to support both direct and integration-based provider filtering
       expect(mockRepository.findMany).toHaveBeenCalledWith({
@@ -133,7 +132,8 @@ describe("CoreMentionService", () => {
       mockRepository.findMany.mockResolvedValue(mockMentions);
       mockRepository.count.mockResolvedValue(1);
 
-      const result = await mentionService.getUserMentionsWithFilters(filterParams);
+      const result =
+        await mentionService.getUserMentionsWithFilters(filterParams);
 
       expect(mockRepository.findMany).toHaveBeenCalledWith({
         where: {
@@ -224,7 +224,8 @@ describe("CoreMentionService", () => {
         mockRepository.findMany.mockResolvedValue([testCase.mention]);
         mockRepository.count.mockResolvedValue(1);
 
-        const result = await mentionService.getUserMentionsWithFilters(filterParams);
+        const result =
+          await mentionService.getUserMentionsWithFilters(filterParams);
 
         expect(result.data[0]?.provider).toBe(testCase.expectedProvider);
       }
@@ -400,7 +401,8 @@ describe("CoreMentionService", () => {
       mockRepository.findMany.mockResolvedValue(mockMentions);
       mockRepository.count.mockResolvedValue(1);
 
-      const result = await mentionService.getUserMentionsWithFilters(filterParams);
+      const result =
+        await mentionService.getUserMentionsWithFilters(filterParams);
 
       expect(result.data[0]?.provider).toBe("YouTube");
       expect(result.data).toHaveLength(1);

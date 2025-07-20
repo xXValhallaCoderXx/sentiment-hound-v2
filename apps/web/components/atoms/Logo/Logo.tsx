@@ -11,7 +11,12 @@ interface LogoProps {
   showText?: boolean;
 }
 
-export const Logo = ({ size = 50, className, href, showText = true }: LogoProps) => {
+export const Logo = ({
+  size = 50,
+  className,
+  href,
+  showText = true,
+}: LogoProps) => {
   const logoContent = (
     <Group gap="sm" className={className}>
       <Image
@@ -33,7 +38,7 @@ export const Logo = ({ size = 50, className, href, showText = true }: LogoProps)
 
   if (href) {
     return (
-      <Link href={href} style={{ textDecoration: 'none', cursor: 'pointer' }}>
+      <Link href={href} style={{ textDecoration: "none", cursor: "pointer" }}>
         {logoContent}
       </Link>
     );

@@ -10,7 +10,7 @@ const earlyAccessSchema = z.object({
 
 export async function handleEarlyAccessSignup(
   prevState: unknown,
-  formData: FormData
+  formData: FormData,
 ) {
   try {
     const rawData = {

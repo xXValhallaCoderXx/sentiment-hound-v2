@@ -13,13 +13,13 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps) {
   // Server-side token/code check
   const resolvedSearchParams = await searchParams;
   const token = resolvedSearchParams.token || resolvedSearchParams.code;
-  
+
   // Redirect if token/code is missing or empty
-  if (!token || token === '') {
+  if (!token || token === "") {
     // Use HTTP 308 (Permanent Redirect) to redirect to sign-in page
-    permanentRedirect('/sign-in');
+    permanentRedirect("/sign-in");
   }
-  
+
   // If token/code exists, render the sign-up form
   return <SignUpForm />;
 }

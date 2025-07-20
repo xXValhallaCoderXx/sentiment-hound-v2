@@ -2,8 +2,15 @@
 
 import { auth } from "@/lib/next-auth.lib";
 import { ActionResponse, createErrorResponse } from "@/lib/types";
-import { mentionService, planService, dashboardService, taskService, DashboardStats, TrendDataPoint } from "@repo/services";
-import { TaskType, TaskStatus } from "@repo/db";
+import {
+  mentionService,
+  planService,
+  dashboardService,
+  taskService,
+  DashboardStats,
+  TrendDataPoint,
+} from "@repo/services";
+import { TaskType, TaskStatus, Task } from "@repo/db";
 import type { AnalysisData } from "@/types/analysis.types";
 
 // Re-export types for components
@@ -18,7 +25,9 @@ export interface MentionItem {
   aspects: Array<{ aspect: string; sentiment: string }>;
 }
 
-export async function getDashboardStats(): Promise<ActionResponse<DashboardStats>> {
+export async function getDashboardStats(): Promise<
+  ActionResponse<DashboardStats>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -37,18 +46,20 @@ export async function getDashboardStats(): Promise<ActionResponse<DashboardStats
   } catch (error: unknown) {
     return {
       data: null,
-      error: createErrorResponse(error instanceof Error ? error : new Error('Unknown error')),
+      error: createErrorResponse(
+        error instanceof Error ? error : new Error("Unknown error"),
+      ),
     };
   }
 }
 
-export async function getRecentMentions(
-  filters?: {
-    sentiment?: string;
-    page?: number;
-    pageSize?: number;
-  }
-): Promise<ActionResponse<{ mentions: MentionItem[]; total: number; totalPages: number }>> {
+export async function getRecentMentions(filters?: {
+  sentiment?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<
+  ActionResponse<{ mentions: MentionItem[]; total: number; totalPages: number }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -65,14 +76,23 @@ export async function getRecentMentions(
       pageSize: filters?.pageSize || 10,
     });
 
-    const mentions: MentionItem[] = mentionsResult.data.map((mention) => ({
-      id: mention.id,
-      content: mention.content,
-      sentiment: mention.sentiment,
-      provider: mention.provider,
-      timestamp: mention.createdAt || new Date().toISOString(),
-      aspects: mention.aspects,
-    }));
+    const mentions: MentionItem[] = mentionsResult.data.map(
+      (mention: {
+        id: number;
+        content: string;
+        sentiment: string | null;
+        provider: string;
+        createdAt?: string;
+        aspects: Array<{ aspect: string; sentiment: string }>;
+      }) => ({
+        id: mention.id,
+        content: mention.content,
+        sentiment: mention.sentiment,
+        provider: mention.provider,
+        timestamp: mention.createdAt || new Date().toISOString(),
+        aspects: mention.aspects,
+      }),
+    );
 
     return {
       data: {
@@ -85,15 +105,19 @@ export async function getRecentMentions(
   } catch (error: unknown) {
     return {
       data: null,
-      error: createErrorResponse(error instanceof Error ? error : new Error('Unknown error')),
+      error: createErrorResponse(
+        error instanceof Error ? error : new Error("Unknown error"),
+      ),
     };
   }
 }
 
-export async function getUserPlanInfo(): Promise<ActionResponse<{
-  planName: string;
-  lookbackPeriod: "7days" | "30days" | "90days";
-}>> {
+export async function getUserPlanInfo(): Promise<
+  ActionResponse<{
+    planName: string;
+    lookbackPeriod: "7days" | "30days" | "90days";
+  }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -104,10 +128,10 @@ export async function getUserPlanInfo(): Promise<ActionResponse<{
     }
 
     const userPlan = await planService.getUserPlan(session.user.id);
-    
+
     // Determine lookback period based on plan
     let lookbackPeriod: "7days" | "30days" | "90days" = "30days";
-    
+
     if (userPlan) {
       switch (userPlan.name.toLowerCase()) {
         case "trial":
@@ -135,13 +159,15 @@ export async function getUserPlanInfo(): Promise<ActionResponse<{
   } catch (error: unknown) {
     return {
       data: null,
-      error: createErrorResponse(error instanceof Error ? error : new Error('Unknown error')),
+      error: createErrorResponse(
+        error instanceof Error ? error : new Error("Unknown error"),
+      ),
     };
   }
 }
 
 export async function getSentimentTrend(
-  period: "7days" | "30days" | "90days" = "30days"
+  period: "7days" | "30days" | "90days" = "30days",
 ): Promise<ActionResponse<TrendDataPoint[]>> {
   try {
     const session = await auth();
@@ -152,7 +178,10 @@ export async function getSentimentTrend(
       };
     }
 
-    const trendData = await dashboardService.getSentimentTrend(session.user.id, period);
+    const trendData = await dashboardService.getSentimentTrend(
+      session.user.id,
+      period,
+    );
 
     return {
       data: trendData,
@@ -161,18 +190,24 @@ export async function getSentimentTrend(
   } catch (error: unknown) {
     return {
       data: null,
-      error: createErrorResponse(error instanceof Error ? error : new Error('Unknown error')),
+      error: createErrorResponse(
+        error instanceof Error ? error : new Error("Unknown error"),
+      ),
     };
   }
 }
 
-export async function getUserAnalyses(
-  filters?: {
-    status?: TaskStatus;
-    page?: number;
-    pageSize?: number;
-  }
-): Promise<ActionResponse<{ analyses: AnalysisData[]; total: number; totalPages: number }>> {
+export async function getUserAnalyses(filters?: {
+  status?: TaskStatus;
+  page?: number;
+  pageSize?: number;
+}): Promise<
+  ActionResponse<{
+    analyses: AnalysisData[];
+    total: number;
+    totalPages: number;
+  }>
+> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -191,8 +226,10 @@ export async function getUserAnalyses(
     });
 
     // Sort by creation date descending
-    const sortedTasks = tasks.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-    
+    const sortedTasks = tasks.sort(
+      (a: Task, b: Task) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+
     // Handle pagination
     const page = filters?.page || 1;
     const pageSize = filters?.pageSize || 10;
@@ -200,24 +237,24 @@ export async function getUserAnalyses(
     const paginatedTasks = sortedTasks.slice(skip, skip + pageSize);
 
     // Transform tasks into AnalysisData format
-    const analyses: AnalysisData[] = paginatedTasks.map(task => {
+    const analyses: AnalysisData[] = paginatedTasks.map((task: Task) => {
       // Map TaskStatus to analysis status
-      let status: 'PROCESSING' | 'COMPLETED' | 'FAILED';
+      let status: "PROCESSING" | "COMPLETED" | "FAILED";
       switch (task.status) {
         case TaskStatus.COMPLETED:
-          status = 'COMPLETED';
+          status = "COMPLETED";
           break;
         case TaskStatus.FAILED:
-          status = 'FAILED';
+          status = "FAILED";
           break;
         default:
-          status = 'PROCESSING';
+          status = "PROCESSING";
           break;
       }
 
       return {
         id: task.id.toString(),
-        url: '', // Will be populated when we get related data
+        url: "", // Will be populated when we get related data
         title: `Analysis Task ${task.id}`,
         status,
         overallScore: 0, // Will be calculated when we get sentiment data
@@ -239,7 +276,9 @@ export async function getUserAnalyses(
   } catch (error: unknown) {
     return {
       data: null,
-      error: createErrorResponse(error instanceof Error ? error : new Error('Unknown error')),
+      error: createErrorResponse(
+        error instanceof Error ? error : new Error("Unknown error"),
+      ),
     };
   }
 }

@@ -18,7 +18,7 @@ interface ICreateIntegration {
 export class CoreIntegrationService {
   constructor(
     private repository: IntegrationRepository,
-    private planService?: any // We'll inject this later to avoid circular dependency
+    private planService?: any, // We'll inject this later to avoid circular dependency
   ) {}
 
   setPlanService(planService: any) {
@@ -36,7 +36,7 @@ export class CoreIntegrationService {
 
   getIntegrationUserIntegrationByProviderId(
     providerId: number,
-    userId: string
+    userId: string,
   ): Promise<Integration | null> {
     return this.repository.findByProviderIdAndUserId(providerId, userId);
   }
@@ -58,11 +58,11 @@ export class CoreIntegrationService {
 
   async getUserIntegrationByName(
     userId: string,
-    providerName: string
+    providerName: string,
   ): Promise<Integration | null> {
     if (!userId || !providerName) {
       throw new IntegrationValidationError(
-        "User ID and provider name are required"
+        "User ID and provider name are required",
       );
     }
     return this.repository.findByUserIdAndProviderName(userId, providerName);
@@ -89,7 +89,9 @@ export class CoreIntegrationService {
     if (this.planService) {
       const planCheck = await this.planService.canUserCreateIntegration(userId);
       if (!planCheck.canCreate) {
-        throw new IntegrationValidationError(planCheck.reason || "Plan limit exceeded");
+        throw new IntegrationValidationError(
+          planCheck.reason || "Plan limit exceeded",
+        );
       }
     }
 
@@ -104,11 +106,10 @@ export class CoreIntegrationService {
           refreshTokenExpiresAt,
         },
       });
-
     } catch (error) {
       throw new IntegrationError(
         "Failed to create integration",
-        "INTEGRATION_CREATE_ERROR"
+        "INTEGRATION_CREATE_ERROR",
       );
     }
   }
@@ -129,7 +130,7 @@ export class CoreIntegrationService {
     // Verify the integration exists before attempting to update
     const integration = await this.repository.findByProviderIdAndUserId(
       providerId,
-      userId
+      userId,
     );
     if (!integration) {
       throw new IntegrationNotFoundError(providerId);
@@ -145,7 +146,7 @@ export class CoreIntegrationService {
       console.log("Error updating integration:", error);
       throw new IntegrationError(
         "Failed to update integration",
-        "INTEGRATION_UPDATE_ERROR"
+        "INTEGRATION_UPDATE_ERROR",
       );
     }
   }

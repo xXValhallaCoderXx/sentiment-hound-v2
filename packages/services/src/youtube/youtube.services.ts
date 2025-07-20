@@ -35,7 +35,7 @@ export class YoutubeService {
    * @returns Promise resolving to integration data including tokens and user info
    */
   async connectYoutubeIntegration(
-    code: string
+    code: string,
   ): Promise<IConnectYoutubeIntegration> {
     const { accessToken, refreshToken, expiresIn } =
       await this.authService.generateAuthFromCode(code);
@@ -60,7 +60,7 @@ export class YoutubeService {
    * @returns Promise resolving to new token data
    */
   async refreshAccessToken(
-    refreshToken: string
+    refreshToken: string,
   ): Promise<IYoutubeRefreshToken> {
     return this.authService.refreshAccessToken(refreshToken);
   }
@@ -98,8 +98,16 @@ export class YoutubeService {
    * @param videoUrl - The YouTube video URL to fetch
    * @returns Promise resolving to video data with comments
    */
-  async fetchSingleYoutubeVideo(authToken: string, authMethod: 'OAUTH' | 'API_KEY', videoUrl: string) {
-    return this.contentService.fetchSingleYoutubeVideo(authToken, authMethod, videoUrl);
+  async fetchSingleYoutubeVideo(
+    authToken: string,
+    authMethod: "OAUTH" | "API_KEY",
+    videoUrl: string,
+  ) {
+    return this.contentService.fetchSingleYoutubeVideo(
+      authToken,
+      authMethod,
+      videoUrl,
+    );
   }
 }
 

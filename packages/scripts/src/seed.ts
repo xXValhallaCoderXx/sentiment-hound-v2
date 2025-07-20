@@ -121,7 +121,7 @@ const seed = async (): Promise<void> => {
     });
     if (existingProvider) {
       console.log(
-        `  ✓ Provider "${provider.name}" already exists, skipping...`
+        `  ✓ Provider "${provider.name}" already exists, skipping...`,
       );
     } else {
       await prisma.provider.create({ data: provider });

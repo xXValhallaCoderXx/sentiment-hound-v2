@@ -29,7 +29,7 @@ export class YoutubeAuthService {
   }
 
   async refreshAccessToken(
-    refreshToken: string
+    refreshToken: string,
   ): Promise<IYoutubeRefreshToken> {
     const params = new URLSearchParams();
     params.append("client_id", process.env.AUTH_GOOGLE_ID as string);
@@ -74,7 +74,7 @@ export class YoutubeAuthService {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-      }
+      },
     );
 
     if (!response.ok) {

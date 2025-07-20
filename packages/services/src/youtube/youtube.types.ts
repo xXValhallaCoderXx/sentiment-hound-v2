@@ -7,9 +7,9 @@
  */
 export enum AuthenticationMethod {
   /** OAuth 2.0 token-based authentication (user-specific tokens) */
-  OAUTH = 'oauth',
+  OAUTH = "oauth",
   /** API key-based authentication (application-level access) */
-  API_KEY = 'api_key'
+  API_KEY = "api_key",
 }
 
 /**

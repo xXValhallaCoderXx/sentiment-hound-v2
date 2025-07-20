@@ -15,7 +15,7 @@ export class SubTaskRepository extends BaseRepository<"subTask"> {
   update(
     id: number,
     data: Prisma.SubTaskUpdateInput,
-    args?: Omit<Prisma.SubTaskUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.SubTaskUpdateArgs, "where" | "data">,
   ): Promise<SubTask> {
     return super.update(id, data, args);
   }
@@ -23,7 +23,7 @@ export class SubTaskRepository extends BaseRepository<"subTask"> {
   // Type-safe methods for specific job operations
   findByTaskId(
     taskId: number,
-    args?: Omit<Prisma.SubTaskFindManyArgs, "where">
+    args?: Omit<Prisma.SubTaskFindManyArgs, "where">,
   ) {
     return this.findMany({ taskId }, args);
   }

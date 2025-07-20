@@ -68,7 +68,7 @@ export class UrlParserService {
 
       // Only include metadata if there's actual data
       const hasMetadata = Object.values(metadata).some(
-        (value) => value !== undefined
+        (value) => value !== undefined,
       );
       if (!hasMetadata) {
         metadata = undefined;
@@ -101,7 +101,7 @@ export class UrlParserService {
       new URL(trimmedUrl);
     } catch (error) {
       throw new InvalidUrlError(
-        `Invalid URL format: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Invalid URL format: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }
@@ -114,7 +114,7 @@ export class UrlParserService {
   private validateUrlLength(url: string): void {
     if (url.length > this.config.maxUrlLength) {
       throw new InvalidUrlError(
-        `URL length ${url.length} exceeds maximum allowed length of ${this.config.maxUrlLength}`
+        `URL length ${url.length} exceeds maximum allowed length of ${this.config.maxUrlLength}`,
       );
     }
   }
@@ -148,14 +148,14 @@ export class UrlParserService {
     }
 
     const isSupported = supportedDomains.some(
-      (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
+      (domain) => hostname === domain || hostname.endsWith(`.${domain}`),
     );
 
     if (!isSupported) {
       throw new UnsupportedProviderError(
         `Unsupported domain: ${hostname}. Supported domains: ${supportedDomains.join(", ")}`,
         hostname,
-        url
+        url,
       );
     }
   }
@@ -172,7 +172,7 @@ export class UrlParserService {
     if (protocol !== "http:" && protocol !== "https:") {
       throw new InvalidUrlError(
         `Invalid protocol '${protocol}'. Only HTTP and HTTPS protocols are supported`,
-        url
+        url,
       );
     }
   }
@@ -224,7 +224,7 @@ export class UrlParserService {
     ];
     if (
       youtubeHosts.some(
-        (host) => hostname === host || hostname.endsWith(`.${host}`)
+        (host) => hostname === host || hostname.endsWith(`.${host}`),
       )
     ) {
       const videoId = this.extractYouTubeVideoId(url);
@@ -234,7 +234,7 @@ export class UrlParserService {
         // This is a YouTube domain but invalid YouTube URL format
         throw new InvalidUrlError(
           `Invalid YouTube URL format: missing or invalid video ID in ${url}`,
-          url
+          url,
         );
       }
     }
@@ -242,7 +242,7 @@ export class UrlParserService {
     throw new UnsupportedProviderError(
       `Unable to detect provider from URL: ${url}`,
       hostname,
-      url
+      url,
     );
   }
 
@@ -305,7 +305,7 @@ export class UrlParserService {
     throw new UnsupportedProviderError(
       `URL normalization not implemented for provider: ${provider}`,
       "unknown",
-      url
+      url,
     );
   }
 
@@ -331,7 +331,7 @@ export class UrlParserService {
     if (!videoId) {
       throw new InvalidUrlError(
         "Unable to extract video ID from YouTube URL",
-        url
+        url,
       );
     }
 
@@ -347,7 +347,7 @@ export class UrlParserService {
    */
   private extractMetadata(
     url: string,
-    provider: Provider
+    provider: Provider,
   ): Record<string, any> | undefined {
     if (!this.config.extractMetadata) {
       return undefined;

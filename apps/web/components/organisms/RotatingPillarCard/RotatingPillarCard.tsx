@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import { Stack, Center } from "@mantine/core";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconRocket, IconBulb, IconSparkles } from "@tabler/icons-react";
-import { CardTitle, DimmedText } from "@/components/atoms/Typography/Typography";
+import {
+  CardTitle,
+  DimmedText,
+} from "@/components/atoms/Typography/Typography";
 import Card from "@/components/organisms/Card/Card";
 import classes from "./RotatingPillarCard.module.css";
 
@@ -20,19 +23,22 @@ const brandPillars: BrandPillar[] = [
     id: "power",
     icon: <IconRocket size={56} />,
     headline: "Power That's Unleashed, Not Locked Up",
-    description: "Experience the full potential of sentiment analysis without complexity barriers. Our tools give you enterprise-grade insights with consumer-friendly accessibility.",
+    description:
+      "Experience the full potential of sentiment analysis without complexity barriers. Our tools give you enterprise-grade insights with consumer-friendly accessibility.",
   },
   {
     id: "insight",
     icon: <IconBulb size={56} />,
     headline: "Insight That Drives Action",
-    description: "Transform raw social data into strategic decisions. Our intelligent analysis helps you understand not just what people are saying, but what it means for your business.",
+    description:
+      "Transform raw social data into strategic decisions. Our intelligent analysis helps you understand not just what people are saying, but what it means for your business.",
   },
   {
     id: "innovation",
     icon: <IconSparkles size={56} />,
     headline: "Innovation That Feels Natural",
-    description: "Advanced AI technology that works intuitively. We believe powerful tools should enhance your workflow, not complicate it.",
+    description:
+      "Advanced AI technology that works intuitively. We believe powerful tools should enhance your workflow, not complicate it.",
   },
 ];
 
@@ -70,13 +76,13 @@ export const RotatingPillarCard = () => {
                 <Center style={{ color: "var(--mantine-primary-color)" }}>
                   {currentPillar.icon}
                 </Center>
-                
+
                 <CardTitle ta="center" fz={{ base: 26, md: 30 }}>
                   {currentPillar.headline}
                 </CardTitle>
-                
-                <DimmedText 
-                  ta="center" 
+
+                <DimmedText
+                  ta="center"
                   maw={450}
                   fz={{ base: 16, md: 18 }}
                   style={{ lineHeight: 1.7 }}

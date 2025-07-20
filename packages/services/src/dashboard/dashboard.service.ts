@@ -62,11 +62,13 @@ export class CoreDashboardService {
     });
 
     // Calculate overall sentiment score (0-100)
-    const overallSentimentScore = totalMentions > 0 
-      ? Math.round(
-          ((sentimentCounts.positive * 100 + sentimentCounts.neutral * 50) / totalMentions)
-        )
-      : 50; // Default to neutral if no data
+    const overallSentimentScore =
+      totalMentions > 0
+        ? Math.round(
+            (sentimentCounts.positive * 100 + sentimentCounts.neutral * 50) /
+              totalMentions,
+          )
+        : 50; // Default to neutral if no data
 
     return {
       overallSentimentScore,
@@ -78,7 +80,7 @@ export class CoreDashboardService {
 
   async getSentimentTrend(
     userId: string,
-    period: "7days" | "30days" | "90days" = "30days"
+    period: "7days" | "30days" | "90days" = "30days",
   ): Promise<TrendDataPoint[]> {
     // Calculate the date range based on period
     const now = new Date();
@@ -106,19 +108,26 @@ export class CoreDashboardService {
     });
 
     // Group mentions by date and calculate sentiment scores
-    const dailyData: { [key: string]: { positive: number; neutral: number; negative: number; total: number } } = {};
+    const dailyData: {
+      [key: string]: {
+        positive: number;
+        neutral: number;
+        negative: number;
+        total: number;
+      };
+    } = {};
 
     mentions.forEach((mention) => {
-      const date = mention.createdAt?.toISOString().split('T')[0];
+      const date = mention.createdAt?.toISOString().split("T")[0];
       if (!date) return; // Skip if date is undefined
-      
+
       if (!dailyData[date]) {
         dailyData[date] = { positive: 0, neutral: 0, negative: 0, total: 0 };
       }
 
       const sentiment = mention.sentiment?.toLowerCase();
       dailyData[date].total++;
-      
+
       if (sentiment === "positive") {
         dailyData[date].positive++;
       } else if (sentiment === "negative") {
@@ -129,30 +138,36 @@ export class CoreDashboardService {
     });
 
     // Convert to TrendDataPoint array
-    const trendData: TrendDataPoint[] = Object.entries(dailyData).map(([date, data]) => {
-      // Calculate percentages
-      const positivePercent = data.total > 0 ? Math.round((data.positive / data.total) * 100) : 0;
-      const neutralPercent = data.total > 0 ? Math.round((data.neutral / data.total) * 100) : 0;
-      const negativePercent = data.total > 0 ? Math.round((data.negative / data.total) * 100) : 0;
-      
-      // Calculate overall sentiment score
-      const overall = data.total > 0 
-        ? Math.round(((data.positive * 100 + data.neutral * 50) / data.total))
-        : 50;
+    const trendData: TrendDataPoint[] = Object.entries(dailyData).map(
+      ([date, data]) => {
+        // Calculate percentages
+        const positivePercent =
+          data.total > 0 ? Math.round((data.positive / data.total) * 100) : 0;
+        const neutralPercent =
+          data.total > 0 ? Math.round((data.neutral / data.total) * 100) : 0;
+        const negativePercent =
+          data.total > 0 ? Math.round((data.negative / data.total) * 100) : 0;
 
-      return {
-        date,
-        positive: positivePercent,
-        neutral: neutralPercent,
-        negative: negativePercent,
-        overall,
-      };
-    });
+        // Calculate overall sentiment score
+        const overall =
+          data.total > 0
+            ? Math.round((data.positive * 100 + data.neutral * 50) / data.total)
+            : 50;
+
+        return {
+          date,
+          positive: positivePercent,
+          neutral: neutralPercent,
+          negative: negativePercent,
+          overall,
+        };
+      },
+    );
 
     // Fill in missing dates with neutral data if needed
     const result: TrendDataPoint[] = [];
     const currentDate = new Date(startDate);
-    
+
     while (currentDate <= now) {
       const dateStr = currentDate.toISOString().split("T")[0];
       if (!dateStr) continue; // Skip if dateStr is undefined

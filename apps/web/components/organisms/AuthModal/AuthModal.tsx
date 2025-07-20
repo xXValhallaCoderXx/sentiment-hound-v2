@@ -17,9 +17,9 @@ import {
   ThemeIcon,
   rem,
 } from "@mantine/core";
-import { 
-  IconBrandGoogle, 
-  IconInfoCircle, 
+import {
+  IconBrandGoogle,
+  IconInfoCircle,
   IconGift,
   IconSparkles,
   IconCheck,
@@ -67,7 +67,7 @@ export function AuthModal({ opened, onClose }: AuthModalProps) {
   const [signUpState, signUpAction] = useActionState(handleEmailSignUp, null);
   const [forgotPasswordState, forgotPasswordAction] = useActionState(
     handleForgotPassword,
-    null
+    null,
   );
 
   // Form handling with Mantine form

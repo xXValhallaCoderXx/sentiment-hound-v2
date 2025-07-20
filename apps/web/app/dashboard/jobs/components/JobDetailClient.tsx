@@ -22,7 +22,7 @@ const JobDetailDrawerClient: FC<IJobDetailDrawerClientProps> = ({
 
     // Navigate without the jobId parameter
     router.push(
-      `/dashboard/jobs${params.toString() ? `?${params.toString()}` : ""}`
+      `/dashboard/jobs${params.toString() ? `?${params.toString()}` : ""}`,
     );
   };
 

@@ -5,6 +5,7 @@ This document describes the database migration and seeding process for deploying
 ## Overview
 
 The database deployment process ensures that:
+
 1. **Migrations are applied** - Database schema changes are deployed safely
 2. **Core data is seeded** - Essential application data (Plans and Providers) is populated
 3. **Environment consistency** - All environments have identical core data
@@ -46,17 +47,20 @@ npm run db:seed
 ### 1. Migration Deployment
 
 The `prisma migrate deploy` command:
+
 - ✅ **Production-safe**: Non-interactive and safe for production environments
 - ✅ **Idempotent**: Can be run multiple times safely
 - ✅ **Atomic**: Applies all pending migrations or fails completely
 - ✅ **Locked**: Uses migration lock to prevent concurrent deployments
 
 **When to use:**
+
 - Production deployments
 - Staging environment updates
 - CI/CD pipelines
 
 **NOT for development:**
+
 - Use `npx prisma migrate dev` for local development
 - Use `npx prisma db push` for rapid prototyping
 
@@ -75,6 +79,7 @@ The seeding process populates core application data that must exist for the appl
 | Pro | $99.00 | 10 | 5 | 2,500,000 | true |
 
 **Providers:**
+
 - **YouTube**: Analyze comments from YouTube videos
 - **Reddit**: Analyze comments from Reddit posts
 
@@ -96,6 +101,7 @@ DATABASE_URL="postgresql://username:password@host:port/database"
 ### Database Connectivity
 
 Ensure your deployment environment can connect to the database:
+
 - Network access to database host
 - Correct credentials and permissions
 - Database exists and is accessible
@@ -131,17 +137,17 @@ spec:
   template:
     spec:
       containers:
-      - name: migrate
-        image: your-app-image
-        command: ["sh", "-c"]
-        args: 
-          - "cd packages/database && npm run deploy"
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: database-secret
-              key: url
+        - name: migrate
+          image: your-app-image
+          command: ["sh", "-c"]
+          args:
+            - "cd packages/database && npm run deploy"
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: url
       restartPolicy: OnFailure
 ```
 
@@ -161,6 +167,7 @@ spec:
 #### Vercel/Netlify Example
 
 Add to your build command:
+
 ```bash
 cd packages/database && npm run deploy && cd ../.. && npm run build
 ```
@@ -170,22 +177,27 @@ cd packages/database && npm run deploy && cd ../.. && npm run build
 The `scripts/deploy.sh` script performs the following steps:
 
 1. **Environment Validation**
+
    - Verifies script is run from correct directory
    - Checks that DATABASE_URL is set
 
 2. **Migration Deployment**
+
    - Runs `prisma migrate deploy`
    - Applies all pending migrations atomically
 
 3. **Client Generation**
+
    - Generates fresh Prisma client
    - Ensures type safety with current schema
 
 4. **Build Process**
+
    - Compiles TypeScript seed scripts
    - Prepares executable seed files
 
 5. **Data Seeding**
+
    - Populates core application data
    - Uses idempotent upsert operations
 
@@ -198,21 +210,27 @@ The `scripts/deploy.sh` script performs the following steps:
 ### Common Issues
 
 **Migration Lock Error:**
+
 ```bash
 Error: P3009: migrate found failed migration
 ```
+
 **Solution:** Check and resolve failed migrations, then retry
 
 **Connection Error:**
+
 ```bash
 Error: P1001: Can't reach database server
 ```
+
 **Solution:** Verify DATABASE_URL and network connectivity
 
 **Permission Error:**
+
 ```bash
 Error: P3006: Migration failed to apply cleanly
 ```
+
 **Solution:** Ensure database user has required permissions
 
 ### Manual Recovery
@@ -220,11 +238,13 @@ Error: P3006: Migration failed to apply cleanly
 If the automated deployment fails:
 
 1. **Check migration status:**
+
    ```bash
    npx prisma migrate status
    ```
 
 2. **Reset if necessary (⚠️ destructive):**
+
    ```bash
    npx prisma migrate reset
    ```
@@ -236,12 +256,12 @@ If the automated deployment fails:
 
 ## Development vs Production
 
-| Operation | Development | Production |
-|-----------|-------------|------------|
-| Schema Changes | `prisma migrate dev` | `prisma migrate deploy` |
-| Database Reset | `prisma db push --force-reset` | ❌ Never |
-| Seeding | `npx prisma db seed` | `npm run deploy` |
-| Client Generation | Automatic | `npx prisma generate` |
+| Operation         | Development                    | Production              |
+| ----------------- | ------------------------------ | ----------------------- |
+| Schema Changes    | `prisma migrate dev`           | `prisma migrate deploy` |
+| Database Reset    | `prisma db push --force-reset` | ❌ Never                |
+| Seeding           | `npx prisma db seed`           | `npm run deploy`        |
+| Client Generation | Automatic                      | `npx prisma generate`   |
 
 ## Security Considerations
 
@@ -255,6 +275,7 @@ If the automated deployment fails:
 ## Monitoring and Logging
 
 The deployment script provides detailed logging:
+
 - Migration application status
 - Seeding success/failure
 - Performance timing information

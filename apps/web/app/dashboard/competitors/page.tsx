@@ -30,7 +30,7 @@ const CompetitorsPage = async () => {
 
   try {
     const userPlan = await planService.getUserPlan(session.user.id);
-    
+
     if (!userPlan) {
       return (
         <Box p={{ base: 12, sm: 16, md: 24 }}>
@@ -53,7 +53,8 @@ const CompetitorsPage = async () => {
     }
 
     // Check if user has competitor analysis access
-    const hasAccess = userPlan.features && 
+    const hasAccess =
+      userPlan.features &&
       (userPlan.features as Record<string, unknown>).competitorAnalysis;
 
     if (!hasAccess) {

@@ -191,7 +191,10 @@ describe("CorePostService", () => {
 
       mockRepository.findMany.mockResolvedValue(expectedPosts);
 
-      const result = await postService.getUserPostsByProvider(userId, providerId);
+      const result = await postService.getUserPostsByProvider(
+        userId,
+        providerId,
+      );
 
       expect(mockRepository.findMany).toHaveBeenCalledWith({
         where: {
@@ -308,7 +311,7 @@ describe("CorePostService", () => {
   describe("backward compatibility", () => {
     it("should continue to work with existing post queries", async () => {
       const userId = "user123";
-      
+
       mockRepository.findMany.mockResolvedValue([]);
 
       await postService.findByUserId(userId);

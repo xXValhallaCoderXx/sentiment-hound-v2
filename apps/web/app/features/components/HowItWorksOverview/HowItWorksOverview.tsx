@@ -1,9 +1,12 @@
-import { Container, Title, Text, Grid, GridCol, ThemeIcon } from "@mantine/core";
 import {
-  IconPlug,
-  IconTarget,
-  IconChartLine,
-} from "@tabler/icons-react";
+  Container,
+  Title,
+  Text,
+  Grid,
+  GridCol,
+  ThemeIcon,
+} from "@mantine/core";
+import { IconPlug, IconTarget, IconChartLine } from "@tabler/icons-react";
 import classes from "./HowItWorksOverview.module.css";
 
 const HowItWorksOverview = () => {
@@ -11,17 +14,20 @@ const HowItWorksOverview = () => {
     {
       icon: IconPlug,
       title: "Connect Your Content",
-      description: "Securely link your YouTube, Substack, or other platforms in just a few clicks.",
+      description:
+        "Securely link your YouTube, Substack, or other platforms in just a few clicks.",
     },
     {
       icon: IconTarget,
       title: "Unleash the Hounds",
-      description: "Our AI gets to work, sifting out spam and bots to accurately identify the true sentiment behind the words.",
+      description:
+        "Our AI gets to work, sifting out spam and bots to accurately identify the true sentiment behind the words.",
     },
     {
       icon: IconChartLine,
       title: "Act with Confidence",
-      description: "View everything on a single, unified dashboard and make smarter decisions with data you can trust.",
+      description:
+        "View everything on a single, unified dashboard and make smarter decisions with data you can trust.",
     },
   ];
 

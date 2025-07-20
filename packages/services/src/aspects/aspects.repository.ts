@@ -8,7 +8,7 @@ export class AspectAnalysisRepository extends BaseRepository<"aspectAnalysis"> {
 
   async findByCommentId(
     commentId: number,
-    args?: Omit<Prisma.AspectAnalysisFindManyArgs, "where">
+    args?: Omit<Prisma.AspectAnalysisFindManyArgs, "where">,
   ): Promise<AspectAnalysis[]> {
     return this.findMany({ commentId }, args);
   }
@@ -16,7 +16,7 @@ export class AspectAnalysisRepository extends BaseRepository<"aspectAnalysis"> {
   async update(
     id: number,
     data: Prisma.AspectAnalysisUpdateInput,
-    args?: Omit<Prisma.AspectAnalysisUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.AspectAnalysisUpdateArgs, "where" | "data">,
   ): Promise<AspectAnalysis> {
     return super.update(id, data, args);
   }

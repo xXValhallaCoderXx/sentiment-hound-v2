@@ -118,7 +118,8 @@ const PlansAndEarlyAccessSection = () => {
           </Title>
           <Text className={classes.subtitle}>
             From startups to enterprise teams, we have a plan that scales with
-            your sentiment analysis needs. Please note that plans and pricing for our public launch are not yet final.
+            your sentiment analysis needs. Please note that plans and pricing
+            for our public launch are not yet final.
           </Text>
         </div>
 
@@ -131,7 +132,10 @@ const PlansAndEarlyAccessSection = () => {
                   className={`${classes.pricingCard} ${plan.popular ? classes.popularCard : ""}`}
                 >
                   {plan.popular && (
-                    <MantineBadge className={classes.popularBadge} color="primary.5">
+                    <MantineBadge
+                      className={classes.popularBadge}
+                      color="primary.5"
+                    >
                       Most Popular
                     </MantineBadge>
                   )}
@@ -174,7 +178,8 @@ const PlansAndEarlyAccessSection = () => {
         {/* Pricing Disclaimer */}
         <div className={classes.pricingDisclaimer}>
           <Text className={classes.disclaimerText}>
-            Note: These are preliminary plans for our future launch. All prices are estimates and subject to change.
+            Note: These are preliminary plans for our future launch. All prices
+            are estimates and subject to change.
           </Text>
         </div>
 

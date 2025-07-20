@@ -29,7 +29,7 @@ const PostFilter: React.FC<PostFilterProps> = ({ currentFilters }) => {
   const [searchTerm, setSearchTerm] = useState(currentFilters.searchTerm || "");
   const [sortBy, setSortBy] = useState(currentFilters.sortBy || "createdAt");
   const [sortOrder, setSortOrder] = useState(
-    currentFilters.sortOrder || "desc"
+    currentFilters.sortOrder || "desc",
   );
 
   const handleApplyFilters = () => {

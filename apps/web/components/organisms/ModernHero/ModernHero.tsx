@@ -1,13 +1,20 @@
-'use client';
+"use client";
 
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial } from '@react-three/drei';
-import * as random from 'maath/random/dist/maath-random.esm';
-import { useState, useRef } from 'react';
-import { Container, Title, Text, Button, Group, useMantineTheme } from '@mantine/core';
-import { useSmartNavigation } from '@/lib/navigation.utils';
-import classes from './ModernHero.module.css';
-import { Points as ThreePoints } from 'three';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Points, PointMaterial } from "@react-three/drei";
+import * as random from "maath/random/dist/maath-random.esm";
+import { useState, useRef } from "react";
+import {
+  Container,
+  Title,
+  Text,
+  Button,
+  Group,
+  useMantineTheme,
+} from "@mantine/core";
+import { useSmartNavigation } from "@/lib/navigation.utils";
+import classes from "./ModernHero.module.css";
+import { Points as ThreePoints } from "three";
 
 interface StarfieldProps {
   particleColor: string;
@@ -16,7 +23,9 @@ interface StarfieldProps {
 
 const Starfield = ({ particleColor, ...props }: StarfieldProps) => {
   const ref = useRef<ThreePoints>(null);
-  const [sphere] = useState(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }));
+  const [sphere] = useState(() =>
+    random.inSphere(new Float32Array(5001), { radius: 1.5 }),
+  );
 
   useFrame((state, delta) => {
     if (ref.current) {
@@ -67,7 +76,9 @@ const ModernHero = () => {
             Cut through the noise.
           </Title>
           <Text c="dimmed" size="lg" lh={1.6} mb="xl">
-            Sentiment Hound gives you clear, actionable insights from comments, reviews, and social chatter. Built for founders, creators, and brands.
+            Sentiment Hound gives you clear, actionable insights from comments,
+            reviews, and social chatter. Built for founders, creators, and
+            brands.
           </Text>
 
           <Group className={classes.controls} mt="xl">
@@ -80,7 +91,6 @@ const ModernHero = () => {
             >
               Early Access
             </Button>
-            
           </Group>
         </div>
       </Container>

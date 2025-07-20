@@ -34,9 +34,9 @@ const WhyTeamsLoveSection = () => {
     <div className={classes.wrapper}>
       <Container size="xl" className={classes.container}>
         <div className={classes.header}>
-          <Badge 
-            variant="filled" 
-            colorScheme="secondary" 
+          <Badge
+            variant="filled"
+            colorScheme="secondary"
             icon={<IconHeart size={14} />}
           >
             WHY YOU&apos;LL LOVE US

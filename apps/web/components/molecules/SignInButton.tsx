@@ -8,8 +8,8 @@ export function SignInButton() {
   const { handleNavigation } = useSmartNavigation();
 
   return (
-    <Button 
-      variant="filled" 
+    <Button
+      variant="filled"
       className={classes.earlyAccessButton}
       onClick={() => handleNavigation("/sign-in", "Sign In")}
     >

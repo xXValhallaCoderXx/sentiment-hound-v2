@@ -54,7 +54,7 @@ export function InvitationCodeHandler() {
 
     // Run after a short delay to ensure the user is properly authenticated
     const timer = setTimeout(handlePendingInvitationCode, 1000);
-    
+
     return () => clearTimeout(timer);
   }, []);
 

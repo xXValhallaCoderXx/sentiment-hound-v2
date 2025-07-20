@@ -16,7 +16,7 @@ export function createRepository<
       args: Prisma.SelectSubset<
         T,
         ArgsOf<DelegateMethod<Delegate["findUnique"]>>
-      >
+      >,
     ): Promise<PayloadType | null> => {
       return delegate.findUnique(args);
     },
@@ -25,7 +25,7 @@ export function createRepository<
       args: Prisma.SelectSubset<
         T,
         ArgsOf<DelegateMethod<Delegate["findFirst"]>>
-      >
+      >,
     ): Promise<PayloadType | null> => {
       return delegate.findFirst(args);
     },
@@ -34,25 +34,25 @@ export function createRepository<
       args?: Prisma.SelectSubset<
         T,
         ArgsOf<DelegateMethod<Delegate["findMany"]>>
-      >
+      >,
     ): Promise<PayloadType[]> => {
       return delegate.findMany(args || {});
     },
 
     create: <T extends ArgsType>(
-      args: Prisma.SelectSubset<T, ArgsOf<DelegateMethod<Delegate["create"]>>>
+      args: Prisma.SelectSubset<T, ArgsOf<DelegateMethod<Delegate["create"]>>>,
     ): Promise<PayloadType> => {
       return delegate.create(args);
     },
 
     update: <T extends ArgsType>(
-      args: Prisma.SelectSubset<T, ArgsOf<DelegateMethod<Delegate["update"]>>>
+      args: Prisma.SelectSubset<T, ArgsOf<DelegateMethod<Delegate["update"]>>>,
     ): Promise<PayloadType> => {
       return delegate.update(args);
     },
 
     delete: <T extends ArgsType>(
-      args: Prisma.SelectSubset<T, ArgsOf<DelegateMethod<Delegate["delete"]>>>
+      args: Prisma.SelectSubset<T, ArgsOf<DelegateMethod<Delegate["delete"]>>>,
     ): Promise<PayloadType> => {
       return delegate.delete(args);
     },

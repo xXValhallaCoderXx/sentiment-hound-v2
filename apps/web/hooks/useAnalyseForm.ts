@@ -36,8 +36,8 @@ export const useAnalyseForm = (): UseAnalyseFormReturn => {
   const setUrl = useCallback((url: string) => {
     // Use the comprehensive URL validation utility
     const validation = validateUrl(url);
-    
-    setState(prev => ({
+
+    setState((prev) => ({
       ...prev,
       url,
       isValid: validation.isValid,
@@ -46,14 +46,14 @@ export const useAnalyseForm = (): UseAnalyseFormReturn => {
   }, []);
 
   const setLoading = useCallback((isLoading: boolean) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isLoading,
     }));
   }, []);
 
   const setError = useCallback((error: string | null) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       error,
       isLoading: false,
@@ -65,7 +65,7 @@ export const useAnalyseForm = (): UseAnalyseFormReturn => {
   }, []);
 
   const resetError = useCallback(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       error: null,
     }));

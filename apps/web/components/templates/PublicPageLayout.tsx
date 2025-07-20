@@ -10,7 +10,10 @@ interface PublicPageLayoutProps {
   showFooter?: boolean;
 }
 
-const PublicPageLayout = ({ children, showFooter = true }: PublicPageLayoutProps) => {
+const PublicPageLayout = ({
+  children,
+  showFooter = true,
+}: PublicPageLayoutProps) => {
   return (
     <div style={{ minHeight: "100vh" }}>
       <AppShell header={{ height: 70 }}>

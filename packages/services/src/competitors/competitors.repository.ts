@@ -9,7 +9,7 @@ type Competitor = {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 type CompetitorSentiment = {
   id: number;
@@ -20,7 +20,7 @@ type CompetitorSentiment = {
   mentionCount: number;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export class CompetitorRepository {
   constructor(private prisma: PrismaClient) {}
@@ -70,7 +70,7 @@ export class CompetitorRepository {
   async getCompetitorSentimentData(
     competitorId: number,
     startDate?: Date,
-    endDate?: Date
+    endDate?: Date,
   ): Promise<CompetitorSentiment[]> {
     // Stub implementation - would use Prisma when available
     return [];
@@ -98,7 +98,7 @@ export class CompetitorRepository {
 
   async getCompetitorByUserAndName(
     userId: string,
-    name: string
+    name: string,
   ): Promise<Competitor | null> {
     // Stub implementation - would use Prisma when available
     return null;

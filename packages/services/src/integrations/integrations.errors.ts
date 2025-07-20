@@ -2,7 +2,7 @@ export class IntegrationError extends Error {
   constructor(
     message: string,
     public code: string,
-    public statusCode: number = 400
+    public statusCode: number = 400,
   ) {
     super(message);
     this.name = "IntegrationError";

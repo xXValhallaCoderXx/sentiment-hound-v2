@@ -26,7 +26,7 @@ export async function getUserIntegrations(): Promise<
 }
 
 export async function getIntegration(
-  id: number
+  id: number,
 ): Promise<ActionResponse<Integration>> {
   try {
     const data = await integrationsService.getIntegration(id);
@@ -64,14 +64,14 @@ export async function revokeIntegration(formData: FormData) {
   const integration =
     await integrationsService.getIntegrationUserIntegrationByProviderId(
       Number(providerId),
-      String(userId)
+      String(userId),
     );
   if (!integration) {
     throw new Error("Integration not found");
   }
 
   const provider = await providerService.getProvider(
-    integration.providerId.toString()
+    integration.providerId.toString(),
   );
 
   // Handle YouTube token revocation
@@ -113,10 +113,10 @@ export const integrateProvider = async (formData: FormData) => {
   if (provider && provider.name === "reddit") {
     // Generate a random state parameter for security
     const state = Math.random().toString(36).substring(2, 15);
-    
+
     // Store state in session or another secure way if needed
     // For now, we'll use a simple random string
-    
+
     const authUrl = redditService.generateAuthUrl(state);
     redirect(authUrl);
   }
@@ -129,8 +129,10 @@ export async function shouldShowOnboarding(): Promise<boolean> {
       return false;
     }
 
-    const integrations = await integrationsService.getUserIntegrations(session.user.id);
-    
+    const integrations = await integrationsService.getUserIntegrations(
+      session.user.id,
+    );
+
     // Show onboarding if user has no integrations
     return integrations.length === 0;
   } catch (error) {
@@ -151,8 +153,10 @@ export async function getUserOnboardingStatus() {
       };
     }
 
-    const integrations = await integrationsService.getUserIntegrations(session.user.id);
-    
+    const integrations = await integrationsService.getUserIntegrations(
+      session.user.id,
+    );
+
     return {
       isAuthenticated: true,
       hasIntegrations: integrations.length > 0,

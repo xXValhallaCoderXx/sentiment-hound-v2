@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Card, 
-  TextInput, 
-  Button, 
-  Group, 
-  Title, 
-  Text, 
-  Alert 
+import {
+  Card,
+  TextInput,
+  Button,
+  Group,
+  Title,
+  Text,
+  Alert,
 } from "@mantine/core";
 import { IconPlus, IconInfoCircle } from "@tabler/icons-react";
 import { addCompetitor } from "../actions/add-competitor";
@@ -25,7 +25,7 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!competitorName.trim()) {
       setError("Please enter a competitor name");
       return;
@@ -37,7 +37,7 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
 
     try {
       const result = await addCompetitor(competitorName.trim(), userId);
-      
+
       if (result.success) {
         setCompetitorName("");
         setSuccess(true);
@@ -57,10 +57,10 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
       <Title order={3} mb="md">
         Add Competitor
       </Title>
-      
+
       <Text size="sm" c="dimmed" mb="lg">
-        Track any brand or company across all major platforms. We&apos;ll analyze 
-        sentiment from YouTube, Reddit, Facebook, Instagram, and more.
+        Track any brand or company across all major platforms. We&apos;ll
+        analyze sentiment from YouTube, Reddit, Facebook, Instagram, and more.
       </Text>
 
       <form onSubmit={handleSubmit}>
@@ -72,8 +72,8 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
             style={{ flex: 1 }}
             disabled={loading}
           />
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             loading={loading}
             leftSection={<IconPlus size={16} />}
           >
@@ -83,9 +83,9 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
       </form>
 
       {error && (
-        <Alert 
-          variant="light" 
-          color="red" 
+        <Alert
+          variant="light"
+          color="red"
           mt="md"
           icon={<IconInfoCircle size={16} />}
         >
@@ -94,13 +94,14 @@ const AddCompetitorForm = ({ userId }: AddCompetitorFormProps) => {
       )}
 
       {success && (
-        <Alert 
-          variant="light" 
-          color="green" 
+        <Alert
+          variant="light"
+          color="green"
           mt="md"
           icon={<IconInfoCircle size={16} />}
         >
-          Competitor added successfully! Sentiment data will be collected automatically.
+          Competitor added successfully! Sentiment data will be collected
+          automatically.
         </Alert>
       )}
     </Card>

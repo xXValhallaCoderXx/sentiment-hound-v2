@@ -17,7 +17,7 @@ export class MentionRepository {
 
   async findById(
     id: string | number,
-    args?: Omit<Prisma.MentionFindUniqueArgs, "where">
+    args?: Omit<Prisma.MentionFindUniqueArgs, "where">,
   ): Promise<Mention | null> {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.mention.findUnique({
@@ -28,7 +28,7 @@ export class MentionRepository {
 
   async findUnique(
     where: Prisma.MentionWhereUniqueInput,
-    args?: Omit<Prisma.MentionFindUniqueArgs, "where">
+    args?: Omit<Prisma.MentionFindUniqueArgs, "where">,
   ): Promise<Mention | null> {
     return this.prisma.mention.findUnique({
       where,
@@ -38,7 +38,7 @@ export class MentionRepository {
 
   async findFirst(
     where: Prisma.MentionWhereInput,
-    args?: Omit<Prisma.MentionFindFirstArgs, "where">
+    args?: Omit<Prisma.MentionFindFirstArgs, "where">,
   ): Promise<Mention | null> {
     return this.prisma.mention.findFirst({
       where,
@@ -53,7 +53,7 @@ export class MentionRepository {
   async update(
     id: string | number,
     data: Prisma.MentionUpdateInput,
-    args?: Omit<Prisma.MentionUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.MentionUpdateArgs, "where" | "data">,
   ): Promise<Mention> {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.mention.update({
@@ -65,7 +65,7 @@ export class MentionRepository {
 
   async delete(
     id: string | number,
-    args?: Omit<Prisma.MentionDeleteArgs, "where">
+    args?: Omit<Prisma.MentionDeleteArgs, "where">,
   ): Promise<Mention> {
     const idNumber = typeof id === "string" ? parseInt(id) : id;
     return this.prisma.mention.delete({
@@ -76,7 +76,7 @@ export class MentionRepository {
 
   async count(
     where: Prisma.MentionWhereInput,
-    args?: Omit<Prisma.MentionCountArgs, "where">
+    args?: Omit<Prisma.MentionCountArgs, "where">,
   ): Promise<number> {
     return this.prisma.mention.count({
       where,

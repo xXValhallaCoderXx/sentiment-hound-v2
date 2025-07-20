@@ -2,10 +2,10 @@
  * Enum for plan names to ensure type safety and prevent typos across the application
  */
 export enum PlanName {
-  DEVELOPER = 'Developer',
-  TRIAL = 'Trial',
-  STARTER = 'Starter',
-  PRO = 'Pro',
+  DEVELOPER = "Developer",
+  TRIAL = "Trial",
+  STARTER = "Starter",
+  PRO = "Pro",
 }
 
 /**
@@ -34,7 +34,10 @@ export const PLAN_HIERARCHY = {
 /**
  * Feature matrix definition for each plan as specified in the PRD
  */
-export const PLAN_FEATURES: Record<PlanName.TRIAL | PlanName.STARTER | PlanName.PRO, PlanFeatureMatrix> = {
+export const PLAN_FEATURES: Record<
+  PlanName.TRIAL | PlanName.STARTER | PlanName.PRO,
+  PlanFeatureMatrix
+> = {
   [PlanName.TRIAL]: {
     monthlyTokenAllowance: 0,
     dataIntegrations: 0,

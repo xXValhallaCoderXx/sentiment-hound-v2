@@ -1,7 +1,21 @@
 "use client";
 
-import { Box, Card, Group, Progress, Stack, Text, ThemeIcon, Badge } from "@mantine/core";
-import { IconTrendingUp, IconKeyboard, IconPlug, IconCoins } from "@tabler/icons-react";
+import {
+  Box,
+  Card,
+  Group,
+  Progress,
+  Stack,
+  Text,
+  ThemeIcon,
+  Badge,
+} from "@mantine/core";
+import {
+  IconTrendingUp,
+  IconKeyboard,
+  IconPlug,
+  IconCoins,
+} from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { getPlanUsageStats } from "@/actions/plan-usage.actions";
 
@@ -110,7 +124,7 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = () => {
                 }
                 color={getProgressColor(
                   stats.integrations.current,
-                  stats.integrations.max
+                  stats.integrations.max,
                 )}
                 size="sm"
               />
@@ -139,7 +153,7 @@ const PlanUsageStats: FC<PlanUsageStatsProps> = () => {
                 }
                 color={getProgressColor(
                   stats.trackedKeywords.current,
-                  stats.trackedKeywords.max
+                  stats.trackedKeywords.max,
                 )}
                 size="sm"
               />

@@ -1,17 +1,17 @@
 /**
  * Validation Tests for ExecutionContext userId Type Fix
- * 
- * These tests specifically validate that the userId field is properly typed 
+ *
+ * These tests specifically validate that the userId field is properly typed
  * as a string CUID and that invalid values are rejected.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { buildExecutionContext } from './execution-context.builder';
-import { IntegrationAuthenticationError } from '../integrations/integrations.errors';
-import { TaskStatus, TaskType, SubTaskStatus, SubTaskType } from '@repo/db';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { buildExecutionContext } from "./execution-context.builder";
+import { IntegrationAuthenticationError } from "../integrations/integrations.errors";
+import { TaskStatus, TaskType, SubTaskStatus, SubTaskType } from "@repo/db";
 
 // Mock the service dependencies
-vi.mock('../index', () => ({
+vi.mock("../index", () => ({
   subtaskService: {
     getTaskWithProviderForSubTask: vi.fn(),
   },
@@ -25,24 +25,24 @@ vi.mock('../index', () => ({
 }));
 
 // Import the mocked services
-import { subtaskService, youtubeService, integrationsService } from '../index';
+import { subtaskService, youtubeService, integrationsService } from "../index";
 
-describe('ExecutionContext userId Type Validation', () => {
+describe("ExecutionContext userId Type Validation", () => {
   const mockJobId = 123;
-  const mockJobData = { videoUrl: 'https://youtube.com/watch?v=test123' };
+  const mockJobData = { videoUrl: "https://youtube.com/watch?v=test123" };
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Valid CUID string userId', () => {
-    it('should accept valid CUID string userId', async () => {
-      const validCUID = 'clt4x8k9z0000xyz123abcdef';
-      
+  describe("Valid CUID string userId", () => {
+    it("should accept valid CUID string userId", async () => {
+      const validCUID = "clt4x8k9z0000xyz123abcdef";
+
       // Mock environment variable for master API key
       const originalEnv = process.env.YOUTUBE_MASTER_API_KEY;
-      process.env.YOUTUBE_MASTER_API_KEY = 'test-master-api-key';
-      
+      process.env.YOUTUBE_MASTER_API_KEY = "test-master-api-key";
+
       const mockSubTask = {
         id: mockJobId,
         status: SubTaskStatus.PENDING,
@@ -64,8 +64,8 @@ describe('ExecutionContext userId Type Validation', () => {
           updatedAt: new Date(),
           user: {
             id: validCUID,
-            name: 'Test User',
-            email: 'test@example.com',
+            name: "Test User",
+            email: "test@example.com",
             emailVerified: null,
             image: null,
             password: null,
@@ -78,23 +78,27 @@ describe('ExecutionContext userId Type Validation', () => {
           },
           provider: {
             id: 1,
-            name: 'YouTube',
-            image: 'youtube-logo.png',
-            description: 'YouTube video platform',
+            name: "YouTube",
+            image: "youtube-logo.png",
+            description: "YouTube video platform",
             createdAt: new Date(),
             updatedAt: new Date(),
           },
         },
       };
 
-      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(mockSubTask);
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId).mockResolvedValue(null);
+      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(
+        mockSubTask,
+      );
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockResolvedValue(null);
 
       const result = await buildExecutionContext(mockJobId, mockJobData);
 
       expect(result.userId).toBe(validCUID);
-      expect(typeof result.userId).toBe('string');
-      
+      expect(typeof result.userId).toBe("string");
+
       // Clean up environment
       if (originalEnv !== undefined) {
         process.env.YOUTUBE_MASTER_API_KEY = originalEnv;
@@ -104,8 +108,8 @@ describe('ExecutionContext userId Type Validation', () => {
     });
   });
 
-  describe('Invalid userId validation', () => {
-    it('should reject empty string userId', async () => {
+  describe("Invalid userId validation", () => {
+    it("should reject empty string userId", async () => {
       const mockSubTask = {
         id: mockJobId,
         status: SubTaskStatus.PENDING,
@@ -120,15 +124,15 @@ describe('ExecutionContext userId Type Validation', () => {
           type: TaskType.FETCH_CONTENT,
           status: TaskStatus.PENDING,
           errorMessage: null,
-          userId: '',
+          userId: "",
           integrationId: null,
           providerId: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
           user: {
-            id: '',
-            name: 'Test User',
-            email: 'test@example.com',
+            id: "",
+            name: "Test User",
+            email: "test@example.com",
             emailVerified: null,
             image: null,
             password: null,
@@ -141,23 +145,25 @@ describe('ExecutionContext userId Type Validation', () => {
           },
           provider: {
             id: 1,
-            name: 'YouTube',
-            image: 'youtube-logo.png',
-            description: 'YouTube video platform',
+            name: "YouTube",
+            image: "youtube-logo.png",
+            description: "YouTube video platform",
             createdAt: new Date(),
             updatedAt: new Date(),
           },
         },
       };
 
-      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(mockSubTask);
+      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(
+        mockSubTask,
+      );
 
-      await expect(buildExecutionContext(mockJobId, mockJobData))
-        .rejects
-        .toThrow(IntegrationAuthenticationError);
+      await expect(
+        buildExecutionContext(mockJobId, mockJobData),
+      ).rejects.toThrow(IntegrationAuthenticationError);
     });
 
-    it('should reject whitespace-only userId', async () => {
+    it("should reject whitespace-only userId", async () => {
       const mockSubTask = {
         id: mockJobId,
         status: SubTaskStatus.PENDING,
@@ -172,15 +178,15 @@ describe('ExecutionContext userId Type Validation', () => {
           type: TaskType.FETCH_CONTENT,
           status: TaskStatus.PENDING,
           errorMessage: null,
-          userId: '   ',
+          userId: "   ",
           integrationId: null,
           providerId: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
           user: {
-            id: '   ',
-            name: 'Test User',
-            email: 'test@example.com',
+            id: "   ",
+            name: "Test User",
+            email: "test@example.com",
             emailVerified: null,
             image: null,
             password: null,
@@ -193,40 +199,42 @@ describe('ExecutionContext userId Type Validation', () => {
           },
           provider: {
             id: 1,
-            name: 'YouTube',
-            image: 'youtube-logo.png',
-            description: 'YouTube video platform',
+            name: "YouTube",
+            image: "youtube-logo.png",
+            description: "YouTube video platform",
             createdAt: new Date(),
             updatedAt: new Date(),
           },
         },
       };
 
-      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(mockSubTask);
+      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(
+        mockSubTask,
+      );
 
-      await expect(buildExecutionContext(mockJobId, mockJobData))
-        .rejects
-        .toThrow(IntegrationAuthenticationError);
+      await expect(
+        buildExecutionContext(mockJobId, mockJobData),
+      ).rejects.toThrow(IntegrationAuthenticationError);
     });
   });
 
-  describe('Type safety validation', () => {
-    it('should ensure userId is typed as string in ExecutionContext interface', () => {
+  describe("Type safety validation", () => {
+    it("should ensure userId is typed as string in ExecutionContext interface", () => {
       // This test ensures compile-time type safety
       // If userId were typed as number, this would fail TypeScript compilation
       const validContext = {
-        userId: 'clt4x8k9z0000xyz123abcdef', // Must be string, not number
+        userId: "clt4x8k9z0000xyz123abcdef", // Must be string, not number
         providerId: 1,
-        providerName: 'YouTube',
-        authToken: 'token123',
+        providerName: "YouTube",
+        authToken: "token123",
         jobData: mockJobData,
         integrationId: 789,
-        tokenSource: 'USER_OAUTH' as const,
-        authMethod: 'OAUTH' as const,
+        tokenSource: "USER_OAUTH" as const,
+        authMethod: "OAUTH" as const,
       };
 
       // TypeScript compilation will fail if userId is not a string
-      expect(typeof validContext.userId).toBe('string');
+      expect(typeof validContext.userId).toBe("string");
     });
   });
 });

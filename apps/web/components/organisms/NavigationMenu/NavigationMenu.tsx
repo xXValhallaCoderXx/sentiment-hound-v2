@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { SignInButton } from '@/components/molecules/SignInButton';
-import SharedNavigationMenu from '../SharedNavigationMenu/SharedNavigationMenu';
+import { SignInButton } from "@/components/molecules/SignInButton";
+import SharedNavigationMenu from "../SharedNavigationMenu/SharedNavigationMenu";
 
 const NavigationMenu = () => {
   const links = [

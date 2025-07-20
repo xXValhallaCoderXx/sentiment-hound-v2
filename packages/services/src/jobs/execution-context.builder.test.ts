@@ -14,14 +14,14 @@
  * master API key fallback, and error conditions.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { buildExecutionContext } from './execution-context.builder';
-import { ExecutionContext, TokenSource } from './execution-context.interface';
-import { IntegrationAuthenticationError } from '../integrations/integrations.errors';
-import { TaskStatus, TaskType, SubTaskStatus, SubTaskType } from '@repo/db';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { buildExecutionContext } from "./execution-context.builder";
+import { ExecutionContext, TokenSource } from "./execution-context.interface";
+import { IntegrationAuthenticationError } from "../integrations/integrations.errors";
+import { TaskStatus, TaskType, SubTaskStatus, SubTaskType } from "@repo/db";
 
 // Mock the service dependencies
-vi.mock('../index', () => ({
+vi.mock("../index", () => ({
   subtaskService: {
     getTaskWithProviderForSubTask: vi.fn(),
   },
@@ -35,12 +35,12 @@ vi.mock('../index', () => ({
 }));
 
 // Import the mocked services
-import { subtaskService, youtubeService, integrationsService } from '../index';
+import { subtaskService, youtubeService, integrationsService } from "../index";
 
-describe('buildExecutionContext', () => {
+describe("buildExecutionContext", () => {
   const mockJobId = 123;
-  const mockJobData = { videoUrl: 'https://youtube.com/watch?v=abc123' };
-  
+  const mockJobData = { videoUrl: "https://youtube.com/watch?v=abc123" };
+
   // Create full mock objects that match the Prisma schema
   const mockSubTask = {
     id: mockJobId,
@@ -56,15 +56,15 @@ describe('buildExecutionContext', () => {
       type: TaskType.FETCH_CONTENT,
       status: TaskStatus.PENDING,
       errorMessage: null,
-      userId: '456',
+      userId: "456",
       integrationId: null,
       providerId: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
       user: {
-        id: '456',
-        name: 'Test User',
-        email: 'test@example.com',
+        id: "456",
+        name: "Test User",
+        email: "test@example.com",
         emailVerified: null,
         image: null,
         password: null,
@@ -77,9 +77,9 @@ describe('buildExecutionContext', () => {
       },
       provider: {
         id: 1,
-        name: 'YouTube',
-        image: 'youtube-logo.png',
-        description: 'YouTube video platform',
+        name: "YouTube",
+        image: "youtube-logo.png",
+        description: "YouTube video platform",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -88,11 +88,11 @@ describe('buildExecutionContext', () => {
 
   const mockIntegration = {
     id: 789,
-    accountId: 'youtube-account-123',
-    accessToken: 'valid_access_token',
-    refreshToken: 'valid_refresh_token',
+    accountId: "youtube-account-123",
+    accessToken: "valid_access_token",
+    refreshToken: "valid_refresh_token",
     refreshTokenExpiresAt: new Date(Date.now() + 3600000), // 1 hour from now
-    userId: '456',
+    userId: "456",
     isActive: true,
     providerId: 1,
     createdAt: new Date(),
@@ -101,40 +101,45 @@ describe('buildExecutionContext', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Default mock setup - can be overridden in individual tests
-    vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(mockSubTask);
+    vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockResolvedValue(
+      mockSubTask,
+    );
   });
 
-  describe('Successful user OAuth token scenario', () => {
-    it('should use valid non-expired user OAuth token', async () => {
+  describe("Successful user OAuth token scenario", () => {
+    it("should use valid non-expired user OAuth token", async () => {
       // Arrange
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
-        .mockResolvedValue(mockIntegration);
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockResolvedValue(mockIntegration);
 
       // Act
       const result = await buildExecutionContext(mockJobId, mockJobData);
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: '456',
+        userId: "456",
         providerId: 1,
-        providerName: 'YouTube',
-        authToken: 'valid_access_token',
+        providerName: "YouTube",
+        authToken: "valid_access_token",
         jobData: mockJobData,
         integrationId: 789,
         tokenSource: TokenSource.USER_OAUTH,
-        authMethod: 'OAUTH',
+        authMethod: "OAUTH",
       });
 
       // Verify that token refresh was not called since token is valid
       expect(youtubeService.refreshAccessToken).not.toHaveBeenCalled();
-      expect(integrationsService.updateIntegrationAuthCredentials).not.toHaveBeenCalled();
+      expect(
+        integrationsService.updateIntegrationAuthCredentials,
+      ).not.toHaveBeenCalled();
     });
   });
 
-  describe('Expired OAuth token refresh scenario', () => {
-    it('should successfully refresh expired OAuth token', async () => {
+  describe("Expired OAuth token refresh scenario", () => {
+    it("should successfully refresh expired OAuth token", async () => {
       // Arrange
       const expiredIntegration = {
         ...mockIntegration,
@@ -142,8 +147,8 @@ describe('buildExecutionContext', () => {
       };
 
       const refreshedToken = {
-        accessToken: 'new_access_token',
-        refreshToken: 'new_refresh_token',
+        accessToken: "new_access_token",
+        refreshToken: "new_refresh_token",
         expiresIn: 3600,
         expiresAt: new Date(Date.now() + 3600000),
       };
@@ -155,40 +160,47 @@ describe('buildExecutionContext', () => {
         refreshToken: refreshedToken.refreshToken,
       };
 
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
-        .mockResolvedValue(expiredIntegration);
-      vi.mocked(youtubeService.refreshAccessToken)
-        .mockResolvedValue(refreshedToken);
-      vi.mocked(integrationsService.updateIntegrationAuthCredentials)
-        .mockResolvedValue(updatedIntegration);
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockResolvedValue(expiredIntegration);
+      vi.mocked(youtubeService.refreshAccessToken).mockResolvedValue(
+        refreshedToken,
+      );
+      vi.mocked(
+        integrationsService.updateIntegrationAuthCredentials,
+      ).mockResolvedValue(updatedIntegration);
 
       // Act
       const result = await buildExecutionContext(mockJobId, mockJobData);
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: '456',
+        userId: "456",
         providerId: 1,
-        providerName: 'YouTube',
-        authToken: 'new_access_token',
+        providerName: "YouTube",
+        authToken: "new_access_token",
         jobData: mockJobData,
         integrationId: 999,
         tokenSource: TokenSource.USER_OAUTH,
-        authMethod: 'OAUTH',
+        authMethod: "OAUTH",
       });
 
       // Verify the refresh flow was called correctly
-      expect(youtubeService.refreshAccessToken).toHaveBeenCalledWith('valid_refresh_token');
-      expect(integrationsService.updateIntegrationAuthCredentials).toHaveBeenCalledWith({
+      expect(youtubeService.refreshAccessToken).toHaveBeenCalledWith(
+        "valid_refresh_token",
+      );
+      expect(
+        integrationsService.updateIntegrationAuthCredentials,
+      ).toHaveBeenCalledWith({
         providerId: 1,
-        userId: '456',
-        accessToken: 'new_access_token',
-        refreshToken: 'new_refresh_token',
+        userId: "456",
+        accessToken: "new_access_token",
+        refreshToken: "new_refresh_token",
         accessTokenExpiry: expect.any(Date),
       });
     });
 
-    it('should fallback to master token when OAuth refresh fails', async () => {
+    it("should fallback to master token when OAuth refresh fails", async () => {
       // Arrange
       const expiredIntegration = {
         ...mockIntegration,
@@ -196,112 +208,128 @@ describe('buildExecutionContext', () => {
       };
 
       // Set environment variable for master token
-      process.env.YOUTUBE_MASTER_API_KEY = 'master_api_token';
+      process.env.YOUTUBE_MASTER_API_KEY = "master_api_token";
 
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
-        .mockResolvedValue(expiredIntegration);
-      vi.mocked(youtubeService.refreshAccessToken)
-        .mockRejectedValue(new Error('Refresh failed'));
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockResolvedValue(expiredIntegration);
+      vi.mocked(youtubeService.refreshAccessToken).mockRejectedValue(
+        new Error("Refresh failed"),
+      );
 
       // Act
       const result = await buildExecutionContext(mockJobId, mockJobData);
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: '456',
+        userId: "456",
         providerId: 1,
-        providerName: 'YouTube',
-        authToken: 'master_api_token',
+        providerName: "YouTube",
+        authToken: "master_api_token",
         jobData: mockJobData,
         integrationId: null,
         tokenSource: TokenSource.MASTER_API_KEY,
-        authMethod: 'API_KEY',
+        authMethod: "API_KEY",
       });
 
       // Verify refresh was attempted but update was not called due to failure
-      expect(youtubeService.refreshAccessToken).toHaveBeenCalledWith('valid_refresh_token');
-      expect(integrationsService.updateIntegrationAuthCredentials).not.toHaveBeenCalled();
+      expect(youtubeService.refreshAccessToken).toHaveBeenCalledWith(
+        "valid_refresh_token",
+      );
+      expect(
+        integrationsService.updateIntegrationAuthCredentials,
+      ).not.toHaveBeenCalled();
 
       // Clean up
       delete process.env.YOUTUBE_MASTER_API_KEY;
     });
   });
 
-  describe('Missing user integration scenario', () => {
-    it('should use master token when user has no integration', async () => {
+  describe("Missing user integration scenario", () => {
+    it("should use master token when user has no integration", async () => {
       // Arrange
-      process.env.YOUTUBE_MASTER_API_KEY = 'master_api_token';
+      process.env.YOUTUBE_MASTER_API_KEY = "master_api_token";
 
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
-        .mockResolvedValue(null);
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockResolvedValue(null);
 
       // Act
       const result = await buildExecutionContext(mockJobId, mockJobData);
 
       // Assert
       expect(result).toEqual<ExecutionContext>({
-        userId: '456',
+        userId: "456",
         providerId: 1,
-        providerName: 'YouTube',
-        authToken: 'master_api_token',
+        providerName: "YouTube",
+        authToken: "master_api_token",
         jobData: mockJobData,
         integrationId: null,
         tokenSource: TokenSource.MASTER_API_KEY,
-        authMethod: 'API_KEY',
+        authMethod: "API_KEY",
       });
 
       // Verify no token operations were attempted
       expect(youtubeService.refreshAccessToken).not.toHaveBeenCalled();
-      expect(integrationsService.updateIntegrationAuthCredentials).not.toHaveBeenCalled();
+      expect(
+        integrationsService.updateIntegrationAuthCredentials,
+      ).not.toHaveBeenCalled();
 
       // Clean up
       delete process.env.YOUTUBE_MASTER_API_KEY;
     });
   });
 
-  describe('Complete authentication failure scenario', () => {
-    it('should throw IntegrationAuthenticationError when no authentication method available', async () => {
+  describe("Complete authentication failure scenario", () => {
+    it("should throw IntegrationAuthenticationError when no authentication method available", async () => {
       // Arrange
       delete process.env.YOUTUBE_MASTER_API_KEY;
 
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
-        .mockResolvedValue(null);
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockResolvedValue(null);
 
       // Act & Assert
-      await expect(buildExecutionContext(mockJobId, mockJobData))
-        .rejects
-        .toThrow(IntegrationAuthenticationError);
+      await expect(
+        buildExecutionContext(mockJobId, mockJobData),
+      ).rejects.toThrow(IntegrationAuthenticationError);
 
-      await expect(buildExecutionContext(mockJobId, mockJobData))
-        .rejects
-        .toThrow(/No valid authentication method available for job 123/);
+      await expect(
+        buildExecutionContext(mockJobId, mockJobData),
+      ).rejects.toThrow(/No valid authentication method available for job 123/);
     });
 
-    it('should throw IntegrationAuthenticationError when job data fetch fails', async () => {
+    it("should throw IntegrationAuthenticationError when job data fetch fails", async () => {
       // Arrange
-      vi.mocked(subtaskService.getTaskWithProviderForSubTask)
-        .mockRejectedValue(new Error('Job not found'));
+      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockRejectedValue(
+        new Error("Job not found"),
+      );
 
       // Act & Assert
-      await expect(buildExecutionContext(mockJobId, mockJobData))
-        .rejects
-        .toThrow(IntegrationAuthenticationError);
+      await expect(
+        buildExecutionContext(mockJobId, mockJobData),
+      ).rejects.toThrow(IntegrationAuthenticationError);
 
-      await expect(buildExecutionContext(mockJobId, mockJobData))
-        .rejects
-        .toThrow(/Failed to build execution context for job 123.*Job not found/);
+      await expect(
+        buildExecutionContext(mockJobId, mockJobData),
+      ).rejects.toThrow(
+        /Failed to build execution context for job 123.*Job not found/,
+      );
     });
 
-    it('should preserve IntegrationAuthenticationError when explicitly thrown', async () => {
+    it("should preserve IntegrationAuthenticationError when explicitly thrown", async () => {
       // Arrange
-      const originalError = new IntegrationAuthenticationError('Custom auth error');
-      vi.mocked(subtaskService.getTaskWithProviderForSubTask)
-        .mockRejectedValue(originalError);
+      const originalError = new IntegrationAuthenticationError(
+        "Custom auth error",
+      );
+      vi.mocked(subtaskService.getTaskWithProviderForSubTask).mockRejectedValue(
+        originalError,
+      );
 
       // Act & Assert
-      await expect(buildExecutionContext(mockJobId, mockJobData))
-        .rejects
-        .toThrow('Custom auth error');
+      await expect(
+        buildExecutionContext(mockJobId, mockJobData),
+      ).rejects.toThrow("Custom auth error");
 
       // Should be the exact same error, not wrapped
       try {
@@ -312,43 +340,45 @@ describe('buildExecutionContext', () => {
     });
   });
 
-  describe('Edge cases and validation', () => {
-    it('should handle integration with missing access token', async () => {
+  describe("Edge cases and validation", () => {
+    it("should handle integration with missing access token", async () => {
       // Arrange
       const integrationWithoutToken = {
         ...mockIntegration,
-        accessToken: '', // Missing access token
+        accessToken: "", // Missing access token
         refreshTokenExpiresAt: new Date(Date.now() + 3600000), // Not expired
       };
 
-      process.env.YOUTUBE_MASTER_API_KEY = 'master_fallback_token';
+      process.env.YOUTUBE_MASTER_API_KEY = "master_fallback_token";
 
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
-        .mockResolvedValue(integrationWithoutToken);
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockResolvedValue(integrationWithoutToken);
 
       // Act
       const result = await buildExecutionContext(mockJobId, mockJobData);
 
       // Assert - Should fallback to master token
-      expect(result.authToken).toBe('master_fallback_token');
+      expect(result.authToken).toBe("master_fallback_token");
       expect(result.tokenSource).toBe(TokenSource.MASTER_API_KEY);
 
       // Clean up
       delete process.env.YOUTUBE_MASTER_API_KEY;
     });
 
-    it('should handle integration service throwing error (not null return)', async () => {
+    it("should handle integration service throwing error (not null return)", async () => {
       // Arrange
-      process.env.YOUTUBE_MASTER_API_KEY = 'master_api_token';
+      process.env.YOUTUBE_MASTER_API_KEY = "master_api_token";
 
-      vi.mocked(integrationsService.getIntegrationUserIntegrationByProviderId)
-        .mockRejectedValue(new Error('Database connection error'));
+      vi.mocked(
+        integrationsService.getIntegrationUserIntegrationByProviderId,
+      ).mockRejectedValue(new Error("Database connection error"));
 
       // Act
       const result = await buildExecutionContext(mockJobId, mockJobData);
 
       // Assert - Should fallback to master token even when service throws
-      expect(result.authToken).toBe('master_api_token');
+      expect(result.authToken).toBe("master_api_token");
       expect(result.tokenSource).toBe(TokenSource.MASTER_API_KEY);
 
       // Clean up

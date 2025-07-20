@@ -52,7 +52,7 @@ const competitorRepository = new CompetitorRepository(prisma);
 // Create singleton instances of services
 export const providerService = new CoreProviderService(providerRepository);
 export const integrationsService = new CoreIntegrationService(
-  integrationRepository
+  integrationRepository,
 );
 export const postService = new CorePostService(postRepository);
 export const youtubeService = new YoutubeService();
@@ -67,7 +67,7 @@ export const mentionService = new CoreMentionService(mentionRepository);
 export const userService = new CoreUserService(userRepository);
 export const planService = new CorePlanService(planRepository);
 export const competitorService = new CoreCompetitorService(
-  competitorRepository
+  competitorRepository,
 );
 export const dashboardService = new CoreDashboardService(mentionRepository);
 export const invitationTokenService = new InvitationTokenService(prisma);

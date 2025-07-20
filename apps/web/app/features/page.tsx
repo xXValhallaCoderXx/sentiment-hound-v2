@@ -32,49 +32,49 @@ const FeaturesPage = async () => {
       {/* Content Layer - Scrollable */}
       <main className={classes.contentLayer}>
         <ScrollHandler />
-        
+
         <AnimatedSection>
           <section className={classes.section}>
             <FeaturesHero />
           </section>
         </AnimatedSection>
-        
+
         <AnimatedSection>
           <section className={classes.howItWorksSection}>
             <HowItWorksOverview />
           </section>
         </AnimatedSection>
-        
+
         {/* Sectional Divider */}
         <hr className={classes.sectionDivider} />
-        
+
         <AnimatedSection>
           <section className={classes.section}>
             <CommandCenterFeature />
           </section>
         </AnimatedSection>
-        
+
         {/* Sectional Divider */}
         <hr className={classes.sectionDivider} />
-        
+
         <AnimatedSection>
           <section className={classes.section}>
             <SpamDetectionFeature />
           </section>
         </AnimatedSection>
-        
+
         {/* Sectional Divider */}
         <hr className={classes.sectionDivider} />
-        
+
         <AnimatedSection>
           <section className={classes.section}>
             <CompetitorAnalysisFeature />
           </section>
         </AnimatedSection>
-        
+
         {/* Sectional Divider */}
         <hr className={classes.sectionDivider} />
-        
+
         <AnimatedSection>
           <section className={classes.section}>
             <FeaturesCallToAction />

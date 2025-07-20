@@ -78,11 +78,11 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
       const result = service.buildRequestConfig(
         specialApiKey,
         "API_KEY",
-        baseUrl
+        baseUrl,
       );
 
       expect(result.url).toBe(
-        `${baseUrl}?key=${encodeURIComponent(specialApiKey)}`
+        `${baseUrl}?key=${encodeURIComponent(specialApiKey)}`,
       );
       expect(result.headers).toBeDefined();
     });
@@ -123,7 +123,7 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
           headers: expect.objectContaining({
             Authorization: `Bearer ${oauthToken}`,
           }),
-        })
+        }),
       );
     });
 
@@ -154,7 +154,7 @@ describe("YoutubeContentService - Explicit Authentication Method", () => {
         expect.stringContaining(`key=${apiKey}`),
         expect.objectContaining({
           headers: expect.any(Object), // headers will be defined but may be empty
-        })
+        }),
       );
     });
   });

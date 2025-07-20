@@ -20,11 +20,16 @@ vi.mock("..", () => ({
 
 // Import after mocking
 import { CoreTaskService } from "./tasks.service";
-import { providerService, urlParserService, integrationsService, subtaskService } from "..";
+import {
+  providerService,
+  urlParserService,
+  integrationsService,
+  subtaskService,
+} from "..";
 
 describe("CoreTaskService", () => {
   let taskService: CoreTaskService;
-  
+
   // Mock prisma
   const mockPrisma = {
     task: {
@@ -85,7 +90,9 @@ describe("CoreTaskService", () => {
       });
 
       // Verify - should NOT call getProviderByName since providerId is provided
-      expect(vi.mocked(providerService.getProviderByName)).not.toHaveBeenCalled();
+      expect(
+        vi.mocked(providerService.getProviderByName),
+      ).not.toHaveBeenCalled();
       expect(mockPrisma.task.create).toHaveBeenCalledWith({
         data: {
           type: TaskType.ANALYZE_POST,
@@ -110,12 +117,14 @@ describe("CoreTaskService", () => {
         name: "YouTube",
       } as any);
 
-      vi.mocked(integrationsService.getUserIntegrationByName).mockResolvedValue({
-        id: 5,
-        provider: { name: "youtube" },
-        accessToken: "user-oauth-token",
-        isActive: true,
-      } as any);
+      vi.mocked(integrationsService.getUserIntegrationByName).mockResolvedValue(
+        {
+          id: 5,
+          provider: { name: "youtube" },
+          accessToken: "user-oauth-token",
+          isActive: true,
+        } as any,
+      );
 
       mockPrisma.task.create.mockResolvedValue({
         id: 2,
@@ -185,9 +194,11 @@ describe("CoreTaskService", () => {
 
       // Verify provider resolution
       expect(vi.mocked(urlParserService.parse)).toHaveBeenCalledWith(
-        "https://www.reddit.com/r/test/comments/abc123/test/"
+        "https://www.reddit.com/r/test/comments/abc123/test/",
       );
-      expect(vi.mocked(providerService.getProviderByName)).toHaveBeenCalledWith("reddit");
+      expect(vi.mocked(providerService.getProviderByName)).toHaveBeenCalledWith(
+        "reddit",
+      );
       expect(result.id).toBe(3);
     });
 
@@ -200,7 +211,7 @@ describe("CoreTaskService", () => {
       });
 
       vi.mocked(providerService.getProviderByName).mockRejectedValue(
-        new Error("Provider 'unsupported' not found")
+        new Error("Provider 'unsupported' not found"),
       );
 
       // Execute & Verify
@@ -213,7 +224,7 @@ describe("CoreTaskService", () => {
             url: "https://unsupported.com/post/123",
             token: "test-token",
           },
-        })
+        }),
       ).rejects.toThrow("Unsupported provider: unsupported");
     });
 
@@ -273,7 +284,7 @@ describe("CoreTaskService", () => {
           extraData: {
             url: "malformed-url",
           },
-        })
+        }),
       ).rejects.toThrow("URL parsing failed: Invalid URL format");
     });
   });
@@ -287,7 +298,7 @@ describe("CoreTaskService", () => {
       });
 
       vi.mocked(providerService.getProviderByName).mockRejectedValue(
-        new Error("Provider not found")
+        new Error("Provider not found"),
       );
 
       await expect(
@@ -299,7 +310,7 @@ describe("CoreTaskService", () => {
             url: "https://unknown.com/post/123",
             token: "test-token",
           },
-        })
+        }),
       ).rejects.toThrow("Unsupported provider: unknown");
     });
   });

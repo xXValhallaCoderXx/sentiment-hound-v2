@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Card, 
-  Text, 
-  SimpleGrid, 
-  Group, 
+import {
+  Card,
+  Text,
+  SimpleGrid,
+  Group,
   ActionIcon,
-  Badge
+  Badge,
 } from "@mantine/core";
 import { IconTrash, IconTrendingUp } from "@tabler/icons-react";
 import { deleteCompetitor } from "../actions/delete-competitor";
@@ -25,18 +25,21 @@ interface CompetitorCardsClientProps {
   userId: string;
 }
 
-const CompetitorCardsClient = ({ competitors: initialCompetitors, userId }: CompetitorCardsClientProps) => {
+const CompetitorCardsClient = ({
+  competitors: initialCompetitors,
+  userId,
+}: CompetitorCardsClientProps) => {
   const [competitors, setCompetitors] = useState(initialCompetitors);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const handleDelete = async (competitorId: number) => {
     setDeletingId(competitorId);
-    
+
     try {
       const result = await deleteCompetitor(competitorId, userId);
-      
+
       if (result.success) {
-        setCompetitors(prev => prev.filter(c => c.id !== competitorId));
+        setCompetitors((prev) => prev.filter((c) => c.id !== competitorId));
       } else {
         console.error("Failed to delete competitor:", result.error);
       }
@@ -49,12 +52,12 @@ const CompetitorCardsClient = ({ competitors: initialCompetitors, userId }: Comp
 
   if (competitors.length === 0) {
     return (
-      <CompetitorsEmptyState 
+      <CompetitorsEmptyState
         onCtaClick={() => {
           // This would typically scroll to or focus the add competitor form
-          const addForm = document.querySelector('[data-competitor-form]');
+          const addForm = document.querySelector("[data-competitor-form]");
           if (addForm) {
-            addForm.scrollIntoView({ behavior: 'smooth' });
+            addForm.scrollIntoView({ behavior: "smooth" });
           }
         }}
       />
@@ -79,7 +82,7 @@ const CompetitorCardsClient = ({ competitors: initialCompetitors, userId }: Comp
               <IconTrash size={14} />
             </ActionIcon>
           </Group>
-          
+
           <Group justify="space-between" mt="md">
             <Badge variant="light" color="blue" size="sm">
               Active
@@ -91,7 +94,7 @@ const CompetitorCardsClient = ({ competitors: initialCompetitors, userId }: Comp
               </Text>
             </Group>
           </Group>
-          
+
           <Text size="xs" c="dimmed" mt="xs">
             Added {new Date(competitor.createdAt).toLocaleDateString()}
           </Text>

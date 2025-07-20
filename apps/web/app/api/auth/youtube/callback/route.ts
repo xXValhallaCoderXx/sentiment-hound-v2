@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
       // Construct absolute URL
       const successUrl = new URL(
         "/dashboard/integrations?success=true",
-        baseUrl
+        baseUrl,
       );
       return NextResponse.redirect(successUrl);
     } catch (error: any) {
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
 
       const failureUrl = new URL(
         `/dashboard/integrations?success=false&error=${errorMessage}`,
-        baseUrl
+        baseUrl,
       );
       return NextResponse.redirect(failureUrl);
     }
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
     // Construct absolute URL
     const failureUrl = new URL(
       "/dashboard/integrations?success=false",
-      baseUrl
+      baseUrl,
     );
     return NextResponse.redirect(failureUrl);
   }

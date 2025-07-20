@@ -1,7 +1,11 @@
 "use client";
 
 import { Container, Accordion, Box } from "@mantine/core";
-import { SectionTitle, BodyText, DimmedText } from "@/components/atoms/Typography";
+import {
+  SectionTitle,
+  BodyText,
+  DimmedText,
+} from "@/components/atoms/Typography";
 
 interface FaqItem {
   value: string;
@@ -17,25 +21,25 @@ interface FaqSectionProps {
   variant?: "contained" | "separated" | "default";
 }
 
-const FaqSection = ({ 
+const FaqSection = ({
   title = "Frequently Asked Questions",
   subtitle,
   faqData,
   containerSize = "xl",
-  variant = "contained"
+  variant = "contained",
 }: FaqSectionProps) => {
   return (
     <Container size={containerSize}>
       <SectionTitle ta="center" mb="xl">
         {title}
       </SectionTitle>
-      
+
       {subtitle && (
         <BodyText ta="center" mb="xl">
           {subtitle}
         </BodyText>
       )}
-      
+
       <Box style={{ maxWidth: "800px", margin: "0 auto" }}>
         <Accordion variant={variant} radius="md">
           {faqData.map((item) => (

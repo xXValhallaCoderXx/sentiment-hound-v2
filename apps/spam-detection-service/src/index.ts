@@ -109,7 +109,7 @@ function getSpamReasons(content: string): string[] {
 
   if (
     /\b(buy now|click here|limited time|act fast|special offer)\b/i.test(
-      content
+      content,
     )
   ) {
     reasons.push("Contains promotional language");

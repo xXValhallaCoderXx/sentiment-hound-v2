@@ -10,7 +10,8 @@ const FeaturesHero = () => {
             All The Power, None of the Noise.
           </Title>
           <Text className={classes.subtitle}>
-            Explore the core features that transform raw data into clear, actionable business intelligence.
+            Explore the core features that transform raw data into clear,
+            actionable business intelligence.
           </Text>
         </div>
       </Container>

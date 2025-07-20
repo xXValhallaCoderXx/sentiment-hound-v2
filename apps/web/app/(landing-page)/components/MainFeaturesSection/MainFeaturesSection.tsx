@@ -28,23 +28,23 @@ const MainFeaturesSection = () => {
         </Title>
 
         <Text c="dimmed" className={classes.description} ta="center" mt="md">
-          Stop drowning in feedback data. Start making confident decisions 
-          with insights that matter.
+          Stop drowning in feedback data. Start making confident decisions with
+          insights that matter.
         </Text>
 
         {/* Bento Grid Layout */}
         <Grid mt={50} gutter="md" className={classes.bentoGrid}>
           {/* Large feature - spans 2 columns */}
           <GridCol span={{ base: 12, md: 8 }}>
-            <Card 
-              className={`${classes.bentoCard} ${classes.bentoCardLarge}`} 
+            <Card
+              className={`${classes.bentoCard} ${classes.bentoCardLarge}`}
               padding="xl"
               radius="lg"
             >
               <Group gap="md" mb="md">
-                <ThemeIcon 
-                  size={60} 
-                  radius="md" 
+                <ThemeIcon
+                  size={60}
+                  radius="md"
                   variant="light"
                   color="primary"
                 >
@@ -55,13 +55,14 @@ const MainFeaturesSection = () => {
                     Real-time Sentiment Detection
                   </Text>
                   <Text c="dimmed" fz="md">
-                    Monitor customer sentiment as it happens across all your channels
+                    Monitor customer sentiment as it happens across all your
+                    channels
                   </Text>
                 </Box>
               </Group>
               <Text c="dimmed" fz="sm" mt="md">
-                Get instant insights from customer feedback across social media, 
-                reviews, support tickets, and more. Our AI processes sentiment 
+                Get instant insights from customer feedback across social media,
+                reviews, support tickets, and more. Our AI processes sentiment
                 in real-time, alerting you to important changes as they happen.
               </Text>
             </Card>
@@ -69,14 +70,14 @@ const MainFeaturesSection = () => {
 
           {/* Medium feature */}
           <GridCol span={{ base: 12, md: 4 }}>
-            <Card 
-              className={`${classes.bentoCard} ${classes.bentoCardMedium}`} 
+            <Card
+              className={`${classes.bentoCard} ${classes.bentoCardMedium}`}
               padding="lg"
               radius="lg"
             >
-              <ThemeIcon 
-                size={50} 
-                radius="md" 
+              <ThemeIcon
+                size={50}
+                radius="md"
                 variant="light"
                 color="secondary"
                 mb="md"
@@ -94,14 +95,14 @@ const MainFeaturesSection = () => {
 
           {/* Two small features */}
           <GridCol span={{ base: 12, sm: 6, md: 3 }}>
-            <Card 
-              className={`${classes.bentoCard} ${classes.bentoCardSmall}`} 
+            <Card
+              className={`${classes.bentoCard} ${classes.bentoCardSmall}`}
               padding="md"
               radius="lg"
             >
-              <ThemeIcon 
-                size={40} 
-                radius="md" 
+              <ThemeIcon
+                size={40}
+                radius="md"
                 variant="light"
                 color="accent"
                 mb="sm"
@@ -118,14 +119,14 @@ const MainFeaturesSection = () => {
           </GridCol>
 
           <GridCol span={{ base: 12, sm: 6, md: 3 }}>
-            <Card 
-              className={`${classes.bentoCard} ${classes.bentoCardSmall}`} 
+            <Card
+              className={`${classes.bentoCard} ${classes.bentoCardSmall}`}
               padding="md"
               radius="lg"
             >
-              <ThemeIcon 
-                size={40} 
-                radius="md" 
+              <ThemeIcon
+                size={40}
+                radius="md"
                 variant="light"
                 color="success"
                 mb="sm"
@@ -143,14 +144,14 @@ const MainFeaturesSection = () => {
 
           {/* Medium feature and Aspect Analysis */}
           <GridCol span={{ base: 12, md: 6 }}>
-            <Card 
-              className={`${classes.bentoCard} ${classes.bentoCardMedium}`} 
+            <Card
+              className={`${classes.bentoCard} ${classes.bentoCardMedium}`}
               padding="lg"
               radius="lg"
             >
-              <ThemeIcon 
-                size={50} 
-                radius="md" 
+              <ThemeIcon
+                size={50}
+                radius="md"
                 variant="light"
                 color="warning"
                 mb="md"
@@ -167,14 +168,14 @@ const MainFeaturesSection = () => {
           </GridCol>
 
           <GridCol span={{ base: 12, md: 6 }}>
-            <Card 
-              className={`${classes.bentoCard} ${classes.bentoCardMedium}`} 
+            <Card
+              className={`${classes.bentoCard} ${classes.bentoCardMedium}`}
               padding="lg"
               radius="lg"
             >
-              <ThemeIcon 
-                size={50} 
-                radius="md" 
+              <ThemeIcon
+                size={50}
+                radius="md"
                 variant="light"
                 color="error"
                 mb="md"

@@ -50,7 +50,7 @@ const SpamDetectionFeature = () => {
 
   const features = [
     "Automated spam filtering",
-    "Manual review dashboard", 
+    "Manual review dashboard",
     "Continuous learning",
   ];
 

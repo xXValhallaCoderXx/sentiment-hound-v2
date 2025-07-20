@@ -29,7 +29,7 @@ export class CoreProviderService {
 
     const normalizedName = name.toLowerCase().trim();
     const cacheKey = `name:${normalizedName}`;
-    
+
     // Check cache first
     const cached = this.getFromCache(cacheKey);
     if (cached) {
@@ -49,21 +49,25 @@ export class CoreProviderService {
       });
 
       if (!provider) {
-        throw new Error(`Provider '${name}' not found. Available providers may include: YouTube, Reddit`);
+        throw new Error(
+          `Provider '${name}' not found. Available providers may include: YouTube, Reddit`,
+        );
       }
 
       // Cache the result
       this.setCache(cacheKey, provider);
-      
+
       console.log(`Found provider: ${provider.name} (ID: ${provider.id})`);
       return provider;
     } catch (error) {
-      if (error instanceof Error && error.message.includes('not found')) {
+      if (error instanceof Error && error.message.includes("not found")) {
         throw error; // Re-throw our custom error
       }
-      
+
       console.error(`Database error looking up provider '${name}':`, error);
-      throw new Error(`Failed to lookup provider '${name}': ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to lookup provider '${name}': ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -75,7 +79,7 @@ export class CoreProviderService {
       this.cacheExpiry.delete(key);
       return null;
     }
-    
+
     return this.providerCache.get(key) || null;
   }
 
@@ -92,11 +96,11 @@ export class CoreProviderService {
   async createProvider(data: Prisma.ProviderCreateInput): Promise<Provider> {
     // Add validation if needed
     const provider = await this.repository.create({ data });
-    
+
     // Cache the new provider
     const cacheKey = `name:${provider.name.toLowerCase().trim()}`;
     this.setCache(cacheKey, provider);
-    
+
     return provider;
   }
 
@@ -105,14 +109,14 @@ export class CoreProviderService {
     if (!provider) {
       throw new Error(`Provider with ID ${id} not found`);
     }
-    
+
     const updatedProvider = await this.repository.update(parseInt(id), data);
-    
+
     // Clear cache for this provider since it was updated
     const cacheKey = `name:${provider.name.toLowerCase().trim()}`;
     this.providerCache.delete(cacheKey);
     this.cacheExpiry.delete(cacheKey);
-    
+
     return updatedProvider;
   }
 
@@ -121,12 +125,12 @@ export class CoreProviderService {
     if (!provider) {
       throw new Error(`Provider with ID ${id} not found`);
     }
-    
+
     // Clear cache for this provider
     const cacheKey = `name:${provider.name.toLowerCase().trim()}`;
     this.providerCache.delete(cacheKey);
     this.cacheExpiry.delete(cacheKey);
-    
+
     await this.repository.delete(parseInt(id));
   }
 }

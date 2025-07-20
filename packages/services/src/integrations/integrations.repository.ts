@@ -8,7 +8,7 @@ export class IntegrationRepository extends BaseRepository<"integration"> {
 
   async findByUserId(
     userId: string,
-    args?: Omit<Prisma.IntegrationFindManyArgs, "where">
+    args?: Omit<Prisma.IntegrationFindManyArgs, "where">,
   ): Promise<Integration[]> {
     return this.findMany({ userId }, args);
   }
@@ -16,7 +16,7 @@ export class IntegrationRepository extends BaseRepository<"integration"> {
   async findByProviderIdAndUserId(
     providerId: number,
     userId: string,
-    args?: Omit<Prisma.IntegrationFindFirstArgs, "where">
+    args?: Omit<Prisma.IntegrationFindFirstArgs, "where">,
   ): Promise<Integration | null> {
     return this.findFirst({ providerId, userId }, args);
   }
@@ -24,7 +24,7 @@ export class IntegrationRepository extends BaseRepository<"integration"> {
   async findByUserIdAndProviderName(
     userId: string,
     providerName: string,
-    args?: Omit<Prisma.IntegrationFindFirstArgs, "where">
+    args?: Omit<Prisma.IntegrationFindFirstArgs, "where">,
   ): Promise<Integration | null> {
     return this.findFirst(
       {
@@ -34,14 +34,14 @@ export class IntegrationRepository extends BaseRepository<"integration"> {
       {
         include: { provider: true },
         ...args,
-      }
+      },
     );
   }
 
   async update(
     id: number,
     data: Prisma.IntegrationUpdateInput,
-    args?: Omit<Prisma.IntegrationUpdateArgs, "where" | "data">
+    args?: Omit<Prisma.IntegrationUpdateArgs, "where" | "data">,
   ): Promise<Integration> {
     return super.update(id, data, args);
   }

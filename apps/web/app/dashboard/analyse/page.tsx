@@ -27,7 +27,8 @@ const AnalysePage = async () => {
             Analyze Content
           </Title>
           <Text size="lg" c="dimmed" maw={600} mx="auto">
-            Submit a URL from YouTube or other supported platforms to analyze sentiment and engagement
+            Submit a URL from YouTube or other supported platforms to analyze
+            sentiment and engagement
           </Text>
         </Box>
 

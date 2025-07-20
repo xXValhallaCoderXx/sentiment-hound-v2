@@ -10,7 +10,7 @@ type Competitor = {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 type CompetitorSentiment = {
   id: number;
@@ -21,11 +21,11 @@ type CompetitorSentiment = {
   mentionCount: number;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 enum MentionSource {
   YOUTUBE = "YOUTUBE",
-  REDDIT = "REDDIT", 
+  REDDIT = "REDDIT",
   FACEBOOK = "FACEBOOK",
   INSTAGRAM = "INSTAGRAM",
   TIKTOK = "TIKTOK",
@@ -42,7 +42,7 @@ export class CoreCompetitorService {
     // Check if competitor already exists
     const existing = await this.repository.getCompetitorByUserAndName(
       data.userId,
-      data.name
+      data.name,
     );
 
     if (existing) {
@@ -62,7 +62,7 @@ export class CoreCompetitorService {
 
   async deleteCompetitor(competitorId: number, userId: string): Promise<void> {
     const competitor = await this.repository.getCompetitorById(competitorId);
-    
+
     if (!competitor || competitor.userId !== userId) {
       throw new Error("Competitor not found or access denied");
     }
@@ -74,10 +74,10 @@ export class CoreCompetitorService {
     competitorId: number,
     userId: string,
     startDate?: Date,
-    endDate?: Date
+    endDate?: Date,
   ): Promise<CompetitorSentiment[]> {
     const competitor = await this.repository.getCompetitorById(competitorId);
-    
+
     if (!competitor || competitor.userId !== userId) {
       throw new Error("Competitor not found or access denied");
     }
@@ -85,7 +85,7 @@ export class CoreCompetitorService {
     return this.repository.getCompetitorSentimentData(
       competitorId,
       startDate,
-      endDate
+      endDate,
     );
   }
 
@@ -103,20 +103,27 @@ export class CoreCompetitorService {
   }
 
   // Method to simulate fetching competitor sentiment from external sources
-  async collectCompetitorSentiment(competitorName: string): Promise<{
-    score: number;
-    sourceType: MentionSource;
-    mentionCount: number;
-  }[]> {
+  async collectCompetitorSentiment(competitorName: string): Promise<
+    {
+      score: number;
+      sourceType: MentionSource;
+      mentionCount: number;
+    }[]
+  > {
     // This is a placeholder implementation that would normally:
     // 1. Query external APIs (Twitter, Reddit, YouTube, etc.)
     // 2. Analyze sentiment of mentions
     // 3. Return aggregated sentiment data
-    
+
     // For MVP, return mock data
-    const sources: MentionSource[] = [MentionSource.YOUTUBE, MentionSource.REDDIT, MentionSource.FACEBOOK, MentionSource.INSTAGRAM];
-    
-    return sources.map(source => ({
+    const sources: MentionSource[] = [
+      MentionSource.YOUTUBE,
+      MentionSource.REDDIT,
+      MentionSource.FACEBOOK,
+      MentionSource.INSTAGRAM,
+    ];
+
+    return sources.map((source) => ({
       score: Math.random() * 2 - 1, // Random score between -1 and 1
       sourceType: source,
       mentionCount: Math.floor(Math.random() * 100) + 1,
@@ -125,13 +132,15 @@ export class CoreCompetitorService {
 
   async updateCompetitorSentimentDaily(competitorId: number): Promise<void> {
     const competitor = await this.repository.getCompetitorById(competitorId);
-    
+
     if (!competitor) {
       throw new Error("Competitor not found");
     }
 
-    const sentimentData = await this.collectCompetitorSentiment(competitor.name);
-    
+    const sentimentData = await this.collectCompetitorSentiment(
+      competitor.name,
+    );
+
     for (const data of sentimentData) {
       try {
         await this.repository.createCompetitorSentiment({
@@ -143,7 +152,9 @@ export class CoreCompetitorService {
         });
       } catch (error) {
         // Skip if data already exists for this day/source combination
-        console.log(`Sentiment data already exists for ${competitor.name} on ${new Date().toISOString()}`);
+        console.log(
+          `Sentiment data already exists for ${competitor.name} on ${new Date().toISOString()}`,
+        );
       }
     }
   }

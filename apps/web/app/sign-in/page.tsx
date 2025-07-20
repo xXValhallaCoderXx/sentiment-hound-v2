@@ -20,7 +20,10 @@ import { useRouter } from "next/navigation";
 import { handleEmailSignIn, handleGoogleSignIn } from "@/actions/auth.actions";
 
 // Components
-import { CardTitle, DimmedText } from "@/components/atoms/Typography/Typography";
+import {
+  CardTitle,
+  DimmedText,
+} from "@/components/atoms/Typography/Typography";
 import { Logo } from "@/components/atoms/Logo/Logo";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormField } from "@/components/molecules/FormField/FormField";

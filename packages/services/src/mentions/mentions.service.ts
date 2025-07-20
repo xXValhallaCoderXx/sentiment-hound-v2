@@ -155,7 +155,7 @@ export class CoreMentionService {
       (comment) => {
         // Determine provider name with fallback logic
         let providerName = "unknown";
-        
+
         // First try direct mention provider relationship
         if (comment.provider?.name) {
           providerName = comment.provider.name;
@@ -175,12 +175,13 @@ export class CoreMentionService {
           sentiment: comment.sentiment,
           provider: providerName,
           createdAt: comment.createdAt?.toISOString(),
-          aspects: comment.aspectAnalyses?.map((aspect: any) => ({
-            aspect: aspect.aspect,
-            sentiment: aspect.sentiment,
-          })) || [],
+          aspects:
+            comment.aspectAnalyses?.map((aspect: any) => ({
+              aspect: aspect.aspect,
+              sentiment: aspect.sentiment,
+            })) || [],
         };
-      }
+      },
     );
 
     return {
@@ -195,7 +196,7 @@ export class CoreMentionService {
   async updateMentionSentiment(
     commentId: number,
     sentiment: string,
-    aspects: { aspect: string; sentiment: string }[]
+    aspects: { aspect: string; sentiment: string }[],
   ): Promise<Mention> {
     console.log("ASPESCTS: ", aspects);
     // Update the sentiment of the comment
