@@ -3,3 +3,5 @@ uvicorn==0.34.0
 transformers==4.50.0
 torch==2.6.0
 pyabsa==2.4.1.post1
+# Additional dependencies for optimal M1 performance
+accelerate>=0.25.0  # Optimized model loading and inference
