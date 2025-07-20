@@ -10,16 +10,27 @@ app = FastAPI(title="Sentiment Analysis API")
 
 # Load general sentiment pipeline using DistilBERT (fine-tuned on SST-2)
 # Explicitly specify PyTorch as the framework to avoid TensorFlow conflicts
+def get_optimal_device():
+    """Get the optimal device for the current system"""
+    if torch.cuda.is_available():
+        return 0  # CUDA GPU
+    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        return "mps"  # Apple Silicon GPU
+    else:
+        return -1  # CPU
+
 general_sentiment_pipeline = pipeline(
     "sentiment-analysis",
     model="distilbert-base-uncased-finetuned-sst-2-english",
     framework="pt",  # Explicitly use PyTorch
-    device=0 if torch.cuda.is_available() else -1  # Use GPU if available
+    device=get_optimal_device()  # Use optimal device (M1 GPU, CUDA, or CPU)
 )
 
-# Load ABSA model
+# Load ABSA model with optimal device configuration
 aspect_extractor = ATEPCCheckpointManager.get_aspect_extractor(
-    checkpoint='english')
+    checkpoint='english',
+    auto_device=True  # Let PyABSA automatically choose the best device (including M1 GPU)
+)
 
 # Maximum sequence length for the model
 MAX_SEQUENCE_LENGTH = 512
