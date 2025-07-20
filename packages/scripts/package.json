@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "dev": "tsc --project tsconfig.build.json --watch",
+    "check-types": "tsc --noEmit",
     "gen-token": "dotenv -e .env -- tsx src/generate-invitation-token.ts",
     "db-seed": "dotenv -e .env -- tsx src/seed.ts"
   },

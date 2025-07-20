@@ -21,6 +21,7 @@ import {
   PLAN_FEATURES,
   PLAN_HIERARCHY,
 } from "@repo/services";
+import { Plan } from "@repo/db";
 import PlanSubmitButton from "./PlanSubmitButton";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
@@ -33,7 +34,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
 
   // Filter to only show Trial, Starter, and Pro plans (exclude Developer)
   const publicPlans =
-    allPlans?.filter((plan) =>
+    allPlans?.filter((plan: Plan) =>
       [PlanName.TRIAL, PlanName.STARTER, PlanName.PRO].includes(
         plan.name as PlanName
       )
@@ -54,7 +55,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
   };
 
   // Get user's current plan for hierarchy comparison
-  const userPlan = allPlans?.find((plan) => Number(userPlanId) === plan.id);
+  const userPlan = allPlans?.find((plan: Plan) => Number(userPlanId) === plan.id);
   const userPlanName = userPlan?.name as PlanName;
   const userPlanHierarchy =
     PLAN_HIERARCHY[userPlanName as keyof typeof PLAN_HIERARCHY] ?? -1;
@@ -166,7 +167,7 @@ const Plans: FC<IPlansProps> = async ({ userPlanId }) => {
   return (
     <Box>
       <SimpleGrid cols={3} spacing="lg" className="mt-4">
-        {publicPlans.map((plan, index) => {
+        {publicPlans.map((plan: Plan, index: number) => {
           const isUsersPlan = Number(userPlanId) === plan.id;
           const yearlyDiscount = formatYearlyDiscount(
             plan.price ? Number(plan.price) : undefined,

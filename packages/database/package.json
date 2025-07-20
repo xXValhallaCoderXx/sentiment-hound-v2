@@ -12,6 +12,7 @@
     "build": "prisma generate && tsc -p tsconfig.build.json",
     "db:build": "prisma generate && tsc -p tsconfig.build.json",
     "dev:watch": "tsc -p tsconfig.build.json --watch",
+    "check-types": "tsc --noEmit",
     "db:push": "prisma db push --accept-data-loss",
     "db:format": "prisma format",
     "db:generate": "prisma generate",

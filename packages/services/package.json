@@ -12,6 +12,7 @@
     "build": "tsc --project tsconfig.build.json",
     "services:build": "tsc --project tsconfig.build.json",
     "dev:watch": "tsc --project tsconfig.build.json --watch",
+    "check-types": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
   },

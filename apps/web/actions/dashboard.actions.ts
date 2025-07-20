@@ -3,7 +3,7 @@
 import { auth } from "@/lib/next-auth.lib";
 import { ActionResponse, createErrorResponse } from "@/lib/types";
 import { mentionService, planService, dashboardService, taskService, DashboardStats, TrendDataPoint } from "@repo/services";
-import { TaskType, TaskStatus } from "@repo/db";
+import { TaskType, TaskStatus, Task } from "@repo/db";
 import type { AnalysisData } from "@/types/analysis.types";
 
 // Re-export types for components
@@ -65,7 +65,14 @@ export async function getRecentMentions(
       pageSize: filters?.pageSize || 10,
     });
 
-    const mentions: MentionItem[] = mentionsResult.data.map((mention) => ({
+    const mentions: MentionItem[] = mentionsResult.data.map((mention: {
+      id: number;
+      content: string;
+      sentiment: string | null;
+      provider: string;
+      createdAt?: string;
+      aspects: Array<{ aspect: string; sentiment: string }>;
+    }) => ({
       id: mention.id,
       content: mention.content,
       sentiment: mention.sentiment,
@@ -191,7 +198,7 @@ export async function getUserAnalyses(
     });
 
     // Sort by creation date descending
-    const sortedTasks = tasks.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    const sortedTasks = tasks.sort((a: Task, b: Task) => b.createdAt.getTime() - a.createdAt.getTime());
     
     // Handle pagination
     const page = filters?.page || 1;
@@ -200,7 +207,7 @@ export async function getUserAnalyses(
     const paginatedTasks = sortedTasks.slice(skip, skip + pageSize);
 
     // Transform tasks into AnalysisData format
-    const analyses: AnalysisData[] = paginatedTasks.map(task => {
+    const analyses: AnalysisData[] = paginatedTasks.map((task: Task) => {
       // Map TaskStatus to analysis status
       let status: 'PROCESSING' | 'COMPLETED' | 'FAILED';
       switch (task.status) {
