@@ -219,22 +219,177 @@ For comprehensive testing guidance, see our detailed documentation:
 - Proper mocking capabilities for dependencies and modules
 - Integration with Turbo's caching system for optimal performance
 
-## Development
+## Scripts & Commands Reference
 
-### Common Scripts
+### 🚀 Development Scripts
 
-- The following scripts are available at the root of the monorepo:
+#### **Start Development Environment**
 
-  - **`pnpm run lint`**: Lints the codebase across all packages.
-  - **`pnpm run format`**: Formats the code using Prettier.
+```bash
+# Full stack (recommended) - starts all JS services + Python sentiment service
+pnpm run dev:full
+# or
+./scripts/dev.sh
 
-### Database Management
+# JavaScript services only (Next.js + NestJS)
+pnpm run dev
 
-- The `turbo.json` file defines several scripts for database management, which are typically run via `pnpm turbo db:<command>`. Examples:
+# Package watcher (for hot-reloading shared packages)
+pnpm run watch
+```
 
-  - `pnpm turbo db:generate`: Generates Prisma client based on schema changes.
-  - `pnpm turbo db:migrate`: Runs database migrations.
-  - `pnpm turbo db:seed`: Seeds the database with initial data.
+#### **Build & Compile**
+
+```bash
+# Build all applications and packages
+pnpm run build
+
+# Build specific components
+pnpm turbo build:web      # Web frontend only
+pnpm turbo build:server   # NestJS backend only
+```
+
+### 🗄️ Database Management
+
+#### **Database Setup & Reset**
+
+```bash
+# 🔄 RESET DATABASE (destructive - wipes all data)
+pnpm turbo db:reset
+
+# 🌱 Seed database with initial data (plans, providers)
+pnpm turbo db:seed
+
+# 🔄 Complete fresh start (reset + seed)
+pnpm turbo db:reset && pnpm turbo db:seed
+```
+
+#### **Schema & Migrations**
+
+```bash
+# Generate Prisma client after schema changes
+pnpm turbo db:generate
+
+# Create and apply new migrations
+pnpm turbo db:migrate
+
+# Push schema changes without migration (dev only)
+pnpm turbo db:push
+
+# Format Prisma schema file
+pnpm turbo db:format
+```
+
+### 🔧 Utility Scripts
+
+#### **Token Generation**
+
+```bash
+# Generate invitation token (requires seeded database)
+pnpm run script:gen-token
+
+# Generate token for specific plan
+pnpm --filter @repo/scripts gen-token --plan=developer
+pnpm --filter @repo/scripts gen-token --plan=pro --expires-in-days=30
+```
+
+#### **Environment Setup**
+
+```bash
+# Complete installation (dependencies + environment)
+pnpm run install:full
+# or
+./scripts/install.sh
+
+# Production setup
+./scripts/prod.sh
+```
+
+### 🧪 Testing Scripts
+
+#### **Run Tests**
+
+```bash
+# Individual package testing (recommended)
+pnpm run test:services   # Core business logic
+pnpm run test:web       # Frontend components
+pnpm run test:packages  # Both services and web
+
+# Watch mode for development
+pnpm run test:watch     # Services with auto-reload
+
+# All tests via Turbo (may have limitations)
+pnpm turbo test
+```
+
+#### **Test Analysis Integration**
+
+```bash
+# Test sentiment analysis service integration
+node scripts/test-analysis-integration.mjs
+```
+
+### 🔍 Code Quality
+
+```bash
+# Lint all packages
+pnpm run lint
+
+# Format code with Prettier
+pnpm run format
+
+# Type checking
+pnpm turbo check-types
+```
+
+### 🐳 Docker & Services
+
+```bash
+# Start database only
+docker-compose up -d postgres
+
+# Start all infrastructure services
+docker-compose up -d
+
+# Stop all services
+docker-compose down
+```
+
+### ⚡ Quick Workflows
+
+#### **Fresh Development Start**
+
+```bash
+# Complete setup from scratch
+pnpm run install:full
+docker-compose up -d
+pnpm turbo db:reset && pnpm turbo db:seed
+pnpm run dev:full
+```
+
+#### **After Schema Changes**
+
+```bash
+pnpm turbo db:generate
+pnpm turbo db:migrate
+# Restart dev servers if needed
+```
+
+#### **Clean Reset & Test**
+
+```bash
+pnpm turbo db:reset && pnpm turbo db:seed
+pnpm run test:services
+```
+
+#### **Production Deployment**
+
+```bash
+./scripts/prod.sh
+pnpm run db:deploy
+```
+
+### 📚 Database Management Reference
 
 For **production deployments**, see the comprehensive [Database Deployment Guide](./packages/database/DEPLOYMENT.md) which covers:
 
@@ -242,6 +397,19 @@ For **production deployments**, see the comprehensive [Database Deployment Guide
 - Integration with CI/CD pipelines
 - Production deployment best practices
 - Troubleshooting and recovery procedures
+
+### 🔧 Advanced Package Commands
+
+```bash
+# Run commands in specific packages
+pnpm --filter @repo/services <command>
+pnpm --filter web <command>
+pnpm --filter @repo/db <command>
+pnpm --filter @repo/scripts <command>
+
+# Watch shared packages for changes
+pnpm run watch:packages
+```
 
 ## Shared Packages
 
