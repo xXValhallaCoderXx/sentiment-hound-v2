@@ -1,84 +1,248 @@
-# Caching
+# Frontend Caching Strategy
 
 ## Purpose of This Document
 
-This document outlines the caching strategies and implementations used throughout the sentiment analysis platform to optimize performance and reduce external API calls.
+This document outlines the caching strategies implemented in the Next.js web application to optimize performance, reduce server load, and improve user experience.
 
-## Caching Strategy
+## Next.js App Router Caching
 
-The application employs multiple caching layers to optimize different types of data access and reduce latency for frequently accessed information.
+### Server Action Caching
 
-## In-Memory Caching
+**Automatic Caching Behavior**:
+- Server Actions are automatically cached by Next.js for identical inputs
+- Cache persists across page navigation and component re-renders
+- Reduces redundant database queries for repeated operations
 
-### Provider Cache
-
-- **Location**: `packages/services/src/providers/providers.service.ts`
-- **Purpose**: Cache social media provider metadata to avoid repeated database queries
-- **Implementation**: Map-based cache with TTL expiration
-- **TTL**: 5 minutes (300 seconds)
-- **Cache Key Pattern**: `name:{normalizedProviderName}`
-
-### Cache Management
-
-- **Expiry Handling**: Automatic cache invalidation based on TTL timestamps
-- **Cache Cleanup**: Expired entries automatically removed on access attempts
-- **Memory Management**: Map-based storage with automatic garbage collection
-
-## Cache Patterns
-
-### Read-Through Caching
-
-- Check cache first before database queries
-- Populate cache on cache misses
-- Consistent cache key generation for predictable lookups
-
-### Cache-Aside Pattern
-
-- Application manages cache population and invalidation
-- Database remains the authoritative data source
-- Cache serves as a performance optimization layer
-
-## Performance Optimizations
-
-### Database Query Reduction
-
-- Provider lookups cached to reduce database load
-- Frequently accessed metadata stored in memory
-- Cache hit logging for performance monitoring
-
-### API Rate Limiting Support
-
-- Caching helps stay within external API rate limits
-- Reduced calls to Reddit, YouTube, and other external services
-- Cached responses for repeated requests
-
-## Implementation Details
-
-### Cache Structure
-
+**Cache Invalidation Patterns**:
 ```typescript
-private providerCache = new Map<string, Provider>();
-private cacheExpiry = new Map<string, number>();
-private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+export async function updateUserProfile(data: ProfileData): Promise<ActionResponse<User>> {
+  const result = await userService.updateProfile(data);
+  
+  // Invalidate specific routes after data mutations
+  revalidatePath('/dashboard/profile');
+  revalidatePath('/dashboard'); // If profile affects dashboard
+  
+  return { data: result };
+}
 ```
 
-### Cache Operations
+### Route-Level Caching
 
-- **Set**: Store data with expiration timestamp
-- **Get**: Retrieve data with automatic expiry checking
-- **Invalidate**: Remove expired entries during access
+**Static Route Caching**:
+- Marketing pages (`/`, `/features`, `/pricing`) statically cached
+- Automatic revalidation for updated content
+- CDN-friendly caching headers for public content
 
-## Future Caching Opportunities
+**Dynamic Route Caching**:
+- Dashboard routes cached per-user with authentication context
+- Protected routes automatically invalidated on authentication changes
+- Background revalidation for better user experience
 
-While the current implementation uses in-memory caching, the architecture could be extended to support:
+## Client-Side Caching Patterns
 
-- Redis for distributed caching across multiple instances
-- Database query result caching for expensive analytics queries
-- API response caching for external service calls
-- User session data caching for improved authentication performance
+### Component-Level Caching
 
-## Monitoring and Debugging
+**React Server Component Caching**:
+- Server Components automatically cached during SSR
+- Client-side navigation preserves cached component state
+- Selective re-rendering for data changes
 
-- Cache hit/miss logging for performance analysis
-- Console logging for cache operations during development
-- Cache statistics could be exposed for monitoring dashboards
+**State Persistence**:
+```typescript
+// Client component pattern for caching UI state
+"use client";
+import { useState, useEffect } from 'react';
+
+export function DashboardFilters() {
+  const [filters, setFilters] = useState(() => {
+    // Restore filters from localStorage on client-side
+    if (typeof window !== 'undefined') {
+      return JSON.parse(localStorage.getItem('dashboard-filters') || '{}');
+    }
+    return {};
+  });
+  
+  useEffect(() => {
+    localStorage.setItem('dashboard-filters', JSON.stringify(filters));
+  }, [filters]);
+}
+```
+
+### Browser Caching Integration
+
+**Service Worker Caching** (Future Enhancement):
+- Static assets cached for offline functionality
+- API response caching for improved performance
+- Background sync for offline data mutations
+
+## Data Caching Strategies
+
+### Server Action Result Caching
+
+**Expensive Query Caching**:
+```typescript
+export async function getDashboardAnalytics(): Promise<ActionResponse<Analytics>> {
+  // Cache expensive analytics calculations
+  const cached = await cache.get(`analytics:${userId}`);
+  if (cached) {
+    return { data: cached };
+  }
+  
+  const analytics = await analyticsService.calculateDashboard(userId);
+  await cache.set(`analytics:${userId}`, analytics, { ttl: 300 }); // 5 minutes
+  
+  return { data: analytics };
+}
+```
+
+**Time-Based Invalidation**:
+- Dashboard analytics cached for 5-minute intervals
+- Integration status cached for 1-minute intervals
+- Job status polled without caching for real-time updates
+
+### Background Data Refresh
+
+**Incremental Static Regeneration (ISR)**:
+- Marketing content automatically revalidated
+- Changelog pages regenerated on content updates
+- Feature pages cached with background revalidation
+
+**Background Job Result Caching**:
+- Analysis results cached indefinitely until new analysis
+- Job status cached briefly to reduce polling frequency
+- Historical data cached with longer TTL periods
+
+## User Experience Optimizations
+
+### Optimistic Updates
+
+**Form Submission Patterns**:
+```typescript
+export async function optimisticProfileUpdate(data: ProfileData) {
+  // Show immediate UI feedback
+  const optimisticResult = { ...currentUser, ...data };
+  
+  // Update UI immediately
+  updateUIState(optimisticResult);
+  
+  try {
+    // Perform actual update
+    const result = await updateUserProfile(data);
+    if (result.error) {
+      // Revert optimistic update on error
+      revertUIState();
+      showError(result.error.error);
+    }
+  } catch (error) {
+    revertUIState();
+    showError("Update failed");
+  }
+}
+```
+
+### Progressive Loading
+
+**Skeleton State Caching**:
+- Skeleton components cached to provide consistent loading experience
+- Layout preserved during data fetching
+- Smooth transitions between loading and loaded states
+
+**Chunked Data Loading**:
+- Dashboard data loaded in chunks for faster initial render
+- Non-critical data loaded in background
+- Prioritized loading for above-the-fold content
+
+## Performance Monitoring
+
+### Cache Hit Rates
+
+**Monitoring Patterns**:
+- Track cache hit rates for Server Actions
+- Monitor revalidation frequency for optimization
+- Measure performance impact of caching strategies
+
+**Debug Information**:
+```typescript
+// Development cache debugging
+if (process.env.NODE_ENV === 'development') {
+  console.log('Cache status:', {
+    hit: cacheHit,
+    key: cacheKey,
+    ttl: cacheTTL,
+    size: cacheSize
+  });
+}
+```
+
+### Cache Performance Optimization
+
+**Strategic Cache Keys**:
+- User-specific cache keys for personalized data
+- Route-based cache keys for shared data
+- Timestamp-based keys for time-sensitive data
+
+**Memory Management**:
+- Automatic cache size limits to prevent memory leaks
+- LRU eviction for least recently used cache entries
+- Periodic cache cleanup for expired entries
+
+## Integration with External Services
+
+### API Response Caching
+
+**Third-Party API Caching**:
+- Social media API responses cached to reduce rate limiting
+- Provider metadata cached for extended periods
+- OAuth token metadata cached for quick validation
+
+**Machine Learning Result Caching**:
+- Sentiment analysis results cached permanently (until new analysis)
+- Aspect analysis cached with content-based keys
+- Batch analysis results cached for bulk operations
+
+### CDN Integration
+
+**Static Asset Caching**:
+- Images, fonts, and static assets cached via CDN
+- Component bundles cached with versioning
+- API responses cached at edge for global performance
+
+**Geographic Distribution**:
+- Static content distributed globally via CDN
+- Dynamic content cached at regional edge locations
+- User-specific data cached closest to user location
+
+## Cache Invalidation Strategy
+
+### Manual Invalidation
+
+**User-Triggered Invalidation**:
+- Profile updates invalidate user-specific caches
+- Integration changes invalidate related dashboard data
+- Analysis completion invalidates result caches
+
+### Automatic Invalidation
+
+**Time-Based Expiration**:
+- Short TTL for real-time data (job status)
+- Medium TTL for semi-static data (user profiles)
+- Long TTL for rarely changing data (provider metadata)
+
+**Event-Driven Invalidation**:
+- Database changes trigger cache invalidation
+- OAuth token updates invalidate integration caches
+- Background job completion invalidates result caches
+
+## Future Caching Enhancements
+
+### Advanced Caching Patterns
+
+**Redis Integration** (Planned):
+- Distributed caching across multiple server instances
+- Shared cache for common data across users
+- Real-time cache synchronization
+
+**GraphQL-Style Caching** (Consideration):
+- Field-level caching for granular invalidation
+- Relationship-aware cache invalidation
+- Automatic cache optimization based on query patterns

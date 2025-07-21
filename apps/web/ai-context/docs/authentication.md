@@ -1,48 +1,160 @@
-# Authentication
+# Frontend Authentication Implementation
 
 ## Purpose of This Document
 
-This document provides an overview of the authentication system used in the Next.js web application, including login strategies, session management, and user roles.
+This document provides detailed information about the NextAuth.js authentication implementation and frontend-specific authentication patterns used in the web application.
 
-## Authentication Strategy
+## NextAuth.js Configuration
 
-The application uses NextAuth.js v5 (beta) with a hybrid approach supporting both OAuth and credentials-based authentication:
+### Authentication Strategy
 
-- **OAuth Providers**: Google OAuth 2.0 with `select_account` prompt
-- **Credentials Provider**: Email/password authentication with bcrypt for password hashing
+**Hybrid Authentication System** supporting multiple login methods:
+
+- **Google OAuth 2.0**: Primary OAuth provider with `select_account` prompt for account switching
+- **Credentials Provider**: Email/password authentication with bcrypt password hashing
 - **Session Strategy**: JWT sessions (required for credentials provider compatibility)
-- **Database Adapter**: Prisma adapter for session and account persistence
+- **Database Integration**: Prisma adapter for session and account persistence
 
-## Core Logic Files
+### Core Configuration Files
 
-- `apps/web/lib/next-auth.lib.ts`: Main NextAuth configuration and providers setup
-- `apps/web/actions/auth.actions.ts`: Server actions for authentication operations
-- `apps/web/app/api/auth/[...nextauth]/route.ts`: NextAuth API route handler
+- **`lib/next-auth.lib.ts`**: Main NextAuth configuration, provider setup, and session handling
+- **`app/api/auth/[...nextauth]/route.ts`**: NextAuth API route handler for authentication endpoints
+- **`actions/auth.actions.ts`**: Server Actions for authentication operations (login, registration)
+- **`actions/account.actions.ts`**: Account management operations (profile updates, account deletion)
 
-## Session Management
+## Authentication Flow Patterns
 
-- **Strategy**: JWT-based sessions stored client-side
-- **Database Integration**: User accounts and sessions persisted via Prisma adapter
-- **Session Validation**: Available throughout the application via `auth()` function
+### User Registration & Login
 
-## User Roles and Permissions
+**Registration Flow**:
+1. User submits form → `auth.actions.ts` Server Action
+2. Password hashing with bcrypt + email validation
+3. User creation in database via Prisma
+4. Automatic login redirect to dashboard
 
-The system defines basic user authentication without complex role-based access control:
+**Login Flow**:
+1. NextAuth.js handles OAuth callbacks and credential validation
+2. Session creation with JWT token signing
+3. Database session persistence via Prisma adapter
+4. Redirect to dashboard with session context
 
-- All authenticated users have access to dashboard features
-- Plan-based feature restrictions handled through the Plan system
-- Feature flags can be manually overridden per user via `featureFlags` JSON field
+### Session Management
 
-## Key Authentication Flows
+**Session Access Patterns**:
+```typescript
+// Server Components & Server Actions
+const session = await auth();
+const userId = session?.user?.id;
 
-- **Sign Up**: Email/password registration with bcrypt hashing
-- **Sign In**: Support for both Google OAuth and email/password
-- **Session Persistence**: JWT tokens with database session tracking
-- **Password Reset**: Handled through standard NextAuth.js mechanisms
+// Client Components (when needed)
+const { data: session } = useSession();
+```
 
-## Environment Variables
+**Session Validation**:
+- **Server Actions**: Built-in `auth()` helper validates JWT and database session
+- **Route Protection**: Layout-level checks with automatic redirect handling
+- **Database Sync**: Session persistence ensures consistency across requests
 
-- `AUTH_GOOGLE_ID`: Google OAuth client ID
-- `AUTH_GOOGLE_SECRET`: Google OAuth client secret
-- `NEXTAUTH_SECRET`: Secret for JWT token signing
-- `NEXTAUTH_URL`: Application base URL for OAuth callbacks
+## Frontend Authentication Patterns
+
+### Route Protection Implementation
+
+**Dashboard Layout Protection** (`app/dashboard/layout.tsx`):
+```typescript
+const session = await auth();
+if (!session) {
+  redirect("/");
+}
+```
+
+**Server Action Protection Pattern**:
+```typescript
+export async function protectedAction(): Promise<ActionResponse<Data>> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: { error: "Authentication required" } };
+  }
+  // Continue with authenticated logic
+}
+```
+
+### User Experience Enhancements
+
+**Logout Handling**:
+- **Confirmation Modal**: `LogoutConfirmationModal` component for user confirmation
+- **Graceful Logout**: `logoutUser()` Server Action with proper cleanup
+- **State Management**: Loading states during logout process
+
+**Authentication Context**:
+- **Global Access**: Session available throughout app via NextAuth.js
+- **Type Safety**: Strongly typed session objects with user information
+- **Automatic Refresh**: JWT token refresh handled automatically
+
+## OAuth Integration Patterns
+
+### Google OAuth Configuration
+
+**Provider Setup**:
+- **Client Configuration**: Environment variables for OAuth credentials
+- **Scope Management**: Profile information and YouTube API access when needed
+- **Account Linking**: Multiple OAuth accounts can link to single user profile
+
+**OAuth Flow Enhancement**:
+- **Account Selection**: `select_account` prompt for multi-account users
+- **Error Handling**: Graceful OAuth error recovery with user feedback
+- **Integration Context**: OAuth tokens used for both authentication and API access
+
+### Social Media Integration
+
+**Dual-Purpose OAuth**:
+- **User Authentication**: Google OAuth for app login
+- **API Access**: Same OAuth tokens for YouTube API integration
+- **Token Management**: Refresh and revocation handled through service layer
+
+## Security Implementation
+
+### Password Security
+
+**Credentials Provider**:
+- **Hashing**: bcrypt with salt for password storage
+- **Validation**: Server-side password strength requirements
+- **No Plaintext**: Passwords never stored in plaintext format
+
+### JWT Security
+
+**Token Configuration**:
+- **Signing Secret**: `NEXTAUTH_SECRET` environment variable for JWT signing
+- **Expiration**: Configurable token lifetime with automatic refresh
+- **Encryption**: Session data encrypted for client-side storage
+
+### Environment Security
+
+**Required Environment Variables**:
+```
+AUTH_GOOGLE_ID=your_google_oauth_client_id
+AUTH_GOOGLE_SECRET=your_google_oauth_client_secret  
+NEXTAUTH_SECRET=your_jwt_signing_secret
+NEXTAUTH_URL=your_app_base_url
+```
+
+## Error Handling & User Feedback
+
+### Authentication Errors
+
+**Error Scenarios**:
+- Invalid credentials during login
+- OAuth provider errors or cancellation  
+- Session expiration during protected operations
+- Network errors during authentication
+
+**User Feedback Patterns**:
+- **Toast Notifications**: Mantine notifications for auth feedback
+- **Error States**: Form validation errors and network error handling
+- **Recovery Actions**: Clear error messages with suggested next steps
+
+### Graceful Degradation
+
+**Unauthenticated Access**:
+- **Public Pages**: Full access to marketing and feature pages
+- **Protected Redirects**: Smooth redirect to login when authentication required
+- **State Preservation**: Return to intended page after successful login
