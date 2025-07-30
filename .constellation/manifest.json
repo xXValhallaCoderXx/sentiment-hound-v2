@@ -1,0 +1,20 @@
+{
+  "lastUpdated": "2025-07-30T07:19:27.250Z",
+  "version": "1.0.0",
+  "files": {
+    "apps/web/app/sign-in/layout.tsx": [
+      {
+        "name": "metadata",
+        "type": "variable",
+        "location": {
+          "filePath": "apps/web/app/sign-in/layout.tsx",
+          "startLine": 3,
+          "startColumn": 13,
+          "endLine": 7,
+          "endColumn": 1
+        },
+        "sourceText": "metadata: Metadata = {\n  title: \"Sign In - Sentiment Hound\",\n  description:\n    \"Sign fff to yossssur powerful social media sentiment analysis tools.\",\n}"
+      }
+    ]
+  }
+}
