@@ -23,17 +23,9 @@ type CompetitorSentiment = {
   updatedAt: Date;
 };
 
-enum MentionSource {
-  YOUTUBE = "YOUTUBE",
-  REDDIT = "REDDIT",
-  FACEBOOK = "FACEBOOK",
-  INSTAGRAM = "INSTAGRAM",
-  TIKTOK = "TIKTOK",
-  LINKEDIN = "LINKEDIN",
-}
 
 export class CoreCompetitorService {
-  constructor(private repository: CompetitorRepository) {}
+  constructor(private repository: CompetitorRepository) { }
 
   async createCompetitor(data: {
     name: string;
@@ -92,13 +84,13 @@ export class CoreCompetitorService {
   async addCompetitorSentimentData(data: {
     competitorId: number;
     score: number;
-    sourceType: MentionSource;
+    sourceType: string;
     mentionCount: number;
     date?: Date;
   }): Promise<CompetitorSentiment> {
     return this.repository.createCompetitorSentiment({
       ...data,
-      sourceType: data.sourceType as string,
+      sourceType: data.sourceType,
     });
   }
 
@@ -106,7 +98,7 @@ export class CoreCompetitorService {
   async collectCompetitorSentiment(competitorName: string): Promise<
     {
       score: number;
-      sourceType: MentionSource;
+      sourceType: string;
       mentionCount: number;
     }[]
   > {
@@ -116,12 +108,7 @@ export class CoreCompetitorService {
     // 3. Return aggregated sentiment data
 
     // For MVP, return mock data
-    const sources: MentionSource[] = [
-      MentionSource.YOUTUBE,
-      MentionSource.REDDIT,
-      MentionSource.FACEBOOK,
-      MentionSource.INSTAGRAM,
-    ];
+    const sources = ["YOUTUBE", "REDDIT", "FACEBOOK", "INSTAGRAM"];
 
     return sources.map((source) => ({
       score: Math.random() * 2 - 1, // Random score between -1 and 1

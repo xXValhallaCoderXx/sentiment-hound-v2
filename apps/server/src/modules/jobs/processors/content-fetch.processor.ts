@@ -76,12 +76,21 @@ export class ContentFetchProcessor {
 
       await Promise.all(
         mentions.map((mention) =>
-          mentionService.createMention({
-            data: {
+          mentionService.upsertMention({
+            where: {
+              remoteId_providerId: {
+                remoteId: mention.commentId,
+                providerId: providerId,
+              },
+            },
+            create: {
               content: mention.content,
               remoteId: mention.commentId,
-              sourceType: 'YOUTUBE',
+              provider: { connect: { id: providerId } },
               post: mention.post,
+            },
+            update: {
+              content: mention.content,
             },
           }),
         ),

@@ -49,10 +49,10 @@ export class PostFetchProcessor {
 
       this.logger.log(
         `Built execution context for job ${job.id}: ` +
-          `provider=${context.providerName}, ` +
-          `userId=${context.userId}, ` +
-          `authMethod=${context.authMethod}, ` +
-          `tokenSource=${context.tokenSource}${context.integrationId ? `, integrationId=${context.integrationId}` : ''}`,
+        `provider=${context.providerName}, ` +
+        `userId=${context.userId}, ` +
+        `authMethod=${context.authMethod}, ` +
+        `tokenSource=${context.tokenSource}${context.integrationId ? `, integrationId=${context.integrationId}` : ''}`,
       );
 
       // Step 2: Validate required job data
@@ -153,19 +153,28 @@ export class PostFetchProcessor {
       if (createdPost && createdPost.length > 0) {
         // Store comments in database
         for (const comment of comments) {
-          await mentionService.createMention({
-            data: {
+          await mentionService.upsertMention({
+            where: {
+              remoteId_providerId: {
+                remoteId: comment.mentionId,
+                providerId: context.providerId,
+              },
+            },
+            create: {
               content: comment.content,
               remoteId: comment.mentionId,
-              sourceType: 'YOUTUBE',
+              provider: { connect: { id: context.providerId } },
               post: { connect: { id: createdPost[0].id } },
+            },
+            update: {
+              content: comment.content,
             },
           });
         }
 
         this.logger.log(
           `Successfully processed video ${result.id} with ${comments.length} comments ` +
-            `using ${context.tokenSource} authentication`,
+          `using ${context.tokenSource} authentication`,
         );
       } else {
         throw new Error(`Failed to find created post for video ${result.id}`);

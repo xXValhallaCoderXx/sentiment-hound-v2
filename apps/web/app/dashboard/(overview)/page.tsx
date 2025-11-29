@@ -24,11 +24,19 @@ const DashboardPage: React.FC = () => {
       const result = await getUserAnalyses();
 
       if (result.error) {
-        setError(result.error.error);
+
+        if (result?.error?.status === 500) {
+          console.log("ERROR: ", result.error)
+          setError("Internal Server Error");
+        } else {
+          setError(result.error.error);
+        }
+
       } else {
         setAnalyses(result.data?.analyses || []);
       }
-    } catch {
+    } catch (e) {
+      console.log("CAUGHT: ", e)
       setError("Failed to load analyses");
     } finally {
       setLoading(false);
@@ -61,7 +69,7 @@ const DashboardPage: React.FC = () => {
   if (error) {
     return (
       <Box p={{ base: 12, sm: 16, md: 24 }}>
-        <ErrorMessage />
+        <ErrorMessage message={error} />
       </Box>
     );
   }
@@ -83,8 +91,9 @@ const DashboardPage: React.FC = () => {
             leftSection={<IconPlus size={16} />}
             variant="filled"
             size="md"
+            onClick={() => router.push("/dashboard/analyse")}
             className={classes.headerButton}
-            // No click functionality as specified in PRD
+          // No click functionality as specified in PRD
           >
             Analyze New Post
           </Button>

@@ -135,7 +135,6 @@ model Post {
 model Mention {
   id              Int             @id @default(autoincrement())
   remoteId        String
-  sourceType      MentionSource
   content         String
   sentiment       String?
   score           String?
@@ -150,8 +149,8 @@ model Mention {
   trackedKeywordId Int?
   trackedKeyword   TrackedKeyword? @relation(fields: [trackedKeywordId], references: [id], onDelete: Cascade)
 
-  providerId Int?
-  provider   Provider? @relation(fields: [providerId], references: [id])
+  providerId Int
+  provider   Provider @relation(fields: [providerId], references: [id])
 
   aspectAnalyses AspectAnalysis[]
   subTaskMention SubTaskMention[]
@@ -159,7 +158,7 @@ model Mention {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([remoteId, sourceType])
+  @@unique([remoteId, providerId])
 }
 
 model AspectAnalysis {
@@ -326,7 +325,7 @@ model CompetitorSentiment {
   competitor   Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
   date         DateTime   @default(now())
   score        Float      // Sentiment score (-1 to 1)
-  sourceType   MentionSource
+  sourceType   String
   mentionCount Int        @default(0) // Number of mentions found
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt

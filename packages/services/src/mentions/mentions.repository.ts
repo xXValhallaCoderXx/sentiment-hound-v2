@@ -1,10 +1,14 @@
 import { Mention, PrismaClient, Prisma } from "@repo/db";
 
 export class MentionRepository {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaClient) { }
 
   async create(args: Prisma.MentionCreateArgs): Promise<Mention> {
     return this.prisma.mention.create(args);
+  }
+
+  async upsert(args: Prisma.MentionUpsertArgs): Promise<Mention> {
+    return this.prisma.mention.upsert(args);
   }
 
   async createMany(args: Prisma.MentionCreateManyArgs) {
