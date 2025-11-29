@@ -44,12 +44,16 @@ export class CoreMentionService {
     return this.repository.createMany(comments);
   }
 
-  async getMention(id: number): Promise<Mention> {
-    const comment = await this.repository.findById(id);
+  async getMention(id: number): Promise<Mention & { provider: { name: string } }> {
+    const comment = await this.repository.findById(id, {
+      include: {
+        provider: true,
+      },
+    });
     if (!comment) {
       throw new Error("Mention not found");
     }
-    return comment;
+    return comment as Mention & { provider: { name: string } };
   }
 
   async getUserMentionsWithFilters({

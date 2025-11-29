@@ -101,7 +101,6 @@ export class RedditFetchProcessor {
                   data: {
                     content: comment.content,
                     remoteId: comment.id,
-                    sourceType: 'REDDIT',
                     author: comment.author,
                     sourceUrl: post.permalink,
                     originLabel: post.subreddit,
@@ -109,13 +108,13 @@ export class RedditFetchProcessor {
                     // trackedKeywordId: keyword.id,
                     sentimentStatus: 'PENDING',
                     post: { connect: { id: createdPost[0].id } },
+                    provider: { connect: { id: providerId } },
                   },
                 });
               }
 
               this.logger.log(
-                `Successfully processed Reddit post ${post.id} with ${
-                  post.comments?.length || 0
+                `Successfully processed Reddit post ${post.id} with ${post.comments?.length || 0
                 } comments`,
               );
             } else {

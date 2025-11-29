@@ -348,7 +348,7 @@ describe("CoreMentionService", () => {
       const mentionData = {
         data: {
           remoteId: "mention123",
-          sourceType: "YOUTUBE",
+          // sourceType: "YOUTUBE",
           content: "Great video!",
           postId: 1,
           providerId: 1, // Optional providerId
@@ -358,7 +358,7 @@ describe("CoreMentionService", () => {
       const expectedMention = {
         id: 1,
         remoteId: "mention123",
-        sourceType: "YOUTUBE",
+        // sourceType: "YOUTUBE",
         content: "Great video!",
         postId: 1,
         providerId: 1,

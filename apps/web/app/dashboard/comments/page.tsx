@@ -31,9 +31,9 @@ const CommentsPage = async ({
   // Augment selectedComment with the provider property if it exists
   const augmentedSelectedComment = selectedComment
     ? {
-        ...selectedComment,
-        provider: selectedComment.sourceType || "Unknown", // Use sourceType or a default
-      }
+      ...selectedComment,
+      provider: selectedComment.provider?.name || "Unknown", // Use provider.name or a default
+    }
     : null;
 
   if (!session?.user?.id) {
